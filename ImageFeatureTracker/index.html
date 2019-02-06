@@ -1,6 +1,7 @@
 <!doctype html>
 <html>
 <head>
+    <link rel="shortcut icon" href="">
     <title>chapter1</title>
     <meta charset="utf-8">
     <script src="js/jsfeat.js"></script>
@@ -21,11 +22,8 @@
         
         initCanvas = function() {
 
-            var canvas = document.getElementById('initCanvas');
-
-            console.log(canvas);
-
-            context = canvas.getContext('2d');
+            var canvas = document.getElementById('initCanvas'),
+            context = canvas.getContext('2d'),
             image = new Image();
             image.src = 'res/cat.jpg';
 
@@ -35,12 +33,17 @@
                 canvas.width = cols;
                 canvas.height = rows;
                 context.drawImage(image, 0, 0, image.width, image.height);
+
+                // Create image matrix
+                var imageData = context.getImageData(0, 0, cols, rows);
+                var dataBuffer = new jsfeat.data_t(cols * rows, imageData.data.buffer);
+                var mat = new jsfeat.matrix_t(cols, rows, jsfeat.U8_t | jsfeat.C4_t, dataBuffer);
             };
         }
 
         main = function() {
 
-            printMatrix();
+            //printMatrix();
             initCanvas();
         }
 
