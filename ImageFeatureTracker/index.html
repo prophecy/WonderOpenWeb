@@ -5,19 +5,50 @@
     <meta charset="utf-8">
     <script src="js/jsfeat.js"></script>
     <script>
-        var matrix = new jsfeat.matrix_t(3, 3, jsfeat.U8_t | jsfeat.C1_t);
-        matrix.data[1] = 1;
-        matrix.data[5] = 2;
-        matrix.data[7] = 1;
 
-        for (var i = 0; i < matrix.rows; ++i) {
-            var start = i * matrix.cols;
-            console.log(matrix.data.subarray(start, start + matrix.cols));
+        printMatrix = function() {
+
+            var matrix = new jsfeat.matrix_t(3, 3, jsfeat.U8_t | jsfeat.C1_t);
+            matrix.data[1] = 1;
+            matrix.data[5] = 2;
+            matrix.data[7] = 1;
+
+            for (var i = 0; i < matrix.rows; ++i) {
+                var start = i * matrix.cols;
+                console.log(matrix.data.subarray(start, start + matrix.cols));
+            }
         }
+        
+        initCanvas = function() {
+
+            var canvas = document.getElementById('initCanvas');
+
+            console.log(canvas);
+
+            context = canvas.getContext('2d');
+            image = new Image();
+            image.src = 'res/cat.jpg';
+
+            image.onload = function () {
+                var cols = image.width;
+                var rows = image.height;
+                canvas.width = cols;
+                canvas.height = rows;
+                context.drawImage(image, 0, 0, image.width, image.height);
+            };
+        }
+
+        main = function() {
+
+            printMatrix();
+            initCanvas();
+        }
+
     </script>
 </head>
 
-<body>
+<body onload="main();">
+    <canvas id="initCanvas"></canvas>
 </body>
 
 </html>
