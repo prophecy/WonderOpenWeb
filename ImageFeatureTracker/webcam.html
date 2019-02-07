@@ -9,15 +9,15 @@
 </head>
 <body>
 
-    <video id="video" width="640" height="480" autoplay></video>
     <canvas id="canvas" width="640" height="480"></canvas>
+    <video id="video" width="640" height="480" autoplay></video>
 
 <script>
 
     // Grab elements, create settings, etc.
     var video = document.getElementById('video');
+    video.style.visibility = "hidden";
 
-    //this.video = document.getElementById("my-video");
     this.c1 = document.getElementById("canvas");
     this.ctx1 = this.c1.getContext("2d");
 
