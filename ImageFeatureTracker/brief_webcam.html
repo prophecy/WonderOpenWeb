@@ -5,13 +5,94 @@
     <title>chapter 3, brief matching</title>
     <script src="./js/tracking-min.js"></script>
     <script src="./js/jsfeat-min.js"></script>
+    <script src="js/common-jsfeat.js"></script>
+    <link rel="stylesheet" type="text/css" href="css/cvw.css">
 </head>
 <body>
 <div id="images" class="canvas-parent">
     <canvas id="initCanvas" class="canvas-img"></canvas>
+    
+    <video id="video" width="640" height="480" autoplay></video>
+    <canvas id="vcanvas" width="640" height="480"></canvas>
 </div>
 
 <script>
+
+    // ------------------------------------------------------------------------
+    // ------------------------------------------------------------------------
+    // Camera canvas
+    // ------------------------------------------------------------------------
+    // ------------------------------------------------------------------------
+
+    context = vcanvas.getContext('2d');
+
+    // Grab elements, create settings, etc.
+    var video = document.getElementById('video');
+    //video.style.visibility = "hidden";
+
+    this.c1 = document.getElementById("vcanvas");
+    this.ctx1 = this.c1.getContext("2d");
+
+    // Get access to the camera!
+    if(navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
+        // Not adding `{ audio: true }` since we only want video now
+        navigator.mediaDevices.getUserMedia({ video: true }).then(function(stream) {
+            //video.src = window.URL.createObjectURL(stream);
+            video.srcObject = stream;
+            video.play();
+        });
+
+        computeFrame = function() {
+
+            var image = this.video;
+            var cols = image.width;
+            var rows = image.height;
+            vcanvas.width = cols;
+            vcanvas.height = rows;
+            context.drawImage(image, 0, 0, image.width, image.height, 0, 0, cols, rows);
+
+            var imageData = context.getImageData(0, 0, cols, rows);
+            var dataBuffer = new jsfeat.data_t(cols * rows, imageData.data.buffer);
+            var mat = new jsfeat.matrix_t(cols, rows, jsfeat.U8_t | jsfeat.C4_t, dataBuffer);
+
+            var gray = new jsfeat.matrix_t(mat.cols, mat.rows, jsfeat.U8_t | jsfeat.C1_t);
+            jsfeat.imgproc.grayscale(mat.data, mat.cols, mat.rows, gray);
+
+            this.ctx1.putImageData(matrix2img(gray), 0, 0);
+        }
+        
+        timerCallback = function() {  
+            if (this.video.paused || this.video.ended) {  
+                return;  
+            }  
+
+            this.computeFrame();  
+            var self = this;  
+
+            setTimeout(function () {  
+                self.timerCallback();  
+            }, 16); // roughly 60 frames per second  
+        }
+
+        this.video.addEventListener("play", function() {
+        
+            self.width = self.video.width;  
+            self.height = self.video.height; 
+            self.timerCallback();
+        
+        }, false);
+    }
+
+</script>
+
+<script>
+
+    // ------------------------------------------------------------------------
+    // ------------------------------------------------------------------------
+    // Feature matching
+    // ------------------------------------------------------------------------
+    // ------------------------------------------------------------------------
+
     var canvas = document.getElementById('initCanvas'),
             imageObject = new Image(), colsObject, rowsObject,
             imageScene = new Image(), colsScene, rowsScene;
@@ -150,6 +231,10 @@
         find_transform(matches, matches.length);
         render_pattern_shape(context, colsObject);
     }
+
+    // ------------------------------------------------------------------------
+    // ------------------------------------------------------------------------
+
 </script>
 </body>
 </html>
