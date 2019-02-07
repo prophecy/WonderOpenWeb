@@ -9,14 +9,16 @@
 </head>
 <body>
 
-    <canvas id="canvas" width="640" height="480"></canvas>
+    <canvas id="canvas" class="canvas-img" width="640" height="480"></canvas>
     <video id="video" width="640" height="480" autoplay></video>
 
 <script>
+    
+    context = canvas.getContext('2d');
 
     // Grab elements, create settings, etc.
     var video = document.getElementById('video');
-    video.style.visibility = "hidden";
+    //video.style.visibility = "hidden";
 
     this.c1 = document.getElementById("canvas");
     this.ctx1 = this.c1.getContext("2d");
@@ -32,21 +34,21 @@
 
         computeFrame = function() {
 
-            this.ctx1.drawImage(this.video, 0, 0, this.width, this.height);
-            var frame = this.ctx1.getImageData(0, 0, this.width, this.height);
-            var l = frame.data.length / 4;  
+            var image = this.video;
+            var cols = image.width;
+            var rows = image.height;
+            canvas.width = cols;
+            canvas.height = rows;
+            context.drawImage(image, 0, 0, image.width, image.height, 0, 0, cols, rows);
 
-            for (var i = 0; i < l; i++) {
-                var grey = (frame.data[i * 4 + 0] + frame.data[i * 4 + 1] + frame.data[i * 4 + 2]) / 3;
+            var imageData = context.getImageData(0, 0, cols, rows);
+            var dataBuffer = new jsfeat.data_t(cols * rows, imageData.data.buffer);
+            var mat = new jsfeat.matrix_t(cols, rows, jsfeat.U8_t | jsfeat.C4_t, dataBuffer);
 
-                frame.data[i * 4 + 0] = grey;
-                frame.data[i * 4 + 1] = grey;
-                frame.data[i * 4 + 2] = grey;
-            }
+            var gray = new jsfeat.matrix_t(mat.cols, mat.rows, jsfeat.U8_t | jsfeat.C1_t);
+            jsfeat.imgproc.grayscale(mat.data, mat.cols, mat.rows, gray);
 
-            this.ctx1.putImageData(frame, 0, 0);
-
-            return;
+            this.ctx1.putImageData(matrix2img(gray), 0, 0);
         }
         
         timerCallback = function() {  
