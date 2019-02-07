@@ -1,57 +1,38 @@
 <!doctype html>
 <html>
 <head>
-    <link rel="shortcut icon" href="">
-    <title>chapter1</title>
     <meta charset="utf-8">
-    <script src="js/jsfeat.js"></script>
-    <script>
-
-        printMatrix = function() {
-
-            var matrix = new jsfeat.matrix_t(3, 3, jsfeat.U8_t | jsfeat.C1_t);
-            matrix.data[1] = 1;
-            matrix.data[5] = 2;
-            matrix.data[7] = 1;
-
-            for (var i = 0; i < matrix.rows; ++i) {
-                var start = i * matrix.cols;
-                console.log(matrix.data.subarray(start, start + matrix.cols));
-            }
-        }
-        
-        initCanvas = function() {
-
-            var canvas = document.getElementById('initCanvas'),
+    <title>chapter 1, matrix to gray</title>
+    <script src="../js/jsfeat-min.js"></script>
+    <script src="../js/common-jsfeat.js"></script>
+    <link rel="stylesheet" type="text/css" href="../css/cvw.css">
+</head>
+<body>
+<div id="images" class="canvas-parent">
+    <canvas id="initCanvas" class="canvas-img"></canvas>
+</div>
+<script>
+    var canvas = document.getElementById('initCanvas'),
             context = canvas.getContext('2d'),
             image = new Image();
-            image.src = 'res/cat.jpg';
+    image.src = '../res/cat.jpg';
 
-            image.onload = function () {
-                var cols = image.width;
-                var rows = image.height;
-                canvas.width = cols;
-                canvas.height = rows;
-                context.drawImage(image, 0, 0, image.width, image.height);
+    image.onload = function () {
+        var cols = image.width;
+        var rows = image.height;
+        canvas.width = cols;
+        canvas.height = rows;
+        context.drawImage(image, 0, 0, image.width, image.height, 0, 0, cols, rows);
 
-                // Create image matrix
-                var imageData = context.getImageData(0, 0, cols, rows);
-                var dataBuffer = new jsfeat.data_t(cols * rows, imageData.data.buffer);
-                var mat = new jsfeat.matrix_t(cols, rows, jsfeat.U8_t | jsfeat.C4_t, dataBuffer);
-            };
-        }
+        var imageData = context.getImageData(0, 0, cols, rows);
+        var dataBuffer = new jsfeat.data_t(cols * rows, imageData.data.buffer);
+        var mat = new jsfeat.matrix_t(cols, rows, jsfeat.U8_t | jsfeat.C4_t, dataBuffer);
 
-        main = function() {
+        var gray = new jsfeat.matrix_t(mat.cols, mat.rows, jsfeat.U8_t | jsfeat.C1_t);
+        jsfeat.imgproc.grayscale(mat.data, mat.cols, mat.rows, gray);
 
-            //printMatrix();
-            initCanvas();
-        }
-
-    </script>
-</head>
-
-<body onload="main();">
-    <canvas id="initCanvas"></canvas>
+        drawMat(gray, document.getElementById('images'), 'canvas-img');
+    };
+</script>
 </body>
-
 </html>
