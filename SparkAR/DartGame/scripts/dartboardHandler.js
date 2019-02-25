@@ -17,11 +17,39 @@ const Diagnostics = require('Diagnostics')
 var dartboard = Scene.root.find('dartboard')
 var planeTracker = Scene.root.find('planeTracker0');
 
+// Game vars
+var StateEnum = {
+	IDLE: 0,
+	SPINNING: 1,
+	RESULT: 2,
+}
+
+var currEnum = StateEnum.IDLE;
+
 TouchGestures.onTap().subscribe(function(gesture) {
-	planeTracker.trackPoint(gesture.location);
+
+	if (currEnum == StateEnum.IDLE)
+		planeTracker.trackPoint(gesture.location);
+});
+
+TouchGestures.onPinch().subscribe(function(gesture) {
+
+	if (currEnum == StateEnum.IDLE) {
+
+		var lastScaleX = dartboard.transform.scaleX.lastValue;
+		dartboard.transform.scaleX = Reactive.mul(lastScaleX, gesture.scale);
+	
+		var lastScaleY = dartboard.transform.scaleY.lastValue;
+		dartboard.transform.scaleY = Reactive.mul(lastScaleY, gesture.scale);
+	
+		var lastScaleZ = dartboard.transform.scaleZ.lastValue;
+		dartboard.transform.scaleZ = Reactive.mul(lastScaleZ, gesture.scale);
+	}
 });
 
 TouchGestures.onLongPress().subscribe(function(gesture) {
+
+	currEnum = StateEnum.SPINNING;
 
 	// Start the animation
 	var rotation_signal = Animation.animate(time_driver, rotation_sampler);
