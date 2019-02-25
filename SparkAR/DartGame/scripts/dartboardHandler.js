@@ -11,6 +11,7 @@
 const Scene = require('Scene');
 const Reactive = require('Reactive');
 const TouchGestures = require('TouchGestures')
+const RawTouchGesture = require('RawTouchGesture')
 const Animation = require('Animation');
 const Diagnostics = require('Diagnostics')
 
@@ -21,16 +22,33 @@ var planeTracker = Scene.root.find('planeTracker0');
 var StateEnum = {
 	IDLE: 0,
 	SPINNING: 1,
-	RESULT: 2,
+	SLOWDOWN: 2,
+	RESULT: 3,
 }
 
 var currEnum = StateEnum.IDLE;
 
 TouchGestures.onTap().subscribe(function(gesture) {
 
-	if (currEnum == StateEnum.IDLE)
+	if (currEnum == StateEnum.IDLE) {
+
+		// Move track point in front of the camera
 		planeTracker.trackPoint(gesture.location);
+		
+		startSpinning();
+	}
 });
+
+function startSpinning() {
+
+	currEnum = StateEnum.SPINNING;
+
+	// Start the animation
+	var rotation_signal = Animation.animate(time_driver, rotation_sampler);
+	time_driver.start();
+
+	dartboard.transform.rotation = rotation_signal;
+}
 
 TouchGestures.onPinch().subscribe(function(gesture) {
 
@@ -45,17 +63,6 @@ TouchGestures.onPinch().subscribe(function(gesture) {
 		var lastScaleZ = dartboard.transform.scaleZ.lastValue;
 		dartboard.transform.scaleZ = Reactive.mul(lastScaleZ, gesture.scale);
 	}
-});
-
-TouchGestures.onLongPress().subscribe(function(gesture) {
-
-	currEnum = StateEnum.SPINNING;
-
-	// Start the animation
-	var rotation_signal = Animation.animate(time_driver, rotation_sampler);
-	time_driver.start();
-
-	dartboard.transform.rotation = rotation_signal;
 });
 
 // Construct a Rotation object from a quaternion-based values.
