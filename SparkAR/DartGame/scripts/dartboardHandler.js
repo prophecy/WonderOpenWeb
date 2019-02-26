@@ -11,13 +11,16 @@
 const Scene = require('Scene');
 const Reactive = require('Reactive');
 const TouchGestures = require('TouchGestures')
-const RawTouchGesture = require('RawTouchGesture')
 const Animation = require('Animation');
 const Diagnostics = require('Diagnostics')
+const Materials = require('Materials');
 
 var dartboard = Scene.root.find('dartboard')
 var planeTracker = Scene.root.find('planeTracker0');
-var startRect = Scene.root.find('startRect');
+
+var startStopRect = Scene.root.find('startStopRect');
+var startButtonMat = Materials.get('startButtonMat');
+var stopButtonMat = Materials.get('stopButtonMat');
 
 // ----------------------------------------------------------------------------------------
 // ----------------------------------------------------------------------------------------
@@ -28,9 +31,9 @@ TouchGestures.onTap().subscribe(function(gesture) {
 	movePlaneTracker(gesture.location);
 });
 
-TouchGestures.onTap(startRect).subscribe(function() {
+TouchGestures.onTap(startStopRect).subscribe(function() {
 	
-	startSpinning();
+	startStopSpinning();
 });
 
 TouchGestures.onPinch().subscribe(function(gesture) {
@@ -57,7 +60,9 @@ var StateEnum = {
 	IDLE: 0,
 	SPINNING: 1,
 	SLOWDOWN: 2,
-	RESULT: 3,
+	STOPPED: 3,
+	SUBMITTING: 4,
+	SUBMITTED: 5
 }
 
 var currEnum = StateEnum.IDLE;
@@ -70,18 +75,65 @@ function movePlaneTracker(location) {
 	planeTracker.trackPoint(location);
 }
 
+function startStopSpinning() {
+
+	if (currEnum == StateEnum.IDLE)
+		startSpinning();
+	else if (currEnum == StateEnum.SPINNING)
+		stopSpinning();
+}
+
 function startSpinning() {
 
-	if (currEnum != StateEnum.IDLE)
-		return;
-
 	currEnum = StateEnum.SPINNING;
+
+	// Chnage button mat
+	startStopRect.material = stopButtonMat;
 
 	// Start the animation
 	var rotation_signal = Animation.animate(time_driver, rotation_sampler);
 	time_driver.start();
 
 	dartboard.transform.rotation = rotation_signal;
+}
+
+function stopSpinning() {
+
+	currEnum = StateEnum.SLOWDOWN;
+
+	// Todo: Have slow down animation
+	spinningStopped();
+}
+
+function spinningStopped() {
+
+	currEnum = StateEnum.STOPPED;
+
+	time_driver.stop();
+
+	// Chnage button mat
+	startStopRect.material = startButtonMat;
+	
+	submitPoint();
+}
+
+function submitPoint() {
+
+	currEnum = StateEnum.SUBMITTING;
+
+	Diagnostics.log('submit point here!');
+
+	// Todo: Request point submittion here
+	
+	// Call this function when submitted
+	submitted();
+}
+
+function submitted() {
+
+	// Todo: Set something in the scene
+
+	currEnum = StateEnum.IDLE;
 }
 
 // ----------------------------------------------------------------------------------------
