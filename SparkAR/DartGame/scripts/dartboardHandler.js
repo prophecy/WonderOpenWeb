@@ -15,6 +15,7 @@ const Animation = require('Animation');
 const Diagnostics = require('Diagnostics')
 const Materials = require('Materials');
 
+var dartboardRoot = Scene.root.find('dartboardRoot');
 var dartboard = Scene.root.find('dartboard')
 var planeTracker = Scene.root.find('planeTracker0');
 
@@ -28,7 +29,7 @@ var stopButtonMat = Materials.get('stopButtonMat');
 
 TouchGestures.onTap().subscribe(function(gesture) {
 
-	movePlaneTracker(gesture.location);
+	moveDartboardRoot(gesture.location);
 });
 
 TouchGestures.onTap(startStopRect).subscribe(function() {
@@ -40,14 +41,14 @@ TouchGestures.onPinch().subscribe(function(gesture) {
 
 	if (currEnum == StateEnum.IDLE) {
 
-		var lastScaleX = dartboard.transform.scaleX.lastValue;
-		dartboard.transform.scaleX = Reactive.mul(lastScaleX, gesture.scale);
+		var lastScaleX = dartboardRoot.transform.scaleX.lastValue;
+		dartboardRoot.transform.scaleX = Reactive.mul(lastScaleX, gesture.scale);
 	
-		var lastScaleY = dartboard.transform.scaleY.lastValue;
-		dartboard.transform.scaleY = Reactive.mul(lastScaleY, gesture.scale);
+		var lastScaleY = dartboardRoot.transform.scaleY.lastValue;
+		dartboardRoot.transform.scaleY = Reactive.mul(lastScaleY, gesture.scale);
 	
-		var lastScaleZ = dartboard.transform.scaleZ.lastValue;
-		dartboard.transform.scaleZ = Reactive.mul(lastScaleZ, gesture.scale);
+		var lastScaleZ = dartboardRoot.transform.scaleZ.lastValue;
+		dartboardRoot.transform.scaleZ = Reactive.mul(lastScaleZ, gesture.scale);
 	}
 });
 
@@ -67,7 +68,7 @@ var StateEnum = {
 
 var currEnum = StateEnum.IDLE;
 
-function movePlaneTracker(location) {
+function moveDartboardRoot(location) {
 
 	if (currEnum != StateEnum.IDLE)
 		return;
