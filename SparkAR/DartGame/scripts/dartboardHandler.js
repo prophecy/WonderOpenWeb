@@ -17,38 +17,21 @@ const Diagnostics = require('Diagnostics')
 
 var dartboard = Scene.root.find('dartboard')
 var planeTracker = Scene.root.find('planeTracker0');
+var startRect = Scene.root.find('startRect');
 
-// Game vars
-var StateEnum = {
-	IDLE: 0,
-	SPINNING: 1,
-	SLOWDOWN: 2,
-	RESULT: 3,
-}
-
-var currEnum = StateEnum.IDLE;
+// ----------------------------------------------------------------------------------------
+// ----------------------------------------------------------------------------------------
+// Gesture
 
 TouchGestures.onTap().subscribe(function(gesture) {
 
-	if (currEnum == StateEnum.IDLE) {
-
-		// Move track point in front of the camera
-		planeTracker.trackPoint(gesture.location);
-		
-		startSpinning();
-	}
+	movePlaneTracker(gesture.location);
 });
 
-function startSpinning() {
-
-	currEnum = StateEnum.SPINNING;
-
-	// Start the animation
-	var rotation_signal = Animation.animate(time_driver, rotation_sampler);
-	time_driver.start();
-
-	dartboard.transform.rotation = rotation_signal;
-}
+TouchGestures.onTap(startRect).subscribe(function() {
+	
+	startSpinning();
+});
 
 TouchGestures.onPinch().subscribe(function(gesture) {
 
@@ -64,6 +47,46 @@ TouchGestures.onPinch().subscribe(function(gesture) {
 		dartboard.transform.scaleZ = Reactive.mul(lastScaleZ, gesture.scale);
 	}
 });
+
+// ----------------------------------------------------------------------------------------
+// ----------------------------------------------------------------------------------------
+// functions on state
+
+// Game vars
+var StateEnum = {
+	IDLE: 0,
+	SPINNING: 1,
+	SLOWDOWN: 2,
+	RESULT: 3,
+}
+
+var currEnum = StateEnum.IDLE;
+
+function movePlaneTracker(location) {
+
+	if (currEnum != StateEnum.IDLE)
+		return;
+
+	planeTracker.trackPoint(location);
+}
+
+function startSpinning() {
+
+	if (currEnum != StateEnum.IDLE)
+		return;
+
+	currEnum = StateEnum.SPINNING;
+
+	// Start the animation
+	var rotation_signal = Animation.animate(time_driver, rotation_sampler);
+	time_driver.start();
+
+	dartboard.transform.rotation = rotation_signal;
+}
+
+// ----------------------------------------------------------------------------------------
+// ----------------------------------------------------------------------------------------
+// Math things
 
 // Construct a Rotation object from a quaternion-based values.
 function axisRotation(axis_x, axis_y, axis_z, angle_degrees) {
