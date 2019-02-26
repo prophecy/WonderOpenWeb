@@ -14,6 +14,7 @@ const TouchGestures = require('TouchGestures')
 const Animation = require('Animation');
 const Diagnostics = require('Diagnostics')
 const Materials = require('Materials');
+const Persistence = require('Persistence') 
 
 var dartboardRoot = Scene.root.find('dartboardRoot');
 var dartboard = Scene.root.find('dartboard')
@@ -22,6 +23,13 @@ var planeTracker = Scene.root.find('planeTracker0');
 var startStopRect = Scene.root.find('startStopRect');
 var startButtonMat = Materials.get('startButtonMat');
 var stopButtonMat = Materials.get('stopButtonMat');
+
+// Test to store access token
+var promise = Persistence.userScope.set('access_token', {message: '12345678'});
+promise.then(function(value) {
+
+	Diagnostics.log(value);
+})
 
 // ----------------------------------------------------------------------------------------
 // ----------------------------------------------------------------------------------------
@@ -34,6 +42,12 @@ TouchGestures.onTap().subscribe(function(gesture) {
 
 TouchGestures.onTap(startStopRect).subscribe(function() {
 	
+	var promise = Persistence.userScope.get('access_token');
+	promise.then(function(result) {
+
+		Diagnostics.log(result);
+	});
+
 	startStopSpinning();
 });
 
