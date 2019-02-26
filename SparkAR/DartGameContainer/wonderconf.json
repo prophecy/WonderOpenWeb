@@ -1,0 +1,12 @@
+{
+  "name": "DartGameAR",
+  "description": "Dart game Http Server",
+  "host": "http://wondersaga.com/wonder_modules/",
+  "version": "0.0.1",
+  "dependencies": {
+    "node.js": {
+      "projectPath": "./DartGameServer/",
+      "WonderHttpServer": "latest"
+    }
+  }
+}
