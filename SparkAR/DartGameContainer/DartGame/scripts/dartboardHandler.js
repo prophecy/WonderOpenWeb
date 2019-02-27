@@ -10,11 +10,12 @@
 
 const Scene = require('Scene');
 const Reactive = require('Reactive');
-const TouchGestures = require('TouchGestures')
+const TouchGestures = require('TouchGestures');
 const Animation = require('Animation');
-const Diagnostics = require('Diagnostics')
+const Diagnostics = require('Diagnostics');
 const Materials = require('Materials');
-const Persistence = require('Persistence') 
+const Persistence = require('Persistence');
+//const Networking = require('Networking');
 
 var dartboardRoot = Scene.root.find('dartboardRoot');
 var dartboard = Scene.root.find('dartboard')
@@ -24,12 +25,17 @@ var startStopRect = Scene.root.find('startStopRect');
 var startButtonMat = Materials.get('startButtonMat');
 var stopButtonMat = Materials.get('stopButtonMat');
 
-// Test to store access token
-var promise = Persistence.userScope.set('access_token', {message: '12345678'});
+// Todo: Replace this with register/login mechanism
+const accessToken = 'UvKOKb5JjcZFE8ob1tHXkur4MvlJ1lMceRJV2anzOZxRijhsVfGLYa5oHaKiPG78cwhzmGcqYNU7FtJoC6eTTO6gSPKW280Hd7TXuoYCehSTEBn9tm0DFV0ohsAGvEvoi77zPvqK7FlgxUhyN3FaP8HkWGfR7EYqN9GVErVTJZYhVvF98NK6yPz8IMJsutLI';
+var promise = Persistence.userScope.set('access_token', {data: accessToken});
 promise.then(function(value) {
 
 	Diagnostics.log(value);
 })
+
+const scoreIndex = [ 20, 1, 18, 4, 13, 6, 10, 15, 2, 17, 3, 19, 7, 16, 8, 11, 14, 9, 12, 5 ];
+const PI = 3.14159;
+const PI_2 = 6.28318;
 
 // ----------------------------------------------------------------------------------------
 // ----------------------------------------------------------------------------------------
@@ -42,12 +48,6 @@ TouchGestures.onTap().subscribe(function(gesture) {
 
 TouchGestures.onTap(startStopRect).subscribe(function() {
 	
-	var promise = Persistence.userScope.get('access_token');
-	promise.then(function(result) {
-
-		Diagnostics.log(result);
-	});
-
 	startStopSpinning();
 });
 
@@ -55,13 +55,13 @@ TouchGestures.onPinch().subscribe(function(gesture) {
 
 	if (currEnum == StateEnum.IDLE) {
 
-		var lastScaleX = dartboardRoot.transform.scaleX.lastValue;
+		var lastScaleX = dartboardRoot.transform.scaleX.pinLastValue();
 		dartboardRoot.transform.scaleX = Reactive.mul(lastScaleX, gesture.scale);
 	
-		var lastScaleY = dartboardRoot.transform.scaleY.lastValue;
+		var lastScaleY = dartboardRoot.transform.scaleY.pinLastValue();
 		dartboardRoot.transform.scaleY = Reactive.mul(lastScaleY, gesture.scale);
 	
-		var lastScaleZ = dartboardRoot.transform.scaleZ.lastValue;
+		var lastScaleZ = dartboardRoot.transform.scaleZ.pinLastValue();
 		dartboardRoot.transform.scaleZ = Reactive.mul(lastScaleZ, gesture.scale);
 	}
 });
@@ -128,7 +128,7 @@ function spinningStopped() {
 
 	// Chnage button mat
 	startStopRect.material = startButtonMat;
-	
+
 	submitPoint();
 }
 
@@ -136,10 +136,17 @@ function submitPoint() {
 
 	currEnum = StateEnum.SUBMITTING;
 
-	Diagnostics.log('submit point here!');
-
-	// Todo: Request point submittion here
+	// Get poin from dartboard angle
+	var rad = dartboard.transform.rotationZ.pinLastValue();
+	var sz = PI_2 / 20;
+	var offset = (PI / 2) - (sz / 2);
+	var index = Math.floor((rad - offset) / sz);
+	if (index < 0)
+		index = 20 + index;
+	var score = scoreIndex[index];
 	
+	Diagnostics.log('Score: ' + score);
+
 	// Call this function when submitted
 	submitted();
 }

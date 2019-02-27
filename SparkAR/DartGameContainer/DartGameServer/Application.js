@@ -32,6 +32,8 @@ var OnBindApi = function(app) {
 
     // Implement my own API
     app.get("/greeting", CreateSugarRoute([MyOwnApi.SayGreeting]));
+
+    app.post("/score", CreateSugarRoute([MyOwnApi.PostScore]))
 }
 
 // Start server

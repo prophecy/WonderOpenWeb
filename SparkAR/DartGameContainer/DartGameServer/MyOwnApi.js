@@ -17,11 +17,38 @@ var greetingSchema = mongoose.Schema({
     greeting: String,
     
 });
+
 var Greeting = mongoose.model("greeting", greetingSchema);
+
+var ScoreSchema = mongoose.Schema({
+
+    username: String,
+    score: String,
+})
+
+var Score = mongoose.model("score", ScoreSchema);
 
 /*****************************************************************************************/
 //    Express API(s) .... ... .. .  .   .
 /*****************************************************************************************/
+
+exports.PostScore = function(req, res, next) {
+
+    console.log("username: " + req.username);
+
+    if (!req.body || !req.body.score){
+
+        res.error = {code:"invalidArgument", message:"Invalid argument"};
+        next();
+        return;
+    }
+
+    var score = JSON.stringify(req.body.score);
+    console.log("score: " + score);
+
+    res.data = { message: "I have your score: " + score };
+    next();
+}
 
 exports.SayGreeting = function(req, res, next) {
 

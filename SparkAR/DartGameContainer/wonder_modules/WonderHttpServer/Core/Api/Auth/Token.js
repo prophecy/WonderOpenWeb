@@ -95,14 +95,14 @@ exports.Authen = function(req, res, next) {
             var currentTimestamp = Utility.GetCurrentTimestamp();
             var timeDiff = currentTimestamp - user.timestamp;
             // Todo: Configure this duration
-            var validTokenDuration = 86400;
-            
-            if (timeDiff > validTokenDuration) {
+            //var validTokenDuration = 86400;
+            //
+            //if (timeDiff > validTokenDuration) {
 
-                res.error = invalidTokenObject;
-                next();
-                return;
-            }
+            //    res.error = invalidTokenObject;
+            //    next();
+            //    return;
+            //}
 
             if (req.auth == null)
                 req.auth = {};
