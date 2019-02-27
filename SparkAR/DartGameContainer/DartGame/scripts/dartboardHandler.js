@@ -20,6 +20,7 @@ const Persistence = require('Persistence');
 var dartboardRoot = Scene.root.find('dartboardRoot');
 var dartboard = Scene.root.find('dartboard')
 var planeTracker = Scene.root.find('planeTracker0');
+var scoreTxt = Scene.root.find('scoreTxt');
 
 var startStopRect = Scene.root.find('startStopRect');
 var startButtonMat = Materials.get('startButtonMat');
@@ -144,8 +145,11 @@ function submitPoint() {
 	if (index < 0)
 		index = 20 + index;
 	var score = scoreIndex[index];
-	
+
 	Diagnostics.log('Score: ' + score);
+
+	scoreTxt.text = 'Score: ' + score;
+	Diagnostics.log(scoreTxt);
 
 	// Call this function when submitted
 	submitted();
