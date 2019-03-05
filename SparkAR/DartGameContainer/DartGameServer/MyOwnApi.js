@@ -2,7 +2,7 @@
 //    MY OWN SOURCE CODE IS HERE .... ... .. .  .   .
 /*****************************************************************************************/
 
-var rootPath = "../wonder_modules/WonderHttpServer/Core/";
+var rootPath = require("./AppConfig").rootPath;
 var WonderPath = require(rootPath + "Utility").SetupWonderPath(rootPath);
 
 var WonderHttpServer = require(WonderPath("WonderHttpServer"));

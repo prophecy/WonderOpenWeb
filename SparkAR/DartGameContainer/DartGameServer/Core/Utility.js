@@ -6,7 +6,10 @@ var corePath = "";
 
 var WonderPath = function(subPath) {
 
-    return path.join(corePath, subPath);
+    if (corePath === "./Core/")
+        return "./Core/" + subPath;
+    else
+        return path.join(corePath, subPath);
 }
 exports.WonderPath = WonderPath;
 
