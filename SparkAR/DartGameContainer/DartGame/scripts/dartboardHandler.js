@@ -14,8 +14,8 @@ const TouchGestures = require('TouchGestures');
 const Animation = require('Animation');
 const Diagnostics = require('Diagnostics');
 const Materials = require('Materials');
-const Persistence = require('Persistence');
-//const Networking = require('Networking');
+//const Persistence = require('Persistence');
+const Networking = require('Networking');
 
 var dartboardRoot = Scene.root.find('dartboardRoot');
 var dartboard = Scene.root.find('dartboard')
@@ -27,12 +27,11 @@ var startButtonMat = Materials.get('startButtonMat');
 var stopButtonMat = Materials.get('stopButtonMat');
 
 // Todo: Replace this with register/login mechanism
-const accessToken = 'UvKOKb5JjcZFE8ob1tHXkur4MvlJ1lMceRJV2anzOZxRijhsVfGLYa5oHaKiPG78cwhzmGcqYNU7FtJoC6eTTO6gSPKW280Hd7TXuoYCehSTEBn9tm0DFV0ohsAGvEvoi77zPvqK7FlgxUhyN3FaP8HkWGfR7EYqN9GVErVTJZYhVvF98NK6yPz8IMJsutLI';
-var promise = Persistence.userScope.set('access_token', {data: accessToken});
-promise.then(function(value) {
-
-	Diagnostics.log(value);
-})
+const token = 'pbBeI6KxVHoPqdXSRlmOwnWoInguhMza16H432SKr1kS8ZyDNvARY972XAaxqNpLMBPV0IbzVBx1xuugDA6pmcnPFKRyYx9w8glkoxv56MoJJDJ3xVXVH8xP4EBu4L7ybUqMs3YVwklfORtQ4alCctyzNrP6KNj0ghlFwVr8CdmSDWhxvoXhR9CQCOuM8XRW';
+//var promise = Persistence.userScope.set('access_token', {data: accessToken});
+//promise.then(function(value) {
+//	Diagnostics.log(value);
+//})
 
 const scoreIndex = [ 20, 1, 18, 4, 13, 6, 10, 15, 2, 17, 3, 19, 7, 16, 8, 11, 14, 9, 12, 5 ];
 const PI = 3.14159;
@@ -147,12 +146,94 @@ function submitPoint() {
 	var score = scoreIndex[index];
 
 	Diagnostics.log('Score: ' + score);
-
 	scoreTxt.text = 'Score: ' + score;
-	Diagnostics.log(scoreTxt);
-
+	
+	/*
 	// Call this function when submitted
 	submitted();
+	/*/
+	//==============================================================================
+	// Create the request
+	//==============================================================================
+
+	// Store the URL we're sending the request to
+	const url = 'https://powerful-lowlands-46130.herokuapp.com/score';
+
+	Diagnostics.log("token: " + token);
+
+	// Todo: Convert score from string to integer here	
+	var bodyObj = {
+		token:token,
+		score:parseInt(score, 10)
+	};
+
+	var bodyStr = JSON.stringify(bodyObj);
+
+	Diagnostics.log("bodyStr: " + bodyStr);
+
+	// Create a request object
+	const request = {
+
+		// The HTTP Method of the request
+		// (https://developer.mozilla.org/en-US/docs/Web/HTTP/Methods)
+		method: 'POST',
+
+		// The HTTP Headers of the request
+		// (https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers)
+		headers: {
+			'Content-type': 'application/json'
+		},
+
+		// The data to send, in string format
+		body: bodyStr
+		//body: JSON.stringify({title: 'Networking Module'})
+	};
+
+	Diagnostics.log("request: " + JSON.stringify(request));
+
+	//==============================================================================
+	// Send the request and log the results
+	//==============================================================================
+
+	// Send the request to the url
+	Networking.fetch(url, request).then(function(result) {
+
+		// Check the status of the result
+		// (https://developer.mozilla.org/en-US/docs/Web/HTTP/Status)
+		if ((result.status >= 200) && (result.status < 300)) {
+
+			Diagnostics.log('Submit score success');
+			
+			// If the request was successful, chain the JSON forward
+			return result.json();
+		}
+
+		// If the request was not successful, throw an error
+		throw new Error('HTTP status code - ' + result.status);
+
+	}).then(function(json) {
+
+		// Log the JSON obtained by the successful request
+		Diagnostics.log('Successfully sent - ' + json.title);
+
+		submitted();
+
+	}).catch(function(error) {
+
+		// Log any errors that may have happened with the request
+		Diagnostics.log('error.message: ' + error.message);
+		Diagnostics.log('error: ' + error);
+
+		SubmitError();
+	});
+	/**/
+}
+
+function SubmitError() {
+
+	// Todo: Should show retry button
+
+	currEnum = StateEnum.IDLE;
 }
 
 function submitted() {
