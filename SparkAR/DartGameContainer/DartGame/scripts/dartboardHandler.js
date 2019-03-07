@@ -21,13 +21,18 @@ var dartboardRoot = Scene.root.find('dartboardRoot');
 var dartboard = Scene.root.find('dartboard')
 var planeTracker = Scene.root.find('planeTracker0');
 var scoreTxt = Scene.root.find('scoreTxt');
+var nameTxt = Scene.root.find('nameTxt');
 
 var startStopRect = Scene.root.find('startStopRect');
 var startButtonMat = Materials.get('startButtonMat');
 var stopButtonMat = Materials.get('stopButtonMat');
 
+const domain = 'https://powerful-lowlands-46130.herokuapp.com';
+const scoreUrl = domain + '/score';
+const randomId = domain + '/random_id';
+
 // Todo: Replace this with register/login mechanism
-const token = 'pbBeI6KxVHoPqdXSRlmOwnWoInguhMza16H432SKr1kS8ZyDNvARY972XAaxqNpLMBPV0IbzVBx1xuugDA6pmcnPFKRyYx9w8glkoxv56MoJJDJ3xVXVH8xP4EBu4L7ybUqMs3YVwklfORtQ4alCctyzNrP6KNj0ghlFwVr8CdmSDWhxvoXhR9CQCOuM8XRW';
+//const token = 'pbBeI6KxVHoPqdXSRlmOwnWoInguhMza16H432SKr1kS8ZyDNvARY972XAaxqNpLMBPV0IbzVBx1xuugDA6pmcnPFKRyYx9w8glkoxv56MoJJDJ3xVXVH8xP4EBu4L7ybUqMs3YVwklfORtQ4alCctyzNrP6KNj0ghlFwVr8CdmSDWhxvoXhR9CQCOuM8XRW';
 //var promise = Persistence.userScope.set('access_token', {data: accessToken});
 //promise.then(function(value) {
 //	Diagnostics.log(value);
@@ -36,6 +41,73 @@ const token = 'pbBeI6KxVHoPqdXSRlmOwnWoInguhMza16H432SKr1kS8ZyDNvARY972XAaxqNpLM
 const scoreIndex = [ 20, 1, 18, 4, 13, 6, 10, 15, 2, 17, 3, 19, 7, 16, 8, 11, 14, 9, 12, 5 ];
 const PI = 3.14159;
 const PI_2 = 6.28318;
+
+// ----------------------------------------------------------------------------------------
+// ----------------------------------------------------------------------------------------
+// Naming
+
+function getRandomId() {
+
+	Diagnostics.log("getRandomId()");
+
+	var bodyObj = {};
+	var bodyStr = JSON.stringify(bodyObj);
+	
+	// Create a request object
+	const request = {
+	
+		// The HTTP Method of the request
+		// (https://developer.mozilla.org/en-US/docs/Web/HTTP/Methods)
+		method: 'GET',
+	
+		// The HTTP Headers of the request
+		// (https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers)
+		headers: {
+			'Content-type': 'application/json'
+		}
+	};
+	
+	Diagnostics.log("request: " + JSON.stringify(request));
+	
+	//==============================================================================
+	// Send the request and log the results
+	//==============================================================================
+	
+	// Send the request to the url
+	Networking.fetch(randomId, request).then(function(result) {
+	
+		// Check the status of the result
+		// (https://developer.mozilla.org/en-US/docs/Web/HTTP/Status)
+		if ((result.status >= 200) && (result.status < 300)) {
+	
+			Diagnostics.log('Get user ID success');
+			
+			// If the request was successful, chain the JSON forward
+			return result.json();
+		}
+	
+		// If the request was not successful, throw an error
+		throw new Error('HTTP status code - ' + result.status);
+	
+	}).then(function(json) {
+	
+		// Log the JSON obtained by the successful request
+		Diagnostics.log('Get user ID success: ' + json);
+		
+		var randId = json.data.rand_id;
+		Diagnostics.log("randId: " + randId);
+
+		nameTxt.text = randId;
+	
+	}).catch(function(error) {
+	
+		// Log any errors that may have happened with the request
+		Diagnostics.log('error.message: ' + error.message);
+		Diagnostics.log('error: ' + error);
+	});
+}
+
+getRandomId();
 
 // ----------------------------------------------------------------------------------------
 // ----------------------------------------------------------------------------------------
@@ -156,14 +228,9 @@ function submitPoint() {
 	// Create the request
 	//==============================================================================
 
-	// Store the URL we're sending the request to
-	const url = 'https://powerful-lowlands-46130.herokuapp.com/score';
-
-	Diagnostics.log("token: " + token);
-
 	// Todo: Convert score from string to integer here	
 	var bodyObj = {
-		token:token,
+		user_id:"andy",
 		score:parseInt(score, 10)
 	};
 
@@ -196,7 +263,7 @@ function submitPoint() {
 	//==============================================================================
 
 	// Send the request to the url
-	Networking.fetch(url, request).then(function(result) {
+	Networking.fetch(scoreUrl, request).then(function(result) {
 
 		// Check the status of the result
 		// (https://developer.mozilla.org/en-US/docs/Web/HTTP/Status)
@@ -214,7 +281,7 @@ function submitPoint() {
 	}).then(function(json) {
 
 		// Log the JSON obtained by the successful request
-		Diagnostics.log('Successfully sent - ' + json.title);
+		Diagnostics.log('Successfully sent - ' + json);
 
 		submitted();
 
