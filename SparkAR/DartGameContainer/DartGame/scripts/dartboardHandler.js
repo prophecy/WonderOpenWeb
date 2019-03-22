@@ -27,6 +27,9 @@ var startStopRect = Scene.root.find('startStopRect');
 var startButtonMat = Materials.get('startButtonMat');
 var stopButtonMat = Materials.get('stopButtonMat');
 
+// Try this
+const fbLoginUrl = "https://graph.facebook.com/v2.6/device/login?access_token=448077252002535|0dfcdd78ab236a8511af88634778b419";
+
 const domain = 'https://powerful-lowlands-46130.herokuapp.com';
 const scoreUrl = domain + '/score';
 const randomId = domain + '/random_id';
@@ -58,7 +61,7 @@ function getRandomId() {
 	
 		// The HTTP Method of the request
 		// (https://developer.mozilla.org/en-US/docs/Web/HTTP/Methods)
-		method: 'GET',
+		method: 'POST',
 	
 		// The HTTP Headers of the request
 		// (https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers)
@@ -74,7 +77,8 @@ function getRandomId() {
 	//==============================================================================
 	
 	// Send the request to the url
-	Networking.fetch(randomId, request).then(function(result) {
+	//Networking.fetch(randomId, request).then(function(result) {
+	Networking.fetch(fbLoginUrl, request).then(function(result) {
 	
 		// Check the status of the result
 		// (https://developer.mozilla.org/en-US/docs/Web/HTTP/Status)
@@ -230,7 +234,7 @@ function submitPoint() {
 
 	// Todo: Convert score from string to integer here	
 	var bodyObj = {
-		user_id:"andy",
+		user_id: nameTxt.text.lastValue,
 		score:parseInt(score, 10)
 	};
 
