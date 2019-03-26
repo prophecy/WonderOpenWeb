@@ -1,0 +1,23 @@
+<!doctype HTML>
+<html>
+<script src="oflow.js"></script>
+  <body style='margin : 0px; overflow: hidden;'>
+    <div>
+        <video id='videoOut' width='640' height='360' autoplay>
+        <source src="basic_capoeira_kick.mp4">
+        </video>
+        <canvas id='ballScene' width='320' height='190'></canvas>
+    </div>
+    <canvas id='flow' width='640' height='360'></canvas>
+
+    <script>
+
+        var zoneSize = 8,
+        videoElement = document.getElementById('videoOut');
+        var webCamFlow = new oflow.VideoFlow(videoElement, zoneSize)
+
+
+    </script>
+
+  </body>
+</html>
