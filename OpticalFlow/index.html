@@ -5,14 +5,16 @@
 </head>
 <body>
 <div>
-    <video id='videoOut' width='640px' height='360px' autoplay loop muted>
+    <video id='videoOut' width='1280px' height='720px' autoplay loop muted>
         <source src="basic_capoeira_kick.mp4">
     </video>
+    <!--
     <canvas id='ballScene' width='320px' height='190px'></canvas>
+    -->
     <button onclick="webCamFlow.stopCapture();videoElement.pause();">Stop</button>
     <button onclick="webCamFlow.startCapture();videoElement.play();">Resume</button>
 </div>
-<canvas id='flow' width='640px' height='360px'></canvas>
+<canvas id='flow' width='1280px' height='720px'></canvas>
 
 <script type="text/javascript">
     var zoneSize = 16;
@@ -21,15 +23,15 @@
 
     window.onload = function () {
         var flowCanvas = document.getElementById('flow'),
-                ballCanvas = document.getElementById('ballScene'),
+                //ballCanvas = document.getElementById('ballScene'),
                 flowContext = flowCanvas.getContext('2d'),
-                ballContext = ballCanvas.getContext('2d'),
+                //ballContext = ballCanvas.getContext('2d'),
                 sceneWidth = flowCanvas.width,
-                sceneHeight = flowCanvas.height,
-                ballSceneW = ballCanvas.width,
-                ballSceneH = ballCanvas.height,
-                ballX = ballSceneW / 2,
-                ballY = ballSceneH / 2;
+                sceneHeight = flowCanvas.height;//,
+                //ballSceneW = ballCanvas.width,
+                //ballSceneH = ballCanvas.height,
+                //ballX = ballSceneW / 2,
+                //ballY = ballSceneH / 2;
 
         // http://stackoverflow.com/questions/8211745/draw-an-arrow-on-html5-canvas-between-two-objects
         function drawArrow(ctx, p1, p2, size) {
@@ -60,13 +62,16 @@
         }
 
         webCamFlow.onCalculated(function (direciton) {
+            
             // render zones
             flowContext.clearRect(0, 0, sceneWidth, sceneHeight);
             for (var i = 0; i < direciton.zones.length; ++i) {
                 var zone = direciton.zones[i];
                 drawArrow(flowContext, zone, {x: zone.x + zone.u * 4, y: zone.y + zone.v * 4}, 5);
             }
+
             // render ball:
+            /*
             ballContext.clearRect(0, 0, ballSceneW, ballSceneH);
             ballContext.beginPath();
             ballX -= direciton.u;
@@ -87,6 +92,7 @@
             ballContext.fillStyle = 'yellow';
             ballContext.fill();
             ballContext.stroke();
+            */
         });
 
         webCamFlow.startCapture();
