@@ -5,15 +5,17 @@
     <title>chapter 3, brief matching</title>
     <script src="./js/tracking-min.js"></script>
     <script src="./js/jsfeat-min.js"></script>
-    <script src="js/common-jsfeat.js"></script>
+    <script src="./js/common-jsfeat.js"></script>
+    <script src="./js/oflow.js"></script>
     <link rel="stylesheet" type="text/css" href="css/cvw.css">
 </head>
 <body>
 <div id="images" class="canvas-parent">
     <canvas id="initCanvas" class="canvas-img"></canvas>
-    
-    <video id="video" width="640" height="480" autoplay></video>
     <canvas id="vcanvas" width="640" height="480"></canvas>
+    <video id='video' width='960px' height='540px' autoplay loop muted>
+        <source src="../resources/nasa_logo_video.mp4">
+    </video>
 </div>
 
 <script>
@@ -28,8 +30,8 @@
             imageObject = new Image(), colsObject, rowsObject,
             imageScene = new Image(), colsScene, rowsScene;
 
-    imageScene.src = '../resources/scene.jpg';
-    imageObject.src = '../resources/train.jpg';
+    imageScene.src = '../resources/bonchon_ads.png'; // Don't use this
+    imageObject.src = '../resources/nasa_logo.png';
 
     var homo3x3 = new jsfeat.matrix_t(3, 3, jsfeat.F32C1_t);
     var match_mask = new jsfeat.matrix_t(500, 1, jsfeat.U8C1_t);
