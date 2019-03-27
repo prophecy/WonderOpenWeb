@@ -8,9 +8,6 @@
     <video id='videoOut' width='960px' height='540px' autoplay loop muted>
         <source src="../resources/nasa_logo_video.mp4">
     </video>
-    <!--
-    <canvas id='ballScene' width='320px' height='190px'></canvas>
-    -->
     <button onclick="webCamFlow.stopCapture();videoElement.pause();">Stop</button>
     <button onclick="webCamFlow.startCapture();videoElement.play();">Resume</button>
 </div>
@@ -23,15 +20,9 @@
 
     window.onload = function () {
         var flowCanvas = document.getElementById('flow'),
-                //ballCanvas = document.getElementById('ballScene'),
                 flowContext = flowCanvas.getContext('2d'),
-                //ballContext = ballCanvas.getContext('2d'),
                 sceneWidth = flowCanvas.width,
-                sceneHeight = flowCanvas.height;//,
-                //ballSceneW = ballCanvas.width,
-                //ballSceneH = ballCanvas.height,
-                //ballX = ballSceneW / 2,
-                //ballY = ballSceneH / 2;
+                sceneHeight = flowCanvas.height;
 
         // http://stackoverflow.com/questions/8211745/draw-an-arrow-on-html5-canvas-between-two-objects
         function drawArrow(ctx, p1, p2, size) {
@@ -69,30 +60,6 @@
                 var zone = direciton.zones[i];
                 drawArrow(flowContext, zone, {x: zone.x + zone.u * 4, y: zone.y + zone.v * 4}, 5);
             }
-
-            // render ball:
-            /*
-            ballContext.clearRect(0, 0, ballSceneW, ballSceneH);
-            ballContext.beginPath();
-            ballX -= direciton.u;
-            ballY += direciton.v;
-            if (ballX < 0) {
-                ballX = ballSceneW;
-            }
-            if (ballX > ballSceneW) {
-                ballX = 0;
-            }
-            if (ballY < 0) {
-                ballY = ballSceneH;
-            }
-            if (ballY > ballSceneH) {
-                ballY = 0;
-            }
-            ballContext.arc(ballX, ballY, 10, 0, 2 * Math.PI, false);
-            ballContext.fillStyle = 'yellow';
-            ballContext.fill();
-            ballContext.stroke();
-            */
         });
 
         webCamFlow.startCapture();
