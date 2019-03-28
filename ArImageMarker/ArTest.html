@@ -20,6 +20,19 @@
             z-index: 10;
             background-color:rgba(255,0,0,0);
         }
+        .button {
+            background-color: #4CAF50;
+            border: none;
+            color: white;
+            padding: 200px 200px;
+            text-align: center;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        .button:hover {
+            background-color: green;
+        }
     </style>
 </head>
 <body>
@@ -35,6 +48,8 @@
     <canvas id="vcanvas" width="960px" height="540px"></canvas>
     <canvas id='flow' width='960px' height='540px'></canvas>
 </div>
+
+<button class="button" onclick="webCamFlow.startCapture();video.play();">PLAY</button>
 
 <script>
 
@@ -377,6 +392,7 @@
 
     // Get access to the camera!
     if(navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
+
         /*
         // Not adding `{ audio: true }` since we only want video now
         navigator.mediaDevices.getUserMedia({ video: true }).then(function(stream) {
