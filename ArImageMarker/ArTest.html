@@ -147,9 +147,13 @@
         return Math.abs(Math.acos(cosVal));
     }
 
-    // Use this as the last C* cluster
+    // C* cluster
     var boundX0, boundX1, boundX2, boundX3;
     var boundY0, boundY1, boundY2, boundY3;
+
+    // C+ cluster
+    var bound2X0, bound2X1, bound2X2, bound2X3;
+    var bound2Y0, bound2Y1, bound2Y2, bound2Y3;
 
     function check_accurate_cluster(cts, shift) {
 
@@ -193,26 +197,49 @@
             boundY2 = shape_pts[2].y;
             boundX3 = shape_pts[3].x;
             boundY3 = shape_pts[3].y;
+
+            // Apply to C+ cluster (reset)
+            bound2X0 = boundX0;
+            bound2X1 = boundX1;
+            bound2X2 = boundX2;
+            bound2X3 = boundX3;
+
+            bound2Y0 = boundY0;
+            bound2Y1 = boundY1;
+            bound2Y2 = boundY2;
+            bound2Y3 = boundY3;
         }
     }
 
-    // Todo: Render the latest satisfy shape here
-    function renderSatisfyPatternShaper(ctx, offset) {
+    // Render the latest satisfy shape here
+    function renderSatisfyPatternShaper(context, offset) {
 
-        // get the projected pattern corners
-        var shape_pts = tCorners(homo3x3.data, colsObject, rowsObject);
+        context.strokeStyle = "rgb(255,0,0)";
+        context.beginPath();
 
-        ctx.strokeStyle = "rgb(255,0,0)";
-        ctx.beginPath();
+        context.moveTo(boundX0 + offset, boundY0);
+        context.lineTo(boundX1 + offset, boundY1);
+        context.lineTo(boundX2 + offset, boundY2);
+        context.lineTo(boundX3 + offset, boundY3);
+        context.lineTo(boundX0 + offset, boundY0);
 
-        ctx.moveTo(boundX0 + offset, boundY0);
-        ctx.lineTo(boundX1 + offset, boundY1);
-        ctx.lineTo(boundX2 + offset, boundY2);
-        ctx.lineTo(boundX3 + offset, boundY3);
-        ctx.lineTo(boundX0 + offset, boundY0);
+        context.lineWidth = 4;
+        context.stroke();
+    }
 
-        ctx.lineWidth = 4;
-        ctx.stroke();
+    function renderSmoothShape(context) {
+
+        context.strokeStyle = "rgb(0,0,255)";
+        context.beginPath();
+
+        context.moveTo(bound2X0, bound2Y0);
+        context.lineTo(bound2X1, bound2Y1);
+        context.lineTo(bound2X2, bound2Y2);
+        context.lineTo(bound2X3, bound2Y3);
+        context.lineTo(bound2X0, bound2Y0);
+
+        context.lineWidth = 4;
+        context.stroke();
     }
 
     function render_pattern_shape(ctx, shift) {
@@ -285,14 +312,68 @@
 
         webCamFlow.onCalculated(function (direciton) {
             
-            // render zones
             flowContext.clearRect(0, 0, sceneWidth, sceneHeight);
+            flowContext.strokeStyle = "rgb(0,0,0)";
+
+            // Calculate C+ offset from arrow
+            var offsetX = 0;
+            var offsetY = 0;
+
+            /* // render zones
             for (var i = 0; i < direciton.zones.length; ++i) {
                 var zone = direciton.zones[i];
                 drawArrow(flowContext, zone, {x: zone.x + zone.u * 4, y: zone.y + zone.v * 4}, 5);
             }
+            /*/ // render zones if inbound
+            for (var i = 0; i < direciton.zones.length; ++i) {
+                var zone = direciton.zones[i];
+                if (zone.x < bound2X0 || zone.x < bound2X3 ||
+                    zone.x > bound2X1 || zone.x > bound2X2)
+                    continue;
+                if (zone.y < boundY0 || zone.y < boundY1 ||
+                    zone.y > boundY2 || zone.y > boundY3)
+                    continue;
+
+                drawArrow(flowContext, zone, {x: zone.x + zone.u * 4, y: zone.y + zone.v * 4}, 5);
+
+                // accumulate offset x
+                offsetX += zone.u;
+                offsetY += zone.v;
+            }
+            /**/
 
             renderSatisfyPatternShaper(flowContext, 0);
+
+            /*
+            var vecLen = Math.sqrt(offsetX*offsetX + offsetY*offsetY);
+            if (vecLen != 0) {
+                offsetX = offsetX / vecLen;
+                offsetY = offsetY / vecLen;
+            }
+            else  {
+                offsetX = offsetY = 0;
+            }
+
+            var OFFSET_PARM = 10.0;
+            /*/
+            var OFFSET_PARM = 0.03;
+            /**/
+
+            // Get C+ cluster
+            bound2X0 = bound2X0 + offsetX*OFFSET_PARM;
+            bound2X1 = bound2X1 + offsetX*OFFSET_PARM;
+            bound2X2 = bound2X2 + offsetX*OFFSET_PARM;
+            bound2X3 = bound2X3 + offsetX*OFFSET_PARM;
+
+            bound2Y0 = bound2Y0 + offsetY*OFFSET_PARM;
+            bound2Y1 = bound2Y1 + offsetY*OFFSET_PARM;
+            bound2Y2 = bound2Y2 + offsetY*OFFSET_PARM;
+            bound2Y3 = bound2Y3 + offsetY*OFFSET_PARM;
+
+            //console.log("0: " + bound2X0 + " 1: " + bound2X1 + " 2: " + bound2X2 + " 3: " + bound2X3);
+            //alert("");
+
+            renderSmoothShape(flowContext);
         });
 
         webCamFlow.startCapture();
@@ -389,7 +470,7 @@
 
     this.c1 = document.getElementById("vcanvas");
     this.ctx1 = this.c1.getContext("2d");
-
+    
     // Get access to the camera!
     if(navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
 
@@ -426,6 +507,7 @@
             var oContext = overlay.getContext('2d');
             oContext.clearRect(0, 0, overlay.width, overlay.height);
             renderSatisfyPatternShaper(oContext, 0);
+            renderSmoothShape(oContext);
         }
         
         timerCallback = function() {  
