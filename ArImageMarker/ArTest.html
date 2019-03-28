@@ -12,6 +12,9 @@
 <body>
 
 <div id="images" class="canvas-parent">
+        <canvas id="abcdef" width="960px" height="540px"></canvas>
+        <canvas id="ghijkl" width="960px" height="540px"></canvas>
+
     <canvas id="initCanvas" class="canvas-img"></canvas>
     <canvas id="vcanvas" width="960px" height="540px"></canvas>
     <video id='video' width='960px' height='540px' autoplay loop muted>
@@ -98,7 +101,101 @@
         return pt;
     }
 
+    /*
+    function get_dist_x(shape_pts, srcI, dstI, shift) {
+        return Math.abs(shape_pts[srcI].x + shift - shape_pts[dstI].x + shift);
+    }
+
+    function get_dist_y(shape_pts, srcI, dstI) {
+        return Math.abs(shape_pts[srcI].y - shape_pts[dstI].y);
+    }
+    /**/
+
+    function getAngle(p0x, p0y, p1x, p1y, p2x, p2y) {
+
+        vec0x = p1x - p0x;
+        vec0y = p1y - p0y;
+        vec1x = p2x - p1x;
+        vec1y = p2y - p1y;
+
+        val0 = vec0x*vec1x + vec0y*vec1y;
+
+        distVec0 = Math.sqrt(vec0x*vec0x + vec0y*vec0y);
+        distVec1 = Math.sqrt(vec1x*vec1x + vec1y*vec1y);
+        val1 = distVec0 * distVec1;
+
+        cosVal = val0 / val1;
+
+        return Math.abs(Math.acos(cosVal));
+    }
+
+    // Use this as the last C* cluster
+    var boundX0, boundX1, boundX2, boundX3;
+    var boundY0, boundY1, boundY2, boundY3;
+
+    function check_accurate_cluster(cts, shift) {
+
+        // Determine the satisfy factor here
+        //     e.g. get big enouth beautiful rectangle
+
+        var shape_pts = tCorners(homo3x3.data, colsObject, rowsObject);
+
+        var ow = imageObject.width*imageObject.width;
+        var oh = imageObject.height*imageObject.height;
+        
+        // Get all angles
+        var a0 = getAngle(shape_pts[0].x + shift, shape_pts[0].y, 
+                            shape_pts[1].x + shift, shape_pts[1].y,
+                            shape_pts[2].x + shift, shape_pts[2].y);
+        var a1 = getAngle(shape_pts[1].x + shift, shape_pts[1].y, 
+                            shape_pts[2].x + shift, shape_pts[2].y,
+                            shape_pts[3].x + shift, shape_pts[3].y);
+        var a2 = getAngle(shape_pts[2].x + shift, shape_pts[2].y, 
+                            shape_pts[3].x + shift, shape_pts[3].y,
+                            shape_pts[0].x + shift, shape_pts[0].y);
+        //var a3 = getAngle(shape_pts[3].x + shift, shape_pts[3].y, shape_pts[0].x + shift, shape_pts[0].y); // Not necessary
+
+        var DIF_THRES = 15.0 * Math.PI / 180.0;
+        var PERFECT_ANGLE = 90.0 * Math.PI / 180.0;
+        var MIN_ANGLE_THRES = PERFECT_ANGLE - DIF_THRES;
+        var MAX_ANGLE_THRES = PERFECT_ANGLE + DIF_THRES;
+
+        if (a0 >= MIN_ANGLE_THRES && a0 <= MAX_ANGLE_THRES &&
+            a1 >= MIN_ANGLE_THRES && a1 <= MAX_ANGLE_THRES &&
+            a2 >= MIN_ANGLE_THRES && a2 <= MAX_ANGLE_THRES) {
+
+            boundX0 = shape_pts[0].x + shift;
+            boundY0 = shape_pts[0].y;
+            boundX1 = shape_pts[1].x + shift;
+            boundY1 = shape_pts[1].y;
+            boundX2 = shape_pts[2].x + shift;
+            boundY2 = shape_pts[2].y;
+            boundX3 = shape_pts[3].x + shift;
+            boundY3 = shape_pts[3].y;
+        }
+    }
+
+    // Todo: Render the latest satisfy shape here
+    function renderSatisfyPatternShaper(ctx, shift) {
+
+        // get the projected pattern corners
+        var shape_pts = tCorners(homo3x3.data, colsObject, rowsObject);
+
+        ctx.strokeStyle = "rgb(255,0,0)";
+        ctx.beginPath();
+
+        ctx.moveTo(boundX0, boundY0);
+        ctx.lineTo(boundX1, boundY1);
+        ctx.lineTo(boundX2, boundY2);
+        ctx.lineTo(boundX3, boundY3);
+        ctx.lineTo(boundX0, boundY0);
+
+        ctx.lineWidth = 4;
+        ctx.stroke();
+    }
+
     function render_pattern_shape(ctx, shift) {
+
         // get the projected pattern corners
         var shape_pts = tCorners(homo3x3.data, colsObject, rowsObject);
 
@@ -110,9 +207,18 @@
         ctx.lineTo(shape_pts[2].x + shift, shape_pts[2].y);
         ctx.lineTo(shape_pts[3].x + shift, shape_pts[3].y);
         ctx.lineTo(shape_pts[0].x + shift, shape_pts[0].y);
-
+        
         ctx.lineWidth = 4;
         ctx.stroke();
+
+        var p0x = shape_pts[0].x + shift;
+        var p0y = shape_pts[0].y;
+        var p1x = shape_pts[1].x + shift;
+        var p1y = shape_pts[1].y;
+        var p2x = shape_pts[2].x + shift;
+        var p2y = shape_pts[2].y;
+        var p3x = shape_pts[3].x + shift;
+        var p3y = shape_pts[3].y;
     }
 
     // Optical flow
@@ -205,6 +311,7 @@
             return b.confidence - a.confidence;
         });
 
+        /*
         for (var i = 0; i < Math.min(matchesShown, matches.length); i++) {
             var color = '#' + Math.floor(Math.random() * 16777215).toString(16);
             context.fillStyle = color;
@@ -217,9 +324,12 @@
             context.lineTo(matches[i].keypoint2[0] + colsObject, matches[i].keypoint2[1]);
             context.stroke();
         }
+        /**/
 
         find_transform(matches, matches.length);
+        check_accurate_cluster(context, colsObject);
         render_pattern_shape(context, colsObject);
+        renderSatisfyPatternShaper(context, colsObject);
     }
 
     window.onload = function () {
