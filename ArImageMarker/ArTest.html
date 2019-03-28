@@ -8,18 +8,31 @@
     <script src="./js/common-jsfeat.js"></script>
     <script src="./js/oflow.js"></script>
     <link rel="stylesheet" type="text/css" href="css/cvw.css">
+    
+    <style>
+        #container {
+            position: relative;
+        }
+        #overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            z-index: 10;
+            background-color:rgba(255,0,0,0);
+        }
+    </style>
 </head>
 <body>
 
 <div id="images" class="canvas-parent">
-        <canvas id="abcdef" width="960px" height="540px"></canvas>
-        <canvas id="ghijkl" width="960px" height="540px"></canvas>
-
+    <div id="container">
+        <video id='video' width='960px' height='540px' autoplay loop muted>
+            <source src="../resources/bonchon_ads_video.mp4">
+        </video>
+        <canvas id="overlay" width='960px' height='540px'></canvas>
+    </div>
     <canvas id="initCanvas" class="canvas-img"></canvas>
     <canvas id="vcanvas" width="960px" height="540px"></canvas>
-    <video id='video' width='960px' height='540px' autoplay loop muted>
-        <source src="../resources/bonchon_ads_video.mp4">
-    </video>
     <canvas id='flow' width='960px' height='540px'></canvas>
 </div>
 
@@ -143,7 +156,7 @@
         //var a3 = getAngle(shape_pts[3].x + shift, shape_pts[3].y, shape_pts[0].x + shift, shape_pts[0].y); // Not necessary
 
         // Get satisfy rectangle by angles
-        var DIF_THRES = 15.0 * Math.PI / 180.0;
+        var DIF_THRES = 7.0 * Math.PI / 180.0;
         var PERFECT_ANGLE = 90.0 * Math.PI / 180.0;
         var MIN_ANGLE_THRES = PERFECT_ANGLE - DIF_THRES;
         var MAX_ANGLE_THRES = PERFECT_ANGLE + DIF_THRES;
@@ -157,19 +170,19 @@
             a1 >= MIN_ANGLE_THRES && a1 <= MAX_ANGLE_THRES &&
             a2 >= MIN_ANGLE_THRES && a2 <= MAX_ANGLE_THRES) {
 
-            boundX0 = shape_pts[0].x + shift;
+            boundX0 = shape_pts[0].x;
             boundY0 = shape_pts[0].y;
-            boundX1 = shape_pts[1].x + shift;
+            boundX1 = shape_pts[1].x;
             boundY1 = shape_pts[1].y;
-            boundX2 = shape_pts[2].x + shift;
+            boundX2 = shape_pts[2].x;
             boundY2 = shape_pts[2].y;
-            boundX3 = shape_pts[3].x + shift;
+            boundX3 = shape_pts[3].x;
             boundY3 = shape_pts[3].y;
         }
     }
 
     // Todo: Render the latest satisfy shape here
-    function renderSatisfyPatternShaper(ctx, shift) {
+    function renderSatisfyPatternShaper(ctx, offset) {
 
         // get the projected pattern corners
         var shape_pts = tCorners(homo3x3.data, colsObject, rowsObject);
@@ -177,11 +190,11 @@
         ctx.strokeStyle = "rgb(255,0,0)";
         ctx.beginPath();
 
-        ctx.moveTo(boundX0, boundY0);
-        ctx.lineTo(boundX1, boundY1);
-        ctx.lineTo(boundX2, boundY2);
-        ctx.lineTo(boundX3, boundY3);
-        ctx.lineTo(boundX0, boundY0);
+        ctx.moveTo(boundX0 + offset, boundY0);
+        ctx.lineTo(boundX1 + offset, boundY1);
+        ctx.lineTo(boundX2 + offset, boundY2);
+        ctx.lineTo(boundX3 + offset, boundY3);
+        ctx.lineTo(boundX0 + offset, boundY0);
 
         ctx.lineWidth = 4;
         ctx.stroke();
@@ -263,6 +276,8 @@
                 var zone = direciton.zones[i];
                 drawArrow(flowContext, zone, {x: zone.x + zone.u * 4, y: zone.y + zone.v * 4}, 5);
             }
+
+            renderSatisfyPatternShaper(flowContext, 0);
         });
 
         webCamFlow.startCapture();
@@ -389,6 +404,12 @@
             this.ctx1.putImageData(matrix2img(gray), 0, 0);
 
             crossScriptMatching(image);
+
+            // Todo: move this code to the proper place
+            //     This is just hotfix
+            var oContext = overlay.getContext('2d');
+            oContext.clearRect(0, 0, overlay.width, overlay.height);
+            renderSatisfyPatternShaper(oContext, 0);
         }
         
         timerCallback = function() {  
