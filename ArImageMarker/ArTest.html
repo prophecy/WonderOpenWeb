@@ -160,7 +160,12 @@
         var MIN_ANGLE_THRES = PERFECT_ANGLE - DIF_THRES;
         var MAX_ANGLE_THRES = PERFECT_ANGLE + DIF_THRES;
 
-        if (a0 >= MIN_ANGLE_THRES && a0 <= MAX_ANGLE_THRES &&
+        if (shape_pts[0].x != 0 && shape_pts[0].y != 0 &&
+            shape_pts[1].x != 0 && shape_pts[1].y != 0 &&
+            shape_pts[2].x != 0 && shape_pts[2].y != 0 &&
+            shape_pts[3].x != 0 && shape_pts[3].y != 0
+            &&
+            a0 >= MIN_ANGLE_THRES && a0 <= MAX_ANGLE_THRES &&
             a1 >= MIN_ANGLE_THRES && a1 <= MAX_ANGLE_THRES &&
             a2 >= MIN_ANGLE_THRES && a2 <= MAX_ANGLE_THRES) {
 
