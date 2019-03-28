@@ -101,16 +101,6 @@
         return pt;
     }
 
-    /*
-    function get_dist_x(shape_pts, srcI, dstI, shift) {
-        return Math.abs(shape_pts[srcI].x + shift - shape_pts[dstI].x + shift);
-    }
-
-    function get_dist_y(shape_pts, srcI, dstI) {
-        return Math.abs(shape_pts[srcI].y - shape_pts[dstI].y);
-    }
-    /**/
-
     function getAngle(p0x, p0y, p1x, p1y, p2x, p2y) {
 
         vec0x = p1x - p0x;
@@ -135,9 +125,6 @@
 
     function check_accurate_cluster(cts, shift) {
 
-        // Determine the satisfy factor here
-        //     e.g. get big enouth beautiful rectangle
-
         var shape_pts = tCorners(homo3x3.data, colsObject, rowsObject);
 
         var ow = imageObject.width*imageObject.width;
@@ -155,6 +142,7 @@
                             shape_pts[0].x + shift, shape_pts[0].y);
         //var a3 = getAngle(shape_pts[3].x + shift, shape_pts[3].y, shape_pts[0].x + shift, shape_pts[0].y); // Not necessary
 
+        // Get satisfy rectangle by angles
         var DIF_THRES = 15.0 * Math.PI / 180.0;
         var PERFECT_ANGLE = 90.0 * Math.PI / 180.0;
         var MIN_ANGLE_THRES = PERFECT_ANGLE - DIF_THRES;
@@ -316,7 +304,7 @@
             return b.confidence - a.confidence;
         });
 
-        /*
+        //*
         for (var i = 0; i < Math.min(matchesShown, matches.length); i++) {
             var color = '#' + Math.floor(Math.random() * 16777215).toString(16);
             context.fillStyle = color;
