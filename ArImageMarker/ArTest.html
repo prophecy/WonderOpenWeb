@@ -471,6 +471,10 @@
     this.c1 = document.getElementById("vcanvas");
     this.ctx1 = this.c1.getContext("2d");
     
+    // Load image as augmented data
+    var chickenOnMars = new Image();
+    chickenOnMars.src = "../resources/superb_chicken_on_mars.png";
+
     // Get access to the camera!
     if(navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
 
@@ -502,12 +506,18 @@
 
             crossScriptMatching(image);
 
-            // Todo: move this code to the proper place
+            // Todo: move this code block to the proper place
             //     This is just hotfix
             var oContext = overlay.getContext('2d');
             oContext.clearRect(0, 0, overlay.width, overlay.height);
-            renderSatisfyPatternShaper(oContext, 0);
-            renderSmoothShape(oContext);
+            //renderSatisfyPatternShaper(oContext, 0);
+            //renderSmoothShape(oContext);
+
+            // Todo: move this code block to the proper place
+            // Draw image on C+ cluster
+            oContext.drawImage(chickenOnMars, bound2X0, bound2Y0, 
+                                Math.abs(bound2X1 - bound2X0), 
+                                Math.abs(bound2Y2 - bound2Y0));
         }
         
         timerCallback = function() {  
