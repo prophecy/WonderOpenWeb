@@ -4,23 +4,31 @@
 // Core game loop
 
 var wonderCore = {
-    getFps: function(fps) {},
+    fpsText: undefined,
+    getFps: function(fps) { if (!!this.fpsText) this.fpsText.html("FPS: " + fps); },
+    start: function() {},
     update: function() {},
-    render: function() {}
+    render: function() {},
+    log: function(val) { console.log(val); },
 };
 
 var prevTimeStamp = 0;
 
 function loop(timestamp) {
 
-    var deltaTime = timestamp - prevTimeStamp;
+    var dt = timestamp - prevTimeStamp;
 
-    var fps = 1000 / deltaTime;
-
+    // Get FPS
+    var fps = 1000 / dt;
     wonderCore.getFps(fps);
-    wonderCore.update(deltaTime);
+
+    // Update loop with delta time
+    wonderCore.update(dt);
+
+    // Render function
     wonderCore.render();
 
+    // Request runloop
     prevTimeStamp = timestamp;
     window.requestAnimationFrame(loop)
 }

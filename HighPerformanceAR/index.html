@@ -3,24 +3,50 @@
 <header>
     <script src="./js/jquery-3.3.1.min.js"></script>
     <script src="./wonderCore.js"></script>
+    <script src="./mediaMgr.js"></script>
+    <style src="./style.css"></style>
 </header>
 
 <body>
 
     <h3 id="fps" class="text"></h3>
-    <canvas id="canvas" width="960px" height="540px"></canvas>
+    <div id="container">
+        <!--
+        <video id='video' class="mediaSize" autoplay loop muted>
+            <source src="../resources/bonchon_ads_video.mp4">
+        </video>
+        -->
+        <canvas id="overlay" class="mediaSize"></canvas>
+    </div>
 
+    <canvas id="dbgCanvas" class="mediaSize"></canvas>
+    
     <script>
         
-        var fpsText = $("#fps");
+        // Conf core
+        wonderCore.fpsText = $("#fps");
 
-        wonderCore.getFps = function(fps) {
+        wonderCore.start = function() {
 
-            fpsText.html("FPS: " + fps);
+            // Load augmented image
+            var augmentedImage = new Image();
+            augmentedImage.src = "../resources/superb_chicken_on_mars.png";
+            mediaMgr.augmentedImage = augmentedImage;    
+
+            mediaMgr.start();
         }
 
-    </script>
+        wonderCore.update = function(dt) {
+            // Game logic is here
+        }
 
+        wonderCore.render = function() {
+            // Render logic is here
+        }
+
+        wonderCore.start();
+
+    </script>
 
 </body>
 </html>

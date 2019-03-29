@@ -270,7 +270,6 @@
     }
 
     // Optical flow
-
     var zoneSize = 16;
     var videoElement = document.getElementById('video');
     var webCamFlow = new oflow.VideoFlow(videoElement, zoneSize);
@@ -319,12 +318,7 @@
             var offsetX = 0;
             var offsetY = 0;
 
-            /* // render zones
-            for (var i = 0; i < direciton.zones.length; ++i) {
-                var zone = direciton.zones[i];
-                drawArrow(flowContext, zone, {x: zone.x + zone.u * 4, y: zone.y + zone.v * 4}, 5);
-            }
-            /*/ // render zones if inbound
+            // render zones if inbound
             for (var i = 0; i < direciton.zones.length; ++i) {
                 var zone = direciton.zones[i];
                 if (zone.x < bound2X0 || zone.x < bound2X3 ||
@@ -340,24 +334,10 @@
                 offsetX += zone.u;
                 offsetY += zone.v;
             }
-            /**/
 
             renderSatisfyPatternShaper(flowContext, 0);
 
-            /*
-            var vecLen = Math.sqrt(offsetX*offsetX + offsetY*offsetY);
-            if (vecLen != 0) {
-                offsetX = offsetX / vecLen;
-                offsetY = offsetY / vecLen;
-            }
-            else  {
-                offsetX = offsetY = 0;
-            }
-
-            var OFFSET_PARM = 10.0;
-            /*/
             var OFFSET_PARM = 0.04;
-            /**/
 
             // Get C+ cluster
             bound2X0 = bound2X0 + offsetX*OFFSET_PARM;
@@ -369,9 +349,6 @@
             bound2Y1 = bound2Y1 + offsetY*OFFSET_PARM;
             bound2Y2 = bound2Y2 + offsetY*OFFSET_PARM;
             bound2Y3 = bound2Y3 + offsetY*OFFSET_PARM;
-
-            //console.log("0: " + bound2X0 + " 1: " + bound2X1 + " 2: " + bound2X2 + " 3: " + bound2X3);
-            //alert("");
 
             renderSmoothShape(flowContext);
         });
@@ -428,7 +405,6 @@
             context.lineTo(matches[i].keypoint2[0] + colsObject, matches[i].keypoint2[1]);
             context.stroke();
         }
-        /**/
 
         find_transform(matches, matches.length);
         check_accurate_cluster(context, colsObject);
@@ -463,10 +439,7 @@
     // ------------------------------------------------------------------------
 
     context = vcanvas.getContext('2d');
-
-    // Grab elements, create settings, etc.
     var video = document.getElementById('video');
-    //video.style.visibility = "hidden";
 
     this.c1 = document.getElementById("vcanvas");
     this.ctx1 = this.c1.getContext("2d");
@@ -478,14 +451,6 @@
     // Get access to the camera!
     if(navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
 
-        /*
-        // Not adding `{ audio: true }` since we only want video now
-        navigator.mediaDevices.getUserMedia({ video: true }).then(function(stream) {
-            //video.src = window.URL.createObjectURL(stream);
-            video.srcObject = stream;
-            video.play();
-        });
-        */
         computeFrame = function() {
 
             var image = this.video;
