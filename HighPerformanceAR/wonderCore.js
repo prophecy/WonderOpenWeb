@@ -3,13 +3,18 @@
 // ------------------------------------------------------------------------
 // Core game loop
 
+function stackTrace() {
+    var err = new Error();
+    return err.stack;
+}
+
 var wonderCore = {
     fpsText: undefined,
     getFps: function(fps) { if (!!this.fpsText) this.fpsText.html("FPS: " + fps); },
     start: function() {},
     update: function() {},
     render: function() {},
-    log: function(val) { console.log(val); },
+    log: function(val) { console.log(val); console.log(stackTrace()) },
 };
 
 var prevTimeStamp = 0;
