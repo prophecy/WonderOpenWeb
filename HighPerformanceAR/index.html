@@ -9,26 +9,43 @@
     <script src="./wonderCore.js"></script>
     <script src="./mediaMgr.js"></script>
     <style src="./style.css"></style>
+
+    <style>
+        #container {
+            position: relative;
+        }
+        .layer {
+            position: absolute;
+            top: 0;
+            left: 0;
+            z-index: 10;
+            background-color:rgba(255,0,0,0);
+        }
+        #video {
+            visibility: hidden;
+        }
+    </style>
 </header>
 
 <body>
 
     <h3 id="fps" class="text"></h3>
+
     <div id="container">
-        <video id='video' class="mediaSize" autoplay loop muted>
-            <source src="../resources/bonchon_ads_video.mp4">
-        </video>
-        <canvas id="overlay" class="mediaSize"></canvas>
+        <canvas id="dbgCanvas" class="layer mediaSize"></canvas>
+        <canvas id="overlay" class="layer mediaSize"></canvas>
     </div>
 
-    <canvas id="dbgCanvas" class="mediaSize"></canvas>
+    <video id='video' class="mediaSize" autoplay loop muted>
+        <source src="../resources/bonchon_ads_video.mp4">
+    </video>
     
     <script>
         
         // Conf core
         wonderCore.fpsText = $("#fps");
         mediaMgr.canvas = $("#dbgCanvas").get(0);
-        mediaMgr.video = document.getElementById('video');
+        mediaMgr.video = $("#video").get(0);
 
         wonderCore.start = function() {
 
@@ -42,7 +59,6 @@
 
         wonderCore.update = function(dt) {
             // Game logic is here
-
 
             mediaMgr.computeFrame();
         }

@@ -10,7 +10,6 @@ var mediaMgr = {
     canvas: undefined,
 
     video: undefined,
-    videoContext: undefined,
     context: undefined,
 
     modeVideo: "modeVideo",
@@ -46,9 +45,6 @@ var mediaMgr = {
                 return;
             }
 
-            // Todo: Fix video context here
-            //videoContext = this.video.getContext("2d");
-
             this.video.addEventListener("play", function() {
 
                 // Do nothing
@@ -62,6 +58,7 @@ var mediaMgr = {
             return;  
         }  
 
+        // Render video on canvas
         var width = this.video.videoWidth;
         var height = this.video.videoHeight;
         var cols = this.video.videoWidth * this.videoToImageRatio;
@@ -71,35 +68,14 @@ var mediaMgr = {
         this.canvas.height = rows;
 
         this.context.drawImage(this.video, 0, 0, width, height, 0, 0, cols, rows);
-
-        /*
-        var imageData = this.videoContext.getImageData(0, 0, cols, rows);
+        
+        // Render grayscale on the same canvas
+        var imageData = this.context.getImageData(0, 0, cols, rows);
         var dataBuffer = new jsfeat.data_t(cols * rows, imageData.data.buffer);
         var mat = new jsfeat.matrix_t(cols, rows, jsfeat.U8_t | jsfeat.C4_t, dataBuffer);
 
         var gray = new jsfeat.matrix_t(mat.cols, mat.rows, jsfeat.U8_t | jsfeat.C1_t);
         jsfeat.imgproc.grayscale(mat.data, mat.cols, mat.rows, gray);
         this.context.putImageData(matrix2img(gray), 0, 0);
-        */
-
-        //this.context.drawImage(this.video, 0, 0, width, height, 0, 0, cols, rows);
-
-        //crossScriptMatching(image);
-
-        /*
-        // Todo: move this code block to the proper place
-        //     This is just hotfix
-        var oContext = overlay.getContext('2d');
-        oContext.clearRect(0, 0, overlay.width, overlay.height);
-        //renderSatisfyPatternShaper(oContext, 0);
-        //renderSmoothShape(oContext);
-
-        // Todo: move this code block to the proper place
-        // Draw image on C+ cluster
-        oContext.drawImage(chickenOnMars, bound2X0, bound2Y0, 
-                            Math.abs(bound2X1 - bound2X0), 
-                            Math.abs(bound2Y2 - bound2Y0));
-        */
     }
-
 };
