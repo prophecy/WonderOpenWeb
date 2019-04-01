@@ -52,7 +52,7 @@ var mediaMgr = {
         }
     },
 
-    computeFrame: function() {
+    processMedia: function() {
 
         if (this.video.paused || this.video.ended) {  
             return;  
@@ -68,7 +68,7 @@ var mediaMgr = {
         this.canvas.height = rows;
 
         this.context.drawImage(this.video, 0, 0, width, height, 0, 0, cols, rows);
-        
+
         // Render grayscale on the same canvas
         var imageData = this.context.getImageData(0, 0, cols, rows);
         var dataBuffer = new jsfeat.data_t(cols * rows, imageData.data.buffer);

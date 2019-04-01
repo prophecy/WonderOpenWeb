@@ -36,6 +36,8 @@
         <canvas id="overlay" class="layer mediaSize"></canvas>
     </div>
 
+
+
     <video id='video' class="mediaSize" autoplay loop muted>
         <source src="../resources/bonchon_ads_video.mp4">
     </video>
@@ -60,7 +62,7 @@
         wonderCore.update = function(dt) {
             // Game logic is here
 
-            mediaMgr.computeFrame();
+            mediaMgr.processMedia();
         }
 
         wonderCore.render = function() {
