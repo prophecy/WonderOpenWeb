@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html>
+<header>
+    <script src="./js.lib/jquery-3.3.1.min.js"></script>
+    <script src="./js.lib/tracking-min.js"></script>
+    <script src="./js.lib/jsfeat-min.js"></script>
+    <script src="./js.lib/common-jsfeat.js"></script>
+    <script src="./js.lib/oflow.js"></script>
+    <script src="./js.src/wonderCore.js"></script>
+    <script src="./js.src/mediaMgr.js"></script>
+    <script src="./js.src/featureMatching.js"></script>
+    <style src="./style.css"></style>
+
+    <style>
+        #container {
+            position: relative;
+        }
+        .layer {
+            position: absolute;
+            top: 0;
+            left: 0;
+            z-index: 10;
+            background-color:rgba(255,0,0,0);
+        }
+        #video {
+            visibility: hidden;
+        }
+    </style>
+</header>
+
+<body>
+
+    <h3 id="fps" class="text"></h3>
+
+    <div id="container">
+        <canvas id="dbgCanvas" class="layer mediaSize"></canvas>
+        <canvas id="overlay" class="layer mediaSize"></canvas>
+    </div>
+
+    
+
+    <video id='video' class="mediaSize" autoplay loop muted>
+        <source src="../resources/bonchon_ads_video.mp4">
+    </video>
+    
+    <script>
+        
+        // Conf core
+        wonderCore.fpsText = $("#fps");
+        mediaMgr.canvas = $("#dbgCanvas").get(0);
+        mediaMgr.video = $("#video").get(0);
+
+        wonderCore.start = function() {
+
+            // Load augmented image
+            var augmentedImage = new Image();
+            augmentedImage.src = "../resources/superb_chicken_on_mars.png";
+            mediaMgr.augmentedImage = augmentedImage;    
+
+            mediaMgr.start();
+            featureMatching.start();
+        }
+
+        wonderCore.update = function(dt) {
+            // Game logic is here
+
+            mediaMgr.processMedia();
+        }
+
+        wonderCore.render = function() {
+            // Render logic is here
+        }
+
+        wonderCore.start();
+
+    </script>
+
+</body>
+</html>

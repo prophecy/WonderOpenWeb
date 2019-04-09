@@ -1,0 +1,69 @@
+<html>
+<head>
+    <title>chapter 5, oflow</title>
+    <script src="oflow.js"></script>
+</head>
+<body>
+<div>
+    <video id='videoOut' width='960px' height='540px' autoplay loop muted>
+        <source src="../resources/nasa_logo_video.mp4">
+    </video>
+    <button onclick="webCamFlow.stopCapture();videoElement.pause();">Stop</button>
+    <button onclick="webCamFlow.startCapture();videoElement.play();">Resume</button>
+</div>
+<canvas id='flow' width='960px' height='540px'></canvas>
+
+<script type="text/javascript">
+    var zoneSize = 16;
+    var videoElement = document.getElementById('videoOut');
+    var webCamFlow = new oflow.VideoFlow(videoElement, zoneSize);
+
+    window.onload = function () {
+        var flowCanvas = document.getElementById('flow'),
+                flowContext = flowCanvas.getContext('2d'),
+                sceneWidth = flowCanvas.width,
+                sceneHeight = flowCanvas.height;
+
+        // http://stackoverflow.com/questions/8211745/draw-an-arrow-on-html5-canvas-between-two-objects
+        function drawArrow(ctx, p1, p2, size) {
+            ctx.save();
+
+            // Rotate the context to point along the path
+            var dx = p2.x - p1.x, dy = p2.y - p1.y, len = Math.sqrt(dx * dx + dy * dy);
+            ctx.translate(p2.x, p2.y);
+            ctx.rotate(Math.atan2(dy, dx));
+
+            ctx.lineWidth = 3;
+            // line
+            ctx.beginPath();
+            ctx.moveTo(0, 0);
+            ctx.lineTo(-len, 0);
+            ctx.closePath();
+            ctx.stroke();
+
+            // arrowhead
+            ctx.beginPath();
+            ctx.moveTo(0, 0);
+            ctx.lineTo(-size, -size);
+            ctx.lineTo(-size, size);
+            ctx.closePath();
+            ctx.fill();
+
+            ctx.restore();
+        }
+
+        webCamFlow.onCalculated(function (direciton) {
+            
+            // render zones
+            flowContext.clearRect(0, 0, sceneWidth, sceneHeight);
+            for (var i = 0; i < direciton.zones.length; ++i) {
+                var zone = direciton.zones[i];
+                drawArrow(flowContext, zone, {x: zone.x + zone.u * 4, y: zone.y + zone.v * 4}, 5);
+            }
+        });
+
+        webCamFlow.startCapture();
+    }
+</script>
+</body>
+</html>
