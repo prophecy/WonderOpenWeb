@@ -340,7 +340,7 @@ var time_driver = Animation.timeDriver({
 // by the previously-defined axisRotation() method.
 var rotation_sampler = Animation.samplers.polyline({
     keyframes: [
-		axisRotation(1,0,0,0),
+		axisRotation(0,0,1,0),
 		axisRotation(0,0,1,90),
 		axisRotation(0,0,1,180),
 		axisRotation(0,0,1,270),
