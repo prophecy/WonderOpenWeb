@@ -1,9 +1,64 @@
+//==============================================================================
+// Require
+//==============================================================================
 
 const Scene = require('Scene');
 const Animation = require('Animation');
 const Diagnostics = require('Diagnostics');
 const Networking = require('Networking');
 const Patches = require('Patches');
+
+//==============================================================================
+// Data Models
+//==============================================================================
+
+var apiDataModel = {
+	randId: undefined,
+	sceneId: undefined
+}
+
+var trackingDataModel = {
+	canTrack: false,
+}
+
+var gameState = {
+	none: 0,
+	ready: 1,
+
+	currentState: 0, // none by default
+}
+
+//==============================================================================
+// Main logic
+//==============================================================================
+
+function startIfReady() {
+
+	if (apiDataModel.randId !== undefined &&
+		apiDataModel.sceneId !== undefined &&
+		trackingDataModel.canTrack === true)
+		{
+			// Start the game
+			if (gameState.currentState === gameState.none)
+			{
+				Diagnostics.log("Start game");
+				startGame();
+			}
+
+			// Set game state
+			gameState.currentState = gameState.ready;
+		}
+}
+
+function startGame() {
+
+	if (apiDataModel.sceneId === "shinkansen")
+		startTrainScene();
+}
+
+//==============================================================================
+// Plane tracking and the whole state management
+//==============================================================================
 
 var targetPlane = Scene.root.find('planeTracker0');
 
@@ -16,17 +71,14 @@ var confidenceSub = targetPlane.confidence.monitor().subscribe(function (e) {
 	if (e.newValue == 'HIGH') {
 		confidenceSub.unsubscribe();
 
+		Diagnostics.log("Object tracking ready!");
+
 		// Update the Script to Editor signal named "targetFound
 		//Patches.setPulseValue("targetFound", Reactive.once());
-		targetFound();
+		trackingDataModel.canTrack = true;
+		startIfReady();
 	}
 });
-
-// Target found event, things start here
-function targetFound() {
-
-	startTrainScene();
-}
 
 //==============================================================================
 // Animate the plane's horizontal position continuously
@@ -68,13 +120,75 @@ function startTrainScene() {
 }
 
 //==============================================================================
-// Session ID handler
+// APIs
 //==============================================================================
 
 const domain = 'https://powerful-lowlands-46130.herokuapp.com';
+const sceneInfo = domain + '/scene_info';
 const randomId = domain + '/random_id';
 
-// Send the request to the url
+// API when state
+getSceneInfo();
+getRandomId();
+
+//==============================================================================
+// Scene info
+
+function getSceneInfo() {
+
+	Diagnostics.log("getSceneInfo()");
+
+	// Create a request object
+	const request = {
+	
+		// The HTTP Method of the request
+		// (https://developer.mozilla.org/en-US/docs/Web/HTTP/Methods)
+		method: 'GET',
+	
+		// The HTTP Headers of the request
+		// (https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers)
+		headers: {
+			'Content-type': 'application/json'
+		}
+	};
+	
+	Diagnostics.log("SceneInfo: request: " + JSON.stringify(request));
+	
+	// Send the request to the url
+	Networking.fetch(sceneInfo, request).then(function(result) {
+	
+		// Check the status of the result
+		// (https://developer.mozilla.org/en-US/docs/Web/HTTP/Status)
+		if ((result.status >= 200) && (result.status < 300)) {
+	
+			Diagnostics.log('SceneInfo: success');
+			
+			// If the request was successful, chain the JSON forward
+			return result.json();
+		}
+	
+		// If the request was not successful, throw an error
+		throw new Error('SceneInfo: HTTP status code - ' + result.status);
+	
+	}).then(function(json) {
+	
+		var sceneId = json.data.scene_id;
+		Diagnostics.log("SceneInfo: scene_id " + sceneId);
+
+		apiDataModel.sceneId = sceneId;
+		startIfReady();
+	
+	}).catch(function(error) {
+	
+		// Log any errors that may have happened with the request
+		Diagnostics.log('SceneInfo: error.message: ' + error.message);
+		Diagnostics.log('SceneInfo: error: ' + error);
+	});
+}
+
+//==============================================================================
+// Random ID
+
 function getRandomId() {
 
 	Diagnostics.log("getRandomId()");
@@ -93,7 +207,7 @@ function getRandomId() {
 		}
 	};
 	
-	Diagnostics.log("request: " + JSON.stringify(request));
+	Diagnostics.log("RandId: request: " + JSON.stringify(request));
 	
 	// Send the request to the url
 	Networking.fetch(randomId, request).then(function(result) {
@@ -102,31 +216,27 @@ function getRandomId() {
 		// (https://developer.mozilla.org/en-US/docs/Web/HTTP/Status)
 		if ((result.status >= 200) && (result.status < 300)) {
 	
-			Diagnostics.log('Get random ID success');
+			Diagnostics.log('RandId: success');
 			
 			// If the request was successful, chain the JSON forward
 			return result.json();
 		}
 	
 		// If the request was not successful, throw an error
-		throw new Error('HTTP status code - ' + result.status);
+		throw new Error('RandId: HTTP status code - ' + result.status);
 	
 	}).then(function(json) {
 	
-		// Log the JSON obtained by the successful request
-		Diagnostics.log('Get random ID success: ' + json);
-		
 		var randId = json.data.rand_id;
 		Diagnostics.log("randId: " + randId);
 
-		//nameTxt.text = randId;
+		apiDataModel.randId = randId;
+		startIfReady();
 	
 	}).catch(function(error) {
 	
 		// Log any errors that may have happened with the request
-		Diagnostics.log('error.message: ' + error.message);
-		Diagnostics.log('error: ' + error);
+		Diagnostics.log('RandId: error.message: ' + error.message);
+		Diagnostics.log('RandId: error: ' + error);
 	});
 }
-
-getRandomId();
