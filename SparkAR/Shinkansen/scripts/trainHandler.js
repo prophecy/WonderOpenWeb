@@ -4,10 +4,12 @@ const Reactive = require('Reactive');
 const Animation = require('Animation');
 const Diagnostics = require('Diagnostics');
 const Networking = require('Networking');
+const Patches = require('Patches');
 
 var train = Scene.root.find('plane_01');
 
-Diagnostics.log(train);
+// Set visibility
+Patches.setBooleanValue("trainSceneVisible", true);
 
 //==============================================================================
 // Animate the plane's horizontal position continuously
