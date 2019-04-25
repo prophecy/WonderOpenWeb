@@ -8,9 +8,30 @@
 const Scene = require('Scene');
 const Reactive = require('Reactive');
 const TouchGestures = require('TouchGestures')
+const Diagnostics = require('Diagnostics');
 
 var origin = Scene.root.find('origin')
 var planeTracker = Scene.root.find('planeTracker0');
+
+var confidenceSub = planeTracker.confidence.monitor().subscribe(function (e) {
+
+	Diagnostics.log("e.newValue: " + e.newValue);
+
+	if (e.newValue == 'HIGH' || e.newValue == 'MEDIUM' || e.newValue == 'LOW') {
+		confidenceSub.unsubscribe();
+
+		Diagnostics.log("Object tracking ready!");
+
+		// Open scene manually
+		startScene();
+	}
+});
+
+function startScene() {
+
+
+}
+
 
 /*
 

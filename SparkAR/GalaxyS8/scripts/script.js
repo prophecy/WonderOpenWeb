@@ -10,9 +10,8 @@ const Reactive = require('Reactive');
 const TouchGestures = require('TouchGestures')
 
 
-var mug_ctrl = Scene.root.find('galaxy_s8_model')
+var pivot = Scene.root.find('origin')
 var planeTracker = Scene.root.find('planeTracker0');
-
 
 TouchGestures.onTap().subscribe(function(gesture) {
 	planeTracker.trackPoint(gesture.location);
@@ -23,17 +22,17 @@ TouchGestures.onPan(planeTracker).subscribe(function(gesture) {
 });
 
 TouchGestures.onPinch().subscribe(function(gesture) {
-	var lastScaleX = mug_ctrl.transform.scaleX.lastValue;
-	mug_ctrl.transform.scaleX = Reactive.mul(lastScaleX, gesture.scale);
+	var lastScaleX = pivot.transform.scaleX.lastValue;
+	pivot.transform.scaleX = Reactive.mul(lastScaleX, gesture.scale);
 
-	var lastScaleY = mug_ctrl.transform.scaleY.lastValue;
-	mug_ctrl.transform.scaleY = Reactive.mul(lastScaleY, gesture.scale);
+	var lastScaleY = pivot.transform.scaleY.lastValue;
+	pivot.transform.scaleY = Reactive.mul(lastScaleY, gesture.scale);
 
-	var lastScaleZ = mug_ctrl.transform.scaleZ.lastValue;
-	mug_ctrl.transform.scaleZ = Reactive.mul(lastScaleZ, gesture.scale);
+	var lastScaleZ = pivot.transform.scaleZ.lastValue;
+	pivot.transform.scaleZ = Reactive.mul(lastScaleZ, gesture.scale);
 });
 
-TouchGestures.onRotate(mug_ctrl).subscribe(function(gesture) {
-  var lastRotationY = mug_ctrl.transform.rotationY.lastValue;
-  mug_ctrl.transform.rotationY = Reactive.add(lastRotationY, Reactive.mul(-1, gesture.rotation));
+TouchGestures.onRotate(pivot).subscribe(function(gesture) {
+  var lastRotationY = pivot.transform.rotationY.lastValue;
+  pivot.transform.rotationY = Reactive.add(lastRotationY, Reactive.mul(-1, gesture.rotation));
 });
