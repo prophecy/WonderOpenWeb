@@ -33,7 +33,7 @@ var gameState = {
 //==============================================================================
 
 function startIfReady() {
-
+	/*
 	if (apiDataModel.randId !== undefined &&
 		apiDataModel.sceneId !== undefined &&
 		trackingDataModel.canTrack === true)
@@ -48,6 +48,7 @@ function startIfReady() {
 			// Set game state
 			gameState.currentState = gameState.ready;
 		}
+		*/
 }
 
 function startGame() {
@@ -77,6 +78,9 @@ var confidenceSub = targetPlane.confidence.monitor().subscribe(function (e) {
 		//Patches.setPulseValue("targetFound", Reactive.once());
 		trackingDataModel.canTrack = true;
 		startIfReady();
+
+		// Open scene manually
+		startTrainScene();
 	}
 });
 
