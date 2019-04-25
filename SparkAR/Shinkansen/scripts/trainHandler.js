@@ -61,6 +61,7 @@ function startGame() {
 // Plane tracking and the whole state management
 //==============================================================================
 
+Patches.setBooleanValue("isScanInstVisible", true);
 var targetPlane = Scene.root.find('planeTracker0');
 
 // Track target image
@@ -78,6 +79,9 @@ var confidenceSub = targetPlane.confidence.monitor().subscribe(function (e) {
 		//Patches.setPulseValue("targetFound", Reactive.once());
 		trackingDataModel.canTrack = true;
 		startIfReady();
+
+		// Hide instruction
+		Patches.setBooleanValue("isScanInstVisible", false);
 
 		// Open scene manually
 		startTrainScene();
