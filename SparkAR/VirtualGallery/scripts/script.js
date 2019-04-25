@@ -9,6 +9,8 @@ const Scene = require('Scene');
 const Reactive = require('Reactive');
 const TouchGestures = require('TouchGestures')
 const Diagnostics = require('Diagnostics');
+var Patches = require('Patches');
+const Time = require('Time');
 
 var origin = Scene.root.find('origin')
 var planeTracker = Scene.root.find('planeTracker0');
@@ -27,11 +29,24 @@ var confidenceSub = planeTracker.confidence.monitor().subscribe(function (e) {
 	}
 });
 
+Patches.setBooleanValue("isSceneStarted", false);
+Patches.setBooleanValue("isShowLoadingUI", true);
+
 function startScene() {
 
+	Diagnostics.log("startScene");
 
+	const timeInMilliseconds = 500;
+	const timeoutTimer = Time.setTimeout(realStartScene, timeInMilliseconds);
+
+	function realStartScene() {
+		
+		Diagnostics.log("real start scene");
+
+		Patches.setBooleanValue("isSceneStarted", true);
+		Patches.setBooleanValue("isShowLoadingUI", false);
+	}
 }
-
 
 /*
 
