@@ -29,8 +29,13 @@ var confidenceSub = planeTracker.confidence.monitor().subscribe(function (e) {
 	}
 });
 
+/* // PROD
 Patches.setBooleanValue("isSceneStarted", false);
 Patches.setBooleanValue("isShowLoadingUI", true);
+/*/ // DBG
+Patches.setBooleanValue("isSceneStarted", true);
+Patches.setBooleanValue("isShowLoadingUI", false);
+/**/
 
 function startScene() {
 
@@ -48,7 +53,7 @@ function startScene() {
 	}
 }
 
-/*
+//*
 
 TouchGestures.onTap().subscribe(function(gesture) {
 	planeTracker.trackPoint(gesture.location);
@@ -74,4 +79,4 @@ TouchGestures.onRotate(origin).subscribe(function(gesture) {
   origin.transform.rotationY = Reactive.add(lastRotationY, Reactive.mul(-1, gesture.rotation));
 });
 
-*/
+/**/
