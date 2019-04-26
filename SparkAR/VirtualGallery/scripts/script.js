@@ -53,7 +53,7 @@ function startScene() {
 	}
 }
 
-//*
+/*
 
 TouchGestures.onTap().subscribe(function(gesture) {
 	planeTracker.trackPoint(gesture.location);
