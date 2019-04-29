@@ -38,6 +38,11 @@ Patches.setBooleanValue("isSceneStarted", true);
 Patches.setBooleanValue("isShowLoadingUI", false);
 /**/
 
+var objMatMap = {};
+
+for (var i=0; i<14; ++i)
+	objMatMap["image_" + i] = "imageMat" + i;
+
 function startScene() {
 
 	Diagnostics.log("startScene");
@@ -64,10 +69,8 @@ Patches.setBooleanValue("isShowSampleCanvas", true);
 for (var i=0; i<14; ++i) {
 
 	var imageName = undefined;
-	var imageMatName = undefined;
 
 	imageName = "image_" + i;
-	imageMatName = "imageMat" + i;
 
 	const testObj = Scene.root.find(imageName); 
 	TouchGestures.onTap(testObj).subscribe(function(gesture) {
@@ -75,6 +78,12 @@ for (var i=0; i<14; ++i) {
 		// Show display image
 		Patches.setBooleanValue("isShowDisplayImage", true);
 	
+		Diagnostics.log("obj: name: " + testObj.name);
+
+		var imageMatName = objMatMap[testObj.name];
+
+		Diagnostics.log("imageMatName: " + imageMatName);
+
 		// Apply material
 		const material = Materials.get(imageMatName);
 		displayImgModel.material = material;
