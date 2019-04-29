@@ -11,6 +11,7 @@ const TouchGestures = require('TouchGestures')
 const Diagnostics = require('Diagnostics');
 var Patches = require('Patches');
 const Time = require('Time');
+const Materials = require('Materials');
 
 var origin = Scene.root.find('origin')
 var planeTracker = Scene.root.find('planeTracker0');
@@ -29,7 +30,7 @@ var confidenceSub = planeTracker.confidence.monitor().subscribe(function (e) {
 	}
 });
 
-/* // PROD
+//* // PROD
 Patches.setBooleanValue("isSceneStarted", false);
 Patches.setBooleanValue("isShowLoadingUI", true);
 /*/ // DBG
@@ -53,30 +54,34 @@ function startScene() {
 	}
 }
 
-/*
+// Test move obj on tapping point
+const displayImg = Scene.root.find("displayImage");
+const displayImgModel = Scene.root.find("displayImageModel");
 
-TouchGestures.onTap().subscribe(function(gesture) {
-	planeTracker.trackPoint(gesture.location);
+Patches.setBooleanValue("isShowDisplayImage", false);
+Patches.setBooleanValue("isShowSampleCanvas", true);
+
+for (var i=0; i<14; ++i) {
+
+	var imageName = undefined;
+	var imageMatName = undefined;
+
+	imageName = "image_" + i;
+	imageMatName = "imageMat" + i;
+
+	const testObj = Scene.root.find(imageName); 
+	TouchGestures.onTap(testObj).subscribe(function(gesture) {
+	
+		// Show display image
+		Patches.setBooleanValue("isShowDisplayImage", true);
+	
+		// Apply material
+		const material = Materials.get(imageMatName);
+		displayImgModel.material = material;
+	});
+}
+
+TouchGestures.onTap(displayImg).subscribe(function(gesture) {
+
+	Patches.setBooleanValue("isShowDisplayImage", false);
 });
-
-TouchGestures.onPan(planeTracker).subscribe(function(gesture) {
-	planeTracker.trackPoint(gesture.location, gesture.state);
-});
-
-TouchGestures.onPinch().subscribe(function(gesture) {
-	var lastScaleX = origin.transform.scaleX.lastValue;
-	origin.transform.scaleX = Reactive.mul(lastScaleX, gesture.scale);
-
-	var lastScaleY = origin.transform.scaleY.lastValue;
-	origin.transform.scaleY = Reactive.mul(lastScaleY, gesture.scale);
-
-	var lastScaleZ = origin.transform.scaleZ.lastValue;
-	origin.transform.scaleZ = Reactive.mul(lastScaleZ, gesture.scale);
-});
-
-TouchGestures.onRotate(origin).subscribe(function(gesture) {
-  var lastRotationY = origin.transform.rotationY.lastValue;
-  origin.transform.rotationY = Reactive.add(lastRotationY, Reactive.mul(-1, gesture.rotation));
-});
-
-/**/
