@@ -55,21 +55,31 @@ function startScene() {
 }
 
 // Test move obj on tapping point
-const testObj = Scene.root.find("square_plane99");
 const displayImg = Scene.root.find("displayImage");
 const displayImgModel = Scene.root.find("displayImageModel");
 
 Patches.setBooleanValue("isShowDisplayImage", false);
 Patches.setBooleanValue("isShowSampleCanvas", true);
-TouchGestures.onTap(testObj).subscribe(function(gesture) {
 
-	// Show display image
-	Patches.setBooleanValue("isShowDisplayImage", true);
+for (var i=0; i<14; ++i) {
 
-	// Apply material
-	const material = Materials.get("imageMat3");
-	displayImgModel.material = material;
-});
+	var imageName = undefined;
+	var imageMatName = undefined;
+
+	imageName = "image_" + i;
+	imageMatName = "imageMat" + i;
+
+	const testObj = Scene.root.find(imageName); 
+	TouchGestures.onTap(testObj).subscribe(function(gesture) {
+	
+		// Show display image
+		Patches.setBooleanValue("isShowDisplayImage", true);
+	
+		// Apply material
+		const material = Materials.get(imageMatName);
+		displayImgModel.material = material;
+	});
+}
 
 TouchGestures.onTap(displayImg).subscribe(function(gesture) {
 
