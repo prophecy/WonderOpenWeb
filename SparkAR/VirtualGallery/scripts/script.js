@@ -30,7 +30,7 @@ var confidenceSub = planeTracker.confidence.monitor().subscribe(function (e) {
 	}
 });
 
-/* // PROD
+//* // PROD
 Patches.setBooleanValue("isSceneStarted", false);
 Patches.setBooleanValue("isShowLoadingUI", true);
 /*/ // DBG
@@ -85,30 +85,3 @@ TouchGestures.onTap(displayImg).subscribe(function(gesture) {
 
 	Patches.setBooleanValue("isShowDisplayImage", false);
 });
-
-/*
-TouchGestures.onTap().subscribe(function(gesture) {
-	planeTracker.trackPoint(gesture.location);
-});
-
-TouchGestures.onPan(planeTracker).subscribe(function(gesture) {
-	planeTracker.trackPoint(gesture.location, gesture.state);
-});
-
-TouchGestures.onPinch().subscribe(function(gesture) {
-	var lastScaleX = origin.transform.scaleX.pinLastValue();
-	origin.transform.scaleX = Reactive.mul(lastScaleX, gesture.scale);
-
-	var lastScaleY = origin.transform.scaleY.pinLastValue();
-	origin.transform.scaleY = Reactive.mul(lastScaleY, gesture.scale);
-
-	var lastScaleZ = origin.transform.scaleZ.pinLastValue();
-	origin.transform.scaleZ = Reactive.mul(lastScaleZ, gesture.scale);
-});
-
-TouchGestures.onRotate(origin).subscribe(function(gesture) {
-  var lastRotationY = origin.transform.rotationY.pinLastValue();
-  origin.transform.rotationY = Reactive.add(lastRotationY, Reactive.mul(-1, gesture.rotation));
-});
-
-/**/
