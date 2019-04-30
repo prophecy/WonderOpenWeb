@@ -13,12 +13,17 @@ Note: Feel free to delete the contents of this script and start from scratch.
 */
 
 // How to load in modules, complete list - https://fb.me/spark-scripting-reference
+const Scene = require('Scene');
 const Diagnostics = require('Diagnostics');
 const FaceTracking = require('FaceTracking');
 const Reactive = require('Reactive');
 
 // Log mouth openness value
 Diagnostics.watch("Mouth Openness - ", FaceTracking.face(0).mouth.openness);
+
+// Show/hide quote and it's tweening here
+var quote1 = Scene.root.find('quote1');
+quote1.hidden = true;
 
 // Handle mouth opennes
 const MOUTH_OPENNESS_MIN_THRESHOLD = 0.1;
@@ -30,5 +35,6 @@ mouthOpen.monitor().subscribe(function() {
     if (FaceTracking.face(0).mouth.openness.pinLastValue() >= MOUTH_OPENNESS_MIN_THRESHOLD) {
     
         Diagnostics.log("Rawww!");
+        quote1.hidden = false;
     }
-})
+}) 
