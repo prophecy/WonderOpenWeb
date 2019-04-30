@@ -15,12 +15,20 @@ Note: Feel free to delete the contents of this script and start from scratch.
 // How to load in modules, complete list - https://fb.me/spark-scripting-reference
 const Diagnostics = require('Diagnostics');
 const FaceTracking = require('FaceTracking');
-const Scene = require('Scene');
+const Reactive = require('Reactive');
 
-// How to log values to the console
-Diagnostics.log('I am a console message logged from the script');
-
-// How to watch Signals in the console
+// Log mouth openness value
 Diagnostics.watch("Mouth Openness - ", FaceTracking.face(0).mouth.openness);
 
+// Handle mouth opennes
+const MOUTH_OPENNESS_MIN_THRESHOLD = 0.1;
 
+var mouthOpen = FaceTracking.face(0).mouth.openness.gt(Reactive.val(MOUTH_OPENNESS_MIN_THRESHOLD));
+
+mouthOpen.monitor().subscribe(function() {
+
+    if (FaceTracking.face(0).mouth.openness.pinLastValue() >= MOUTH_OPENNESS_MIN_THRESHOLD) {
+    
+        Diagnostics.log("Rawww!");
+    }
+})
