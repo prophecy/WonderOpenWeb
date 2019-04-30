@@ -34,16 +34,49 @@ const MOUTH_OPENNESS_MIN_THRESHOLD = 0.1;
 
 var mouthOpen = FaceTracking.face(0).mouth.openness.gt(Reactive.val(MOUTH_OPENNESS_MIN_THRESHOLD));
 
+
+var latestMouthCenterX = 0;
+var latestMouthCenterY = 0;
+var latestMouthCenterZ = 0;
+
 mouthOpen.monitor().subscribe(function() {
 
-    if (FaceTracking.face(0).mouth.openness.pinLastValue() >= MOUTH_OPENNESS_MIN_THRESHOLD) {
-    
-        Diagnostics.log("Rawww!");
-        quote1.hidden = false;
+    var mouth = FaceTracking.face(0).mouth;
 
-        playQuote();
+    if (mouth.openness.pinLastValue() >= MOUTH_OPENNESS_MIN_THRESHOLD) {
+    
+        var valXSub = mouth.center.x.monitor().subscribe(function(v) {
+            latestMouthCenterX = v.newValue;
+            valXSub.unsubscribe();
+            playQuoteIfReady();
+        });
+
+        var valYSub = mouth.center.y.monitor().subscribe(function(v) {
+            latestMouthCenterY = v.newValue;
+            valYSub.unsubscribe();
+            playQuoteIfReady();
+        });
+
+        var valZSub = mouth.center.z.monitor().subscribe(function(v) {
+            latestMouthCenterZ = v.newValue;
+            valZSub.unsubscribe();
+            playQuoteIfReady();
+        });
     }
 }) 
+
+var counter = 3;
+
+function playQuoteIfReady() {
+
+    --counter;
+
+    if (counter == 0) {
+        
+        quote1.hidden = false;
+        playQuote();
+    }
+}
 
 //==============================================================================
 // Animate quote position
@@ -67,27 +100,25 @@ const timeDriver = Animation.timeDriver(timeDriverParameters);
 
 function playQuote() {
 
-    // Get mouth pos
-    //const mouthCenterX = FaceTracking.face(0).mouth.center.x.pinLastValue();
-    //const mouthCenterY = FaceTracking.face(0).mouth.center.y.pinLastValue();
-    //const mouthCenterZ = FaceTracking.face(0).mouth.center.z.pinLastValue();
-    //Diagnostics.log("mx: " + mouthCenterX + " my: " + mouthCenterY + " mz: " + mouthCenterZ);
- 
     // Translate animation
-    const translateXSampler = Animation.samplers.easeInOutQuad(4, 12);
+    const translateXSampler = Animation.samplers.easeInOutQuad(latestMouthCenterX, 12);
     const translationXAnim = Animation.animate(timeDriver, translateXSampler);
 
-    const translateYSampler = Animation.samplers.easeInOutQuad(-4, -3);
+    // Todo: remove this tmp
+    const tmpYOffset = 1.0;
+
+    const translateYSampler = Animation.samplers.easeInOutQuad(latestMouthCenterY + tmpYOffset, -3);
     const translationYAnim = Animation.animate(timeDriver, translateYSampler);
 
     // Scale animation
-    const scaleQuadraticSampler = Animation.samplers.easeInOutQuad(0, 0.16);
+    const scaleQuadraticSampler = Animation.samplers.easeInOutQuad(0, 0.16); 
     const scaleAnimation = Animation.animate(timeDriver, scaleQuadraticSampler);
 
     // Bind the translation animation signal to the x-axis position signal of the plane
     quote1.transform.x = translationXAnim;
     quote1.transform.y = translationYAnim;
-
+    quote1.transform.z = latestMouthCenterZ;
+  
     quote1.transform.scaleX = scaleAnimation;
     //quote1.transform.scaleY = translationAnimation;
     quote1.transform.scaleZ = scaleAnimation;
