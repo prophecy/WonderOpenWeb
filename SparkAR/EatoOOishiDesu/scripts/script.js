@@ -31,13 +31,27 @@ quote1.hidden = true;
 
 // Handle mouth opennes
 const MOUTH_OPENNESS_MIN_THRESHOLD = 0.1;
+const MOUTH_CLOSSNESS_MAX_THRESHOLD = 0.08;
 
 var mouthOpen = FaceTracking.face(0).mouth.openness.gt(Reactive.val(MOUTH_OPENNESS_MIN_THRESHOLD));
-
+var mouthClose = FaceTracking.face(0).mouth.openness.gt(Reactive.val(MOUTH_CLOSSNESS_MAX_THRESHOLD));
 
 var latestMouthCenterX = 0;
 var latestMouthCenterY = 0;
 var latestMouthCenterZ = 0;
+
+mouthClose.monitor().subscribe(function() {
+
+    var mouth = FaceTracking.face(0).mouth;
+
+    if (mouth.openness.pinLastValue() <= MOUTH_CLOSSNESS_MAX_THRESHOLD) {
+
+        // Reset counter
+        counter = 3;
+        //quote1.hidden = true;
+        hideQuote();
+    }
+});
 
 mouthOpen.monitor().subscribe(function() {
 
@@ -74,7 +88,7 @@ function playQuoteIfReady() {
     if (counter == 0) {
         
         quote1.hidden = false;
-        playQuote();
+        showQuote();
     }
 }
 
@@ -86,7 +100,7 @@ function playQuoteIfReady() {
 const timeDriverParameters = {
 
     // The duration of the driver
-    durationMilliseconds: 1500,
+    durationMilliseconds: 200,
   
     // The number of iterations before the driver stops
     loopCount: 1,
@@ -95,13 +109,13 @@ const timeDriverParameters = {
     mirror: true  
 };
 
-// Create a time driver using the parameters
-const timeDriver = Animation.timeDriver(timeDriverParameters);
+function showQuote() {
 
-function playQuote() {
+    // Create a time driver using the parameters
+    const timeDriver = Animation.timeDriver(timeDriverParameters);
 
     // Translate animation
-    const translateXSampler = Animation.samplers.easeInOutQuad(latestMouthCenterX, 12);
+    const translateXSampler = Animation.samplers.easeInOutQuad(latestMouthCenterX, 9);
     const translationXAnim = Animation.animate(timeDriver, translateXSampler);
 
     // Todo: remove this tmp
@@ -126,3 +140,52 @@ function playQuote() {
     // Start the time driver (unlike value drivers this needs to be done explicitly)
     timeDriver.start(); 
 } 
+
+const hideTimeDriverParameters = {
+
+    // The duration of the driver
+    durationMilliseconds: 100,
+  
+    // The number of iterations before the driver stops
+    loopCount: 1,
+  
+    // Should the driver 'yoyo' back and forth
+    mirror: true  
+};
+
+function hideQuote() {
+
+    // Create a time driver using the parameters
+    const timeDriver = Animation.timeDriver(hideTimeDriverParameters);
+
+    // Translate animation
+    const translateXSampler = Animation.samplers.easeInOutQuad(9, latestMouthCenterX);
+    const translationXAnim = Animation.animate(timeDriver, translateXSampler);
+
+    // Todo: remove this tmp
+    const tmpYOffset = 1.0;
+
+    const translateYSampler = Animation.samplers.easeInOutQuad(-3, latestMouthCenterY + tmpYOffset);
+    const translationYAnim = Animation.animate(timeDriver, translateYSampler);
+
+    // Scale animation
+    const scaleQuadraticSampler = Animation.samplers.easeInOutQuad(0.16, 0); 
+    const scaleAnimation = Animation.animate(timeDriver, scaleQuadraticSampler);
+
+    // Bind the translation animation signal to the x-axis position signal of the plane
+    quote1.transform.x = translationXAnim;
+    quote1.transform.y = translationYAnim;
+    quote1.transform.z = latestMouthCenterZ;
+  
+    quote1.transform.scaleX = scaleAnimation;
+    //quote1.transform.scaleY = translationAnimation;
+    quote1.transform.scaleZ = scaleAnimation;
+
+    // Start the time driver (unlike value drivers this needs to be done explicitly)
+    timeDriver.start(); 
+
+    timeDriver.onAfterIteration().subscribe(function() {
+
+        quote1.hidden = true;
+    });
+}
