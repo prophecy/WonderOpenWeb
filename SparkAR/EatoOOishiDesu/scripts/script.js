@@ -138,7 +138,7 @@ function showQuote() {
     quote1.transform.scaleZ = scaleAnimation;
 
     // Start the time driver (unlike value drivers this needs to be done explicitly)
-    timeDriver.start(); 
+    timeDriver.start();
 } 
 
 const hideTimeDriverParameters = {
