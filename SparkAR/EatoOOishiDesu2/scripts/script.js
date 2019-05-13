@@ -37,14 +37,15 @@ quoteList.push(quote0);
 quoteList.push(quote1);
 quoteList.push(quote2);
 
-Diagnostics.log("quoteList.length: " + quoteList.length);
-
 // Hide all quotes
-for (var i=0; i<quoteList.length; ++i) {
+function hideAllQuotes() {
 
-    Diagnostics.log("i: " + i);
-    quoteList[i].hidden = true;
+    for (var i=0; i<quoteList.length; ++i) {
+
+        quoteList[i].hidden = true;
+    }
 }
+hideAllQuotes();
 
 // Handle current quote
 function changeQuote() { 
@@ -65,6 +66,28 @@ function changeQuote() {
     }
 }
 
+// Check weather the face is tracked
+var isTracked = FaceTracking.face(0).isTracked;
+
+isTracked.monitor().subscribe(function(e) {
+
+    // Untracked to tracked state
+    if (e.newValue) {
+
+        // Do nothing
+    }
+    // Tracked to untracked state
+    else {
+
+        hideAllQuotes();
+        changeQuote();
+    }
+});
+
+//var confidenceSub = target.confidence.monitor().subscribe(function (e) {
+
+    //Diagnostics.log("e.newValue: " + e.newValue);
+//}); 
 
 // Handle mouth opennes
 const MOUTH_OPENNESS_MIN_THRESHOLD = 0.1;
@@ -224,8 +247,5 @@ function hideQuote() {
 
         // Hide current quote
         curQuote.hidden = true;
-
-        // Change quote
-        changeQuote();
     });
 }
