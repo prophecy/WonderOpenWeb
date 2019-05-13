@@ -29,6 +29,11 @@ Diagnostics.watch("Mouth Center Z ", FaceTracking.face(0).mouth.center.z);
 var quote0 = Scene.root.find('quote0');
 var quote1 = Scene.root.find('quote1');
 var quote2 = Scene.root.find('quote2');
+var quote3 = Scene.root.find('quote3');
+var quote4 = Scene.root.find('quote4');
+var quote5 = Scene.root.find('quote5');
+var quote6 = Scene.root.find('quote6');
+
 var curQuote = quote0;
  
 // Indexing quotes
@@ -36,6 +41,10 @@ var quoteList = [];
 quoteList.push(quote0);
 quoteList.push(quote1);
 quoteList.push(quote2);
+quoteList.push(quote3);
+quoteList.push(quote4);
+quoteList.push(quote5);
+quoteList.push(quote6);
 
 // Hide all quotes
 function hideAllQuotes() {
