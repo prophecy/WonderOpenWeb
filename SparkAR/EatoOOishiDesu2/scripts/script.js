@@ -67,9 +67,7 @@ function changeQuote() {
 }
 
 // Check weather the face is tracked
-var isTracked = FaceTracking.face(0).isTracked;
-
-isTracked.monitor().subscribe(function(e) {
+FaceTracking.face(0).isTracked.monitor().subscribe(function(e) {
 
     // Untracked to tracked state
     if (e.newValue) {
@@ -91,7 +89,7 @@ isTracked.monitor().subscribe(function(e) {
 
 // Handle mouth opennes
 const MOUTH_OPENNESS_MIN_THRESHOLD = 0.1;
-const MOUTH_CLOSSNESS_MAX_THRESHOLD = 0.08;
+const MOUTH_CLOSSNESS_MAX_THRESHOLD = 0.07;
 
 var mouthOpen = FaceTracking.face(0).mouth.openness.gt(Reactive.val(MOUTH_OPENNESS_MIN_THRESHOLD));
 var mouthClose = FaceTracking.face(0).mouth.openness.gt(Reactive.val(MOUTH_CLOSSNESS_MAX_THRESHOLD));
@@ -234,7 +232,7 @@ function hideQuote() {
     // Bind the translation animation signal to the x-axis position signal of the plane
     curQuote.transform.x = translationXAnim;
     curQuote.transform.y = translationYAnim;
-    curQuote.transform.z = latestMouthCenterZ;
+    curQuote.transform.z = latestMouthCenterZ; 
   
     curQuote.transform.scaleX = scaleAnimation;
     //curQuote.transform.scaleY = translationAnimation;
