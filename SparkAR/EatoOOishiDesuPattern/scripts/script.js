@@ -26,7 +26,7 @@ Diagnostics.watch("Mouth Center Y ", FaceTracking.face(0).mouth.center.y);
 Diagnostics.watch("Mouth Center Z ", FaceTracking.face(0).mouth.center.z);
  
 handlePatternModule();
-//handleQuoteModule();
+handleQuoteModule();
 
 function handlePatternModule() {
 
