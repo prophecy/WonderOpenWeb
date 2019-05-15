@@ -114,7 +114,7 @@ function handleQuoteModule() {
 
             quoteList[i].hidden = true;
         }
-    }
+    } 
     hideAllQuotes();
 
     // Handle current quote
