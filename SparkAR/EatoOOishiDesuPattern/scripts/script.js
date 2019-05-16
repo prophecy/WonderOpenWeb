@@ -106,11 +106,20 @@ function handlePatternModule() {
     moveRow(7500, row6, -10, 10);
     moveRow(7500, row7, 10, -10);
 }
+ 
+var sharedQuoteIndex = 0;
 
 function handleQuoteModule(faceIndex, quoteList) {
 
-    var curQuote = quoteList[0];
-    
+    if (!!!sharedQuoteIndex)
+        sharedQuoteIndex = 0;
+
+    ++sharedQuoteIndex;
+    if (sharedQuoteIndex >= quoteList.length)
+        sharedQuoteIndex = 0;
+
+    var curQuote = quoteList[sharedQuoteIndex];
+
     // Hide all quotes
     function hideAllQuotes() {
 
@@ -120,25 +129,28 @@ function handleQuoteModule(faceIndex, quoteList) {
         }
     } 
     hideAllQuotes();
-
+ 
     // Handle current quote
-    function changeQuote() { 
+    function changeQuote() {  
 
         for (var i=0; i<quoteList.length; ++i) {
 
-            if (curQuote === quoteList[i]) {
+            if (sharedQuoteIndex === i) {
 
                 // Adjust quote index
-                if (i == quoteList.length - 1)
-                    i = 0;
-                else
-                    ++i;
+                ++sharedQuoteIndex;
+
+                if (sharedQuoteIndex >= quoteList.length)
+                    sharedQuoteIndex = 0;
 
                 // Update current quote
-                curQuote = quoteList[i];
+                curQuote = quoteList[sharedQuoteIndex];
+
+                break;
             }
         }
     }
+    changeQuote();
 
     // Check weather the face is tracked
     FaceTracking.face(faceIndex).isTracked.monitor().subscribe(function(e) {
