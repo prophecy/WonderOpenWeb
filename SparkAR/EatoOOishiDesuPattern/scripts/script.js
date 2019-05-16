@@ -20,13 +20,36 @@ const Reactive = require('Reactive');
 const Animation = require('Animation');
  
 // Log mouth openness value
-Diagnostics.watch("Mouth Openness - ", FaceTracking.face(0).mouth.openness);
-Diagnostics.watch("Mouth Center X ", FaceTracking.face(0).mouth.center.x);
-Diagnostics.watch("Mouth Center Y ", FaceTracking.face(0).mouth.center.y);
-Diagnostics.watch("Mouth Center Z ", FaceTracking.face(0).mouth.center.z);
+//Diagnostics.watch("Mouth Openness - ", FaceTracking.face(0).mouth.openness);
+//Diagnostics.watch("Mouth Center X ", FaceTracking.face(0).mouth.center.x);
+//Diagnostics.watch("Mouth Center Y ", FaceTracking.face(0).mouth.center.y);
+//Diagnostics.watch("Mouth Center Z ", FaceTracking.face(0).mouth.center.z);
  
 handlePatternModule();
-handleQuoteModule();
+
+// Handle quotes of face [0]
+var quoteList0 = [];
+quoteList0.push(Scene.root.find('quote00'));
+quoteList0.push(Scene.root.find('quote01'));
+quoteList0.push(Scene.root.find('quote02'));
+quoteList0.push(Scene.root.find('quote03'));
+quoteList0.push(Scene.root.find('quote04'));
+quoteList0.push(Scene.root.find('quote05'));
+quoteList0.push(Scene.root.find('quote06'));
+
+handleQuoteModule(0, quoteList0);
+
+// Handle quotes of face [1]
+var quoteList1 = [];
+quoteList1.push(Scene.root.find('quote10'));
+quoteList1.push(Scene.root.find('quote11'));
+quoteList1.push(Scene.root.find('quote12'));
+quoteList1.push(Scene.root.find('quote13'));
+quoteList1.push(Scene.root.find('quote14'));
+quoteList1.push(Scene.root.find('quote15'));
+quoteList1.push(Scene.root.find('quote16'));
+
+handleQuoteModule(1, quoteList1);
 
 function handlePatternModule() {
 
@@ -84,29 +107,10 @@ function handlePatternModule() {
     moveRow(7500, row7, 10, -10);
 }
 
-function handleQuoteModule() {
+function handleQuoteModule(faceIndex, quoteList) {
 
-    // Get quote ref
-    var quote0 = Scene.root.find('quote0');
-    var quote1 = Scene.root.find('quote1');
-    var quote2 = Scene.root.find('quote2');
-    var quote3 = Scene.root.find('quote3');
-    var quote4 = Scene.root.find('quote4');
-    var quote5 = Scene.root.find('quote5');
-    var quote6 = Scene.root.find('quote6');
-
-    var curQuote = quote0;
+    var curQuote = quoteList[0];
     
-    // Indexing quotes
-    var quoteList = [];
-    quoteList.push(quote0);
-    quoteList.push(quote1);
-    quoteList.push(quote2);
-    quoteList.push(quote3);
-    quoteList.push(quote4);
-    quoteList.push(quote5);
-    quoteList.push(quote6);
-
     // Hide all quotes
     function hideAllQuotes() {
 
@@ -137,7 +141,7 @@ function handleQuoteModule() {
     }
 
     // Check weather the face is tracked
-    FaceTracking.face(0).isTracked.monitor().subscribe(function(e) {
+    FaceTracking.face(faceIndex).isTracked.monitor().subscribe(function(e) {
 
         // Untracked to tracked state
         if (e.newValue) {
@@ -161,8 +165,8 @@ function handleQuoteModule() {
     const MOUTH_OPENNESS_MIN_THRESHOLD = 0.1;
     const MOUTH_CLOSSNESS_MAX_THRESHOLD = 0.07;
 
-    var mouthOpen = FaceTracking.face(0).mouth.openness.gt(Reactive.val(MOUTH_OPENNESS_MIN_THRESHOLD));
-    var mouthClose = FaceTracking.face(0).mouth.openness.gt(Reactive.val(MOUTH_CLOSSNESS_MAX_THRESHOLD));
+    var mouthOpen = FaceTracking.face(faceIndex).mouth.openness.gt(Reactive.val(MOUTH_OPENNESS_MIN_THRESHOLD));
+    var mouthClose = FaceTracking.face(faceIndex).mouth.openness.gt(Reactive.val(MOUTH_CLOSSNESS_MAX_THRESHOLD));
 
     var latestMouthCenterX = 0;
     var latestMouthCenterY = 0;
@@ -170,7 +174,7 @@ function handleQuoteModule() {
 
     mouthClose.monitor().subscribe(function() {
 
-        var mouth = FaceTracking.face(0).mouth;
+        var mouth = FaceTracking.face(faceIndex).mouth;
 
         if (mouth.openness.pinLastValue() <= MOUTH_CLOSSNESS_MAX_THRESHOLD) {
 
@@ -182,7 +186,7 @@ function handleQuoteModule() {
 
     mouthOpen.monitor().subscribe(function() {
 
-        var mouth = FaceTracking.face(0).mouth;
+        var mouth = FaceTracking.face(faceIndex).mouth;
 
         if (mouth.openness.pinLastValue() >= MOUTH_OPENNESS_MIN_THRESHOLD) {
         
