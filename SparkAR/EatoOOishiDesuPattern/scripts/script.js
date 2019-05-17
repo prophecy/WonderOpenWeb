@@ -18,6 +18,7 @@ const Diagnostics = require('Diagnostics');
 const FaceTracking = require('FaceTracking');
 const Reactive = require('Reactive');
 const Animation = require('Animation');
+const Patches = require('Patches');
  
 // Log mouth openness value
 //Diagnostics.watch("Mouth Openness - ", FaceTracking.face(0).mouth.openness);
@@ -50,6 +51,13 @@ quoteList1.push(Scene.root.find('quote15'));
 quoteList1.push(Scene.root.find('quote16'));
 
 handleQuoteModule(1, quoteList1);
+
+var facePoint0 = Patches.getVectorValue("facePoint0");
+var facePoint1 = Patches.getVectorValue("facePoint1");
+
+//Diagnostics.watch("facePoint0 X ", facePoint0.x);
+//Diagnostics.watch("facePoint0 Y ", facePoint0.y);
+//Diagnostics.watch("facePoint0 Z ", facePoint0.z);
 
 function handlePatternModule() {
 
@@ -239,6 +247,10 @@ function handleQuoteModule(faceIndex, quoteList) {
     // Animate quote position
     //==============================================================================
 
+    const TARGET_QUOTE_SCALE = 0.16;
+    var currentQuoteScale = TARGET_QUOTE_SCALE;
+    const SCALE_RATIO = 0.02;
+
     // Create a set of time driver parameters
     const showTimeDriverParameters = {
 
@@ -254,6 +266,21 @@ function handleQuoteModule(faceIndex, quoteList) {
 
     function showQuote() {
 
+        var qx = facePoint0.x.pinLastValue();
+        var qy = facePoint0.y.pinLastValue();
+        var qz = facePoint0.z.pinLastValue();
+
+        if (faceIndex == 1) {
+
+            qx = facePoint1.x.pinLastValue();
+            qy = facePoint1.y.pinLastValue();
+            qz = facePoint1.z.pinLastValue();
+        }
+
+        var range = Math.sqrt(qx*qx + qy*qy + qz*qz);
+        
+        //Diagnostics.log("Range: " + range);
+
         // Create a time driver using the parameters
         const timeDriver = Animation.timeDriver(showTimeDriverParameters);
 
@@ -267,8 +294,13 @@ function handleQuoteModule(faceIndex, quoteList) {
         const translateYSampler = Animation.samplers.easeInOutQuad(latestMouthCenterY + tmpYOffset, -3);
         const translationYAnim = Animation.animate(timeDriver, translateYSampler);
 
+        // Get scale factors (Linearly positive correlated with absolute Euclidean distance from camera)
+        //     Find distance from quote to camera | Given camera is always be at ( 0, 0, 0 )
+        
+        currentQuoteScale = TARGET_QUOTE_SCALE * SCALE_RATIO * range;
+        
         // Scale animation
-        const scaleQuadraticSampler = Animation.samplers.easeInOutQuad(0, 0.16); 
+        const scaleQuadraticSampler = Animation.samplers.easeInOutQuad(0, currentQuoteScale);
         const scaleAnimation = Animation.animate(timeDriver, scaleQuadraticSampler);
 
         // Bind the translation animation signal to the x-axis position signal of the plane
@@ -312,7 +344,7 @@ function handleQuoteModule(faceIndex, quoteList) {
         const translationYAnim = Animation.animate(timeDriver, translateYSampler);
 
         // Scale animation
-        const scaleQuadraticSampler = Animation.samplers.easeInOutQuad(0.16, 0); 
+        const scaleQuadraticSampler = Animation.samplers.easeInOutQuad(currentQuoteScale, 0);
         const scaleAnimation = Animation.animate(timeDriver, scaleQuadraticSampler);
 
         // Bind the translation animation signal to the x-axis position signal of the plane
