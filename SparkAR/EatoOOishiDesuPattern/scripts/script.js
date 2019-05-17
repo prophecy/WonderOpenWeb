@@ -278,14 +278,14 @@ function handleQuoteModule(faceIndex, quoteList) {
         }
 
         var range = Math.sqrt(qx*qx + qy*qy + qz*qz);
-        
+
         //Diagnostics.log("Range: " + range);
 
         // Create a time driver using the parameters
         const timeDriver = Animation.timeDriver(showTimeDriverParameters);
 
         // Translate animation
-        const translateXSampler = Animation.samplers.easeInOutQuad(latestMouthCenterX, 9);
+        const translateXSampler = Animation.samplers.easeInOutQuad(latestMouthCenterX, range * 0.18);
         const translationXAnim = Animation.animate(timeDriver, translateXSampler);
 
         // Todo: remove this tmp
