@@ -59,6 +59,23 @@ var facePoint1 = Patches.getVectorValue("facePoint1");
 //Diagnostics.watch("facePoint0 Y ", facePoint0.y);
 //Diagnostics.watch("facePoint0 Z ", facePoint0.z);
 
+// Front
+applyBalloonMovement(
+    Scene.root.find('gyoza_front_plane0'), 
+    0.6, 0.4, 0.2,
+    1500, -3000, 4500);
+
+applyBalloonMovement(
+    Scene.root.find('gyoza_front_plane1'), 
+    0.6, 0.2, 0.4,
+    3000, -1500, 4500);
+
+applyBalloonMovement(
+    Scene.root.find('gyoza_front_plane2'), 
+    0.4, 0.6, 0.2, 
+    3000, -4500, 1500);
+
+// Back
 applyBalloonMovement(
     Scene.root.find('gyoza_back_plane0'), 
     0.2, 0.4, 0.6,
