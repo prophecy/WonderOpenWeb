@@ -38,7 +38,7 @@ bubbleList0.push(Scene.root.find('bubble04'));
 bubbleList0.push(Scene.root.find('bubble05'));
 bubbleList0.push(Scene.root.find('bubble06'));
 
-handleBubbleModule(0, bubbleList0);
+handleBubbles(0, bubbleList0);
 
 // Handle bubbles of face [1]
 var bubbleList1 = [];
@@ -50,7 +50,7 @@ bubbleList1.push(Scene.root.find('bubble14'));
 bubbleList1.push(Scene.root.find('bubble15'));
 bubbleList1.push(Scene.root.find('bubble16'));
 
-handleBubbleModule(1, bubbleList1);
+handleBubbles(1, bubbleList1);
 
 var facePoint0 = Patches.getVectorValue("facePoint0");
 var facePoint1 = Patches.getVectorValue("facePoint1");
@@ -59,67 +59,81 @@ var facePoint1 = Patches.getVectorValue("facePoint1");
 //Diagnostics.watch("facePoint0 Y ", facePoint0.y);
 //Diagnostics.watch("facePoint0 Z ", facePoint0.z);
 
-/*
-function handlePatternModule() {
+applyBalloonMovement(
+    Scene.root.find('gyoza_back_plane0'), 
+    0.2, 0.4, 0.6,
+    1500, 3000, 4500);
 
-    // Document about animation
-    // https://developers.facebook.com/docs/ar-studio/reference/classes/animationmodule.samplerfactory
- 
-    function moveRow(duration, rowObj, srcX, dstX) {
+applyBalloonMovement(
+    Scene.root.find('gyoza_back_plane1'), 
+    0.2, 0.6, 0.4,
+    3000, -1500, 4500);
 
-        // Create a set of time driver parameters
-        const timeDriverParameters = {
-        
-            // The duration of the driver
-            durationMilliseconds: duration,
-        
-            // The number of iterations before the driver stops
+applyBalloonMovement(
+    Scene.root.find('gyoza_back_plane2'), 
+    0.4, 0.6, 0.2, 
+    4500, 1500, 3000);
+
+applyBalloonMovement(
+    Scene.root.find('gyoza_back_plane3'), 
+    0.4, 0.6, 0.2, 
+    4500, 3000, 1500);
+    
+// --------------------------------------------------------------------------------
+// MOVEMENT EFFECT
+// --------------------------------------------------------------------------------
+
+function applyBalloonMovement(obj, rx, ry, rz, tx, ty, tz) {
+
+    var originList = [
+        obj.transform.x.pinLastValue(), 
+        obj.transform.y.pinLastValue(), 
+        obj.transform.z.pinLastValue()
+    ];
+
+    var radiousList = [rx, ry, rz];
+    var timeList = [tx, ty, tz];
+    var transAnimList = [];
+
+    for (var i=0; i<3; ++i) {
+
+        const showTimeDriverParameters = {
+            durationMilliseconds: timeList[i],
             loopCount: Infinity,
-        
-            // Should the driver 'yoyo' back and forth
-            mirror: false
+            mirror: true  
         };
-            
-        // Create a time driver using the parameters
-        const timeDriver = Animation.timeDriver(timeDriverParameters);
-        
-        // Create a sampler with a quadratic change in and out from -5 to 5
-        const quadraticSampler = Animation.samplers.linear(srcX, dstX);
-        
-        // Create an animation combining the driver and sampler
-        const translationAnimation = Animation.animate(timeDriver, quadraticSampler);
-        
-        rowObj.transform.x = translationAnimation;
-        
-        // Start the time driver (unlike value drivers this needs to be done explicitly)
-        timeDriver.start();	
+
+        const timeDriver = Animation.timeDriver(showTimeDriverParameters);
+
+        // Translate animation
+        const curRadious = radiousList[i];
+        const min = originList[i] - curRadious;
+        const max = originList[i] + curRadious;
+        const transSampler = Animation.samplers.easeInOutQuad(min, max);
+        const transAnim = Animation.animate(timeDriver, transSampler);
+    
+        transAnimList.push(transAnim);
+
+        timeDriver.start();
     }
 
-    var row0 = Scene.root.find('row0');
-    var row1 = Scene.root.find('row1');
-    var row2 = Scene.root.find('row2');
-    var row3 = Scene.root.find('row3');
-
-    var row4 = Scene.root.find('row4');
-    var row5 = Scene.root.find('row5');
-    var row6 = Scene.root.find('row6');
-    var row7 = Scene.root.find('row7');
-
-    moveRow(7500, row0, -10, 10);
-    moveRow(7500, row1, 10, -10);
-    moveRow(7500, row2, -10, 10);
-    moveRow(7500, row3, 10, -10);
-
-    moveRow(7500, row4, -10, 10);
-    moveRow(7500, row5, 10, -10);
-    moveRow(7500, row6, -10, 10);
-    moveRow(7500, row7, 10, -10);
+    obj.transform.x = transAnimList[0];
+    obj.transform.y = transAnimList[1];
+    obj.transform.z = transAnimList[2];
 }
-*/
- 
+
+function applyParalaxMovement(fLayer, bLayer, fw, bw) {
+
+}
+
+// --------------------------------------------------------------------------------
+// BUBBLE MODULE
+// --------------------------------------------------------------------------------
+
+// Use this var to handle bubble between face 1 and face 2
 var sharedBubbleIndex = 0;
 
-function handleBubbleModule(faceIndex, bubbleList) {
+function handleBubbles(faceIndex, bubbleList) {
 
     if (!!!sharedBubbleIndex)
         sharedBubbleIndex = 0;
@@ -245,9 +259,8 @@ function handleBubbleModule(faceIndex, bubbleList) {
         }
     }
 
-    //==============================================================================
-    // Animate bubble position
-    //==============================================================================
+    // --------------------------------------------------------------------------------
+    // Bubble animation
 
     const TARGET_BUBBLE_SCALE = 0.16;
     var curBubbleScale = TARGET_BUBBLE_SCALE;
@@ -263,7 +276,7 @@ function handleBubbleModule(faceIndex, bubbleList) {
         loopCount: 1,
     
         // Should the driver 'yoyo' back and forth
-        mirror: true  
+        mirror: false  
     };
 
     function showBubble() {
@@ -326,7 +339,7 @@ function handleBubbleModule(faceIndex, bubbleList) {
         loopCount: 1,
     
         // Should the driver 'yoyo' back and forth
-        mirror: true  
+        mirror: false  
     };
 
     function hideBubble() {
