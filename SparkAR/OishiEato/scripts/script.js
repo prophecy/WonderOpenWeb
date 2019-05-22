@@ -95,6 +95,11 @@ applyBalloonMovement(
     Scene.root.find('gyoza_back_plane3'), 
     0.4, 0.6, 0.2, 
     4500, 3000, 1500);
+
+applyParalaxMovement(
+    Scene.root.find('front_root'),
+    Scene.root.find('back_root'),
+    0.1, 0.1);
     
 // --------------------------------------------------------------------------------
 // MOVEMENT EFFECT
@@ -141,6 +146,10 @@ function applyBalloonMovement(obj, rx, ry, rz, tx, ty, tz) {
 
 function applyParalaxMovement(fLayer, bLayer, fw, bw) {
 
+    fLayer.transform.x = Reactive.mul(facePoint0.x, fw);
+    fLayer.transform.y = Reactive.mul(facePoint0.y, fw);
+    bLayer.transform.x = Reactive.mul(facePoint0.x, -bw);
+    bLayer.transform.y = Reactive.mul(facePoint0.y, -bw);
 }
 
 // --------------------------------------------------------------------------------
