@@ -28,29 +28,29 @@ const Patches = require('Patches');
  
 //handlePatternModule();
 
-// Handle quotes of face [0]
-var quoteList0 = [];
-quoteList0.push(Scene.root.find('quote00'));
-quoteList0.push(Scene.root.find('quote01'));
-quoteList0.push(Scene.root.find('quote02'));
-quoteList0.push(Scene.root.find('quote03'));
-quoteList0.push(Scene.root.find('quote04'));
-quoteList0.push(Scene.root.find('quote05'));
-quoteList0.push(Scene.root.find('quote06'));
+// Handle bubbles of face [0]
+var bubbleList0 = [];
+bubbleList0.push(Scene.root.find('bubble00'));
+bubbleList0.push(Scene.root.find('bubble01'));
+bubbleList0.push(Scene.root.find('bubble02'));
+bubbleList0.push(Scene.root.find('bubble03'));
+bubbleList0.push(Scene.root.find('bubble04'));
+bubbleList0.push(Scene.root.find('bubble05'));
+bubbleList0.push(Scene.root.find('bubble06'));
 
-handleQuoteModule(0, quoteList0);
+handleBubbleModule(0, bubbleList0);
 
-// Handle quotes of face [1]
-var quoteList1 = [];
-quoteList1.push(Scene.root.find('quote10'));
-quoteList1.push(Scene.root.find('quote11'));
-quoteList1.push(Scene.root.find('quote12'));
-quoteList1.push(Scene.root.find('quote13'));
-quoteList1.push(Scene.root.find('quote14'));
-quoteList1.push(Scene.root.find('quote15'));
-quoteList1.push(Scene.root.find('quote16'));
+// Handle bubbles of face [1]
+var bubbleList1 = [];
+bubbleList1.push(Scene.root.find('bubble10'));
+bubbleList1.push(Scene.root.find('bubble11'));
+bubbleList1.push(Scene.root.find('bubble12'));
+bubbleList1.push(Scene.root.find('bubble13'));
+bubbleList1.push(Scene.root.find('bubble14'));
+bubbleList1.push(Scene.root.find('bubble15'));
+bubbleList1.push(Scene.root.find('bubble16'));
 
-handleQuoteModule(1, quoteList1);
+handleBubbleModule(1, bubbleList1);
 
 var facePoint0 = Patches.getVectorValue("facePoint0");
 var facePoint1 = Patches.getVectorValue("facePoint1");
@@ -117,50 +117,50 @@ function handlePatternModule() {
 }
 */
  
-var sharedQuoteIndex = 0;
+var sharedBubbleIndex = 0;
 
-function handleQuoteModule(faceIndex, quoteList) {
+function handleBubbleModule(faceIndex, bubbleList) {
 
-    if (!!!sharedQuoteIndex)
-        sharedQuoteIndex = 0;
+    if (!!!sharedBubbleIndex)
+        sharedBubbleIndex = 0;
 
-    ++sharedQuoteIndex;
-    if (sharedQuoteIndex >= quoteList.length)
-        sharedQuoteIndex = 0;
+    ++sharedBubbleIndex;
+    if (sharedBubbleIndex >= bubbleList.length)
+        sharedBubbleIndex = 0;
 
-    var curQuote = quoteList[sharedQuoteIndex];
+    var curBubble = bubbleList[sharedBubbleIndex];
 
-    // Hide all quotes
-    function hideAllQuotes() {
+    // Hide all bubbles
+    function hideAllBubbles() {
 
-        for (var i=0; i<quoteList.length; ++i) {
+        for (var i=0; i<bubbleList.length; ++i) {
 
-            quoteList[i].hidden = true;
+            bubbleList[i].hidden = true;
         }
     } 
-    hideAllQuotes();
+    hideAllBubbles();
  
-    // Handle current quote
-    function changeQuote() {  
+    // Handle current bubble
+    function changeBubble() {  
 
-        for (var i=0; i<quoteList.length; ++i) {
+        for (var i=0; i<bubbleList.length; ++i) {
 
-            if (sharedQuoteIndex === i) {
+            if (sharedBubbleIndex === i) {
 
-                // Adjust quote index
-                ++sharedQuoteIndex;
+                // Adjust bubble index
+                ++sharedBubbleIndex;
 
-                if (sharedQuoteIndex >= quoteList.length)
-                    sharedQuoteIndex = 0;
+                if (sharedBubbleIndex >= bubbleList.length)
+                    sharedBubbleIndex = 0;
 
-                // Update current quote
-                curQuote = quoteList[sharedQuoteIndex];
+                // Update current bubble
+                curBubble = bubbleList[sharedBubbleIndex];
 
                 break;
             }
         }
     }
-    changeQuote();
+    changeBubble();
 
     // Check weather the face is tracked
     FaceTracking.face(faceIndex).isTracked.monitor().subscribe(function(e) {
@@ -173,8 +173,8 @@ function handleQuoteModule(faceIndex, quoteList) {
         // Tracked to untracked state
         else {
 
-            hideAllQuotes();
-            changeQuote();
+            hideAllBubbles();
+            changeBubble();
         }
     });
 
@@ -202,7 +202,7 @@ function handleQuoteModule(faceIndex, quoteList) {
 
             // Reset counter
             counter = 3;
-            hideQuote();
+            hideBubble();
         }
     });
 
@@ -215,42 +215,42 @@ function handleQuoteModule(faceIndex, quoteList) {
             var valXSub = mouth.center.x.monitor().subscribe(function(v) {
                 latestMouthCenterX = v.newValue;
                 valXSub.unsubscribe();
-                playQuoteIfReady();
+                playBubbleIfReady();
             });
 
             var valYSub = mouth.center.y.monitor().subscribe(function(v) {
                 latestMouthCenterY = v.newValue;
                 valYSub.unsubscribe();
-                playQuoteIfReady();
+                playBubbleIfReady();
             });
 
             var valZSub = mouth.center.z.monitor().subscribe(function(v) {
                 latestMouthCenterZ = v.newValue;
                 valZSub.unsubscribe();
-                playQuoteIfReady();
+                playBubbleIfReady();
             });
         }
     }) 
 
     var counter = 3;
 
-    function playQuoteIfReady() {
+    function playBubbleIfReady() {
 
         --counter;
 
         if (counter == 0) {
             
-            curQuote.hidden = false;
-            showQuote();
+            curBubble.hidden = false;
+            showBubble();
         }
     }
 
     //==============================================================================
-    // Animate quote position
+    // Animate bubble position
     //==============================================================================
 
-    const TARGET_QUOTE_SCALE = 0.16;
-    var currentQuoteScale = TARGET_QUOTE_SCALE;
+    const TARGET_BUBBLE_SCALE = 0.16;
+    var curBubbleScale = TARGET_BUBBLE_SCALE;
     const SCALE_RATIO = 0.02;
 
     // Create a set of time driver parameters
@@ -266,7 +266,7 @@ function handleQuoteModule(faceIndex, quoteList) {
         mirror: true  
     };
 
-    function showQuote() {
+    function showBubble() {
 
         var qx = facePoint0.x.pinLastValue();
         var qy = facePoint0.y.pinLastValue();
@@ -297,22 +297,21 @@ function handleQuoteModule(faceIndex, quoteList) {
         const translationYAnim = Animation.animate(timeDriver, translateYSampler);
 
         // Get scale factors (Linearly positive correlated with absolute Euclidean distance from camera)
-        //     Find distance from quote to camera | Given camera is always be at ( 0, 0, 0 )
+        //     Find distance from bubble to camera | Given camera is always be at ( 0, 0, 0 )
         
-        currentQuoteScale = TARGET_QUOTE_SCALE * SCALE_RATIO * range;
+        curBubbleScale = TARGET_BUBBLE_SCALE * SCALE_RATIO * range;
         
         // Scale animation
-        const scaleQuadraticSampler = Animation.samplers.easeInOutQuad(0, currentQuoteScale);
+        const scaleQuadraticSampler = Animation.samplers.easeInOutQuad(0, curBubbleScale);
         const scaleAnimation = Animation.animate(timeDriver, scaleQuadraticSampler);
 
         // Bind the translation animation signal to the x-axis position signal of the plane
-        curQuote.transform.x = translationXAnim;
-        curQuote.transform.y = translationYAnim;
-        curQuote.transform.z = latestMouthCenterZ;
+        curBubble.transform.x = translationXAnim;
+        curBubble.transform.y = translationYAnim;
+        curBubble.transform.z = latestMouthCenterZ;
     
-        curQuote.transform.scaleX = scaleAnimation;
-        //curQuote.transform.scaleY = translationAnimation;
-        curQuote.transform.scaleZ = scaleAnimation;
+        curBubble.transform.scaleX = scaleAnimation;
+        curBubble.transform.scaleZ = scaleAnimation;
 
         // Start the time driver (unlike value drivers this needs to be done explicitly)
         timeDriver.start(); 
@@ -330,7 +329,7 @@ function handleQuoteModule(faceIndex, quoteList) {
         mirror: true  
     };
 
-    function hideQuote() {
+    function hideBubble() {
 
         // Create a time driver using the parameters
         const timeDriver = Animation.timeDriver(hideTimeDriverParameters);
@@ -346,25 +345,24 @@ function handleQuoteModule(faceIndex, quoteList) {
         const translationYAnim = Animation.animate(timeDriver, translateYSampler);
 
         // Scale animation
-        const scaleQuadraticSampler = Animation.samplers.easeInOutQuad(currentQuoteScale, 0);
+        const scaleQuadraticSampler = Animation.samplers.easeInOutQuad(curBubbleScale, 0);
         const scaleAnimation = Animation.animate(timeDriver, scaleQuadraticSampler);
 
         // Bind the translation animation signal to the x-axis position signal of the plane
-        curQuote.transform.x = translationXAnim;
-        curQuote.transform.y = translationYAnim;
-        curQuote.transform.z = latestMouthCenterZ; 
+        curBubble.transform.x = translationXAnim;
+        curBubble.transform.y = translationYAnim;
+        curBubble.transform.z = latestMouthCenterZ; 
     
-        curQuote.transform.scaleX = scaleAnimation;
-        //curQuote.transform.scaleY = translationAnimation;
-        curQuote.transform.scaleZ = scaleAnimation;
+        curBubble.transform.scaleX = scaleAnimation;
+        curBubble.transform.scaleZ = scaleAnimation;
 
         // Start the time driver (unlike value drivers this needs to be done explicitly)
         timeDriver.start(); 
 
         timeDriver.onAfterIteration().subscribe(function() {
 
-            // Hide current quote
-            curQuote.hidden = true;
+            // Hide current bubble
+            curBubble.hidden = true;
         });
     }       
 }
