@@ -233,7 +233,7 @@ function handleBubbles(faceIndex, bubbleList) {
     var latestMouthCenterX = 0;
     var latestMouthCenterY = 0;
     var latestMouthCenterZ = 0;
-
+    /*
     mouthClose.monitor().subscribe(function() {
 
         var mouth = FaceTracking.face(faceIndex).mouth;
@@ -251,9 +251,9 @@ function handleBubbles(faceIndex, bubbleList) {
         if (mouth.openness.pinLastValue() >= MOUTH_OPENNESS_MIN_THRESHOLD)
             tryOpenMouth(faceIndex);
     })
-
+    */
     var counter;
-
+    tryOpenMouth(0);
     function tryOpenMouth(faceIndex) {
 
         // Reset counter
