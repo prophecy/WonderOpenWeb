@@ -240,8 +240,6 @@ function handleBubbles(faceIndex, bubbleList) {
 
         if (mouth.openness.pinLastValue() <= MOUTH_CLOSSNESS_MAX_THRESHOLD) {
 
-            // Reset counter
-            counter = 3;
             hideBubble();
         }
     });
@@ -250,29 +248,37 @@ function handleBubbles(faceIndex, bubbleList) {
 
         var mouth = FaceTracking.face(faceIndex).mouth;
 
-        if (mouth.openness.pinLastValue() >= MOUTH_OPENNESS_MIN_THRESHOLD) {
-        
-            var valXSub = mouth.center.x.monitor().subscribe(function(v) {
-                latestMouthCenterX = v.newValue;
-                valXSub.unsubscribe();
-                playBubbleIfReady();
-            });
+        if (mouth.openness.pinLastValue() >= MOUTH_OPENNESS_MIN_THRESHOLD)
+            tryOpenMouth(faceIndex);
+    })
 
-            var valYSub = mouth.center.y.monitor().subscribe(function(v) {
-                latestMouthCenterY = v.newValue;
-                valYSub.unsubscribe();
-                playBubbleIfReady();
-            });
+    var counter;
 
-            var valZSub = mouth.center.z.monitor().subscribe(function(v) {
-                latestMouthCenterZ = v.newValue;
-                valZSub.unsubscribe();
-                playBubbleIfReady();
-            });
-        }
-    }) 
+    function tryOpenMouth(faceIndex) {
 
-    var counter = 3;
+        // Reset counter
+        counter = 3;
+
+        var mouth = FaceTracking.face(faceIndex).mouth;
+
+        var valXSub = mouth.center.x.monitor().subscribe(function(v) {
+            latestMouthCenterX = v.newValue;
+            valXSub.unsubscribe();
+            playBubbleIfReady();
+        });
+
+        var valYSub = mouth.center.y.monitor().subscribe(function(v) {
+            latestMouthCenterY = v.newValue;
+            valYSub.unsubscribe();
+            playBubbleIfReady();
+        });
+
+        var valZSub = mouth.center.z.monitor().subscribe(function(v) {
+            latestMouthCenterZ = v.newValue;
+            valZSub.unsubscribe();
+            playBubbleIfReady();
+        });
+    }
 
     function playBubbleIfReady() {
 
