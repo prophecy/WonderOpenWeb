@@ -1,0 +1,33 @@
+# 3ds Max Wavefront OBJ Exporter v0.97b - (c)2007 guruware
+# File Created: 05.04.2019 12:32:15
+
+newmtl Helmet_M
+	Ns 20.0000
+	Ni 1.5000
+	d 1.0000
+	Tr 0.0000
+	Tf 1.0000 1.0000 1.0000 
+	illum 2
+	Ka 0.5451 0.5451 0.5451
+	Kd 0.5451 0.5451 0.5451
+	Ks 1.0729 1.0729 1.0729
+	Ke 0.0000 0.0000 0.0000
+	map_Ka C:\Users\adawat\Desktop\viking_helmet_horns_lowpoly_max7\helmet_color.dds
+	map_Kd C:\Users\adawat\Desktop\viking_helmet_horns_lowpoly_max7\helmet_color.dds
+	map_bump helmet_normal_bump_Normal_Bump.tga
+
+newmtl Horn_M
+	Ns 10.0000
+	Ni 1.5000
+	d 1.0000
+	Tr 0.0000
+	Tf 1.0000 1.0000 1.0000 
+	illum 2
+	Ka 0.5294 0.3333 0.1255
+	Kd 0.5294 0.3333 0.1255
+	Ks 0.2700 0.2700 0.2700
+	Ke 0.0000 0.0000 0.0000
+	map_Ka C:\Users\adawat\Desktop\viking_helmet_horns_lowpoly_max7\horn_color.dds
+	map_Kd C:\Users\adawat\Desktop\viking_helmet_horns_lowpoly_max7\horn_color.dds
+	map_bump C:\Users\adawat\Desktop\viking_helmet_horns_lowpoly_max7\horn_bump.dds
+	bump C:\Users\adawat\Desktop\viking_helmet_horns_lowpoly_max7\horn_bump.dds
