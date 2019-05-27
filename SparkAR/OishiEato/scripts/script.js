@@ -319,8 +319,12 @@ function handleBubbles(faceIndex, bubbleList) {
             qz = facePoint1.z.pinLastValue();
         }
 
-        const X_POS_WEIGHT = 0.18;
+        var xPostWeight = 0.18;
         const Y_OFFSET = 1.0;
+
+        Diagnostics.log("norm vec: " + (qz / Math.abs(qx)));
+
+        xPostWeight = xPostWeight * -1.0 * (qx / Math.abs(qx));
 
         var range = Math.sqrt(qx*qx + qy*qy + qz*qz);
 
@@ -328,13 +332,13 @@ function handleBubbles(faceIndex, bubbleList) {
         const timeDriver = Animation.timeDriver(showTimeDriverParameters);
 
         // Translate animation
-        const translateXSampler = Animation.samplers.easeInOutQuad(latestMouthCenterX, range * X_POS_WEIGHT);
+        const translateXSampler = Animation.samplers.easeInOutQuad(latestMouthCenterX, range * xPostWeight);
         const translationXAnim = Animation.animate(timeDriver, translateXSampler);
 
         const translateYSampler = Animation.samplers.easeInOutQuad(latestMouthCenterY + Y_OFFSET, -3);
         const translationYAnim = Animation.animate(timeDriver, translateYSampler);
 
-        shownBubbleX = range * X_POS_WEIGHT;
+        shownBubbleX = range * xPostWeight;
 
         // Get scale factors (Linearly positive correlated with absolute Euclidean distance from camera)
         //     Find distance from bubble to camera | Given camera is always be at ( 0, 0, 0 )
