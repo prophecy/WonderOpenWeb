@@ -182,15 +182,12 @@ function applyRotationBounce(obj, minAngle, maxAngle, duration) {
     // by the previously-defined axisRotation() method.
     var rotation_sampler = Animation.samplers.polyline({
         keyframes: [
-            axisRotation(0,1,0,-10),
-            axisRotation(0,1,0,0),
+            axisRotation(0,1,0,10),
             axisRotation(0,1,0,50),
-            axisRotation(0,1,0,50),
-            axisRotation(0,1,0,0),
-            axisRotation(0,1,0,-10),
+            axisRotation(0,1,0,10),
         ],
         knots: [
-            0, 1, 3, 5, 7, 9
+            0, 1, 2
         ]
     });
 
