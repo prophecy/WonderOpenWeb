@@ -291,6 +291,7 @@ function handleBubbles(faceIndex, bubbleList) {
     const TARGET_BUBBLE_SCALE = 0.16;
     var curBubbleScale = TARGET_BUBBLE_SCALE;
     const SCALE_RATIO = 0.02;
+    var shownBubbleX = 9;
 
     // Create a set of time driver parameters
     const showTimeDriverParameters = {
@@ -333,6 +334,8 @@ function handleBubbles(faceIndex, bubbleList) {
         const translateYSampler = Animation.samplers.easeInOutQuad(latestMouthCenterY + Y_OFFSET, -3);
         const translationYAnim = Animation.animate(timeDriver, translateYSampler);
 
+        shownBubbleX = range * X_POS_WEIGHT;
+
         // Get scale factors (Linearly positive correlated with absolute Euclidean distance from camera)
         //     Find distance from bubble to camera | Given camera is always be at ( 0, 0, 0 )
         
@@ -351,7 +354,7 @@ function handleBubbles(faceIndex, bubbleList) {
         curBubble.transform.scaleZ = scaleAnimation;
 
         // Start the time driver (unlike value drivers this needs to be done explicitly)
-        timeDriver.start(); 
+        timeDriver.start();
     } 
 
     const hideTimeDriverParameters = {
@@ -372,7 +375,7 @@ function handleBubbles(faceIndex, bubbleList) {
         const timeDriver = Animation.timeDriver(hideTimeDriverParameters);
 
         // Translate animation
-        const translateXSampler = Animation.samplers.easeInOutQuad(9, latestMouthCenterX);
+        const translateXSampler = Animation.samplers.easeInOutQuad(shownBubbleX, latestMouthCenterX);
         const translationXAnim = Animation.animate(timeDriver, translateXSampler);
 
         // Todo: remove this tmp
@@ -396,10 +399,12 @@ function handleBubbles(faceIndex, bubbleList) {
         // Start the time driver (unlike value drivers this needs to be done explicitly)
         timeDriver.start(); 
 
-        timeDriver.onAfterIteration().subscribe(function() {
+        var handler = timeDriver.onAfterIteration().subscribe(function() {
 
             // Hide current bubble
             curBubble.hidden = true;
+
+            handler.unsubscribe();
         });
     }       
 }
