@@ -322,8 +322,6 @@ function handleBubbles(faceIndex, bubbleList) {
         var xPostWeight = 0.18;
         const Y_OFFSET = 1.0;
 
-        Diagnostics.log("norm vec: " + (qz / Math.abs(qx)));
-
         xPostWeight = xPostWeight * -1.0 * (qx / Math.abs(qx));
 
         var range = Math.sqrt(qx*qx + qy*qy + qz*qz);
