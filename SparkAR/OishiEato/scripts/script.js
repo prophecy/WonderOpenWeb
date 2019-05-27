@@ -318,21 +318,19 @@ function handleBubbles(faceIndex, bubbleList) {
             qz = facePoint1.z.pinLastValue();
         }
 
-        var range = Math.sqrt(qx*qx + qy*qy + qz*qz);
+        const X_POS_WEIGHT = 0.18;
+        const Y_OFFSET = 1.0;
 
-        //Diagnostics.log("Range: " + range);
+        var range = Math.sqrt(qx*qx + qy*qy + qz*qz);
 
         // Create a time driver using the parameters
         const timeDriver = Animation.timeDriver(showTimeDriverParameters);
 
         // Translate animation
-        const translateXSampler = Animation.samplers.easeInOutQuad(latestMouthCenterX, range * 0.18);
+        const translateXSampler = Animation.samplers.easeInOutQuad(latestMouthCenterX, range * X_POS_WEIGHT);
         const translationXAnim = Animation.animate(timeDriver, translateXSampler);
 
-        // Todo: remove this tmp
-        const tmpYOffset = 1.0;
-
-        const translateYSampler = Animation.samplers.easeInOutQuad(latestMouthCenterY + tmpYOffset, -3);
+        const translateYSampler = Animation.samplers.easeInOutQuad(latestMouthCenterY + Y_OFFSET, -3);
         const translationYAnim = Animation.animate(timeDriver, translateYSampler);
 
         // Get scale factors (Linearly positive correlated with absolute Euclidean distance from camera)
