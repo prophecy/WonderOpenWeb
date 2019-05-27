@@ -217,6 +217,7 @@ function applyRotationBounce(obj, minAngle, maxAngle, duration) {
 
 // Use this var to handle bubble between face 1 and face 2
 var sharedBubbleIndex = 0;
+var showingBubbleIndex = -1;
 
 function handleBubbles(faceIndex, bubbleList) {
 
@@ -272,7 +273,7 @@ function handleBubbles(faceIndex, bubbleList) {
         // Tracked to untracked state
         else {
 
-            hideAllBubbles();
+            hideBubble();
         }
     });
  
@@ -337,11 +338,8 @@ function handleBubbles(faceIndex, bubbleList) {
 
         --counter;
 
-        if (counter == 0) {
-            
-            curBubble.hidden = false;
+        if (counter == 0)
             showBubble();
-        }
     }
 
     // --------------------------------------------------------------------------------
@@ -366,6 +364,12 @@ function handleBubbles(faceIndex, bubbleList) {
     };
 
     function showBubble() {
+
+        if (showingBubbleIndex != -1)
+            return;
+        showingBubbleIndex = faceIndex;
+
+        curBubble.hidden = false;
 
         var qx = facePoint0.x.pinLastValue();
         var qy = facePoint0.y.pinLastValue();
@@ -432,6 +436,9 @@ function handleBubbles(faceIndex, bubbleList) {
 
     function hideBubble() {
 
+        if (showingBubbleIndex != faceIndex)
+            return;
+
         // Create a time driver using the parameters
         const timeDriver = Animation.timeDriver(hideTimeDriverParameters);
 
@@ -464,6 +471,9 @@ function handleBubbles(faceIndex, bubbleList) {
 
             // Hide current bubble
             curBubble.hidden = true;
+
+            if (showingBubbleIndex == faceIndex)
+                showingBubbleIndex = -1;
 
             handler.unsubscribe();
         });
