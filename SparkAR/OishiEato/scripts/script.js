@@ -214,10 +214,9 @@ function handleBubbles(faceIndex, bubbleList) {
         else {
 
             hideAllBubbles();
-            changeBubble();
         }
     });
-
+ 
     //var confidenceSub = target.confidence.monitor().subscribe(function (e) {
 
         //Diagnostics.log("e.newValue: " + e.newValue);
@@ -243,6 +242,7 @@ function handleBubbles(faceIndex, bubbleList) {
             // Reset counter
             counter = 3;
             hideBubble();
+            changeBubble();
         }
     });
 
