@@ -268,20 +268,15 @@ function handleBubbles(faceIndex, bubbleList) {
         // Untracked to tracked state
         if (e.newValue) {
 
-            // Do nothing
+            showBubble();
         }
         // Tracked to untracked state
         else {
 
-            hideBubble();
+            //hideBubble();
         }
     });
  
-    //var confidenceSub = target.confidence.monitor().subscribe(function (e) {
-
-        //Diagnostics.log("e.newValue: " + e.newValue);
-    //}); 
-
     // Handle mouth opennes
     const MOUTH_OPENNESS_MIN_THRESHOLD = 0.1;
     const MOUTH_CLOSSNESS_MAX_THRESHOLD = 0.07;
@@ -301,8 +296,8 @@ function handleBubbles(faceIndex, bubbleList) {
 
             // Reset counter
             counter = 3;
-            hideBubble();
-            changeBubble();
+            //hideBubble();
+            //changeBubble();
         }
     });
 
@@ -330,16 +325,16 @@ function handleBubbles(faceIndex, bubbleList) {
                 playBubbleIfReady();
             });
         }
-    }) 
+    })
 
     var counter = 3;
 
     function playBubbleIfReady() {
 
-        --counter;
+        //--counter;
 
-        if (counter == 0)
-            showBubble();
+        //if (counter == 0)
+            //showBubble();
     }
 
     // --------------------------------------------------------------------------------
