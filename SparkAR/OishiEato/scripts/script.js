@@ -17,8 +17,8 @@ const Scene = require('Scene');
 const Diagnostics = require('Diagnostics');
 const FaceTracking = require('FaceTracking');
 const Reactive = require('Reactive');
-const Animation = require('Animation');
 const Patches = require('Patches');
+const Animation = require('Animation');
  
 // Log mouth openness value
 //Diagnostics.watch("Mouth Openness - ", FaceTracking.face(0).mouth.openness);
@@ -76,6 +76,7 @@ applyBalloonMovement(
     3000, -4500, 1500);
 
 // Back
+/*
 applyBalloonMovement(
     Scene.root.find('gyoza_back_plane0'), 
     0.2, 0.4, 0.6,
@@ -95,12 +96,30 @@ applyBalloonMovement(
     Scene.root.find('gyoza_back_plane3'), 
     0.4, 0.6, 0.2, 
     4500, 3000, 1500);
+/*/
+applyRotationBounce(
+    Scene.root.find('gyoza_back_plane0'), 
+    -60, 60, 800
+);
+applyRotationBounce(
+    Scene.root.find('gyoza_back_plane1'), 
+    -60, 60, 800
+);
+applyRotationBounce(
+    Scene.root.find('gyoza_back_plane2'), 
+    -60, 60, 800
+);
+applyRotationBounce(
+    Scene.root.find('gyoza_back_plane3'), 
+    -60, 60, 800
+);
+/**/
 
 applyParalaxMovement(
     Scene.root.find('front_root'),
     Scene.root.find('back_root'),
     0.1, 0.1);
-    
+
 // --------------------------------------------------------------------------------
 // MOVEMENT EFFECT
 // --------------------------------------------------------------------------------
@@ -150,6 +169,49 @@ function applyParalaxMovement(fLayer, bLayer, fw, bw) {
     fLayer.transform.y = Reactive.mul(facePoint0.y, fw);
     bLayer.transform.x = Reactive.mul(facePoint0.x, -bw);
     bLayer.transform.y = Reactive.mul(facePoint0.y, -bw);
+}
+
+function applyRotationBounce(obj, minAngle, maxAngle, duration) {
+
+    var time_driver = Animation.timeDriver({
+        durationMilliseconds: 2000,
+        loopCount: Infinity
+    });
+
+    // Create a rotation sampler using Rotation objects generated
+    // by the previously-defined axisRotation() method.
+    var rotation_sampler = Animation.samplers.polyline({
+        keyframes: [
+            axisRotation(0,1,0,-10),
+            axisRotation(0,1,0,0),
+            axisRotation(0,1,0,50),
+            axisRotation(0,1,0,50),
+            axisRotation(0,1,0,0),
+            axisRotation(0,1,0,-10),
+        ],
+        knots: [
+            0, 1, 3, 5, 7, 9
+        ]
+    });
+
+    // Start the animation
+    var rotation_signal = Animation.animate(time_driver, rotation_sampler);
+    
+    obj.transform.rotation = rotation_signal;
+
+    time_driver.start();
+
+    function axisRotation(axis_x, axis_y, axis_z, angle_degrees) {
+        var norm = Math.sqrt(axis_x*axis_x + axis_y*axis_y + axis_z*axis_z);
+        axis_x /= norm;
+        axis_y /= norm;
+        axis_z /= norm;
+        var angle_radians = angle_degrees * Math.PI / 180.0;
+        var cos = Math.cos(angle_radians/2);
+        var sin = Math.sin(angle_radians/2);
+        return Reactive.rotation(
+            cos, axis_x*sin, axis_y*sin, axis_z*sin);
+    }
 }
 
 // --------------------------------------------------------------------------------
