@@ -113,6 +113,18 @@ applyRotationBounce(
     Scene.root.find('gyoza_back_plane3'), 
     15, 45, 2300
 );
+applyRotationBounce(
+    Scene.root.find('gyoza_back_plane4'), 
+    25, 51, 2050
+);
+applyRotationBounce(
+    Scene.root.find('gyoza_back_plane5'), 
+    17, 48, 2250
+);
+applyRotationBounce(
+    Scene.root.find('gyoza_back_plane6'), 
+    12, 56, 2100
+);
 /**/
 
 applyParalaxMovement(
