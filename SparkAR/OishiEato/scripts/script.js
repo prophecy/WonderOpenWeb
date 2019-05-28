@@ -299,6 +299,7 @@ function handleBubbles(faceIndex, bubbleList) {
             counter = 3;
             //hideBubble();
             //changeBubble();
+            stopFeed();
         }
     });
 
@@ -311,31 +312,103 @@ function handleBubbles(faceIndex, bubbleList) {
             var valXSub = mouth.center.x.monitor().subscribe(function(v) {
                 latestMouthCenterX = v.newValue;
                 valXSub.unsubscribe();
-                playBubbleIfReady();
+                feedIfReady();
             });
 
             var valYSub = mouth.center.y.monitor().subscribe(function(v) {
                 latestMouthCenterY = v.newValue;
                 valYSub.unsubscribe();
-                playBubbleIfReady();
+                feedIfReady();
             });
 
             var valZSub = mouth.center.z.monitor().subscribe(function(v) {
                 latestMouthCenterZ = v.newValue;
                 valZSub.unsubscribe();
-                playBubbleIfReady();
+                feedIfReady();
             });
         }
     })
 
     var counter = 3;
 
-    function playBubbleIfReady() {
+    function feedIfReady() {
 
-        //--counter;
+        --counter;
 
-        //if (counter == 0)
-            //showBubble();
+        if (counter == 0)
+            startFeed(testyPoolList);
+    }
+
+    // --------------------------------------------------------------------------------
+    // Testy pool
+
+    var testyPoolList = [];
+
+    var srcObj = Scene.root.find('testyPool');
+
+    var srcX = srcObj.transform.x.pinLastValue();
+    var srcY = srcObj.transform.y.pinLastValue();
+    var srcZ = srcObj.transform.z.pinLastValue();
+
+    Diagnostics.log("srcX: " + srcX);
+    Diagnostics.log("srcY: " + srcY);
+    Diagnostics.log("srcZ: " + srcZ);
+
+    testyPoolList.push(Scene.root.find('testy0'));
+    testyPoolList.push(Scene.root.find('testy1'));
+    testyPoolList.push(Scene.root.find('testy2'));
+    testyPoolList.push(Scene.root.find('testy3'));
+    testyPoolList.push(Scene.root.find('testy4'));
+    testyPoolList.push(Scene.root.find('testy5'));
+    testyPoolList.push(Scene.root.find('testy6'));
+    testyPoolList.push(Scene.root.find('testy7'));
+    testyPoolList.push(Scene.root.find('testy8'));
+    testyPoolList.push(Scene.root.find('testy9'));
+
+    var feedTimeDriver;
+
+    function startFeed(objList) {
+
+        var qx = facePoint0.x.pinLastValue();
+        var qy = facePoint0.y.pinLastValue();
+        var qz = facePoint0.z.pinLastValue();
+
+        if (faceIndex == 1) {
+
+            qx = facePoint1.x.pinLastValue();
+            qy = facePoint1.y.pinLastValue();
+            qz = facePoint1.z.pinLastValue();
+        }
+
+        // Todo: This needs rotation considering between face and mouth
+        var dstX = (-1.0 * qx) + latestMouthCenterX - srcX;
+        var dstY = (1.0 * qy) + latestMouthCenterY - srcY;
+        var dstZ = (-1.0 * qz) + latestMouthCenterZ - srcZ;
+
+        Diagnostics.log("dstX: " + dstX);
+        Diagnostics.log("dstY: " + dstY);
+        Diagnostics.log("dstZ: " + dstZ);
+
+        const shootFoodInterval = {
+            durationMilliseconds: 1000,
+            loopCount: Infinity,
+            mirror: false  
+        };
+
+        feedTimeDriver = Animation.timeDriver(shootFoodInterval);
+        const feedSampler = Animation.samplers.easeInOutQuad(0, 1);
+        const feedAnim = Animation.animate(feedTimeDriver, feedSampler);
+
+        objList[0].transform.x = feedAnim.mul(dstX);
+        objList[0].transform.y = feedAnim.mul(dstY);
+        objList[0].transform.z = feedAnim.mul(dstZ);
+
+        feedTimeDriver.start();
+    }
+
+    function stopFeed() {
+
+        feedTimeDriver.stop();
     }
 
     // --------------------------------------------------------------------------------
