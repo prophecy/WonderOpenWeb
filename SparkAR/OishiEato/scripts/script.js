@@ -389,7 +389,8 @@ function handleBubbles(faceIndex, bubbleList) {
     var feedTimeDriverList = [];
 
     function startFeed(objList) {
-    
+        stopFeed();
+
         srcObj.hidden = false;
 
         const timeInMilliseconds = 120;
@@ -406,6 +407,19 @@ function handleBubbles(faceIndex, bubbleList) {
             }                
         }
 
+        var xPointList = [];
+        xPointList.push(0);
+        xPointList.push(-4);
+        xPointList.push(3);
+        xPointList.push(1);
+        xPointList.push(-3);
+        xPointList.push(-2);
+        xPointList.push(2);
+        xPointList.push(-2);
+        xPointList.push(-1);
+        xPointList.push(2);
+        var xVariant = 4.0;
+
         function runFeedInterval(index) {
 
             const shootFoodInterval = {
@@ -417,7 +431,7 @@ function handleBubbles(faceIndex, bubbleList) {
             var feedTimeDriver = Animation.timeDriver(shootFoodInterval);
     
             const txSamp = Animation.samplers.easeInOutQuad(
-                0, 
+                xPointList[index] * xVariant, 
                 testyTarget.transform.x.pinLastValue() - srcObj.transform.x.pinLastValue());
             const txAnim = Animation.animate(feedTimeDriver, txSamp);
     
