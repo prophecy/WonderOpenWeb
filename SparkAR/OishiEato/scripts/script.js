@@ -373,14 +373,6 @@ function handleBubbles(faceIndex, bubbleList) {
 
     var srcObj = Scene.root.find('testyPool');
 
-    var srcX = srcObj.transform.x.pinLastValue();
-    var srcY = srcObj.transform.y.pinLastValue();
-    var srcZ = srcObj.transform.z.pinLastValue();
-
-    Diagnostics.log("srcX: " + srcX);
-    Diagnostics.log("srcY: " + srcY);
-    Diagnostics.log("srcZ: " + srcZ);
-
     testyPoolList.push(Scene.root.find('testy0'));
     testyPoolList.push(Scene.root.find('testy1'));
     testyPoolList.push(Scene.root.find('testy2'));
@@ -394,44 +386,77 @@ function handleBubbles(faceIndex, bubbleList) {
 
     var testyTarget = Scene.root.find('testyTarget0');
 
-    var feedTimeDriver;
+    var feedTimeDriverList = [];
 
     function startFeed(objList) {
     
-        const shootFoodInterval = {
-            durationMilliseconds: 600,
-            loopCount: Infinity,
-            mirror: false  
-        };
+        srcObj.hidden = false;
 
-        feedTimeDriver = Animation.timeDriver(shootFoodInterval);
+        const timeInMilliseconds = 120;
+        const intervalTimer = Time.setInterval(shouldStartFeed, timeInMilliseconds);
+        var feedIndex = 0;
 
-        const txSamp = Animation.samplers.easeInOutQuad(
-            0, 
-            testyTarget.transform.x.pinLastValue() - srcObj.transform.x.pinLastValue());
-        const txAnim = Animation.animate(feedTimeDriver, txSamp);
+        function shouldStartFeed() {
 
-        const tySamp = Animation.samplers.easeInOutQuad(
-            0, 
-            testyTarget.transform.y.pinLastValue() - srcObj.transform.y.pinLastValue());
-        const tyAnim = Animation.animate(feedTimeDriver, tySamp);
+            runFeedInterval(feedIndex++);
+            
+            if (feedIndex >= objList.length) {
 
-        const tzSamp = Animation.samplers.easeInOutQuad(
-            0, 
-            testyTarget.transform.z.pinLastValue() - srcObj.transform.z.pinLastValue());
-        const tzAnim = Animation.animate(feedTimeDriver, tzSamp);
- 
+                Time.clearInterval(intervalTimer);
+            }                
+        }
 
-        objList[0].transform.x = txAnim;
-        objList[0].transform.y = tyAnim;
-        objList[0].transform.z = tzAnim;
+        function runFeedInterval(index) {
 
-        feedTimeDriver.start();
+            const shootFoodInterval = {
+                durationMilliseconds: 800,
+                loopCount: Infinity,
+                mirror: false  
+            };
+    
+            var feedTimeDriver = Animation.timeDriver(shootFoodInterval);
+    
+            const txSamp = Animation.samplers.easeInOutQuad(
+                0, 
+                testyTarget.transform.x.pinLastValue() - srcObj.transform.x.pinLastValue());
+            const txAnim = Animation.animate(feedTimeDriver, txSamp);
+    
+            const tySamp = Animation.samplers.easeInOutQuad(
+                0, 
+                testyTarget.transform.y.pinLastValue() - srcObj.transform.y.pinLastValue());
+            const tyAnim = Animation.animate(feedTimeDriver, tySamp);
+    
+            const tzSamp = Animation.samplers.easeInOutQuad(
+                0, 
+                testyTarget.transform.z.pinLastValue() - srcObj.transform.z.pinLastValue());
+            const tzAnim = Animation.animate(feedTimeDriver, tzSamp);
+            
+            objList[index].transform.x = txAnim;
+            objList[index].transform.y = tyAnim;
+            objList[index].transform.z = tzAnim;
+
+            feedTimeDriver.start();
+
+            if (!(feedTimeDriverList.length > index))
+                feedTimeDriverList.push(feedTimeDriver);
+            else
+                feedTimeDriverList[index] = feedTimeDriver;
+        }
     }
 
     function stopFeed() {
 
-        feedTimeDriver.stop();
+        for (var i=0; i<feedTimeDriverList.length; ++i)
+            feedTimeDriverList[i].stop();
+
+        for (var i=0; i<testyPoolList.length; ++i) {
+
+            testyPoolList[i].transform.x = 0;     
+            testyPoolList[i].transform.y = 0;     
+            testyPoolList[i].transform.z = 0;     
+        }
+            
+        srcObj.hidden = true;
     }
 
     // --------------------------------------------------------------------------------
