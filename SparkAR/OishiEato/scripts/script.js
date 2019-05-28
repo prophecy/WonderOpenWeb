@@ -273,9 +273,10 @@ function handleBubbles(faceIndex, bubbleList) {
         // Tracked to untracked state
         else {
 
-            //hideBubble();
+            hideBubble();
+            changeBubble();
         }
-    });
+    }); 
  
     // Handle mouth opennes
     const MOUTH_OPENNESS_MIN_THRESHOLD = 0.1;
@@ -343,7 +344,8 @@ function handleBubbles(faceIndex, bubbleList) {
     const TARGET_BUBBLE_SCALE = 0.16;
     var curBubbleScale = TARGET_BUBBLE_SCALE;
     const SCALE_RATIO = 0.02;
-    var shownBubbleX = 9;
+    var shownBubbleX = 9; // Init with default value
+    const X_SIDE_WEIGHT = 0.25;
 
     // Create a set of time driver parameters
     const showTimeDriverParameters = {
@@ -357,6 +359,8 @@ function handleBubbles(faceIndex, bubbleList) {
         // Should the driver 'yoyo' back and forth
         mirror: false  
     };
+
+    const BUBBLE_POSITION_Y = 0;
 
     function showBubble() {
 
@@ -377,10 +381,8 @@ function handleBubbles(faceIndex, bubbleList) {
             qz = facePoint1.z.pinLastValue();
         }
 
-        var xPostWeight = 0.18;
-        const Y_OFFSET = 1.0;
-
-        xPostWeight = xPostWeight * -1.0 * (qx / Math.abs(qx));
+        // Use this value to select bubble showing side
+        var xSideNorm = -1.0 * (qx / Math.abs(qx));
 
         var range = Math.sqrt(qx*qx + qy*qy + qz*qz);
 
@@ -388,13 +390,13 @@ function handleBubbles(faceIndex, bubbleList) {
         const timeDriver = Animation.timeDriver(showTimeDriverParameters);
 
         // Translate animation
-        const translateXSampler = Animation.samplers.easeInOutQuad(latestMouthCenterX, range * xPostWeight);
-        const translationXAnim = Animation.animate(timeDriver, translateXSampler);
+        //const translateXSampler = Animation.samplers.easeInOutQuad(latestMouthCenterX, range * xSideWeight);
+        //const translationXAnim = Animation.animate(timeDriver, translateXSampler);
 
-        const translateYSampler = Animation.samplers.easeInOutQuad(latestMouthCenterY + Y_OFFSET, -3);
-        const translationYAnim = Animation.animate(timeDriver, translateYSampler);
+        //const translateYSampler = Animation.samplers.easeInOutQuad(latestMouthCenterY, BUBBLE_POSITION_Y);
+        //const translationYAnim = Animation.animate(timeDriver, translateYSampler);
 
-        shownBubbleX = range * xPostWeight;
+        shownBubbleX = range * xSideNorm * X_SIDE_WEIGHT;
 
         // Get scale factors (Linearly positive correlated with absolute Euclidean distance from camera)
         //     Find distance from bubble to camera | Given camera is always be at ( 0, 0, 0 )
@@ -406,8 +408,10 @@ function handleBubbles(faceIndex, bubbleList) {
         const scaleAnimation = Animation.animate(timeDriver, scaleQuadraticSampler);
 
         // Bind the translation animation signal to the x-axis position signal of the plane
-        curBubble.transform.x = translationXAnim;
-        curBubble.transform.y = translationYAnim;
+        //curBubble.transform.x = translationXAnim;
+        //curBubble.transform.y = translationYAnim;
+        curBubble.transform.x = shownBubbleX;
+        curBubble.transform.y = BUBBLE_POSITION_Y;
         curBubble.transform.z = latestMouthCenterZ;
     
         curBubble.transform.scaleX = scaleAnimation;
@@ -438,23 +442,20 @@ function handleBubbles(faceIndex, bubbleList) {
         const timeDriver = Animation.timeDriver(hideTimeDriverParameters);
 
         // Translate animation
-        const translateXSampler = Animation.samplers.easeInOutQuad(shownBubbleX, latestMouthCenterX);
-        const translationXAnim = Animation.animate(timeDriver, translateXSampler);
+        //const translateXSampler = Animation.samplers.easeInOutQuad(shownBubbleX, latestMouthCenterX);
+        //const translationXAnim = Animation.animate(timeDriver, translateXSampler);
 
-        // Todo: remove this tmp
-        const tmpYOffset = 1.0;
-
-        const translateYSampler = Animation.samplers.easeInOutQuad(-3, latestMouthCenterY + tmpYOffset);
-        const translationYAnim = Animation.animate(timeDriver, translateYSampler);
+        //const translateYSampler = Animation.samplers.easeInOutQuad(BUBBLE_POSITION_Y, latestMouthCenterY);
+        //const translationYAnim = Animation.animate(timeDriver, translateYSampler);
 
         // Scale animation
         const scaleQuadraticSampler = Animation.samplers.easeInOutQuad(curBubbleScale, 0);
         const scaleAnimation = Animation.animate(timeDriver, scaleQuadraticSampler);
 
         // Bind the translation animation signal to the x-axis position signal of the plane
-        curBubble.transform.x = translationXAnim;
-        curBubble.transform.y = translationYAnim;
-        curBubble.transform.z = latestMouthCenterZ; 
+        //curBubble.transform.x = translationXAnim;
+        //curBubble.transform.y = translationYAnim;
+        //curBubble.transform.z = latestMouthCenterZ; 
     
         curBubble.transform.scaleX = scaleAnimation;
         curBubble.transform.scaleZ = scaleAnimation;
