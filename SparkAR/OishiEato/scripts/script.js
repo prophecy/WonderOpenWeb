@@ -99,19 +99,19 @@ applyBalloonMovement(
 /*/
 applyRotationBounce(
     Scene.root.find('gyoza_back_plane0'), 
-    -60, 60, 800
+    10, 50, 2000
 );
 applyRotationBounce(
     Scene.root.find('gyoza_back_plane1'), 
-    -60, 60, 800
+    20, 60, 2100
 );
 applyRotationBounce(
     Scene.root.find('gyoza_back_plane2'), 
-    -60, 60, 800
+    0, 40, 2200
 );
 applyRotationBounce(
     Scene.root.find('gyoza_back_plane3'), 
-    -60, 60, 800
+    15, 45, 2300
 );
 /**/
 
@@ -174,7 +174,7 @@ function applyParalaxMovement(fLayer, bLayer, fw, bw) {
 function applyRotationBounce(obj, minAngle, maxAngle, duration) {
 
     var time_driver = Animation.timeDriver({
-        durationMilliseconds: 2000,
+        durationMilliseconds: duration,
         loopCount: Infinity
     });
 
@@ -182,9 +182,9 @@ function applyRotationBounce(obj, minAngle, maxAngle, duration) {
     // by the previously-defined axisRotation() method.
     var rotation_sampler = Animation.samplers.polyline({
         keyframes: [
-            axisRotation(0,1,0,10),
-            axisRotation(0,1,0,50),
-            axisRotation(0,1,0,10),
+            axisRotation(0,1,0,minAngle),
+            axisRotation(0,1,0,maxAngle),
+            axisRotation(0,1,0,minAngle),
         ],
         knots: [
             0, 1, 2
