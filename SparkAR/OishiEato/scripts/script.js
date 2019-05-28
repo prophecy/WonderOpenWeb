@@ -430,7 +430,7 @@ function handleBubbles(faceIndex, bubbleList) {
     var curBubbleScale = TARGET_BUBBLE_SCALE;
     const SCALE_RATIO = 0.02;
     var shownBubbleX = 9; // Init with default value
-    const X_SIDE_WEIGHT = 0.25;
+    const X_SIDE_WEIGHT = 0.2;
 
     // Create a set of time driver parameters
     const showTimeDriverParameters = {
