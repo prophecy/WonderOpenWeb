@@ -19,6 +19,7 @@ const FaceTracking = require('FaceTracking');
 const Reactive = require('Reactive');
 const Patches = require('Patches');
 const Animation = require('Animation');
+const Time = require('Time');
  
 // Log mouth openness value
 //Diagnostics.watch("Mouth Openness - ", FaceTracking.face(0).mouth.openness);
@@ -347,8 +348,22 @@ function handleBubbles(faceIndex, bubbleList) {
 
         --counter;
 
-        if (counter == 0)
-            startFeed(testyPoolList);
+        if (counter == 0) {
+
+            // Update testy target
+            var mouth = FaceTracking.face(faceIndex).mouth;
+            testyTarget.transform.x = mouth.center.x;
+            testyTarget.transform.y = mouth.center.y;
+            testyTarget.transform.z = mouth.center.z;
+
+            const timeInMilliseconds = 100;
+            const intervalTimer = Time.setInterval(shouldStartFeed, timeInMilliseconds);
+
+            function shouldStartFeed() { 
+                Time.clearInterval(intervalTimer);
+                startFeed(testyPoolList);
+            }
+        }
     }
 
     // --------------------------------------------------------------------------------
@@ -377,43 +392,39 @@ function handleBubbles(faceIndex, bubbleList) {
     testyPoolList.push(Scene.root.find('testy8'));
     testyPoolList.push(Scene.root.find('testy9'));
 
+    var testyTarget = Scene.root.find('testyTarget0');
+
     var feedTimeDriver;
 
     function startFeed(objList) {
-
-        var qx = facePoint0.x.pinLastValue();
-        var qy = facePoint0.y.pinLastValue();
-        var qz = facePoint0.z.pinLastValue();
-
-        if (faceIndex == 1) {
-
-            qx = facePoint1.x.pinLastValue();
-            qy = facePoint1.y.pinLastValue();
-            qz = facePoint1.z.pinLastValue();
-        }
-
-        // Todo: This needs rotation considering between face and mouth
-        var dstX = (-1.0 * qx) + latestMouthCenterX - srcX;
-        var dstY = (1.0 * qy) + latestMouthCenterY - srcY;
-        var dstZ = (-1.0 * qz) + latestMouthCenterZ - srcZ;
-
-        Diagnostics.log("dstX: " + dstX);
-        Diagnostics.log("dstY: " + dstY);
-        Diagnostics.log("dstZ: " + dstZ);
-
+    
         const shootFoodInterval = {
-            durationMilliseconds: 1000,
+            durationMilliseconds: 600,
             loopCount: Infinity,
             mirror: false  
         };
 
         feedTimeDriver = Animation.timeDriver(shootFoodInterval);
-        const feedSampler = Animation.samplers.easeInOutQuad(0, 1);
-        const feedAnim = Animation.animate(feedTimeDriver, feedSampler);
 
-        objList[0].transform.x = feedAnim.mul(dstX);
-        objList[0].transform.y = feedAnim.mul(dstY);
-        objList[0].transform.z = feedAnim.mul(dstZ);
+        const txSamp = Animation.samplers.easeInOutQuad(
+            0, 
+            testyTarget.transform.x.pinLastValue() - srcObj.transform.x.pinLastValue());
+        const txAnim = Animation.animate(feedTimeDriver, txSamp);
+
+        const tySamp = Animation.samplers.easeInOutQuad(
+            0, 
+            testyTarget.transform.y.pinLastValue() - srcObj.transform.y.pinLastValue());
+        const tyAnim = Animation.animate(feedTimeDriver, tySamp);
+
+        const tzSamp = Animation.samplers.easeInOutQuad(
+            0, 
+            testyTarget.transform.z.pinLastValue() - srcObj.transform.z.pinLastValue());
+        const tzAnim = Animation.animate(feedTimeDriver, tzSamp);
+ 
+
+        objList[0].transform.x = txAnim;
+        objList[0].transform.y = tyAnim;
+        objList[0].transform.z = tzAnim;
 
         feedTimeDriver.start();
     }
