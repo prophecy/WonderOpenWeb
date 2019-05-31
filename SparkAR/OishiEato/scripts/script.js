@@ -104,10 +104,14 @@ const gyozaBackPlane2 = Scene.root.find('gyoza_back_plane2');
 //Diagnostics.watch("Mouth Center Z ", FaceTracking.face(0).mouth.center.z);
 
 // @ START
+const TARGET_BUBBLE_SCALE = 0.16 * 0.02;
+var shownBubbleX = 9; // Init with default value
+const X_SIDE_WEIGHT = 0.14; 
+const BUBBLE_POSITION_Y = -8.8;
 
 crushRoot.hidden = true;
-handleBubbles(0, bubbleList0);
-handleBubbles(1, bubbleList1);
+//handleBubbles(0, bubbleList0);
+//handleBubbles(1, bubbleList1);
 
 applyBalloonMovement(gyozaFrontPlane0, 0.6, 0.4, 0.2, 1500, -3000, 4500);
 applyRotationBounce(gyozaBackPlane1, 20, 40, 600);
@@ -119,30 +123,43 @@ applyParalaxMovement(frontRoot, backRoot, 0.1, 0.1);
 function onFace0Tracked(mouthCenterPoint) {
 
     Diagnostics.log("onFace 0 Tracked!");
-    Diagnostics.log("mcx: " + mouthCenterPoint[0] + " mcy: " + mouthCenterPoint[1] + " mcz: " + mouthCenterPoint[1]);
+    //Diagnostics.log("mcx: " + mouthCenterPoint[0] + " mcy: " + mouthCenterPoint[1] + " mcz: " + mouthCenterPoint[1]);
+
+    showBubble(bubbleList0[0], facePoint0, X_SIDE_WEIGHT, BUBBLE_POSITION_Y, TARGET_BUBBLE_SCALE); 
 }
 
-function onface1Tracked() {
+function onFace0Untracked() {
 
     Diagnostics.log("onFace 0 untracked");
+
+    hideBubble(bubbleList0[0]);
 }
 
-handleFaceTrackingState(0, onFace0Tracked, onface1Tracked);
+handleFaceTrackingState(0, onFace0Tracked, onFace0Untracked);
 
 function onFace0MouthOpen() {
 
-    Diagnostics.log("onFace0MouthOpen");
+    Diagnostics.log("onFace0MouthOpen"); 
 }
 
 function onFace0MouthClose() {
 
-    Diagnostics.log("onFace)MouthClose");
+    Diagnostics.log("onFaceMouthClose");
 }
 
 handleMouthOpeningState(
     0, 
     MOUTH_OPENNESS_MIN_THRESHOLD, MOUTH_CLOSSNESS_MAX_THRESHOLD, 
     onFace0MouthOpen, onFace0MouthClose);
+
+function hideAllBubbles(bubbleList) {
+
+for (var i=0; i<bubbleList.length; ++i)
+    bubbleList[i].hidden = true;
+} 
+
+hideAllBubbles(bubbleList0);
+
 
 // @ OPEN MOUTH
 
@@ -316,192 +333,86 @@ function applyRotationBounce(obj, minAngle, maxAngle, duration) {
 // --------------------------------------------------------------------------------
 
 // --------------------------------------------------------------------------------
-// Bubble handler
+// Bubble animation
 
-// Use this var to handle bubble between face 1 and face 2
-var sharedBubbleIndex = 0;
-var showingBubbleIndex = -1;
+function showBubble(obj, facePoint, xSideWeight, positionY, targetBubbleScale) { 
 
-function handleBubbles(faceIndex, bubbleList) {
+    const facePointX = facePoint.x.pinLastValue(); 
+    const facePointY = facePoint.y.pinLastValue();
+    const facePointZ = facePoint.z.pinLastValue();
 
-    if (!!!sharedBubbleIndex)
-        sharedBubbleIndex = 0;
+    obj.hidden = false;
 
-    ++sharedBubbleIndex;
-    if (sharedBubbleIndex >= bubbleList.length)
-        sharedBubbleIndex = 0;
-
-    var curBubble = bubbleList[sharedBubbleIndex];
-
-    // Hide all bubbles
-    function hideAllBubbles() {
-
-        for (var i=0; i<bubbleList.length; ++i) {
-
-            bubbleList[i].hidden = true;
-        }
-    } 
-    hideAllBubbles();
- 
-    // Handle current bubble
-    function changeBubble() {  
-
-        for (var i=0; i<bubbleList.length; ++i) {
-
-            if (sharedBubbleIndex === i) {
-
-                // Adjust bubble index
-                ++sharedBubbleIndex;
-
-                if (sharedBubbleIndex >= bubbleList.length)
-                    sharedBubbleIndex = 0;
-
-                // Update current bubble
-                curBubble = bubbleList[sharedBubbleIndex];
-
-                break;
-            }
-        }
-    }
-    changeBubble();
-
-    // --------------------------------------------------------------------------------
-    // Bubble animation
-
-    const TARGET_BUBBLE_SCALE = 0.16;
-    var curBubbleScale = TARGET_BUBBLE_SCALE;
-    const SCALE_RATIO = 0.02;
-    var shownBubbleX = 9; // Init with default value
-    const X_SIDE_WEIGHT = 0.14; 
-
-    // Create a set of time driver parameters
     const showTimeDriverParameters = {
 
-        // The duration of the driver
         durationMilliseconds: 200,
-    
-        // The number of iterations before the driver stops
         loopCount: 1,
-    
-        // Should the driver 'yoyo' back and forth
         mirror: false  
     };
 
-    const BUBBLE_POSITION_Y = -8.8;
+    // Range affects scale and position
+    var range = Math.sqrt(facePointX*facePointX + facePointY*facePointY + facePointZ*facePointZ);
 
-    function showBubble() {
+    // Use this value to select bubble showing side
+    var xSideNorm = -1.0 * (facePointX / Math.abs(facePointX));
 
-        if (showingBubbleIndex != -1)
-            return;
-        showingBubbleIndex = faceIndex;
+    shownBubbleX = range * xSideNorm * xSideWeight;
 
-        curBubble.hidden = false;
+    // Bind the translation animation signal to the x-axis position signal of the plane
+    obj.transform.x = shownBubbleX;
+    obj.transform.y = positionY;
+    obj.transform.z = 0.0;
 
-        var qx = facePoint0.x.pinLastValue();
-        var qy = facePoint0.y.pinLastValue();
-        var qz = facePoint0.z.pinLastValue();
+    // Create a time driver using the parameters
+    const timeDriver = Animation.timeDriver(showTimeDriverParameters);
 
-        if (faceIndex == 1) {
-
-            qx = facePoint1.x.pinLastValue();
-            qy = facePoint1.y.pinLastValue();
-            qz = facePoint1.z.pinLastValue();
-        }
-
-        // Use this value to select bubble showing side
-        var xSideNorm = -1.0 * (qx / Math.abs(qx));
-
-        var range = Math.sqrt(qx*qx + qy*qy + qz*qz);
-
-        // Create a time driver using the parameters
-        const timeDriver = Animation.timeDriver(showTimeDriverParameters);
-
-        // Translate animation
-        //const translateXSampler = Animation.samplers.easeInOutQuad(latestMouthCenterX, range * xSideWeight);
-        //const translationXAnim = Animation.animate(timeDriver, translateXSampler);
-
-        //const translateYSampler = Animation.samplers.easeInOutQuad(latestMouthCenterY, BUBBLE_POSITION_Y);
-        //const translationYAnim = Animation.animate(timeDriver, translateYSampler);
-
-        shownBubbleX = range * xSideNorm * X_SIDE_WEIGHT;
-
-        // Get scale factors (Linearly positive correlated with absolute Euclidean distance from camera)
-        //     Find distance from bubble to camera | Given camera is always be at ( 0, 0, 0 )
-        
-        curBubbleScale = TARGET_BUBBLE_SCALE * SCALE_RATIO * range;
-        
-        // Scale animation
-        const scaleQuadraticSampler = Animation.samplers.easeInOutQuad(0, curBubbleScale);
-        const scaleAnimation = Animation.animate(timeDriver, scaleQuadraticSampler);
-
-        // Bind the translation animation signal to the x-axis position signal of the plane
-        //curBubble.transform.x = translationXAnim;
-        //curBubble.transform.y = translationYAnim;
-        curBubble.transform.x = shownBubbleX;
-        curBubble.transform.y = BUBBLE_POSITION_Y;
-        curBubble.transform.z = latestMouthCenterZ;
+    // Get scale factors (Linearly positive correlated with absolute Euclidean distance from camera)
+    //     Find distance from bubble to camera | Given camera is always be at ( 0, 0, 0 )
     
-        curBubble.transform.scaleX = scaleAnimation;
-        curBubble.transform.scaleZ = scaleAnimation;
+    var bubbleScale = targetBubbleScale * range;
+     
+    // Scale animation
+    const scaleQuadraticSampler = Animation.samplers.easeInOutQuad(0, bubbleScale);
+    const scaleAnimation = Animation.animate(timeDriver, scaleQuadraticSampler);
 
-        // Start the time driver (unlike value drivers this needs to be done explicitly)
-        timeDriver.start();
-    } 
+    obj.transform.scaleX = scaleAnimation;
+    obj.transform.scaleZ = scaleAnimation;
+
+    // Start the time driver (unlike value drivers this needs to be done explicitly)
+    timeDriver.start();
+}
+
+function hideBubble(obj) {
 
     const hideTimeDriverParameters = {
-
-        // The duration of the driver
         durationMilliseconds: 100,
-    
-        // The number of iterations before the driver stops
         loopCount: 1,
-    
-        // Should the driver 'yoyo' back and forth
         mirror: false  
     };
 
-    function hideBubble() {
+    // Create a time driver using the parameters
+    const timeDriver = Animation.timeDriver(hideTimeDriverParameters);
 
-        if (showingBubbleIndex != faceIndex)
-            return;
+    // Scale with animation
+    var curBubbleScale = obj.transform.scaleX.pinLastValue();
 
-        // Create a time driver using the parameters
-        const timeDriver = Animation.timeDriver(hideTimeDriverParameters);
+    const scaleQuadraticSampler = Animation.samplers.easeInOutQuad(curBubbleScale, 0);
+    const scaleAnimation = Animation.animate(timeDriver, scaleQuadraticSampler);
 
-        // Translate animation
-        //const translateXSampler = Animation.samplers.easeInOutQuad(shownBubbleX, latestMouthCenterX);
-        //const translationXAnim = Animation.animate(timeDriver, translateXSampler);
+    obj.transform.scaleX = scaleAnimation;
+    obj.transform.scaleZ = scaleAnimation;
 
-        //const translateYSampler = Animation.samplers.easeInOutQuad(BUBBLE_POSITION_Y, latestMouthCenterY);
-        //const translationYAnim = Animation.animate(timeDriver, translateYSampler);
+    // Start the time driver (unlike value drivers this needs to be done explicitly)
+    timeDriver.start(); 
 
-        // Scale animation
-        const scaleQuadraticSampler = Animation.samplers.easeInOutQuad(curBubbleScale, 0);
-        const scaleAnimation = Animation.animate(timeDriver, scaleQuadraticSampler);
+    var handler = timeDriver.onAfterIteration().subscribe(function() {
 
-        // Bind the translation animation signal to the x-axis position signal of the plane
-        //curBubble.transform.x = translationXAnim;
-        //curBubble.transform.y = translationYAnim;
-        //curBubble.transform.z = latestMouthCenterZ; 
-    
-        curBubble.transform.scaleX = scaleAnimation;
-        curBubble.transform.scaleZ = scaleAnimation;
+        // Hide current bubble
+        obj.hidden = true;
 
-        // Start the time driver (unlike value drivers this needs to be done explicitly)
-        timeDriver.start(); 
-
-        var handler = timeDriver.onAfterIteration().subscribe(function() {
-
-            // Hide current bubble
-            curBubble.hidden = true;
-
-            if (showingBubbleIndex == faceIndex)
-                showingBubbleIndex = -1;
-
-            handler.unsubscribe();
-        });
-    }       
-}
+        handler.unsubscribe();
+    });
+}       
 
 // --------------------------------------------------------------------------------
 // Food feeder
