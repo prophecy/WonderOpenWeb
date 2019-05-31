@@ -356,7 +356,7 @@ function handleBubbles(faceIndex, bubbleList) {
             testyTarget.transform.y = mouth.center.y;
             testyTarget.transform.z = mouth.center.z;
 
-            const timeInMilliseconds = 100;
+            const timeInMilliseconds = 50;
             const intervalTimer = Time.setInterval(shouldStartFeed, timeInMilliseconds);
 
             function shouldStartFeed() { 
@@ -388,25 +388,63 @@ function handleBubbles(faceIndex, bubbleList) {
 
     var feedTimeDriverList = [];
 
+    var crushPoolList = [];
+
+    var crushRoot = Scene.root.find('crushPool');
+
+    crushPoolList.push(Scene.root.find('crush0'));
+    crushPoolList.push(Scene.root.find('crush1'));
+    crushPoolList.push(Scene.root.find('crush2'));
+    crushPoolList.push(Scene.root.find('crush3'));
+    crushPoolList.push(Scene.root.find('crush4'));
+    crushPoolList.push(Scene.root.find('crush5'));
+    crushPoolList.push(Scene.root.find('crush6'));
+    crushPoolList.push(Scene.root.find('crush7'));
+    crushPoolList.push(Scene.root.find('crush8'));
+    crushPoolList.push(Scene.root.find('crush9'));
+
+    var crushTimeDriverList = [];
+
+    crushRoot.hidden = true;
+
+    crushRoot.transform.x = testyTarget.transform.x;
+    crushRoot.transform.y = testyTarget.transform.y;
+    crushRoot.transform.z = testyTarget.transform.z;
+    
     function startFeed(objList) {
 
         // Stop the old event before starting it again
         stopFeed();
 
         srcObj.hidden = false;
+        crushRoot.hidden = false;
 
         const timeInMilliseconds = 120;
         const intervalTimer = Time.setInterval(shouldStartFeed, timeInMilliseconds);
         var feedIndex = 0;
 
+        const crushTimeInMilliseconds = 100;
+        const crushIntervalTimer = Time.setInterval(shouldStartCrush, crushTimeInMilliseconds);
+        var crushIndex = 0;
+
         function shouldStartFeed() {
 
             runFeedInterval(objList, feedIndex++);
-            
+
             if (feedIndex >= objList.length) {
 
                 Time.clearInterval(intervalTimer);
             }                
+        }
+
+        function shouldStartCrush() {
+
+            runCrushInterval(objList, crushIndex++);
+
+            if (crushIndex >= objList.length) {
+
+                Time.clearInterval(crushIntervalTimer);
+            }
         }
 
         var xPointList = [];
@@ -443,6 +481,70 @@ function handleBubbles(faceIndex, bubbleList) {
         const FEED_SET_COUNT = 8;
         var curSet = 0;
 
+        var crushYAngleList = [];
+        crushYAngleList.push(0.11449);    crushYAngleList.push(0.55922);    
+        crushYAngleList.push(0.21852);    crushYAngleList.push(0.09600);
+        crushYAngleList.push(0.82530);    crushYAngleList.push(0.95081);    
+        crushYAngleList.push(0.84250);    crushYAngleList.push(0.77527);    
+        crushYAngleList.push(0.85664);    crushYAngleList.push(0.53096);
+        
+        var crushNormDirList = [];
+        
+        for (var i=0; i<crushYAngleList.length; ++i) {
+
+            var rad = crushYAngleList[i] * 2.0 * Math.PI;
+            var xNorm = Math.cos(rad);
+            var yNorm = Math.sin(rad);
+
+            var tmp = [];
+            tmp.push(xNorm);
+            tmp.push(yNorm);
+
+            crushNormDirList.push(tmp);
+        }
+
+        function runCrushInterval(objList, index) {
+
+            // Manipulate crush angle
+            const crushInterval = {
+                durationMilliseconds: 300,
+                loopCount: Infinity,
+                mirror: false  
+            };
+            var crushTimeDriver = Animation.timeDriver(crushInterval);
+
+             Diagnostics.log("tmp: " + crushNormDirList[index]);
+            
+            const cxSamp = Animation.samplers.easeInOutQuad(
+                0,
+                crushNormDirList[index][0] * 7.0
+            );
+            const cxAnim = Animation.animate(crushTimeDriver, cxSamp);
+
+            const cySamp = Animation.samplers.easeInOutQuad(
+                0,
+                crushNormDirList[index][1] * 7.0
+            );
+            const cyAnim = Animation.animate(crushTimeDriver, cySamp);
+
+            const czSamp = Animation.samplers.easeInOutQuad(
+                0,
+                7.0
+            );
+            const czAnim = Animation.animate(crushTimeDriver, czSamp);
+
+            crushPoolList[index].transform.x = cxAnim;
+            crushPoolList[index].transform.y = cyAnim;
+            crushPoolList[index].transform.z = czAnim;
+
+            crushTimeDriver.start();
+
+            if (!(crushTimeDriverList.length > index))
+                crushTimeDriverList.push(crushTimeDriver);
+            else
+                crushTimeDriverList[index] = crushTimeDriver;
+        }
+
         function runFeedInterval(objList, index) {
 
             if (index == FEED_SET_COUNT - 1)
@@ -451,7 +553,7 @@ function handleBubbles(faceIndex, bubbleList) {
             // Manipulate position transition
 
             const shootFoodInterval = {
-                durationMilliseconds: 1200,
+                durationMilliseconds: 800,
                 loopCount: Infinity,
                 mirror: false  
             };
@@ -522,6 +624,18 @@ function handleBubbles(faceIndex, bubbleList) {
         }
             
         srcObj.hidden = true;
+
+        for (var i=0; i<crushTimeDriverList.length; ++i)
+            crushTimeDriverList[i].stop();
+
+        for (var i=0; i<crushTimeDriverList.length; ++i) {
+
+            crushPoolList[i].transform.x = 0;
+            crushPoolList[i].transform.y = 0;
+            crushPoolList[i].transform.z = 0;
+        }
+
+        crushRoot.hidden = true;
     }
 
     // --------------------------------------------------------------------------------
