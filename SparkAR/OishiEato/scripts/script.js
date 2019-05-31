@@ -21,6 +21,18 @@ const Patches = require('Patches');
 const Animation = require('Animation');
 const Time = require('Time');
  
+function axisRotation(axis_x, axis_y, axis_z, angle_degrees) {
+    var norm = Math.sqrt(axis_x*axis_x + axis_y*axis_y + axis_z*axis_z);
+    axis_x /= norm;
+    axis_y /= norm;
+    axis_z /= norm;
+    var angle_radians = angle_degrees * Math.PI / 180.0;
+    var cos = Math.cos(angle_radians/2);
+    var sin = Math.sin(angle_radians/2);
+    return Reactive.rotation(
+        cos, axis_x*sin, axis_y*sin, axis_z*sin);
+}
+
 // Log mouth openness value
 //Diagnostics.watch("Mouth Openness - ", FaceTracking.face(0).mouth.openness);
 //Diagnostics.watch("Mouth Center X ", FaceTracking.face(0).mouth.center.x);
@@ -210,18 +222,6 @@ function applyRotationBounce(obj, minAngle, maxAngle, duration) {
     obj.transform.rotation = rotation_signal;
 
     time_driver.start();
-
-    function axisRotation(axis_x, axis_y, axis_z, angle_degrees) {
-        var norm = Math.sqrt(axis_x*axis_x + axis_y*axis_y + axis_z*axis_z);
-        axis_x /= norm;
-        axis_y /= norm;
-        axis_z /= norm;
-        var angle_radians = angle_degrees * Math.PI / 180.0;
-        var cos = Math.cos(angle_radians/2);
-        var sin = Math.sin(angle_radians/2);
-        return Reactive.rotation(
-            cos, axis_x*sin, axis_y*sin, axis_z*sin);
-    }
 }
 
 // --------------------------------------------------------------------------------
@@ -389,6 +389,8 @@ function handleBubbles(faceIndex, bubbleList) {
     var feedTimeDriverList = [];
 
     function startFeed(objList) {
+
+        // Stop the old event before starting it again
         stopFeed();
 
         srcObj.hidden = false;
@@ -399,7 +401,7 @@ function handleBubbles(faceIndex, bubbleList) {
 
         function shouldStartFeed() {
 
-            runFeedInterval(feedIndex++);
+            runFeedInterval(objList, feedIndex++);
             
             if (feedIndex >= objList.length) {
 
@@ -408,22 +410,48 @@ function handleBubbles(faceIndex, bubbleList) {
         }
 
         var xPointList = [];
-        xPointList.push(0);
-        xPointList.push(-4);
-        xPointList.push(3);
-        xPointList.push(1);
-        xPointList.push(-3);
-        xPointList.push(-2);
-        xPointList.push(2);
-        xPointList.push(-2);
-        xPointList.push(-1);
-        xPointList.push(2);
         var xVariant = 4.0;
 
-        function runFeedInterval(index) {
+        // Set 1
+        xPointList.push(-4.64605);  xPointList.push(2.01145);   xPointList.push(0.15905);   xPointList.push(-5.46574);
+        xPointList.push(1.48324);   xPointList.push(-0.88440);  xPointList.push(5.19227);   xPointList.push(-0.17623);
+        xPointList.push(-4.53221);  xPointList.push(3.80409);
+        // Set 2
+        xPointList.push(-0.58917);  xPointList.push(-7.88229);  xPointList.push(0.28566);   xPointList.push(-2.71326);
+        xPointList.push(-4.56251);  xPointList.push(1.48852);   xPointList.push(7.26982);   xPointList.push(-1.98159);
+        xPointList.push(-4.68881);  xPointList.push(5.47105);
+        
+        var yPointList = [];
+        var yVariant = 4.0;
+
+        // Set 1
+        yPointList.push(-4.02526);  yPointList.push(3.29644);   yPointList.push(-4.92173);  yPointList.push(4.44748);
+        yPointList.push(1.83189);   yPointList.push(5.47964);   yPointList.push(3.90241);   yPointList.push(-5.72946);
+        yPointList.push(-0.65139);  yPointList.push(5.41456);
+        // Set 2
+        yPointList.push(-5.93434);  yPointList.push(4.94540);   yPointList.push(5.72991);   yPointList.push(-6.85919);
+        yPointList.push(-4.76642);  yPointList.push(2.35872);   yPointList.push(-3.66115);  yPointList.push(2.37872);
+        yPointList.push(2.26890);   yPointList.push(-6.83019);
+
+        var yAngleList = [];
+        var yAngleVariant = 180.0;
+
+        yAngleList.push(0.88630); yAngleList.push(-0.34092); yAngleList.push(-0.36846); yAngleList.push(0.48486); 
+        yAngleList.push(-0.67216); yAngleList.push(0.76679); yAngleList.push(-0.03117); yAngleList.push(0.98991); 
+        yAngleList.push(0.38995); yAngleList.push(-0.14609); 
+
+        const FEED_SET_COUNT = 8;
+        var curSet = 0;
+
+        function runFeedInterval(objList, index) {
+
+            if (index == FEED_SET_COUNT - 1)
+                curSet = (curSet == 0) ? FEED_SET_COUNT : 0; 
+
+            // Manipulate position transition
 
             const shootFoodInterval = {
-                durationMilliseconds: 800,
+                durationMilliseconds: 1200,
                 loopCount: Infinity,
                 mirror: false  
             };
@@ -431,12 +459,12 @@ function handleBubbles(faceIndex, bubbleList) {
             var feedTimeDriver = Animation.timeDriver(shootFoodInterval);
     
             const txSamp = Animation.samplers.easeInOutQuad(
-                xPointList[index] * xVariant, 
+                xPointList[index + curSet] * xVariant, 
                 testyTarget.transform.x.pinLastValue() - srcObj.transform.x.pinLastValue());
             const txAnim = Animation.animate(feedTimeDriver, txSamp);
     
             const tySamp = Animation.samplers.easeInOutQuad(
-                0, 
+                yPointList[index + curSet] * yVariant, 
                 testyTarget.transform.y.pinLastValue() - srcObj.transform.y.pinLastValue());
             const tyAnim = Animation.animate(feedTimeDriver, tySamp);
     
@@ -445,6 +473,8 @@ function handleBubbles(faceIndex, bubbleList) {
                 testyTarget.transform.z.pinLastValue() - srcObj.transform.z.pinLastValue());
             const tzAnim = Animation.animate(feedTimeDriver, tzSamp);
             
+            //Diagnostics.log("obj idx: " + objList[index]);
+
             objList[index].transform.x = txAnim;
             objList[index].transform.y = tyAnim;
             objList[index].transform.z = tzAnim;
@@ -455,6 +485,27 @@ function handleBubbles(faceIndex, bubbleList) {
                 feedTimeDriverList.push(feedTimeDriver);
             else
                 feedTimeDriverList[index] = feedTimeDriver;
+
+            // Manipulate angle 
+            var curRot = yAngleList[index] * yAngleVariant;
+
+            var qRotDriver = Animation.timeDriver({
+                durationMilliseconds: 1000,
+                loopCount: 1
+            });
+            var qRotsampler = Animation.samplers.polyline({
+                keyframes: [
+                    axisRotation(0, 0, 1, 0),
+                    axisRotation(0, 0, 1, curRot),
+                ],
+                knots: [
+                    0, 1
+                ]
+            });
+            var qRotSignal = Animation.animate(qRotDriver, qRotsampler);
+            qRotDriver.start(); 
+ 
+            objList[index].transform.rotation = qRotSignal;
         }
     }
 
