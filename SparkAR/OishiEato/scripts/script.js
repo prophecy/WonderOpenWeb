@@ -130,6 +130,7 @@ const TARGET_BUBBLE_SCALE = 0.0032;
 var currentBibbleIndex = 0;
 const BUBBLE_SIZE = bubbleList0.length;
 var isBubbleVisible = false;
+var curFaceOwnBubble = -1;
 
 // Hide all bubbles
 function hideAllBubbles(bubbleList) {
@@ -157,9 +158,14 @@ function onFaceTracked(faceIndex) {
         curBubble = bubbleList1[currentBibbleIndex];
         curFacePoint = facePoint1;
     }
-     
-    showBubble(curBubble, curFacePoint, X_SIDE_WEIGHT, BUBBLE_POSITION_Y, TARGET_BUBBLE_SCALE);
 
+    // Check is in front of the other
+    if (!isBubbleVisible) {
+
+        showBubble(curBubble, curFacePoint, X_SIDE_WEIGHT, BUBBLE_POSITION_Y, TARGET_BUBBLE_SCALE);
+        curFaceOwnBubble = faceIndex;
+    }
+    
     isBubbleVisible = true;
 }
 
