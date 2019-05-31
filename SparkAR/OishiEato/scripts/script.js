@@ -202,7 +202,6 @@ handleFaceTrackingState(1, function() { onFaceTracked(1); }, function() { onFace
 
 // --------------------------------------------------------------------------------
 // @ OPEN MOUTH
-crushRoot.hidden = true;
 
 function onFace0MouthOpen() {
 
@@ -643,13 +642,11 @@ function initFoodFeeder(foodObjList, crushObjList, range) {
         );
         const czAnim = Animation.animate(crushTimeDriver, czSamp);
 
-        crushPoolList[index].transform.x = cxAnim;
-        crushPoolList[index].transform.y = cyAnim;
-        crushPoolList[index].transform.z = czAnim;
+        objList[index].transform.x = cxAnim;
+        objList[index].transform.y = cyAnim;
+        objList[index].transform.z = czAnim;
 
         crushTimeDriver.start();
-
-        crushPoolList[index].hidden = false;
 
         if (!(crushTimeDriverList.length > index))
             crushTimeDriverList.push(crushTimeDriver);
@@ -671,7 +668,6 @@ function initFoodFeeder(foodObjList, crushObjList, range) {
         }                
     }
 
-    /*
     const crushTimeInMilliseconds = 100;
     const crushIntervalTimer = Time.setInterval(shouldStartCrush, crushTimeInMilliseconds);
     var crushIndex = 0;
@@ -685,19 +681,6 @@ function initFoodFeeder(foodObjList, crushObjList, range) {
             Time.clearInterval(crushIntervalTimer);
         }
     }
-    */
-}
- 
-function showFoodFeeder(faceIndex) {
-
-    srcObj.hidden = false;
-    crushRoot.hidden = false;
-}
-
-function hideFoodFeeder(faceIndex) {
-
-    srcObj.hidden = true;
-    crushRoot.hidden = true;
 }
 
 // --------------------------------------------------------------------------------
