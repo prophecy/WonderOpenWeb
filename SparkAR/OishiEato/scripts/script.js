@@ -110,33 +110,39 @@ applyBalloonMovement(
     0.4, 0.6, 0.2, 
     4500, 3000, 1500);
 /*/
+/*
 applyRotationBounce(
     Scene.root.find('gyoza_back_plane0'), 
-    10, 50, 2000
+    20, 40, 600 
 );
 applyRotationBounce(
     Scene.root.find('gyoza_back_plane1'), 
-    20, 60, 2100
+    20, 40, 600
 );
+*/
+
+// Uset this !
 applyRotationBounce(
     Scene.root.find('gyoza_back_plane2'), 
-    0, 40, 2200
+    20, 40, 1000
 );
 applyRotationBounce(
     Scene.root.find('gyoza_back_plane3'), 
-    15, 45, 2300
+    20, 40, 1000
 );
+
+/*
 applyRotationBounce(
     Scene.root.find('gyoza_back_plane4'), 
-    25, 51, 2050
+    20, 40, 600
 );
 applyRotationBounce(
     Scene.root.find('gyoza_back_plane5'), 
-    17, 48, 2250
+    20, 40, 600
 );
 applyRotationBounce(
     Scene.root.find('gyoza_back_plane6'), 
-    12, 56, 2100
+    20, 40, 600
 );
 /**/
 
@@ -208,11 +214,14 @@ function applyRotationBounce(obj, minAngle, maxAngle, duration) {
     var rotation_sampler = Animation.samplers.polyline({
         keyframes: [
             axisRotation(0,1,0,minAngle),
-            axisRotation(0,1,0,maxAngle),
             axisRotation(0,1,0,minAngle),
+            axisRotation(0,1,0,minAngle),
+
+            axisRotation(0,1,0,maxAngle),
+            axisRotation(0,1,0,minAngle)
         ],
         knots: [
-            0, 1, 2
+            0, 1, 2, 3, 4
         ]
     });
 
@@ -310,8 +319,7 @@ function handleBubbles(faceIndex, bubbleList) {
 
             // Reset counter
             counter = 3;
-            //hideBubble();
-            //changeBubble();
+            
             stopFeed();
         }
     });
@@ -326,7 +334,7 @@ function handleBubbles(faceIndex, bubbleList) {
                 latestMouthCenterX = v.newValue;
                 valXSub.unsubscribe();
                 feedIfReady();
-            });
+            }); 
 
             var valYSub = mouth.center.y.monitor().subscribe(function(v) {
                 latestMouthCenterY = v.newValue;
@@ -419,6 +427,9 @@ function handleBubbles(faceIndex, bubbleList) {
         srcObj.hidden = false;
         crushRoot.hidden = false;
 
+        for (var i=0; i<crushPoolList.length; ++i)
+            crushPoolList[i].hidden = true;
+
         const timeInMilliseconds = 120;
         const intervalTimer = Time.setInterval(shouldStartFeed, timeInMilliseconds);
         var feedIndex = 0;
@@ -439,9 +450,9 @@ function handleBubbles(faceIndex, bubbleList) {
 
         function shouldStartCrush() {
 
-            runCrushInterval(objList, crushIndex++);
+            runCrushInterval(crushPoolList, crushIndex++);
 
-            if (crushIndex >= objList.length) {
+            if (crushIndex >= crushPoolList.length) {
 
                 Time.clearInterval(crushIntervalTimer);
             }
@@ -487,14 +498,15 @@ function handleBubbles(faceIndex, bubbleList) {
         crushYAngleList.push(0.82530);    crushYAngleList.push(0.95081);    
         crushYAngleList.push(0.84250);    crushYAngleList.push(0.77527);    
         crushYAngleList.push(0.85664);    crushYAngleList.push(0.53096);
-        
+         
         var crushNormDirList = [];
         
         for (var i=0; i<crushYAngleList.length; ++i) {
 
             var rad = crushYAngleList[i] * 2.0 * Math.PI;
+
             var xNorm = Math.cos(rad);
-            var yNorm = Math.sin(rad);
+            var yNorm = Math.sin(rad - (Math.PI * 0.6));
 
             var tmp = [];
             tmp.push(xNorm);
@@ -505,16 +517,21 @@ function handleBubbles(faceIndex, bubbleList) {
 
         function runCrushInterval(objList, index) {
 
+            if (crushNormDirList[index] === undefined)
+                return;
+            if (crushNormDirList[index][0] === undefined)
+                return;
+            if (crushNormDirList[index][1] === undefined)
+                return;
+
             // Manipulate crush angle
-            const crushInterval = {
+            const crushInterval = { 
                 durationMilliseconds: 300,
                 loopCount: Infinity,
                 mirror: false  
             };
             var crushTimeDriver = Animation.timeDriver(crushInterval);
 
-             Diagnostics.log("tmp: " + crushNormDirList[index]);
-            
             const cxSamp = Animation.samplers.easeInOutQuad(
                 0,
                 crushNormDirList[index][0] * 7.0
@@ -539,10 +556,12 @@ function handleBubbles(faceIndex, bubbleList) {
 
             crushTimeDriver.start();
 
+            crushPoolList[index].hidden = false;
+
             if (!(crushTimeDriverList.length > index))
                 crushTimeDriverList.push(crushTimeDriver);
             else
-                crushTimeDriverList[index] = crushTimeDriver;
+                crushTimeDriverList[index] = crushTimeDriver; 
         }
 
         function runFeedInterval(objList, index) {
@@ -577,9 +596,12 @@ function handleBubbles(faceIndex, bubbleList) {
             
             //Diagnostics.log("obj idx: " + objList[index]);
 
-            objList[index].transform.x = txAnim;
-            objList[index].transform.y = tyAnim;
-            objList[index].transform.z = tzAnim;
+            if (objList[index] !== undefined) {
+
+                objList[index].transform.x = txAnim;
+                objList[index].transform.y = tyAnim;
+                objList[index].transform.z = tzAnim;
+            }
 
             feedTimeDriver.start();
 
@@ -607,7 +629,9 @@ function handleBubbles(faceIndex, bubbleList) {
             var qRotSignal = Animation.animate(qRotDriver, qRotsampler);
             qRotDriver.start(); 
  
-            objList[index].transform.rotation = qRotSignal;
+            if (objList[index] !== undefined) {
+                objList[index].transform.rotation = qRotSignal;
+            }
         }
     }
 
@@ -645,7 +669,7 @@ function handleBubbles(faceIndex, bubbleList) {
     var curBubbleScale = TARGET_BUBBLE_SCALE;
     const SCALE_RATIO = 0.02;
     var shownBubbleX = 9; // Init with default value
-    const X_SIDE_WEIGHT = 0.2;
+    const X_SIDE_WEIGHT = 0.14; 
 
     // Create a set of time driver parameters
     const showTimeDriverParameters = {
@@ -660,7 +684,7 @@ function handleBubbles(faceIndex, bubbleList) {
         mirror: false  
     };
 
-    const BUBBLE_POSITION_Y = 0;
+    const BUBBLE_POSITION_Y = -8.8;
 
     function showBubble() {
 
