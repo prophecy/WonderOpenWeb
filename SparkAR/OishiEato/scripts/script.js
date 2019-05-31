@@ -15,7 +15,6 @@ const Time = require('Time');
 // SHARED VARS & CALLBACKS
 // --------------------------------------------------------------------------------
 
-
 // Todo: Remove these
 var feedTimeDriverList = [];
 var crushTimeDriverList = [];
@@ -34,6 +33,11 @@ bubbleList0.push(Scene.root.find('bubble04'));
 bubbleList0.push(Scene.root.find('bubble05'));
 bubbleList0.push(Scene.root.find('bubble06'));
 
+// Verify
+for (var i=0; i<bubbleList0.length; ++i)
+    if (bubbleList0[i] === undefined)
+        Diagnostics.log("obj is undefined");
+
 // Handle bubbles of face #1
 var bubbleList1 = [];
 bubbleList1.push(Scene.root.find('bubble10'));
@@ -43,6 +47,11 @@ bubbleList1.push(Scene.root.find('bubble13'));
 bubbleList1.push(Scene.root.find('bubble14'));
 bubbleList1.push(Scene.root.find('bubble15'));
 bubbleList1.push(Scene.root.find('bubble16'));
+
+// Verify
+for (var i=0; i<bubbleList1.length; ++i)
+    if (bubbleList1[i] === undefined)
+        Diagnostics.log("obj is undefined");
 
 var srcObj = Scene.root.find('testyPool');
 
@@ -104,38 +113,78 @@ const gyozaBackPlane2 = Scene.root.find('gyoza_back_plane2');
 //Diagnostics.watch("Mouth Center Z ", FaceTracking.face(0).mouth.center.z);
 
 // @ START
-const TARGET_BUBBLE_SCALE = 0.16 * 0.02;
-var shownBubbleX = 9; // Init with default value
-const X_SIDE_WEIGHT = 0.14; 
-const BUBBLE_POSITION_Y = -8.8;
-
-crushRoot.hidden = true;
-//handleBubbles(0, bubbleList0);
-//handleBubbles(1, bubbleList1);
-
+// Handle movements
 applyBalloonMovement(gyozaFrontPlane0, 0.6, 0.4, 0.2, 1500, -3000, 4500);
 applyRotationBounce(gyozaBackPlane1, 20, 40, 600);
 applyRotationBounce(gyozaBackPlane2, 20, 40, 1000);
-
 applyParalaxMovement(frontRoot, backRoot, 0.1, 0.1);
 
 // @ FACE DETECTED
-function onFace0Tracked(mouthCenterPoint) {
 
-    Diagnostics.log("onFace 0 Tracked!");
-    //Diagnostics.log("mcx: " + mouthCenterPoint[0] + " mcy: " + mouthCenterPoint[1] + " mcz: " + mouthCenterPoint[1]);
+// Bubble transformations
+const X_SIDE_WEIGHT = 0.14; 
+const BUBBLE_POSITION_Y = -8.8;
+const TARGET_BUBBLE_SCALE = 0.0032;
 
-    showBubble(bubbleList0[0], facePoint0, X_SIDE_WEIGHT, BUBBLE_POSITION_Y, TARGET_BUBBLE_SCALE); 
+// Bubble list mgr vars
+var currentBibbleIndex = 0;
+const BUBBLE_SIZE = bubbleList0.length;
+var isBubbleVisible = false;
+
+// Hide all bubbles
+function hideAllBubbles(bubbleList) {
+    for (var i=0; i<bubbleList.length; ++i)
+        bubbleList[i].hidden = true;
+} 
+    
+hideAllBubbles(bubbleList0);
+hideAllBubbles(bubbleList1);
+    
+function onFaceTracked(faceIndex) {
+
+    var curBubble = undefined;
+    var curFacePoint = undefined;
+
+    if (faceIndex == 0) {
+
+        Diagnostics.log("Face #0 is tracked");
+        curBubble = bubbleList0[currentBibbleIndex];
+        curFacePoint = facePoint0;
+    }
+    else if (faceIndex == 1) {
+
+        Diagnostics.log("Face #1 is tracked");
+        curBubble = bubbleList1[currentBibbleIndex];
+        curFacePoint = facePoint1;
+    }
+     
+    showBubble(curBubble, curFacePoint, X_SIDE_WEIGHT, BUBBLE_POSITION_Y, TARGET_BUBBLE_SCALE);
+
+    isBubbleVisible = true;
 }
 
-function onFace0Untracked() {
+function onFaceUntracked(faceIndex) {
 
-    Diagnostics.log("onFace 0 untracked");
+    var curBubble = undefined;
+ 
+    if (faceIndex == 0)
+        curBubble = bubbleList0[currentBibbleIndex];
+    else if (faceIndex == 1)
+        curBubble = bubbleList1[currentBibbleIndex];
 
-    hideBubble(bubbleList0[0]);
+    hideBubble(curBubble);
+
+    if (! (++currentBibbleIndex < BUBBLE_SIZE))
+        currentBibbleIndex = 0;
+
+    isBubbleVisible = false;
 }
 
-handleFaceTrackingState(0, onFace0Tracked, onFace0Untracked);
+handleFaceTrackingState(0, function() { onFaceTracked(0); }, function() { onFaceUntracked(0); });
+handleFaceTrackingState(1, function() { onFaceTracked(1); }, function() { onFaceUntracked(1); });
+
+// @ OPEN MOUTH
+crushRoot.hidden = true;
 
 function onFace0MouthOpen() {
 
@@ -152,16 +201,6 @@ handleMouthOpeningState(
     MOUTH_OPENNESS_MIN_THRESHOLD, MOUTH_CLOSSNESS_MAX_THRESHOLD, 
     onFace0MouthOpen, onFace0MouthClose);
 
-function hideAllBubbles(bubbleList) {
-
-for (var i=0; i<bubbleList.length; ++i)
-    bubbleList[i].hidden = true;
-} 
-
-hideAllBubbles(bubbleList0);
-
-
-// @ OPEN MOUTH
 
 // --------------------------------------------------------------------------------
 // GENERIC FUNCTIONS
@@ -356,7 +395,7 @@ function showBubble(obj, facePoint, xSideWeight, positionY, targetBubbleScale) {
     // Use this value to select bubble showing side
     var xSideNorm = -1.0 * (facePointX / Math.abs(facePointX));
 
-    shownBubbleX = range * xSideNorm * xSideWeight;
+    var shownBubbleX = range * xSideNorm * xSideWeight;
 
     // Bind the translation animation signal to the x-axis position signal of the plane
     obj.transform.x = shownBubbleX;
