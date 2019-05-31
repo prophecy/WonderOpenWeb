@@ -520,7 +520,7 @@ function handleBubbles(faceIndex, bubbleList) {
         var xSideNorm = -1.0 * (qx / Math.abs(qx));
 
         var range = Math.sqrt(qx*qx + qy*qy + qz*qz);
-
+ 
         // Create a time driver using the parameters
         const timeDriver = Animation.timeDriver(showTimeDriverParameters);
 
