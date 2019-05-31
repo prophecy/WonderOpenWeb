@@ -1,18 +1,8 @@
-/*
-Welcome to scripting in Spark AR Studio!
-From making things move to triggering audio clips,
-reactive programming can help you achieve your scripting goals.
 
-Helpful links:
+// --------------------------------------------------------------------------------
+// IMPORT EXTERNAL MODULES
+// --------------------------------------------------------------------------------
 
-Scripting Basics - https://fb.me/spark-scripting-basics
-Reactive Programming - https://fb.me/spark-reactive-programming
-Changelogs - https://fb.me/spark-changelog
-
-Note: Feel free to delete the contents of this script and start from scratch.
-*/
-
-// How to load in modules, complete list - https://fb.me/spark-scripting-reference
 const Scene = require('Scene');
 const Diagnostics = require('Diagnostics');
 const FaceTracking = require('FaceTracking');
@@ -20,7 +10,217 @@ const Reactive = require('Reactive');
 const Patches = require('Patches');
 const Animation = require('Animation');
 const Time = require('Time');
- 
+
+// --------------------------------------------------------------------------------
+// SHARED VARS & CALLBACKS
+// --------------------------------------------------------------------------------
+
+
+// Todo: Remove these
+var feedTimeDriverList = [];
+var crushTimeDriverList = [];
+
+// --------------------------------------------------------------------------------
+// SCENE DATABASE
+// --------------------------------------------------------------------------------
+
+// Handle bubbles of face #0
+var bubbleList0 = [];
+bubbleList0.push(Scene.root.find('bubble00'));
+bubbleList0.push(Scene.root.find('bubble01'));
+bubbleList0.push(Scene.root.find('bubble02'));
+bubbleList0.push(Scene.root.find('bubble03'));
+bubbleList0.push(Scene.root.find('bubble04'));
+bubbleList0.push(Scene.root.find('bubble05'));
+bubbleList0.push(Scene.root.find('bubble06'));
+
+// Handle bubbles of face #1
+var bubbleList1 = [];
+bubbleList1.push(Scene.root.find('bubble10'));
+bubbleList1.push(Scene.root.find('bubble11'));
+bubbleList1.push(Scene.root.find('bubble12'));
+bubbleList1.push(Scene.root.find('bubble13'));
+bubbleList1.push(Scene.root.find('bubble14'));
+bubbleList1.push(Scene.root.find('bubble15'));
+bubbleList1.push(Scene.root.find('bubble16'));
+
+var srcObj = Scene.root.find('testyPool');
+
+var testyPoolList = [];
+testyPoolList.push(Scene.root.find('testy0'));
+testyPoolList.push(Scene.root.find('testy1'));
+testyPoolList.push(Scene.root.find('testy2'));
+testyPoolList.push(Scene.root.find('testy3'));
+testyPoolList.push(Scene.root.find('testy4'));
+testyPoolList.push(Scene.root.find('testy5'));
+testyPoolList.push(Scene.root.find('testy6'));
+testyPoolList.push(Scene.root.find('testy7'));
+testyPoolList.push(Scene.root.find('testy8'));
+testyPoolList.push(Scene.root.find('testy9'));
+
+var crushRoot = Scene.root.find('crushPool');
+
+var crushPoolList = [];
+crushPoolList.push(Scene.root.find('crush0'));
+crushPoolList.push(Scene.root.find('crush1'));
+crushPoolList.push(Scene.root.find('crush2'));
+crushPoolList.push(Scene.root.find('crush3'));
+crushPoolList.push(Scene.root.find('crush4'));
+crushPoolList.push(Scene.root.find('crush5'));
+crushPoolList.push(Scene.root.find('crush6'));
+crushPoolList.push(Scene.root.find('crush7'));
+crushPoolList.push(Scene.root.find('crush8'));
+crushPoolList.push(Scene.root.find('crush9'));
+
+const facePoint0 = Patches.getVectorValue("facePoint0");
+const facePoint1 = Patches.getVectorValue("facePoint1");
+
+const frontRoot = Scene.root.find('front_root');
+const backRoot = Scene.root.find('back_root');
+
+const MOUTH_OPENNESS_MIN_THRESHOLD = 0.1;
+const MOUTH_CLOSSNESS_MAX_THRESHOLD = 0.07;
+
+// --------------------------------------------------------------------------------
+// THEME VARS
+// --------------------------------------------------------------------------------
+
+// GYOZA
+const gyozaFrontPlane0 = Scene.root.find('gyoza_front_plane0');
+const gyozaBackPlane1 = Scene.root.find('gyoza_back_plane1');
+const gyozaBackPlane2 = Scene.root.find('gyoza_back_plane2');
+
+// --------------------------------------------------------------------------------
+// SCENE LOGIC
+// --------------------------------------------------------------------------------
+
+//Diagnostics.watch("facePoint0 X ", facePoint0.x);
+//Diagnostics.watch("facePoint0 Y ", facePoint0.y);
+//Diagnostics.watch("facePoint0 Z ", facePoint0.z);
+
+//Diagnostics.watch("Mouth Openness - ", FaceTracking.face(0).mouth.openness);
+//Diagnostics.watch("Mouth Center X ", FaceTracking.face(0).mouth.center.x);
+//Diagnostics.watch("Mouth Center Y ", FaceTracking.face(0).mouth.center.y);
+//Diagnostics.watch("Mouth Center Z ", FaceTracking.face(0).mouth.center.z);
+
+// @ START
+
+crushRoot.hidden = true;
+handleBubbles(0, bubbleList0);
+handleBubbles(1, bubbleList1);
+
+applyBalloonMovement(gyozaFrontPlane0, 0.6, 0.4, 0.2, 1500, -3000, 4500);
+applyRotationBounce(gyozaBackPlane1, 20, 40, 600);
+applyRotationBounce(gyozaBackPlane2, 20, 40, 1000);
+
+applyParalaxMovement(frontRoot, backRoot, 0.1, 0.1);
+
+// @ FACE DETECTED
+function onFace0Tracked(mouthCenterPoint) {
+
+    Diagnostics.log("onFace 0 Tracked!");
+    Diagnostics.log("mcx: " + mouthCenterPoint[0] + " mcy: " + mouthCenterPoint[1] + " mcz: " + mouthCenterPoint[1]);
+}
+
+function onface1Tracked() {
+
+    Diagnostics.log("onFace 0 untracked");
+}
+
+handleFaceTrackingState(0, onFace0Tracked, onface1Tracked);
+
+function onFace0MouthOpen() {
+
+    Diagnostics.log("onFace0MouthOpen");
+}
+
+function onFace0MouthClose() {
+
+    Diagnostics.log("onFace)MouthClose");
+}
+
+handleMouthOpeningState(
+    0, 
+    MOUTH_OPENNESS_MIN_THRESHOLD, MOUTH_CLOSSNESS_MAX_THRESHOLD, 
+    onFace0MouthOpen, onFace0MouthClose);
+
+// @ OPEN MOUTH
+
+// --------------------------------------------------------------------------------
+// GENERIC FUNCTIONS
+// --------------------------------------------------------------------------------
+
+// Handle mouth opennes
+
+// TRICKED: Use this line to bind signal 
+//var mouth = FaceTracking.face(faceIndex).mouth;
+       
+function handleMouthOpeningState(faceIndex, openMinThres, closeMaxThres, openCallback, closCallback) {
+
+    var mouthOpen = FaceTracking.face(faceIndex).mouth.openness.gt(Reactive.val(openMinThres));
+    var mouthClose = FaceTracking.face(faceIndex).mouth.openness.lt(Reactive.val(closeMaxThres));
+    
+    mouthOpen.monitor().subscribe(function(flag) {
+        if (flag.newValue)
+            openCallback();
+    });
+
+    mouthClose.monitor().subscribe(function(flag) {
+        if (flag.newValue)
+            closCallback();
+    });
+}
+
+function handleFaceTrackingState(faceIndex, trackCallback, untrackCallback) {
+
+    // Check weather the face is tracked
+    FaceTracking.face(faceIndex).isTracked.monitor().subscribe(function(e) {
+        
+        var mouthCenterPoint = [0, 0, 0];
+        
+        var mouth = FaceTracking.face(faceIndex).mouth;
+    
+        // Untracked to tracked state
+        if (e.newValue) {
+    
+            // Reset counter
+            var counter = 3;
+    
+            // Show feed effect by face+mouth transform
+            var valXSub = mouth.center.x.monitor().subscribe(function(v) {
+                mouthCenterPoint[0] = v.newValue;
+                valXSub.unsubscribe();
+                notifyIfTracked();
+            }); 
+    
+            var valYSub = mouth.center.y.monitor().subscribe(function(v) {
+                mouthCenterPoint[1] = v.newValue;
+                valYSub.unsubscribe();
+                notifyIfTracked();
+            });
+    
+            var valZSub = mouth.center.z.monitor().subscribe(function(v) {
+                mouthCenterPoint[2] = v.newValue;
+                valZSub.unsubscribe();
+                notifyIfTracked();
+            });
+
+            function notifyIfTracked() {
+
+                --counter;
+
+                if (counter == 0)
+                    trackCallback(mouthCenterPoint);
+            }
+        }
+        // Tracked to untracked state
+        else {
+            
+            untrackCallback();
+        }
+    }); 
+}
+
 function axisRotation(axis_x, axis_y, axis_z, angle_degrees) {
     var norm = Math.sqrt(axis_x*axis_x + axis_y*axis_y + axis_z*axis_z);
     axis_x /= norm;
@@ -32,70 +232,6 @@ function axisRotation(axis_x, axis_y, axis_z, angle_degrees) {
     return Reactive.rotation(
         cos, axis_x*sin, axis_y*sin, axis_z*sin);
 }
-
-// Log mouth openness value
-//Diagnostics.watch("Mouth Openness - ", FaceTracking.face(0).mouth.openness);
-//Diagnostics.watch("Mouth Center X ", FaceTracking.face(0).mouth.center.x);
-//Diagnostics.watch("Mouth Center Y ", FaceTracking.face(0).mouth.center.y);
-//Diagnostics.watch("Mouth Center Z ", FaceTracking.face(0).mouth.center.z);
- 
-//handlePatternModule();
-
-// Handle bubbles of face [0]
-var bubbleList0 = [];
-bubbleList0.push(Scene.root.find('bubble00'));
-bubbleList0.push(Scene.root.find('bubble01'));
-bubbleList0.push(Scene.root.find('bubble02'));
-bubbleList0.push(Scene.root.find('bubble03'));
-bubbleList0.push(Scene.root.find('bubble04'));
-bubbleList0.push(Scene.root.find('bubble05'));
-bubbleList0.push(Scene.root.find('bubble06'));
-
-handleBubbles(0, bubbleList0);
-
-// Handle bubbles of face [1]
-var bubbleList1 = [];
-bubbleList1.push(Scene.root.find('bubble10'));
-bubbleList1.push(Scene.root.find('bubble11'));
-bubbleList1.push(Scene.root.find('bubble12'));
-bubbleList1.push(Scene.root.find('bubble13'));
-bubbleList1.push(Scene.root.find('bubble14'));
-bubbleList1.push(Scene.root.find('bubble15'));
-bubbleList1.push(Scene.root.find('bubble16'));
-
-handleBubbles(1, bubbleList1);
-
-var facePoint0 = Patches.getVectorValue("facePoint0");
-var facePoint1 = Patches.getVectorValue("facePoint1");
-
-//Diagnostics.watch("facePoint0 X ", facePoint0.x);
-//Diagnostics.watch("facePoint0 Y ", facePoint0.y);
-//Diagnostics.watch("facePoint0 Z ", facePoint0.z);
-
-// Front
-applyBalloonMovement(
-    Scene.root.find('gyoza_front_plane0'), 
-    0.6, 0.4, 0.2,
-    1500, -3000, 4500);
-
-applyRotationBounce(
-    Scene.root.find('gyoza_back_plane1'), 
-    20, 40, 600
-);
-
-applyRotationBounce(
-    Scene.root.find('gyoza_back_plane2'), 
-    20, 40, 1000
-);
-
-applyParalaxMovement(
-    Scene.root.find('front_root'),
-    Scene.root.find('back_root'),
-    0.1, 0.1);
-
-// --------------------------------------------------------------------------------
-// MOVEMENT EFFECT
-// --------------------------------------------------------------------------------
 
 function applyBalloonMovement(obj, rx, ry, rz, tx, ty, tz) {
 
@@ -176,8 +312,11 @@ function applyRotationBounce(obj, minAngle, maxAngle, duration) {
 }
 
 // --------------------------------------------------------------------------------
-// BUBBLE MODULE
+// SPECIFIC FUNCTIONS
 // --------------------------------------------------------------------------------
+
+// --------------------------------------------------------------------------------
+// Bubble handler
 
 // Use this var to handle bubble between face 1 and face 2
 var sharedBubbleIndex = 0;
@@ -225,384 +364,6 @@ function handleBubbles(faceIndex, bubbleList) {
         }
     }
     changeBubble();
-
-    // Check weather the face is tracked
-    FaceTracking.face(faceIndex).isTracked.monitor().subscribe(function(e) {
-
-        // Untracked to tracked state
-        if (e.newValue) {
-
-            showBubble();
-        }
-        // Tracked to untracked state
-        else {
-
-            hideBubble();
-            changeBubble();
-        }
-    }); 
- 
-    // Handle mouth opennes
-    const MOUTH_OPENNESS_MIN_THRESHOLD = 0.1;
-    const MOUTH_CLOSSNESS_MAX_THRESHOLD = 0.07;
-
-    var mouthOpen = FaceTracking.face(faceIndex).mouth.openness.gt(Reactive.val(MOUTH_OPENNESS_MIN_THRESHOLD));
-    var mouthClose = FaceTracking.face(faceIndex).mouth.openness.gt(Reactive.val(MOUTH_CLOSSNESS_MAX_THRESHOLD));
-
-    var latestMouthCenterX = 0;
-    var latestMouthCenterY = 0;
-    var latestMouthCenterZ = 0;
-
-    mouthClose.monitor().subscribe(function() {
-
-        var mouth = FaceTracking.face(faceIndex).mouth;
-
-        if (mouth.openness.pinLastValue() <= MOUTH_CLOSSNESS_MAX_THRESHOLD) {
-
-            // Reset counter
-            counter = 3;
-            
-            stopFeed();
-        }
-    });
-
-    mouthOpen.monitor().subscribe(function() {
-
-        var mouth = FaceTracking.face(faceIndex).mouth;
-
-        if (mouth.openness.pinLastValue() >= MOUTH_OPENNESS_MIN_THRESHOLD) {
-        
-            var valXSub = mouth.center.x.monitor().subscribe(function(v) {
-                latestMouthCenterX = v.newValue;
-                valXSub.unsubscribe();
-                feedIfReady();
-            }); 
-
-            var valYSub = mouth.center.y.monitor().subscribe(function(v) {
-                latestMouthCenterY = v.newValue;
-                valYSub.unsubscribe();
-                feedIfReady();
-            });
-
-            var valZSub = mouth.center.z.monitor().subscribe(function(v) {
-                latestMouthCenterZ = v.newValue;
-                valZSub.unsubscribe();
-                feedIfReady();
-            });
-        }
-    })
-
-    var counter = 3;
-
-    function feedIfReady() {
-
-        --counter;
-
-        if (counter == 0) {
-
-            // Update testy target
-            var mouth = FaceTracking.face(faceIndex).mouth;
-            testyTarget.transform.x = mouth.center.x;
-            testyTarget.transform.y = mouth.center.y;
-            testyTarget.transform.z = mouth.center.z;
-
-            const timeInMilliseconds = 50;
-            const intervalTimer = Time.setInterval(shouldStartFeed, timeInMilliseconds);
-
-            function shouldStartFeed() { 
-                Time.clearInterval(intervalTimer);
-                startFeed(testyPoolList);
-            }
-        }
-    }
-
-    // --------------------------------------------------------------------------------
-    // Testy pool
-
-    var testyPoolList = [];
-
-    var srcObj = Scene.root.find('testyPool');
-
-    testyPoolList.push(Scene.root.find('testy0'));
-    testyPoolList.push(Scene.root.find('testy1'));
-    testyPoolList.push(Scene.root.find('testy2'));
-    testyPoolList.push(Scene.root.find('testy3'));
-    testyPoolList.push(Scene.root.find('testy4'));
-    testyPoolList.push(Scene.root.find('testy5'));
-    testyPoolList.push(Scene.root.find('testy6'));
-    testyPoolList.push(Scene.root.find('testy7'));
-    testyPoolList.push(Scene.root.find('testy8'));
-    testyPoolList.push(Scene.root.find('testy9'));
-
-    var testyTarget = Scene.root.find('testyTarget0');
-
-    var feedTimeDriverList = [];
-
-    var crushPoolList = [];
-
-    var crushRoot = Scene.root.find('crushPool');
-
-    crushPoolList.push(Scene.root.find('crush0'));
-    crushPoolList.push(Scene.root.find('crush1'));
-    crushPoolList.push(Scene.root.find('crush2'));
-    crushPoolList.push(Scene.root.find('crush3'));
-    crushPoolList.push(Scene.root.find('crush4'));
-    crushPoolList.push(Scene.root.find('crush5'));
-    crushPoolList.push(Scene.root.find('crush6'));
-    crushPoolList.push(Scene.root.find('crush7'));
-    crushPoolList.push(Scene.root.find('crush8'));
-    crushPoolList.push(Scene.root.find('crush9'));
-
-    var crushTimeDriverList = [];
-
-    crushRoot.hidden = true;
-
-    crushRoot.transform.x = testyTarget.transform.x;
-    crushRoot.transform.y = testyTarget.transform.y;
-    crushRoot.transform.z = testyTarget.transform.z;
-    
-    function startFeed(objList) {
-
-        // Stop the old event before starting it again
-        stopFeed();
-
-        srcObj.hidden = false;
-        crushRoot.hidden = false;
-
-        for (var i=0; i<crushPoolList.length; ++i)
-            crushPoolList[i].hidden = true;
-
-        const timeInMilliseconds = 120;
-        const intervalTimer = Time.setInterval(shouldStartFeed, timeInMilliseconds);
-        var feedIndex = 0;
-
-        const crushTimeInMilliseconds = 100;
-        const crushIntervalTimer = Time.setInterval(shouldStartCrush, crushTimeInMilliseconds);
-        var crushIndex = 0;
-
-        function shouldStartFeed() {
-
-            runFeedInterval(objList, feedIndex++);
-
-            if (feedIndex >= objList.length) {
-
-                Time.clearInterval(intervalTimer);
-            }                
-        }
-
-        function shouldStartCrush() {
-
-            runCrushInterval(crushPoolList, crushIndex++);
-
-            if (crushIndex >= crushPoolList.length) {
-
-                Time.clearInterval(crushIntervalTimer);
-            }
-        }
-
-        var xPointList = [];
-        var xVariant = 4.0;
-
-        // Set 1
-        xPointList.push(-4.64605);  xPointList.push(2.01145);   xPointList.push(0.15905);   xPointList.push(-5.46574);
-        xPointList.push(1.48324);   xPointList.push(-0.88440);  xPointList.push(5.19227);   xPointList.push(-0.17623);
-        xPointList.push(-4.53221);  xPointList.push(3.80409);
-        // Set 2
-        xPointList.push(-0.58917);  xPointList.push(-7.88229);  xPointList.push(0.28566);   xPointList.push(-2.71326);
-        xPointList.push(-4.56251);  xPointList.push(1.48852);   xPointList.push(7.26982);   xPointList.push(-1.98159);
-        xPointList.push(-4.68881);  xPointList.push(5.47105);
-        
-        var yPointList = [];
-        var yVariant = 4.0;
-
-        // Set 1
-        yPointList.push(-4.02526);  yPointList.push(3.29644);   yPointList.push(-4.92173);  yPointList.push(4.44748);
-        yPointList.push(1.83189);   yPointList.push(5.47964);   yPointList.push(3.90241);   yPointList.push(-5.72946);
-        yPointList.push(-0.65139);  yPointList.push(5.41456);
-        // Set 2
-        yPointList.push(-5.93434);  yPointList.push(4.94540);   yPointList.push(5.72991);   yPointList.push(-6.85919);
-        yPointList.push(-4.76642);  yPointList.push(2.35872);   yPointList.push(-3.66115);  yPointList.push(2.37872);
-        yPointList.push(2.26890);   yPointList.push(-6.83019);
-
-        var yAngleList = [];
-        var yAngleVariant = 180.0;
-
-        yAngleList.push(0.88630); yAngleList.push(-0.34092); yAngleList.push(-0.36846); yAngleList.push(0.48486); 
-        yAngleList.push(-0.67216); yAngleList.push(0.76679); yAngleList.push(-0.03117); yAngleList.push(0.98991); 
-        yAngleList.push(0.38995); yAngleList.push(-0.14609); 
-
-        const FEED_SET_COUNT = 8;
-        var curSet = 0;
-
-        var crushYAngleList = [];
-        crushYAngleList.push(0.11449);    crushYAngleList.push(0.55922);    
-        crushYAngleList.push(0.21852);    crushYAngleList.push(0.09600);
-        crushYAngleList.push(0.82530);    crushYAngleList.push(0.95081);    
-        crushYAngleList.push(0.84250);    crushYAngleList.push(0.77527);    
-        crushYAngleList.push(0.85664);    crushYAngleList.push(0.53096);
-         
-        var crushNormDirList = [];
-        
-        for (var i=0; i<crushYAngleList.length; ++i) {
-
-            var rad = crushYAngleList[i] * 2.0 * Math.PI;
-
-            var xNorm = Math.cos(rad);
-            var yNorm = Math.sin(rad - (Math.PI * 0.6));
-
-            var tmp = [];
-            tmp.push(xNorm);
-            tmp.push(yNorm);
-
-            crushNormDirList.push(tmp);
-        }
-
-        function runCrushInterval(objList, index) {
-
-            if (crushNormDirList[index] === undefined)
-                return;
-            if (crushNormDirList[index][0] === undefined)
-                return;
-            if (crushNormDirList[index][1] === undefined)
-                return;
-
-            // Manipulate crush angle
-            const crushInterval = { 
-                durationMilliseconds: 300,
-                loopCount: Infinity,
-                mirror: false  
-            };
-            var crushTimeDriver = Animation.timeDriver(crushInterval);
-
-            const cxSamp = Animation.samplers.easeInOutQuad(
-                0,
-                crushNormDirList[index][0] * 7.0
-            );
-            const cxAnim = Animation.animate(crushTimeDriver, cxSamp);
-
-            const cySamp = Animation.samplers.easeInOutQuad(
-                0,
-                crushNormDirList[index][1] * 7.0
-            );
-            const cyAnim = Animation.animate(crushTimeDriver, cySamp);
-
-            const czSamp = Animation.samplers.easeInOutQuad(
-                0,
-                7.0
-            );
-            const czAnim = Animation.animate(crushTimeDriver, czSamp);
-
-            crushPoolList[index].transform.x = cxAnim;
-            crushPoolList[index].transform.y = cyAnim;
-            crushPoolList[index].transform.z = czAnim;
-
-            crushTimeDriver.start();
-
-            crushPoolList[index].hidden = false;
-
-            if (!(crushTimeDriverList.length > index))
-                crushTimeDriverList.push(crushTimeDriver);
-            else
-                crushTimeDriverList[index] = crushTimeDriver; 
-        }
-
-        function runFeedInterval(objList, index) {
-
-            if (index == FEED_SET_COUNT - 1)
-                curSet = (curSet == 0) ? FEED_SET_COUNT : 0; 
-
-            // Manipulate position transition
-
-            const shootFoodInterval = {
-                durationMilliseconds: 800,
-                loopCount: Infinity,
-                mirror: false  
-            };
-    
-            var feedTimeDriver = Animation.timeDriver(shootFoodInterval);
-    
-            const txSamp = Animation.samplers.easeInOutQuad(
-                xPointList[index + curSet] * xVariant, 
-                testyTarget.transform.x.pinLastValue() - srcObj.transform.x.pinLastValue());
-            const txAnim = Animation.animate(feedTimeDriver, txSamp);
-    
-            const tySamp = Animation.samplers.easeInOutQuad(
-                yPointList[index + curSet] * yVariant, 
-                testyTarget.transform.y.pinLastValue() - srcObj.transform.y.pinLastValue());
-            const tyAnim = Animation.animate(feedTimeDriver, tySamp);
-    
-            const tzSamp = Animation.samplers.easeInOutQuad(
-                0, 
-                testyTarget.transform.z.pinLastValue() - srcObj.transform.z.pinLastValue());
-            const tzAnim = Animation.animate(feedTimeDriver, tzSamp);
-            
-            //Diagnostics.log("obj idx: " + objList[index]);
-
-            if (objList[index] !== undefined) {
-
-                objList[index].transform.x = txAnim;
-                objList[index].transform.y = tyAnim;
-                objList[index].transform.z = tzAnim;
-            }
-
-            feedTimeDriver.start();
-
-            if (!(feedTimeDriverList.length > index))
-                feedTimeDriverList.push(feedTimeDriver);
-            else
-                feedTimeDriverList[index] = feedTimeDriver;
-
-            // Manipulate angle 
-            var curRot = yAngleList[index] * yAngleVariant;
-
-            var qRotDriver = Animation.timeDriver({
-                durationMilliseconds: 1000,
-                loopCount: 1
-            });
-            var qRotsampler = Animation.samplers.polyline({
-                keyframes: [
-                    axisRotation(0, 0, 1, 0),
-                    axisRotation(0, 0, 1, curRot),
-                ],
-                knots: [
-                    0, 1
-                ]
-            });
-            var qRotSignal = Animation.animate(qRotDriver, qRotsampler);
-            qRotDriver.start(); 
- 
-            if (objList[index] !== undefined) {
-                objList[index].transform.rotation = qRotSignal;
-            }
-        }
-    }
-
-    function stopFeed() {
-
-        for (var i=0; i<feedTimeDriverList.length; ++i)
-            feedTimeDriverList[i].stop();
-
-        for (var i=0; i<testyPoolList.length; ++i) {
-
-            testyPoolList[i].transform.x = 0;     
-            testyPoolList[i].transform.y = 0;     
-            testyPoolList[i].transform.z = 0;     
-        }
-            
-        srcObj.hidden = true;
-
-        for (var i=0; i<crushTimeDriverList.length; ++i)
-            crushTimeDriverList[i].stop();
-
-        for (var i=0; i<crushTimeDriverList.length; ++i) {
-
-            crushPoolList[i].transform.x = 0;
-            crushPoolList[i].transform.y = 0;
-            crushPoolList[i].transform.z = 0;
-        }
-
-        crushRoot.hidden = true;
-    }
 
     // --------------------------------------------------------------------------------
     // Bubble animation
@@ -741,3 +502,265 @@ function handleBubbles(faceIndex, bubbleList) {
         });
     }       
 }
+
+// --------------------------------------------------------------------------------
+// Food feeder
+
+function startFeed(objList) {
+ 
+    /*
+    for (var i=0; i<crushPoolList.length; ++i)
+        crushPoolList[i].hidden = true;
+
+    const timeInMilliseconds = 120;
+    const intervalTimer = Time.setInterval(shouldStartFeed, timeInMilliseconds);
+    var feedIndex = 0;
+
+    const crushTimeInMilliseconds = 100;
+    const crushIntervalTimer = Time.setInterval(shouldStartCrush, crushTimeInMilliseconds);
+    var crushIndex = 0;
+
+    function shouldStartFeed() {
+
+        runFeedInterval(objList, feedIndex++);
+
+        if (feedIndex >= objList.length) {
+
+            Time.clearInterval(intervalTimer);
+        }                
+    }
+
+    function shouldStartCrush() {
+
+        runCrushInterval(crushPoolList, crushIndex++);
+
+        if (crushIndex >= crushPoolList.length) {
+
+            Time.clearInterval(crushIntervalTimer);
+        }
+    }
+    */
+    
+    var xPointList = [];
+    var xVariant = 4.0;
+
+    // Set 1
+    xPointList.push(-4.64605);  xPointList.push(2.01145);   xPointList.push(0.15905);   xPointList.push(-5.46574);
+    xPointList.push(1.48324);   xPointList.push(-0.88440);  xPointList.push(5.19227);   xPointList.push(-0.17623);
+    xPointList.push(-4.53221);  xPointList.push(3.80409);
+    // Set 2
+    xPointList.push(-0.58917);  xPointList.push(-7.88229);  xPointList.push(0.28566);   xPointList.push(-2.71326);
+    xPointList.push(-4.56251);  xPointList.push(1.48852);   xPointList.push(7.26982);   xPointList.push(-1.98159);
+    xPointList.push(-4.68881);  xPointList.push(5.47105);
+    
+    var yPointList = [];
+    var yVariant = 4.0;
+
+    // Set 1
+    yPointList.push(-4.02526);  yPointList.push(3.29644);   yPointList.push(-4.92173);  yPointList.push(4.44748);
+    yPointList.push(1.83189);   yPointList.push(5.47964);   yPointList.push(3.90241);   yPointList.push(-5.72946);
+    yPointList.push(-0.65139);  yPointList.push(5.41456);
+    // Set 2
+    yPointList.push(-5.93434);  yPointList.push(4.94540);   yPointList.push(5.72991);   yPointList.push(-6.85919);
+    yPointList.push(-4.76642);  yPointList.push(2.35872);   yPointList.push(-3.66115);  yPointList.push(2.37872);
+    yPointList.push(2.26890);   yPointList.push(-6.83019);
+
+    var yAngleList = [];
+    var yAngleVariant = 180.0;
+
+    yAngleList.push(0.88630); yAngleList.push(-0.34092); yAngleList.push(-0.36846); yAngleList.push(0.48486); 
+    yAngleList.push(-0.67216); yAngleList.push(0.76679); yAngleList.push(-0.03117); yAngleList.push(0.98991); 
+    yAngleList.push(0.38995); yAngleList.push(-0.14609); 
+
+    const FEED_SET_COUNT = 8;
+    var curSet = 0;
+
+    var crushYAngleList = [];
+    crushYAngleList.push(0.11449);    crushYAngleList.push(0.55922);    
+    crushYAngleList.push(0.21852);    crushYAngleList.push(0.09600);
+    crushYAngleList.push(0.82530);    crushYAngleList.push(0.95081);    
+    crushYAngleList.push(0.84250);    crushYAngleList.push(0.77527);    
+    crushYAngleList.push(0.85664);    crushYAngleList.push(0.53096);
+    
+    var crushNormDirList = [];
+    
+    for (var i=0; i<crushYAngleList.length; ++i) {
+
+        var rad = crushYAngleList[i] * 2.0 * Math.PI;
+
+        var xNorm = Math.cos(rad);
+        var yNorm = Math.sin(rad - (Math.PI * 0.6));
+
+        var tmp = [];
+        tmp.push(xNorm);
+        tmp.push(yNorm);
+
+        crushNormDirList.push(tmp);
+    }
+
+    function runCrushInterval(objList, index) {
+
+        if (crushNormDirList[index] === undefined)
+            return;
+        if (crushNormDirList[index][0] === undefined)
+            return;
+        if (crushNormDirList[index][1] === undefined)
+            return;
+
+        // Manipulate crush angle
+        const crushInterval = { 
+            durationMilliseconds: 300,
+            loopCount: Infinity,
+            mirror: false  
+        };
+        var crushTimeDriver = Animation.timeDriver(crushInterval);
+
+        const cxSamp = Animation.samplers.easeInOutQuad(
+            0,
+            crushNormDirList[index][0] * 7.0
+        );
+        const cxAnim = Animation.animate(crushTimeDriver, cxSamp);
+
+        const cySamp = Animation.samplers.easeInOutQuad(
+            0,
+            crushNormDirList[index][1] * 7.0
+        );
+        const cyAnim = Animation.animate(crushTimeDriver, cySamp);
+
+        const czSamp = Animation.samplers.easeInOutQuad(
+            0,
+            7.0
+        );
+        const czAnim = Animation.animate(crushTimeDriver, czSamp);
+
+        crushPoolList[index].transform.x = cxAnim;
+        crushPoolList[index].transform.y = cyAnim;
+        crushPoolList[index].transform.z = czAnim;
+
+        crushTimeDriver.start();
+
+        crushPoolList[index].hidden = false;
+
+        if (!(crushTimeDriverList.length > index))
+            crushTimeDriverList.push(crushTimeDriver);
+        else
+            crushTimeDriverList[index] = crushTimeDriver; 
+    }
+
+    function runFeedInterval(objList, index) {
+
+        if (index == FEED_SET_COUNT - 1)
+            curSet = (curSet == 0) ? FEED_SET_COUNT : 0; 
+
+        // Manipulate position transition
+
+        const shootFoodInterval = {
+            durationMilliseconds: 800,
+            loopCount: Infinity,
+            mirror: false  
+        };
+
+        var feedTimeDriver = Animation.timeDriver(shootFoodInterval);
+
+        const txSamp = Animation.samplers.easeInOutQuad(
+            xPointList[index + curSet] * xVariant, 
+            testyTarget.transform.x.pinLastValue() - srcObj.transform.x.pinLastValue());
+        const txAnim = Animation.animate(feedTimeDriver, txSamp);
+
+        const tySamp = Animation.samplers.easeInOutQuad(
+            yPointList[index + curSet] * yVariant, 
+            testyTarget.transform.y.pinLastValue() - srcObj.transform.y.pinLastValue());
+        const tyAnim = Animation.animate(feedTimeDriver, tySamp);
+
+        const tzSamp = Animation.samplers.easeInOutQuad(
+            0, 
+            testyTarget.transform.z.pinLastValue() - srcObj.transform.z.pinLastValue());
+        const tzAnim = Animation.animate(feedTimeDriver, tzSamp);
+        
+        //Diagnostics.log("obj idx: " + objList[index]);
+
+        if (objList[index] !== undefined) {
+
+            objList[index].transform.x = txAnim;
+            objList[index].transform.y = tyAnim;
+            objList[index].transform.z = tzAnim;
+        }
+
+        feedTimeDriver.start();
+
+        if (!(feedTimeDriverList.length > index))
+            feedTimeDriverList.push(feedTimeDriver);
+        else
+            feedTimeDriverList[index] = feedTimeDriver;
+
+        // Manipulate angle 
+        var curRot = yAngleList[index] * yAngleVariant;
+
+        var qRotDriver = Animation.timeDriver({
+            durationMilliseconds: 1000,
+            loopCount: 1
+        });
+        var qRotsampler = Animation.samplers.polyline({
+            keyframes: [
+                axisRotation(0, 0, 1, 0),
+                axisRotation(0, 0, 1, curRot),
+            ],
+            knots: [
+                0, 1
+            ]
+        });
+        var qRotSignal = Animation.animate(qRotDriver, qRotsampler);
+        qRotDriver.start(); 
+
+        if (objList[index] !== undefined) {
+            objList[index].transform.rotation = qRotSignal;
+        }
+    }
+}
+ 
+function showFeed() {
+
+    //srcObj.hidden = false;
+    //crushRoot.hidden = false;
+}
+
+function stopFeed() {
+
+    for (var i=0; i<feedTimeDriverList.length; ++i)
+        feedTimeDriverList[i].stop();
+
+    for (var i=0; i<testyPoolList.length; ++i) {
+
+        testyPoolList[i].transform.x = 0;     
+        testyPoolList[i].transform.y = 0;     
+        testyPoolList[i].transform.z = 0;     
+    }
+    
+    for (var i=0; i<crushTimeDriverList.length; ++i)
+        crushTimeDriverList[i].stop();
+
+    for (var i=0; i<crushTimeDriverList.length; ++i) {
+
+        crushPoolList[i].transform.x = 0;
+        crushPoolList[i].transform.y = 0;
+        crushPoolList[i].transform.z = 0;
+    }
+
+}
+
+function hideFeed() {
+
+    srcObj.hidden = true;
+    crushRoot.hidden = true;
+}
+
+// --------------------------------------------------------------------------------
+// HTTP REQUEST
+// --------------------------------------------------------------------------------
+
+
+// Log mouth openness value
+
+ 
+//handlePatternModule();
+
