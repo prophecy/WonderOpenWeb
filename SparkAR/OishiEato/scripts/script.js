@@ -78,73 +78,15 @@ applyBalloonMovement(
     0.6, 0.4, 0.2,
     1500, -3000, 4500);
 
-applyBalloonMovement(
-    Scene.root.find('gyoza_front_plane1'), 
-    0.6, 0.2, 0.4,
-    3000, -1500, 4500);
-
-applyBalloonMovement(
-    Scene.root.find('gyoza_front_plane2'), 
-    0.4, 0.6, 0.2, 
-    3000, -4500, 1500);
-
-// Back
-/*
-applyBalloonMovement(
-    Scene.root.find('gyoza_back_plane0'), 
-    0.2, 0.4, 0.6,
-    1500, 3000, 4500);
-
-applyBalloonMovement(
-    Scene.root.find('gyoza_back_plane1'), 
-    0.2, 0.6, 0.4,
-    3000, -1500, 4500);
-
-applyBalloonMovement(
-    Scene.root.find('gyoza_back_plane2'), 
-    0.4, 0.6, 0.2, 
-    4500, 1500, 3000);
-
-applyBalloonMovement(
-    Scene.root.find('gyoza_back_plane3'), 
-    0.4, 0.6, 0.2, 
-    4500, 3000, 1500);
-/*/
-/*
-applyRotationBounce(
-    Scene.root.find('gyoza_back_plane0'), 
-    20, 40, 600 
-);
 applyRotationBounce(
     Scene.root.find('gyoza_back_plane1'), 
     20, 40, 600
 );
-*/
 
-// Uset this !
 applyRotationBounce(
     Scene.root.find('gyoza_back_plane2'), 
     20, 40, 1000
 );
-applyRotationBounce(
-    Scene.root.find('gyoza_back_plane3'), 
-    20, 40, 1000
-);
-
-/*
-applyRotationBounce(
-    Scene.root.find('gyoza_back_plane4'), 
-    20, 40, 600
-);
-applyRotationBounce(
-    Scene.root.find('gyoza_back_plane5'), 
-    20, 40, 600
-);
-applyRotationBounce(
-    Scene.root.find('gyoza_back_plane6'), 
-    20, 40, 600
-);
-/**/
 
 applyParalaxMovement(
     Scene.root.find('front_root'),
