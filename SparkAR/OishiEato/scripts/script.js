@@ -55,6 +55,8 @@ for (var i=0; i<bubbleList1.length; ++i)
 
 var srcObj = Scene.root.find('testyPool');
 
+var foodFeederRoot0 = Scene.root.find('footFeederRoot0');
+
 var testyPoolList = [];
 testyPoolList.push(Scene.root.find('testy0'));
 testyPoolList.push(Scene.root.find('testy1'));
@@ -112,13 +114,22 @@ const gyozaBackPlane2 = Scene.root.find('gyoza_back_plane2');
 //Diagnostics.watch("Mouth Center Y ", FaceTracking.face(0).mouth.center.y);
 //Diagnostics.watch("Mouth Center Z ", FaceTracking.face(0).mouth.center.z);
 
+// --------------------------------------------------------------------------------
 // @ START
+
 // Handle movements
 applyBalloonMovement(gyozaFrontPlane0, 0.6, 0.4, 0.2, 1500, -3000, 4500);
 applyRotationBounce(gyozaBackPlane1, 20, 40, 600);
 applyRotationBounce(gyozaBackPlane2, 20, 40, 1000);
 applyParalaxMovement(frontRoot, backRoot, 0.1, 0.1);
 
+// Init food feeder
+const FOOD_FEEDER_RANGE = 50.0;
+
+foodFeederRoot0.hidden = true;
+initFoodFeeder(testyPoolList, crushPoolList, FOOD_FEEDER_RANGE);
+
+// --------------------------------------------------------------------------------
 // @ FACE DETECTED
 
 // Bubble transformations
@@ -189,17 +200,28 @@ function onFaceUntracked(faceIndex) {
 handleFaceTrackingState(0, function() { onFaceTracked(0); }, function() { onFaceUntracked(0); });
 handleFaceTrackingState(1, function() { onFaceTracked(1); }, function() { onFaceUntracked(1); });
 
+// --------------------------------------------------------------------------------
 // @ OPEN MOUTH
 crushRoot.hidden = true;
 
 function onFace0MouthOpen() {
 
     Diagnostics.log("onFace0MouthOpen"); 
+
+    var mouth = FaceTracking.face(0).mouth;
+    
+    foodFeederRoot0.transform.x = mouth.center.x;
+    foodFeederRoot0.transform.y = mouth.center.y;
+    foodFeederRoot0.transform.z = mouth.center.z;
+
+    foodFeederRoot0.hidden = false;
 }
 
 function onFace0MouthClose() {
 
     Diagnostics.log("onFaceMouthClose");
+
+    foodFeederRoot0.hidden = true;
 }
 
 handleMouthOpeningState(
@@ -462,41 +484,9 @@ function hideBubble(obj) {
 // --------------------------------------------------------------------------------
 // Food feeder
 
-function startFeed(objList) {
- 
-    /*
-    for (var i=0; i<crushPoolList.length; ++i)
-        crushPoolList[i].hidden = true;
+function initFoodFeeder(foodObjList, crushObjList, range) {
 
-    const timeInMilliseconds = 120;
-    const intervalTimer = Time.setInterval(shouldStartFeed, timeInMilliseconds);
-    var feedIndex = 0;
-
-    const crushTimeInMilliseconds = 100;
-    const crushIntervalTimer = Time.setInterval(shouldStartCrush, crushTimeInMilliseconds);
-    var crushIndex = 0;
-
-    function shouldStartFeed() {
-
-        runFeedInterval(objList, feedIndex++);
-
-        if (feedIndex >= objList.length) {
-
-            Time.clearInterval(intervalTimer);
-        }                
-    }
-
-    function shouldStartCrush() {
-
-        runCrushInterval(crushPoolList, crushIndex++);
-
-        if (crushIndex >= crushPoolList.length) {
-
-            Time.clearInterval(crushIntervalTimer);
-        }
-    }
-    */
-    
+    // Vars
     var xPointList = [];
     var xVariant = 4.0;
 
@@ -554,6 +544,70 @@ function startFeed(objList) {
         crushNormDirList.push(tmp);
     }
 
+    function runFeedInterval(objList, index) {
+
+        if (index == FEED_SET_COUNT - 1)
+            curSet = (curSet == 0) ? FEED_SET_COUNT : 0; 
+
+        // Manipulate position transition
+
+        const shootFoodInterval = {
+            durationMilliseconds: 800,
+            loopCount: Infinity,
+            mirror: false  
+        };
+
+        var feedTimeDriver = Animation.timeDriver(shootFoodInterval);
+ 
+        const txSamp = Animation.samplers.easeInOutQuad(xPointList[index + curSet] * xVariant, 0.0);
+        const txAnim = Animation.animate(feedTimeDriver, txSamp);
+
+        const tySamp = Animation.samplers.easeInOutQuad(yPointList[index + curSet] * yVariant, 0.0);
+        const tyAnim = Animation.animate(feedTimeDriver, tySamp);
+
+        const tzSamp = Animation.samplers.easeInOutQuad(range, 0.0);
+        const tzAnim = Animation.animate(feedTimeDriver, tzSamp);
+        
+        //Diagnostics.log("obj idx: " + objList[index]);
+
+        if (objList[index] !== undefined) {
+
+            objList[index].transform.x = txAnim;
+            objList[index].transform.y = tyAnim;
+            objList[index].transform.z = tzAnim;
+        }
+
+        feedTimeDriver.start();
+
+        if (!(feedTimeDriverList.length > index))
+            feedTimeDriverList.push(feedTimeDriver);
+        else
+            feedTimeDriverList[index] = feedTimeDriver;
+
+        // Manipulate angle 
+        var curRot = yAngleList[index] * yAngleVariant;
+
+        var qRotDriver = Animation.timeDriver({
+            durationMilliseconds: 1000,
+            loopCount: 1
+        });
+        var qRotsampler = Animation.samplers.polyline({
+            keyframes: [
+                axisRotation(0, 0, 1, 0),
+                axisRotation(0, 0, 1, curRot),
+            ],
+            knots: [
+                0, 1
+            ]
+        });
+        var qRotSignal = Animation.animate(qRotDriver, qRotsampler);
+        qRotDriver.start(); 
+
+        if (objList[index] !== undefined) {
+            objList[index].transform.rotation = qRotSignal;
+        }
+    }
+
     function runCrushInterval(objList, index) {
 
         if (crushNormDirList[index] === undefined)
@@ -603,108 +657,44 @@ function startFeed(objList) {
             crushTimeDriverList[index] = crushTimeDriver; 
     }
 
-    function runFeedInterval(objList, index) {
+    const timeInMilliseconds = 120;
+    const intervalTimer = Time.setInterval(shouldStartFeed, timeInMilliseconds);
+    var feedIndex = 0;
 
-        if (index == FEED_SET_COUNT - 1)
-            curSet = (curSet == 0) ? FEED_SET_COUNT : 0; 
+    function shouldStartFeed() {
 
-        // Manipulate position transition
+        runFeedInterval(foodObjList, feedIndex++);
 
-        const shootFoodInterval = {
-            durationMilliseconds: 800,
-            loopCount: Infinity,
-            mirror: false  
-        };
+        if (feedIndex >= foodObjList.length) {
 
-        var feedTimeDriver = Animation.timeDriver(shootFoodInterval);
+            Time.clearInterval(intervalTimer);
+        }                
+    }
 
-        const txSamp = Animation.samplers.easeInOutQuad(
-            xPointList[index + curSet] * xVariant, 
-            testyTarget.transform.x.pinLastValue() - srcObj.transform.x.pinLastValue());
-        const txAnim = Animation.animate(feedTimeDriver, txSamp);
+    /*
+    const crushTimeInMilliseconds = 100;
+    const crushIntervalTimer = Time.setInterval(shouldStartCrush, crushTimeInMilliseconds);
+    var crushIndex = 0;
 
-        const tySamp = Animation.samplers.easeInOutQuad(
-            yPointList[index + curSet] * yVariant, 
-            testyTarget.transform.y.pinLastValue() - srcObj.transform.y.pinLastValue());
-        const tyAnim = Animation.animate(feedTimeDriver, tySamp);
+    function shouldStartCrush() {
 
-        const tzSamp = Animation.samplers.easeInOutQuad(
-            0, 
-            testyTarget.transform.z.pinLastValue() - srcObj.transform.z.pinLastValue());
-        const tzAnim = Animation.animate(feedTimeDriver, tzSamp);
-        
-        //Diagnostics.log("obj idx: " + objList[index]);
+        runCrushInterval(crushPoolList, crushIndex++);
 
-        if (objList[index] !== undefined) {
+        if (crushIndex >= crushPoolList.length) {
 
-            objList[index].transform.x = txAnim;
-            objList[index].transform.y = tyAnim;
-            objList[index].transform.z = tzAnim;
-        }
-
-        feedTimeDriver.start();
-
-        if (!(feedTimeDriverList.length > index))
-            feedTimeDriverList.push(feedTimeDriver);
-        else
-            feedTimeDriverList[index] = feedTimeDriver;
-
-        // Manipulate angle 
-        var curRot = yAngleList[index] * yAngleVariant;
-
-        var qRotDriver = Animation.timeDriver({
-            durationMilliseconds: 1000,
-            loopCount: 1
-        });
-        var qRotsampler = Animation.samplers.polyline({
-            keyframes: [
-                axisRotation(0, 0, 1, 0),
-                axisRotation(0, 0, 1, curRot),
-            ],
-            knots: [
-                0, 1
-            ]
-        });
-        var qRotSignal = Animation.animate(qRotDriver, qRotsampler);
-        qRotDriver.start(); 
-
-        if (objList[index] !== undefined) {
-            objList[index].transform.rotation = qRotSignal;
+            Time.clearInterval(crushIntervalTimer);
         }
     }
+    */
 }
  
-function showFeed() {
+function showFoodFeeder(faceIndex) {
 
-    //srcObj.hidden = false;
-    //crushRoot.hidden = false;
+    srcObj.hidden = false;
+    crushRoot.hidden = false;
 }
 
-function stopFeed() {
-
-    for (var i=0; i<feedTimeDriverList.length; ++i)
-        feedTimeDriverList[i].stop();
-
-    for (var i=0; i<testyPoolList.length; ++i) {
-
-        testyPoolList[i].transform.x = 0;     
-        testyPoolList[i].transform.y = 0;     
-        testyPoolList[i].transform.z = 0;     
-    }
-    
-    for (var i=0; i<crushTimeDriverList.length; ++i)
-        crushTimeDriverList[i].stop();
-
-    for (var i=0; i<crushTimeDriverList.length; ++i) {
-
-        crushPoolList[i].transform.x = 0;
-        crushPoolList[i].transform.y = 0;
-        crushPoolList[i].transform.z = 0;
-    }
-
-}
-
-function hideFeed() {
+function hideFoodFeeder(faceIndex) {
 
     srcObj.hidden = true;
     crushRoot.hidden = true;
