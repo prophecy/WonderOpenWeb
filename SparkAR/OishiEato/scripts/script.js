@@ -53,8 +53,6 @@ for (var i=0; i<bubbleList1.length; ++i)
     if (bubbleList1[i] === undefined)
         Diagnostics.log("obj is undefined");
 
-var srcObj = Scene.root.find('testyPool');
-
 var foodFeederRoot0 = Scene.root.find('footFeederRoot0');
 
 var testyPoolList = [];
@@ -123,10 +121,10 @@ const gyozaBackPlane2 = Scene.root.find('gyoza_back_plane2');
 // --------------------------------------------------------------------------------
 // @ START
 
-// Handle movements
+// Handle env obj movements
 applyBalloonMovement(gyozaFrontPlane0, 0.6, 0.4, 0.2, 1500, -3000, 4500);
-applyRotationBounce(gyozaBackPlane1, 20, 40, 600);
-applyRotationBounce(gyozaBackPlane2, 20, 40, 1000);
+applyRotationBounce(gyozaBackPlane1, 50, 20, 1800); // The small one
+applyRotationBounce(gyozaBackPlane2, 0, 50, 1600); // The big one
 applyParalaxMovement(frontRoot, backRoot, 0.1, 0.1);
 
 // Init food feeder
@@ -230,7 +228,7 @@ handleFaceTrackingState(1, function() { onFaceTracked(1); }, function() { onFace
 
 function onFace0MouthOpen() {
 
-    Diagnostics.log("onFace0MouthOpen"); 
+    //Diagnostics.log("onFace0MouthOpen"); 
 
     var mouth = FaceTracking.face(0).mouth;
     
@@ -243,7 +241,7 @@ function onFace0MouthOpen() {
 
 function onFace0MouthClose() {
 
-    Diagnostics.log("onFaceMouthClose");
+    //Diagnostics.log("onFaceMouthClose");
 
     foodFeederRoot0.hidden = true;
 }
@@ -399,15 +397,15 @@ function applyRotationBounce(obj, minAngle, maxAngle, duration) {
     // by the previously-defined axisRotation() method.
     var rotation_sampler = Animation.samplers.polyline({
         keyframes: [
-            axisRotation(0,1,0,minAngle),
-            axisRotation(0,1,0,minAngle),
-            axisRotation(0,1,0,minAngle),
+            axisRotation(0, 1, 0, minAngle),
+            axisRotation(0, 1, 0, minAngle),
 
-            axisRotation(0,1,0,maxAngle),
-            axisRotation(0,1,0,minAngle)
+            axisRotation(0, 1, 0, maxAngle),
+
+            axisRotation(0, 1, 0, minAngle),
         ],
         knots: [
-            0, 1, 2, 3, 4
+            0, 12, 13, 14,
         ]
     });
 
@@ -598,6 +596,8 @@ function initFoodFeeder(foodObjList, crushObjList, args) {
         };
         var crushTimeDriver = Animation.timeDriver(crushInterval);
 
+        Diagnostics.log("crushNormDirList.length: " + crushNormDirList.length);
+        
         const cxSamp = Animation.samplers.easeInOutQuad(0, crushNormDirList[index][0] * varianceX);
         const cxAnim = Animation.animate(crushTimeDriver, cxSamp);
 
