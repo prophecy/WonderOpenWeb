@@ -68,6 +68,12 @@ testyPoolList.push(Scene.root.find('testy6'));
 testyPoolList.push(Scene.root.find('testy7'));
 testyPoolList.push(Scene.root.find('testy8'));
 testyPoolList.push(Scene.root.find('testy9'));
+testyPoolList.push(Scene.root.find('testy10'));
+testyPoolList.push(Scene.root.find('testy11'));
+testyPoolList.push(Scene.root.find('testy12'));
+testyPoolList.push(Scene.root.find('testy13'));
+testyPoolList.push(Scene.root.find('testy14'));
+testyPoolList.push(Scene.root.find('testy15'));
 
 var crushRoot = Scene.root.find('crushPool');
 
@@ -132,10 +138,10 @@ const foodFeederArgs = {
     feedVariantY: 2.0,
     yAngleVariant: 180.0,
 
-    FEED_SET_COUNT: 8,
+    FEED_SET_COUNT: 16,
 
-    feedInterval: 200,
-    feedDuration: 400,
+    feedInterval: 300,
+    feedDuration: 800,
 
     crushDuration: 300,
     crushInterval: 100,
@@ -504,8 +510,6 @@ function hideBubble(obj) {
 
 function initFoodFeeder(foodObjList, crushObjList, args) {
 
-    var curSet = 0;
-
     // Create object list from randrom number
 
     var xPointList = [
@@ -542,11 +546,9 @@ function initFoodFeeder(foodObjList, crushObjList, args) {
     
     function runFeedInterval(objList, index, duration) {
 
-        if (index == args.FEED_SET_COUNT - 1)
-            curSet = (curSet == 0) ? args.FEED_SET_COUNT : 0; 
+        Diagnostics.log("index: " + index); 
 
         // Manipulate position transition
-
         const shootFoodInterval = {
             durationMilliseconds: duration,
             loopCount: Infinity,
@@ -555,10 +557,10 @@ function initFoodFeeder(foodObjList, crushObjList, args) {
 
         var feedTimeDriver = Animation.timeDriver(shootFoodInterval);
  
-        const txSamp = Animation.samplers.easeInOutQuad(xPointList[index + curSet] * args.feedVariantX, 0.0);
+        const txSamp = Animation.samplers.easeInOutQuad(xPointList[index] * args.feedVariantX, 0.0);
         const txAnim = Animation.animate(feedTimeDriver, txSamp);
 
-        const tySamp = Animation.samplers.easeInOutQuad(yPointList[index + curSet] * args.feedVariantY, 0.0);
+        const tySamp = Animation.samplers.easeInOutQuad(yPointList[index] * args.feedVariantY, 0.0);
         const tyAnim = Animation.animate(feedTimeDriver, tySamp);
 
         const tzSamp = Animation.samplers.easeInOutQuad(args.range, 0.0);
@@ -627,6 +629,8 @@ function initFoodFeeder(foodObjList, crushObjList, args) {
     const feederIntervalTimer = Time.setInterval(shouldStartFeed, feederTimeInMilliseconds);
     var feedIndex = 0;
 
+    Diagnostics.log("foodObjList: " + foodObjList.length);
+ 
     // Hide all
     for (var i=0; i<foodObjList.length; ++i)
         foodObjList[i].hidden = true;
