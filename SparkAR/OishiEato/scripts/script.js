@@ -485,65 +485,59 @@ function hideBubble(obj) {
 
 function initFoodFeeder(foodObjList, crushObjList, range) {
 
-    // Vars
-    var xPointList = [];
-    var xVariant = 4.0;
-
-    // Set 1
-    xPointList.push(-4.64605);  xPointList.push(2.01145);   xPointList.push(0.15905);   xPointList.push(-5.46574);
-    xPointList.push(1.48324);   xPointList.push(-0.88440);  xPointList.push(5.19227);   xPointList.push(-0.17623);
-    xPointList.push(-4.53221);  xPointList.push(3.80409);
-    // Set 2
-    xPointList.push(-0.58917);  xPointList.push(-7.88229);  xPointList.push(0.28566);   xPointList.push(-2.71326);
-    xPointList.push(-4.56251);  xPointList.push(1.48852);   xPointList.push(7.26982);   xPointList.push(-1.98159);
-    xPointList.push(-4.68881);  xPointList.push(5.47105);
-    
-    var yPointList = [];
-    var yVariant = 4.0;
-
-    // Set 1
-    yPointList.push(-4.02526);  yPointList.push(3.29644);   yPointList.push(-4.92173);  yPointList.push(4.44748);
-    yPointList.push(1.83189);   yPointList.push(5.47964);   yPointList.push(3.90241);   yPointList.push(-5.72946);
-    yPointList.push(-0.65139);  yPointList.push(5.41456);
-    // Set 2
-    yPointList.push(-5.93434);  yPointList.push(4.94540);   yPointList.push(5.72991);   yPointList.push(-6.85919);
-    yPointList.push(-4.76642);  yPointList.push(2.35872);   yPointList.push(-3.66115);  yPointList.push(2.37872);
-    yPointList.push(2.26890);   yPointList.push(-6.83019);
-
-    var yAngleList = [];
+    // Parameters
+    var feedVariantX = 2.0;
+    var feedVariantY = 2.0;
     var yAngleVariant = 180.0;
-
-    yAngleList.push(0.88630); yAngleList.push(-0.34092); yAngleList.push(-0.36846); yAngleList.push(0.48486); 
-    yAngleList.push(-0.67216); yAngleList.push(0.76679); yAngleList.push(-0.03117); yAngleList.push(0.98991); 
-    yAngleList.push(0.38995); yAngleList.push(-0.14609); 
 
     const FEED_SET_COUNT = 8;
     var curSet = 0;
 
-    var crushYAngleList = [];
-    crushYAngleList.push(0.11449);    crushYAngleList.push(0.55922);    
-    crushYAngleList.push(0.21852);    crushYAngleList.push(0.09600);
-    crushYAngleList.push(0.82530);    crushYAngleList.push(0.95081);    
-    crushYAngleList.push(0.84250);    crushYAngleList.push(0.77527);    
-    crushYAngleList.push(0.85664);    crushYAngleList.push(0.53096);
-    
+    const feedInterval = 200;
+    const feedDuration = 400;
+
+    const crushDuration = 300;
+    const crushInterval = 100;
+
+    const crushVarianceX = 7.0;
+    const crushVarianceY = 7.0;
+    const crushVarianceZ = 7.0;
+
+    // Create object list from randrom number
+
+    var xPointList = [
+        -4.64605, 2.01145, 0.15905, -5.46574, 1.48324, -0.88440, 5.19227, -0.17623, -4.53221, 3.80409,
+        -0.58917, -7.88229, 0.28566, -2.71326, -4.56251, 1.48852, 7.26982, -1.98159, -4.68881, 5.47105
+    ];
+    var yPointList = [
+        -4.02526, 3.29644, -4.92173, 4.44748, 1.83189, 5.47964, 3.90241, -5.72946, -0.65139, 5.41456,
+        -5.93434, 4.94540, 5.72991, -6.85919, -4.76642, 2.35872, -3.66115, 2.37872, 2.26890, -6.83019
+    ];
+    var yAngleList = [
+        0.88630, -0.34092, -0.36846, 0.48486, -0.67216, 0.76679, -0.03117, 0.98991, 0.38995, -0.14609
+    ];
+     
+    var crushYAngleList0 = [
+        -0.08104, 0.44314, 0.52326, -0.30244, 0.82356, -0.26104, -0.85587, 0.80953, 0.90391, -0.21765
+    ];
+
+    var crushYAngleList1 = [
+        0.89408, -0.70547, 0.91741, -0.60386, 0.20676,-0.97222, 0.50191, 0.53523, -0.42530, 0.93437
+    ];
+
     var crushNormDirList = [];
-    
-    for (var i=0; i<crushYAngleList.length; ++i) {
+    for (var i=0; i<crushYAngleList0.length; ++i) {
 
-        var rad = crushYAngleList[i] * 2.0 * Math.PI;
+        var radx = crushYAngleList0[i] * 2.0 * Math.PI;
+        var rady = crushYAngleList1[i] * 2.0 * Math.PI;
 
-        var xNorm = Math.cos(rad);
-        var yNorm = Math.sin(rad - (Math.PI * 0.6));
-
-        var tmp = [];
-        tmp.push(xNorm);
-        tmp.push(yNorm);
-
-        crushNormDirList.push(tmp);
+        crushNormDirList.push([Math.cos(radx), Math.sin(rady)]);
     }
 
-    function runFeedInterval(objList, index) {
+    // --------------------------------------------------------------------------------
+    // Feeder efx function
+    
+    function runFeedInterval(objList, index, duration) {
 
         if (index == FEED_SET_COUNT - 1)
             curSet = (curSet == 0) ? FEED_SET_COUNT : 0; 
@@ -551,30 +545,28 @@ function initFoodFeeder(foodObjList, crushObjList, range) {
         // Manipulate position transition
 
         const shootFoodInterval = {
-            durationMilliseconds: 800,
+            durationMilliseconds: duration,
             loopCount: Infinity,
             mirror: false  
         };
 
         var feedTimeDriver = Animation.timeDriver(shootFoodInterval);
  
-        const txSamp = Animation.samplers.easeInOutQuad(xPointList[index + curSet] * xVariant, 0.0);
+        const txSamp = Animation.samplers.easeInOutQuad(xPointList[index + curSet] * feedVariantX, 0.0);
         const txAnim = Animation.animate(feedTimeDriver, txSamp);
 
-        const tySamp = Animation.samplers.easeInOutQuad(yPointList[index + curSet] * yVariant, 0.0);
+        const tySamp = Animation.samplers.easeInOutQuad(yPointList[index + curSet] * feedVariantY, 0.0);
         const tyAnim = Animation.animate(feedTimeDriver, tySamp);
 
         const tzSamp = Animation.samplers.easeInOutQuad(range, 0.0);
         const tzAnim = Animation.animate(feedTimeDriver, tzSamp);
         
-        //Diagnostics.log("obj idx: " + objList[index]);
-
-        if (objList[index] !== undefined) {
-
-            objList[index].transform.x = txAnim;
-            objList[index].transform.y = tyAnim;
-            objList[index].transform.z = tzAnim;
-        }
+        // Show object
+        objList[index].hidden = false;
+ 
+        objList[index].transform.x = txAnim;
+        objList[index].transform.y = tyAnim;
+        objList[index].transform.z = tzAnim;
 
         feedTimeDriver.start();
 
@@ -583,64 +575,36 @@ function initFoodFeeder(foodObjList, crushObjList, range) {
         else
             feedTimeDriverList[index] = feedTimeDriver;
 
-        // Manipulate angle 
-        var curRot = yAngleList[index] * yAngleVariant;
-
-        var qRotDriver = Animation.timeDriver({
-            durationMilliseconds: 1000,
-            loopCount: 1
-        });
-        var qRotsampler = Animation.samplers.polyline({
-            keyframes: [
-                axisRotation(0, 0, 1, 0),
-                axisRotation(0, 0, 1, curRot),
-            ],
-            knots: [
-                0, 1
-            ]
-        });
-        var qRotSignal = Animation.animate(qRotDriver, qRotsampler);
-        qRotDriver.start(); 
-
-        if (objList[index] !== undefined) {
-            objList[index].transform.rotation = qRotSignal;
-        }
+        // Manipulate angle
+        objList[index].transform.rotationX = 0.0;
+        objList[index].transform.rotationY = 0.0;
+        objList[index].transform.rotationZ = yAngleList[index] * yAngleVariant;
     }
 
-    function runCrushInterval(objList, index) {
+    // --------------------------------------------------------------------------------
+    // Crush efx function
 
-        if (crushNormDirList[index] === undefined)
-            return;
-        if (crushNormDirList[index][0] === undefined)
-            return;
-        if (crushNormDirList[index][1] === undefined)
-            return;
+    function runCrushInterval(objList, index, crushDuration, varianceX, varianceY, varianceZ) {
 
         // Manipulate crush angle
         const crushInterval = { 
-            durationMilliseconds: 300,
+            durationMilliseconds: crushDuration,
             loopCount: Infinity,
             mirror: false  
         };
         var crushTimeDriver = Animation.timeDriver(crushInterval);
 
-        const cxSamp = Animation.samplers.easeInOutQuad(
-            0,
-            crushNormDirList[index][0] * 7.0
-        );
+        const cxSamp = Animation.samplers.easeInOutQuad(0, crushNormDirList[index][0] * varianceX);
         const cxAnim = Animation.animate(crushTimeDriver, cxSamp);
 
-        const cySamp = Animation.samplers.easeInOutQuad(
-            0,
-            crushNormDirList[index][1] * 7.0
-        );
+        const cySamp = Animation.samplers.easeInOutQuad(0, crushNormDirList[index][1] * varianceY);
         const cyAnim = Animation.animate(crushTimeDriver, cySamp);
 
-        const czSamp = Animation.samplers.easeInOutQuad(
-            0,
-            7.0
-        );
+        const czSamp = Animation.samplers.easeInOutQuad(0, varianceZ);
         const czAnim = Animation.animate(crushTimeDriver, czSamp);
+
+        // Show object
+        objList[index].hidden = false;
 
         objList[index].transform.x = cxAnim;
         objList[index].transform.y = cyAnim;
@@ -654,32 +618,42 @@ function initFoodFeeder(foodObjList, crushObjList, range) {
             crushTimeDriverList[index] = crushTimeDriver; 
     }
 
-    const timeInMilliseconds = 120;
-    const intervalTimer = Time.setInterval(shouldStartFeed, timeInMilliseconds);
+    // --------------------------------------------------------------------------------
+    // Start food feeder effect
+    const feederTimeInMilliseconds = feedInterval;
+    const feederIntervalTimer = Time.setInterval(shouldStartFeed, feederTimeInMilliseconds);
     var feedIndex = 0;
+
+    // Hide all
+    for (var i=0; i<foodObjList.length; ++i)
+        foodObjList[i].hidden = true;
 
     function shouldStartFeed() {
 
-        runFeedInterval(foodObjList, feedIndex++);
+        runFeedInterval(foodObjList, feedIndex++, feedDuration);
 
-        if (feedIndex >= foodObjList.length) {
-
-            Time.clearInterval(intervalTimer);
-        }                
+        if (feedIndex >= foodObjList.length)
+            Time.clearInterval(feederIntervalTimer);
     }
 
-    const crushTimeInMilliseconds = 100;
+    // --------------------------------------------------------------------------------
+    // Start crush effect
+
+    const crushTimeInMilliseconds = crushInterval;
     const crushIntervalTimer = Time.setInterval(shouldStartCrush, crushTimeInMilliseconds);
     var crushIndex = 0;
 
+    // Hide all
+    for (var i=0; i<crushObjList.length; ++i)
+        crushObjList[i].hidden = true;
+
     function shouldStartCrush() {
 
-        runCrushInterval(crushPoolList, crushIndex++);
+        runCrushInterval(crushObjList, crushIndex++, crushDuration, 
+            crushVarianceX, crushVarianceY, crushVarianceZ);
 
-        if (crushIndex >= crushPoolList.length) {
-
+        if (crushIndex >= crushObjList.length)
             Time.clearInterval(crushIntervalTimer);
-        }
     }
 }
 
