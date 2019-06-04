@@ -124,10 +124,29 @@ applyRotationBounce(gyozaBackPlane2, 20, 40, 1000);
 applyParalaxMovement(frontRoot, backRoot, 0.1, 0.1);
 
 // Init food feeder
-const FOOD_FEEDER_RANGE = 50.0;
+const foodFeederArgs = {
+
+    range: 50.0,
+
+    feedVariantX: 2.0,
+    feedVariantY: 2.0,
+    yAngleVariant: 180.0,
+
+    FEED_SET_COUNT: 8,
+
+    feedInterval: 200,
+    feedDuration: 400,
+
+    crushDuration: 300,
+    crushInterval: 100,
+
+    crushVarianceX: 7.0,
+    crushVarianceY: 7.0,
+    crushVarianceZ: 7.0,
+}
 
 foodFeederRoot0.hidden = true;
-initFoodFeeder(testyPoolList, crushPoolList, FOOD_FEEDER_RANGE);
+initFoodFeeder(testyPoolList, crushPoolList, foodFeederArgs);
 
 // --------------------------------------------------------------------------------
 // @ FACE DETECTED
@@ -483,25 +502,9 @@ function hideBubble(obj) {
 // --------------------------------------------------------------------------------
 // Food feeder
 
-function initFoodFeeder(foodObjList, crushObjList, range) {
+function initFoodFeeder(foodObjList, crushObjList, args) {
 
-    // Parameters
-    var feedVariantX = 2.0;
-    var feedVariantY = 2.0;
-    var yAngleVariant = 180.0;
-
-    const FEED_SET_COUNT = 8;
     var curSet = 0;
-
-    const feedInterval = 200;
-    const feedDuration = 400;
-
-    const crushDuration = 300;
-    const crushInterval = 100;
-
-    const crushVarianceX = 7.0;
-    const crushVarianceY = 7.0;
-    const crushVarianceZ = 7.0;
 
     // Create object list from randrom number
 
@@ -539,8 +542,8 @@ function initFoodFeeder(foodObjList, crushObjList, range) {
     
     function runFeedInterval(objList, index, duration) {
 
-        if (index == FEED_SET_COUNT - 1)
-            curSet = (curSet == 0) ? FEED_SET_COUNT : 0; 
+        if (index == args.FEED_SET_COUNT - 1)
+            curSet = (curSet == 0) ? args.FEED_SET_COUNT : 0; 
 
         // Manipulate position transition
 
@@ -552,13 +555,13 @@ function initFoodFeeder(foodObjList, crushObjList, range) {
 
         var feedTimeDriver = Animation.timeDriver(shootFoodInterval);
  
-        const txSamp = Animation.samplers.easeInOutQuad(xPointList[index + curSet] * feedVariantX, 0.0);
+        const txSamp = Animation.samplers.easeInOutQuad(xPointList[index + curSet] * args.feedVariantX, 0.0);
         const txAnim = Animation.animate(feedTimeDriver, txSamp);
 
-        const tySamp = Animation.samplers.easeInOutQuad(yPointList[index + curSet] * feedVariantY, 0.0);
+        const tySamp = Animation.samplers.easeInOutQuad(yPointList[index + curSet] * args.feedVariantY, 0.0);
         const tyAnim = Animation.animate(feedTimeDriver, tySamp);
 
-        const tzSamp = Animation.samplers.easeInOutQuad(range, 0.0);
+        const tzSamp = Animation.samplers.easeInOutQuad(args.range, 0.0);
         const tzAnim = Animation.animate(feedTimeDriver, tzSamp);
         
         // Show object
@@ -578,7 +581,7 @@ function initFoodFeeder(foodObjList, crushObjList, range) {
         // Manipulate angle
         objList[index].transform.rotationX = 0.0;
         objList[index].transform.rotationY = 0.0;
-        objList[index].transform.rotationZ = yAngleList[index] * yAngleVariant;
+        objList[index].transform.rotationZ = yAngleList[index] * args.yAngleVariant;
     }
 
     // --------------------------------------------------------------------------------
@@ -620,7 +623,7 @@ function initFoodFeeder(foodObjList, crushObjList, range) {
 
     // --------------------------------------------------------------------------------
     // Start food feeder effect
-    const feederTimeInMilliseconds = feedInterval;
+    const feederTimeInMilliseconds = args.feedInterval;
     const feederIntervalTimer = Time.setInterval(shouldStartFeed, feederTimeInMilliseconds);
     var feedIndex = 0;
 
@@ -630,7 +633,7 @@ function initFoodFeeder(foodObjList, crushObjList, range) {
 
     function shouldStartFeed() {
 
-        runFeedInterval(foodObjList, feedIndex++, feedDuration);
+        runFeedInterval(foodObjList, feedIndex++, args.feedDuration);
 
         if (feedIndex >= foodObjList.length)
             Time.clearInterval(feederIntervalTimer);
@@ -639,7 +642,7 @@ function initFoodFeeder(foodObjList, crushObjList, range) {
     // --------------------------------------------------------------------------------
     // Start crush effect
 
-    const crushTimeInMilliseconds = crushInterval;
+    const crushTimeInMilliseconds = args.crushInterval;
     const crushIntervalTimer = Time.setInterval(shouldStartCrush, crushTimeInMilliseconds);
     var crushIndex = 0;
 
@@ -649,8 +652,8 @@ function initFoodFeeder(foodObjList, crushObjList, range) {
 
     function shouldStartCrush() {
 
-        runCrushInterval(crushObjList, crushIndex++, crushDuration, 
-            crushVarianceX, crushVarianceY, crushVarianceZ);
+        runCrushInterval(crushObjList, crushIndex++, args.crushDuration, 
+            args.crushVarianceX, args.crushVarianceY, args.crushVarianceZ);
 
         if (crushIndex >= crushObjList.length)
             Time.clearInterval(crushIntervalTimer);
