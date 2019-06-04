@@ -140,7 +140,7 @@ const foodFeederArgs = {
 
     FEED_SET_COUNT: 16,
 
-    feedInterval: 300,
+    feedInterval: 200,
     feedDuration: 800,
 
     crushDuration: 300,
@@ -213,7 +213,7 @@ function onFaceUntracked(faceIndex) {
         curBubble = bubbleList0[currentBibbleIndex];
     else if (faceIndex == 1)
         curBubble = bubbleList1[currentBibbleIndex];
-
+ 
     hideBubble(curBubble);
 
     if (! (++currentBibbleIndex < BUBBLE_SIZE))
@@ -521,7 +521,8 @@ function initFoodFeeder(foodObjList, crushObjList, args) {
         -5.93434, 4.94540, 5.72991, -6.85919, -4.76642, 2.35872, -3.66115, 2.37872, 2.26890, -6.83019
     ];
     var yAngleList = [
-        0.88630, -0.34092, -0.36846, 0.48486, -0.67216, 0.76679, -0.03117, 0.98991, 0.38995, -0.14609
+        0.88630, -0.34092, -0.36846, 0.48486, -0.67216, 0.76679, -0.03117, 0.98991, 0.38995, -0.14609,
+        0.80563, -0.07388, 0.56158, -0.68193, -0.38198, 0.07115, -0.72906, -0.09344, 0.37989, 0.87110
     ];
      
     var crushYAngleList0 = [
@@ -530,7 +531,7 @@ function initFoodFeeder(foodObjList, crushObjList, args) {
 
     var crushYAngleList1 = [
         0.89408, -0.70547, 0.91741, -0.60386, 0.20676,-0.97222, 0.50191, 0.53523, -0.42530, 0.93437
-    ];
+    ]; 
 
     var crushNormDirList = [];
     for (var i=0; i<crushYAngleList0.length; ++i) {
@@ -545,8 +546,6 @@ function initFoodFeeder(foodObjList, crushObjList, args) {
     // Feeder efx function
     
     function runFeedInterval(objList, index, duration) {
-
-        Diagnostics.log("index: " + index); 
 
         // Manipulate position transition
         const shootFoodInterval = {
@@ -567,8 +566,8 @@ function initFoodFeeder(foodObjList, crushObjList, args) {
         const tzAnim = Animation.animate(feedTimeDriver, tzSamp);
         
         // Show object
-        objList[index].hidden = false;
- 
+        objList[index].hidden = false; 
+            
         objList[index].transform.x = txAnim;
         objList[index].transform.y = tyAnim;
         objList[index].transform.z = tzAnim;
