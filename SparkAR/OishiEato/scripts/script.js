@@ -73,8 +73,6 @@ testyPoolList.push(Scene.root.find('testy13'));
 testyPoolList.push(Scene.root.find('testy14'));
 testyPoolList.push(Scene.root.find('testy15'));
 
-var crushRoot = Scene.root.find('crushPool');
-
 var crushPoolList = [];
 crushPoolList.push(Scene.root.find('crush0'));
 crushPoolList.push(Scene.root.find('crush1'));
@@ -522,6 +520,10 @@ function initFoodFeeder(foodObjList, crushObjList, args) {
         0.88630, -0.34092, -0.36846, 0.48486, -0.67216, 0.76679, -0.03117, 0.98991, 0.38995, -0.14609,
         0.80563, -0.07388, 0.56158, -0.68193, -0.38198, 0.07115, -0.72906, -0.09344, 0.37989, 0.87110
     ];
+    var isFoodFlip = [
+        1, 1, 0, 0, 0, 1, 0, 0, 1, 0,
+        1, 1, 1, 0, 0, 0, 1, 0, 1, 0
+    ];
      
     var crushYAngleList0 = [
         -0.08104, 0.44314, 0.52326, -0.30244, 0.82356, -0.26104, -0.85587, 0.80953, 0.90391, -0.21765
@@ -579,7 +581,13 @@ function initFoodFeeder(foodObjList, crushObjList, args) {
 
         // Manipulate angle
         objList[index].transform.rotationX = 0.0;
-        objList[index].transform.rotationY = 0.0;
+
+        // Flip randomly
+        if (isFoodFlip[index] == 1)
+            objList[index].transform.rotationY = 180.0;
+        else
+            objList[index].transform.rotationY = 0.0;
+        
         objList[index].transform.rotationZ = yAngleList[index] * args.yAngleVariant;
     }
 
@@ -596,8 +604,6 @@ function initFoodFeeder(foodObjList, crushObjList, args) {
         };
         var crushTimeDriver = Animation.timeDriver(crushInterval);
 
-        Diagnostics.log("crushNormDirList.length: " + crushNormDirList.length);
-        
         const cxSamp = Animation.samplers.easeInOutQuad(0, crushNormDirList[index][0] * varianceX);
         const cxAnim = Animation.animate(crushTimeDriver, cxSamp);
 
@@ -628,8 +634,6 @@ function initFoodFeeder(foodObjList, crushObjList, args) {
     const feederIntervalTimer = Time.setInterval(shouldStartFeed, feederTimeInMilliseconds);
     var feedIndex = 0;
 
-    Diagnostics.log("foodObjList: " + foodObjList.length);
- 
     // Hide all
     for (var i=0; i<foodObjList.length; ++i)
         foodObjList[i].hidden = true;
@@ -655,11 +659,15 @@ function initFoodFeeder(foodObjList, crushObjList, args) {
 
     function shouldStartCrush() {
 
+        if (crushIndex >= crushObjList.length) {
+
+            Time.clearInterval(crushIntervalTimer);
+            return;
+        }
+
         runCrushInterval(crushObjList, crushIndex++, args.crushDuration, 
             args.crushVarianceX, args.crushVarianceY, args.crushVarianceZ);
 
-        if (crushIndex >= crushObjList.length)
-            Time.clearInterval(crushIntervalTimer);
     }
 }
 
