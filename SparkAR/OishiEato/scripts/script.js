@@ -89,6 +89,7 @@ const facePoint0 = Patches.getVectorValue("facePoint0");
 const facePoint1 = Patches.getVectorValue("facePoint1");
 
 const frontRoot = Scene.root.find('front_root');
+const frontObj0 = Scene.root.find('gyoza_front_plane0');
 const backRoot = Scene.root.find('back_root');
 
 const MOUTH_OPENNESS_MIN_THRESHOLD = 0.1;
@@ -123,7 +124,8 @@ const gyozaBackPlane2 = Scene.root.find('gyoza_back_plane2');
 applyBalloonMovement(gyozaFrontPlane0, 0.6, 0.4, 0.2, 1500, -3000, 4500);
 applyRotationBounce(gyozaBackPlane1, 50, 20, 1800); // The small one
 applyRotationBounce(gyozaBackPlane2, 0, 50, 1600); // The big one
-applyParalaxMovement(frontRoot, backRoot, 0.1, 0.1);
+
+applyParalaxMovement(undefined, backRoot, 0.1, 0.1);
 
 // Init food feeder
 const foodFeederArgs = {
@@ -378,10 +380,17 @@ function applyBalloonMovement(obj, rx, ry, rz, tx, ty, tz) {
 
 function applyParalaxMovement(fLayer, bLayer, fw, bw) {
 
-    fLayer.transform.x = Reactive.mul(facePoint0.x, fw);
-    fLayer.transform.y = Reactive.mul(facePoint0.y, fw);
-    bLayer.transform.x = Reactive.mul(facePoint0.x, -bw);
-    bLayer.transform.y = Reactive.mul(facePoint0.y, -bw);
+    if (fLayer != undefined) {
+
+        fLayer.transform.x = Reactive.mul(facePoint0.x, fw);
+        fLayer.transform.y = Reactive.mul(facePoint0.y, fw);
+    }
+
+    if (bLayer != undefined) {
+
+        bLayer.transform.x = Reactive.mul(facePoint0.x, -bw);
+        bLayer.transform.y = Reactive.mul(facePoint0.y, -bw);
+    }
 }
 
 function applyRotationBounce(obj, minAngle, maxAngle, duration) {
