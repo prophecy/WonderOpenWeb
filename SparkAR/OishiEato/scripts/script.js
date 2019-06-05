@@ -196,7 +196,7 @@ function onFaceTracked(faceIndex) {
     // Check is in front of the other
     if (!isBubbleVisible) {
 
-        showBubble(curBubble, curFacePoint, X_SIDE_WEIGHT, BUBBLE_POSITION_Y, TARGET_BUBBLE_SCALE);
+        showBubble(curBubble, curFacePoint, X_SIDE_WEIGHT, BUBBLE_POSITION_Y, TARGET_BUBBLE_SCALE, true);
         curFaceOwnBubble = faceIndex;
     }
     
@@ -431,7 +431,7 @@ function applyRotationBounce(obj, minAngle, maxAngle, duration) {
 // --------------------------------------------------------------------------------
 // Bubble animation
 
-function showBubble(obj, facePoint, xSideWeight, positionY, targetBubbleScale) { 
+function showBubble(obj, facePoint, xSideWeight, positionY, targetBubbleScale, isAlwaysLeft) { 
 
     const facePointX = facePoint.x.pinLastValue(); 
     const facePointY = facePoint.y.pinLastValue();
@@ -451,6 +451,8 @@ function showBubble(obj, facePoint, xSideWeight, positionY, targetBubbleScale) {
 
     // Use this value to select bubble showing side
     var xSideNorm = -1.0 * (facePointX / Math.abs(facePointX));
+    if (isAlwaysLeft)
+        xSideNorm = 1.0;
 
     var shownBubbleX = range * xSideNorm * xSideWeight;
 
