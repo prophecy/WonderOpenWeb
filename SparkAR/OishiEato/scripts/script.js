@@ -10,6 +10,7 @@ const Reactive = require('Reactive');
 const Patches = require('Patches');
 const Animation = require('Animation');
 const Time = require('Time');
+const Networking = require('Networking');
 
 // --------------------------------------------------------------------------------
 // SHARED VARS & CALLBACKS
@@ -120,6 +121,22 @@ const gyozaBackPlane2 = Scene.root.find('gyoza_back_plane2');
 // --------------------------------------------------------------------------------
 // @ START
 
+// Get theme
+var GET_THEME_URL = "https://dev.oishidrink.com/eato/asset/getTheme.aspx";
+getThemeData(GET_THEME_URL, function(data, err) { 
+     
+    if (!!data) {
+        
+        Diagnostics.log("theme: "  + data.theme);
+        Diagnostics.log("face: " + data.face);
+        Diagnostics.log("product: " + data.product);
+    }
+    else {
+
+        Diagnostics.log("err: " + JSON.stringify(err));
+    }
+});
+ 
 // Handle env obj movements
 applyBalloonMovement(gyozaFrontPlane0, 0.6, 0.4, 0.2, 1500, -3000, 4500);
 applyRotationBounce(gyozaBackPlane1, 50, 20, 1800); // The small one
@@ -683,12 +700,48 @@ function initFoodFeeder(foodObjList, crushObjList, args) {
 }
 
 // --------------------------------------------------------------------------------
-// HTTP REQUEST
+// NETWORKING
 // --------------------------------------------------------------------------------
 
+function getThemeData(url, callback) {
 
-// Log mouth openness value
+	const request = {
+		method: 'GET',
+		headers: { 'Content-type': 'application/json' }
+	};
+    
+    Networking.fetch(url, request).then(function(result) {
 
- 
-//handlePatternModule();
+        // Check the status of the result
+        // (https://developer.mozilla.org/en-US/docs/Web/HTTP/Status)
+        if ((result.status >= 200) && (result.status < 300)) {
+    
+            Diagnostics.log('HTTP request success');
+            
+            // If the request was successful, chain the JSON forward
+            return result.json();
+        }
+    
+        // If the request was not successful, throw an error
+        throw new Error('HTTP status code - ' + result.status);
+    
+    }).then(function(json) {
+    
+        // Log the JSON obtained by the successful request
+        Diagnostics.log('Successfully Get - ' + JSON.stringify(json));
+
+        if (callback != undefined)
+            callback(json, null);
+
+    }).catch(function(error) {
+    
+        // Log any errors that may have happened with the request
+        Diagnostics.log('error.message: ' + error.message);
+        Diagnostics.log('error: ' + error);
+
+        if (callback != undefined)
+            callback(null, error);
+    });
+}
+
 
