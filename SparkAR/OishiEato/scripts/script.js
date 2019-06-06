@@ -360,15 +360,15 @@ function onFaceTracked(faceIndex) {
     var curBubble = undefined;
     var curFacePoint = undefined;
 
+    Diagnostics.log("Face #" + faceIndex + " is tracked");
+
     if (faceIndex == 0) {
 
-        Diagnostics.log("Face #0 is tracked");
         curBubble = bubbleList0[currentBibbleIndex];
         curFacePoint = facePoint0;
     }
     else if (faceIndex == 1) {
 
-        Diagnostics.log("Face #1 is tracked");
         curBubble = bubbleList1[currentBibbleIndex];
         curFacePoint = facePoint1;
     }
@@ -387,6 +387,8 @@ function onFaceUntracked(faceIndex) {
 
     var curBubble = undefined;
  
+    Diagnostics.log("Face #" + faceIndex + " is untracked");
+
     if (faceIndex == 0)
         curBubble = bubbleList0[currentBibbleIndex];
     else if (faceIndex == 1)
