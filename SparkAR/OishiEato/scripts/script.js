@@ -195,14 +195,10 @@ Diagnostics.watch("Mouth Center X ", FaceTracking.face(0).mouth.center.x);
 Diagnostics.watch("Mouth Center Y ", FaceTracking.face(0).mouth.center.y);
 Diagnostics.watch("Mouth Center Z ", FaceTracking.face(0).mouth.center.z);
 
+// Toggle show/hidden debug panel
 TouchGestures.onLongPress().subscribe(function (gesture) {
 
-    Diagnostics.log("LongPress new value: " + gesture.newValue);
-
     var isHidden = dbgCanvas.hidden.pinLastValue();
-
-    Diagnostics.log("isHidden: " + isHidden);
-
     dbgCanvas.hidden = !isHidden;
 });
 
