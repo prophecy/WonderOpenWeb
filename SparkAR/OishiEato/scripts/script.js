@@ -1,7 +1,10 @@
 
 // --------------------------------------------------------------------------------
-// IMPORT EXTERNAL MODULES
+// SHARED VARS & PARAMETERS
 // --------------------------------------------------------------------------------
+
+// --------------------------------------------------------------------------------
+// IMPORT EXTERNAL MODULES
 
 const Scene = require('Scene');
 const Diagnostics = require('Diagnostics');
@@ -11,18 +14,11 @@ const Patches = require('Patches');
 const Animation = require('Animation');
 const Time = require('Time');
 const Networking = require('Networking');
-
-// --------------------------------------------------------------------------------
-// SHARED VARS & CALLBACKS
-// --------------------------------------------------------------------------------
-
-// Todo: Remove these
-var feedTimeDriverList = [];
-var crushTimeDriverList = [];
+const Materials = require('Materials');
+const Textures = require('Textures');
 
 // --------------------------------------------------------------------------------
 // SCENE DATABASE
-// --------------------------------------------------------------------------------
 
 // Handle bubbles of face #0
 var bubbleList0 = [];
@@ -89,40 +85,157 @@ crushPoolList.push(Scene.root.find('crush9'));
 const facePoint0 = Patches.getVectorValue("facePoint0");
 const facePoint1 = Patches.getVectorValue("facePoint1");
 
+const prodRoot = Scene.root.find('prod_root');
+
+const prodPlane0 = Scene.root.find('prod_plane0');
+const prodPlane1 = Scene.root.find('prod_plane1');
+
+const prodPlane0Mesh = Scene.root.find('prod_plane0_mesh');
+const prodPlane1Mesh = Scene.root.find('prod_plane1_mesh');
+
 const frontRoot = Scene.root.find('front_root');
-const frontObj0 = Scene.root.find('gyoza_front_plane0');
-const backRoot = Scene.root.find('back_root');
+
+// --------------------------------------------------------------------------------
+// RESOURCES for GYOZA THEME
+
+const gyozaFrontPlane0 = Scene.root.find('gyoza_front_plane0');
+const gyozaFrontPlane1 = Scene.root.find('gyoza_front_plane1');
+
+// --------------------------------------------------------------------------------
+// URL
+var GET_THEME_URL = "https://dev.oishidrink.com/eato/asset/getTheme.aspx";
+
+// --------------------------------------------------------------------------------
+// SHARED VARS & CALLBACKS
 
 const MOUTH_OPENNESS_MIN_THRESHOLD = 0.1;
 const MOUTH_CLOSSNESS_MAX_THRESHOLD = 0.07;
 
-// --------------------------------------------------------------------------------
-// THEME VARS
-// --------------------------------------------------------------------------------
+var feedTimeDriverList = [];
+var crushTimeDriverList = [];
 
-// GYOZA
-const gyozaFrontPlane0 = Scene.root.find('gyoza_front_plane0');
-const gyozaBackPlane1 = Scene.root.find('gyoza_back_plane1');
-const gyozaBackPlane2 = Scene.root.find('gyoza_back_plane2');
+var currentData = {};
+
+// Create lookup table between SERVER data and texture name
+const PROD_NAME_LOOKUP_TABLE = {
+
+    gyoza_pork_5pcs: "Gyoza Pork 5pcs",
+    gyoza_pork_12pcs: "Gyoza Pork12pcs",
+    gyoza_takoyaki_5pcs: "Gyoza Takoyaki 5pcs",
+    gyoza_chicken_12pcs: "Gyoza Chicken 12pcs",
+    gyoza_shrimp_12pcs: "Gyoza Shrimp12pcs",
+
+    sandwich_alaska_wakame: "Sandwich Alaska&Wakame",
+    sandwich_tuna: "Sandwich Tuna",
+    sandwich_ham_egg: "Sandwich Ham&Egg",
+
+    crabstick_alaska: "Crab Stick Alaska",
+    crabstick_kamaboko: "Crab Stick Kamaboko",
+
+    takoyaki: "Tokoyaki",
+
+    meal_yakisoba: "Meal Yakisoba",
+    meal_clams: "Meal Clams",
+
+    npd_gyoza_yuzu: "NPD Gyoza Yuzu",
+    npd_sandwich_crabstick_wasabi: "NPD Sandwich Crabstick &Wasabi",
+    npd_meal_in_7_11: "NPD Meal in 7-11",
+    npd_gyoza_pork_mala: "NPD Gyoza Pork Mala",
+}
+
+const PROD_TEX_LOOKUP_TABLE = {
+
+    gyoza_pork_5pcs: "gyoza_prod_tex0",
+    gyoza_pork_12pcs: "gyoza_prod_tex0",
+    gyoza_takoyaki_5pcs: "gyoza_prod_tex0",
+    gyoza_chicken_12pcs: "gyoza_prod_tex0",
+    gyoza_shrimp_12pcs: "gyoza_prod_tex0",
+
+    sandwich_alaska_wakame: "sandwich_prod_tex0",
+    sandwich_tuna: "sandwich_prod_tex0",
+    sandwich_ham_egg: "sandwich_prod_tex0",
+
+    crabstick_alaska: "not_found_tex",
+    crabstick_kamaboko: "not_found_tex",
+
+    takoyaki: "not_found_tex",
+
+    meal_yakisoba: "not_found_tex",
+    meal_clams: "not_found_tex",
+
+    npd_gyoza_yuzu: "not_found_tex",
+    npd_sandwich_crabstick_wasabi: "not_found_tex",
+    npd_meal_in_7_11: "not_found_tex",
+    npd_gyoza_pork_mala: "not_found_tex",
+}
 
 // --------------------------------------------------------------------------------
 // SCENE LOGIC
 // --------------------------------------------------------------------------------
 
-//Diagnostics.watch("facePoint0 X ", facePoint0.x);
-//Diagnostics.watch("facePoint0 Y ", facePoint0.y);
-//Diagnostics.watch("facePoint0 Z ", facePoint0.z);
+// --------------------------------------------------------------------------------
+// @ DEBUGGING
 
-//Diagnostics.watch("Mouth Openness - ", FaceTracking.face(0).mouth.openness);
-//Diagnostics.watch("Mouth Center X ", FaceTracking.face(0).mouth.center.x);
-//Diagnostics.watch("Mouth Center Y ", FaceTracking.face(0).mouth.center.y);
-//Diagnostics.watch("Mouth Center Z ", FaceTracking.face(0).mouth.center.z);
+Diagnostics.watch("facePoint0 X ", facePoint0.x);
+Diagnostics.watch("facePoint0 Y ", facePoint0.y);
+Diagnostics.watch("facePoint0 Z ", facePoint0.z);
+
+Diagnostics.watch("Mouth Openness - ", FaceTracking.face(0).mouth.openness);
+Diagnostics.watch("Mouth Center X ", FaceTracking.face(0).mouth.center.x);
+Diagnostics.watch("Mouth Center Y ", FaceTracking.face(0).mouth.center.y);
+Diagnostics.watch("Mouth Center Z ", FaceTracking.face(0).mouth.center.z);
 
 // --------------------------------------------------------------------------------
 // @ START
 
+function initProduct() {
+
+    var prodName = currentData.product;
+    var prodKey = undefined;
+
+    var prodKeys = Object.keys(PROD_NAME_LOOKUP_TABLE);
+
+    //Diagnostics.log("prodKeys: " + prodKeys);
+
+    // Get product key (O(n))
+    for (var i=0; i<prodKeys.length; ++i) {
+
+        var key = prodKeys[i];
+
+        if (PROD_NAME_LOOKUP_TABLE[key] === prodName)
+            prodKey = key;
+    }
+
+    if (prodKey === undefined) {
+
+        Diagnostics.log("Product key not found!");
+        return;
+    }
+
+    Diagnostics.log("Got product key: " + prodKey);
+
+    // Get product texture
+    var texName = PROD_TEX_LOOKUP_TABLE[prodKey];
+
+    if (texName === undefined) {
+
+        Diagnostics.log("Texture name not found with key: " + prodKey);
+        return;
+    }
+     
+    Diagnostics.log("Got texture name: " + texName);
+
+    // Apply texture to product material
+    var prodMat = Materials.get("prod_mat0");
+    var prodTex = Textures.get(texName);
+    prodMat.diffuse = prodTex;
+
+    // Apply material to product object
+    prodPlane0Mesh.material = prodMat;
+    prodPlane1Mesh.material = prodMat; 
+}
+
 // Get theme
-var GET_THEME_URL = "https://dev.oishidrink.com/eato/asset/getTheme.aspx";
 getThemeData(GET_THEME_URL, function(data, err) { 
      
     if (!!data) {
@@ -130,19 +243,24 @@ getThemeData(GET_THEME_URL, function(data, err) {
         Diagnostics.log("theme: "  + data.theme);
         Diagnostics.log("face: " + data.face);
         Diagnostics.log("product: " + data.product);
+
+        // Update current data
+        currentData = data;
     }
     else {
 
         Diagnostics.log("err: " + JSON.stringify(err));
     }
+
+    initProduct();
 });
  
 // Handle env obj movements
 applyBalloonMovement(gyozaFrontPlane0, 0.6, 0.4, 0.2, 1500, -3000, 4500);
-applyRotationBounce(gyozaBackPlane1, 50, 20, 1800); // The small one
-applyRotationBounce(gyozaBackPlane2, 0, 50, 1600); // The big one
+applyRotationBounce(prodPlane0, 50, 20, 1800); // The small one
+applyRotationBounce(prodPlane1, 0, 50, 1600); // The big one
 
-applyParalaxMovement(undefined, backRoot, 0.1, 0.1);
+applyParalaxMovement(undefined, prodRoot, 0.1, 0.1);
 
 // Init food feeder
 const foodFeederArgs = {
@@ -711,7 +829,7 @@ function getThemeData(url, callback) {
 	};
     
     Networking.fetch(url, request).then(function(result) {
-
+    
         // Check the status of the result
         // (https://developer.mozilla.org/en-US/docs/Web/HTTP/Status)
         if ((result.status >= 200) && (result.status < 300)) {
@@ -728,19 +846,20 @@ function getThemeData(url, callback) {
     }).then(function(json) {
     
         // Log the JSON obtained by the successful request
-        Diagnostics.log('Successfully Get - ' + JSON.stringify(json));
+        //Diagnostics.log('Successfully Get - ' + JSON.stringify(json));
 
         if (callback != undefined)
             callback(json, null);
-
-    }).catch(function(error) {
     
+    }).catch(function(error) {
+    /*
         // Log any errors that may have happened with the request
         Diagnostics.log('error.message: ' + error.message);
         Diagnostics.log('error: ' + error);
 
         if (callback != undefined)
             callback(null, error);
+    */
     });
 }
 
