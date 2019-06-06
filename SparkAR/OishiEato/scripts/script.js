@@ -17,6 +17,7 @@ const Networking = require('Networking');
 const Materials = require('Materials');
 const Textures = require('Textures');
 const TouchGestures = require('TouchGestures');
+const CameraInfo = require('CameraInfo');
 
 // --------------------------------------------------------------------------------
 // SCENE DATABASE
@@ -204,6 +205,23 @@ TouchGestures.onLongPress().subscribe(function (gesture) {
 
 // --------------------------------------------------------------------------------
 // @ START
+
+// Send events for data analytics
+CameraInfo.isCapturingPhoto.monitor().subscribe(function(value) {
+
+    Diagnostics.log("Capturing Proto: value: " + value.newValue);
+
+    // If new value == true -> means begin
+    //        value == false -> means finish
+});
+
+CameraInfo.isRecordingVideo.monitor().subscribe(function(value) {
+
+    Diagnostics.log("Recording Video: value: " + value.newValue);
+
+    // If new value == true -> means begin
+    //        value == false -> means finish
+});
 
 function initProduct() {
 
