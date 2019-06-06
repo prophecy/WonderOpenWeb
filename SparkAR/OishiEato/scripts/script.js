@@ -220,8 +220,11 @@ function initProduct() {
 
         var key = prodKeys[i];
 
-        if (prodName.localeCompare(PROD_NAME_LOOKUP_TABLE[key]) == 0)
+        if (prodName.localeCompare(PROD_NAME_LOOKUP_TABLE[key]) == 0) {
+
             prodKey = key;
+            break;
+        }
     }
 
     if (prodKey === undefined) {
