@@ -91,9 +91,11 @@ const prodRoot = Scene.root.find('prod_root');
 
 const prodPlane0 = Scene.root.find('prod_plane0');
 const prodPlane1 = Scene.root.find('prod_plane1');
+const prodPlane2 = Scene.root.find('prod_plane2');
 
 const prodPlane0Mesh = Scene.root.find('prod_plane0_mesh');
 const prodPlane1Mesh = Scene.root.find('prod_plane1_mesh');
+const prodPlane2Mesh = Scene.root.find('prod_plane2_mesh');
 
 const frontRoot = Scene.root.find('front_root');
 
@@ -294,6 +296,7 @@ function initProduct() {
     // Apply material to product object
     prodPlane0Mesh.material = prodMat;
     prodPlane1Mesh.material = prodMat; 
+    prodPlane2Mesh.material = prodMat;
 }
 
 function initFrontFrame() {
@@ -342,6 +345,7 @@ getThemeData(GET_THEME_URL, function(data, err) {
 applyBalloonMovement(gyozaFrontPlane0, 0.6, 0.4, 0.2, 1500, -3000, 4500);
 applyRotationBounce(prodPlane0, 50, 20, 1800); // The small one
 applyRotationBounce(prodPlane1, 0, 50, 1600); // The big one
+applyRotationBounce(prodPlane2, 50, 20, 2000); // The big one
 
 applyParalaxMovement(undefined, prodRoot, 0.1, 0.1);
 
