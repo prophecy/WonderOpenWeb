@@ -106,8 +106,13 @@ const dbgCanvas = Scene.root.find('debugPanelCanvas');
 // --------------------------------------------------------------------------------
 // RESOURCES for GYOZA THEME
 
+const frontGyoza = Scene.root.find('front_gyoza');
+
 const gyozaFrontPlane0 = Scene.root.find('gyoza_front_plane0');
 const gyozaFrontPlane1 = Scene.root.find('gyoza_front_plane1');
+
+const gyozaFrontPlane0Mesh = Scene.root.find('gyoza_front_plane0_mesh');
+const gyozaFrontPlane1Mesh = Scene.root.find('gyoza_front_plane1_mesh');
 
 // --------------------------------------------------------------------------------
 // URL
@@ -123,6 +128,11 @@ var feedTimeDriverList = [];
 var crushTimeDriverList = [];
 
 var currentData = {};
+
+const PROD_MAT_NAME = "prod_mat0";
+
+const GYOZA_FRONT_MAT0 = "gyoza_front_mat0";
+const GYOZA_FRONT_MAT1 = "gyoza_front_mat1";
 
 // Create lookup table between SERVER data and texture name
 const PROD_NAME_LOOKUP_TABLE = {
@@ -180,6 +190,15 @@ const PROD_TEX_LOOKUP_TABLE = {
     not_found_tex: "not_found_tex",
 }
 
+const THEME_NAME_LOOKUP_TABLE = {
+
+    gyoza: "Gyoza",
+    sandwich: "Sandwich",
+    crabstick: "Crab Stick",
+    takoyaki: "Tokoyaki",
+    meal: "Meal",
+}
+
 // --------------------------------------------------------------------------------
 // SCENE LOGIC
 // --------------------------------------------------------------------------------
@@ -233,7 +252,7 @@ function initProduct() {
 
     //Diagnostics.log("prodKeys: " + prodKeys);
 
-    // Get product key (O(n))
+    // Search product key (O(n))
     for (var i=0; i<prodKeys.length; ++i) {
 
         var key = prodKeys[i];
@@ -268,13 +287,31 @@ function initProduct() {
     }
     
     // Apply texture to product material
-    var prodMat = Materials.get("prod_mat0");
+    var prodMat = Materials.get(PROD_MAT_NAME);
     var prodTex = Textures.get(texName);
     prodMat.diffuse = prodTex;
 
     // Apply material to product object
     prodPlane0Mesh.material = prodMat;
     prodPlane1Mesh.material = prodMat; 
+}
+
+function initFrontFrame() {
+
+    var themeName = currentData.theme;
+
+    if (themeName.localeCompare(THEME_NAME_LOOKUP_TABLE.gyoza) == 0) {
+
+        // Apply mat for Gyoza theme
+        gyozaFrontPlane0Mesh.material = Materials.get(GYOZA_FRONT_MAT0);
+        gyozaFrontPlane1Mesh.material = Materials.get(GYOZA_FRONT_MAT1);
+
+        // Show them all!
+        frontGyoza.hidden = false;
+    }
+    else {
+        Diagnostics.log("Theme key not found with value: '" + themeName + "'");
+    }
 }
 
 // Get theme
@@ -298,6 +335,7 @@ getThemeData(GET_THEME_URL, function(data, err) {
     }
 
     initProduct();
+    initFrontFrame();
 });
  
 // Handle env obj movements
