@@ -116,6 +116,41 @@ const gyozaFrontPlane1 = Scene.root.find('gyoza_front_plane1');
 const gyozaFrontPlane0Mesh = Scene.root.find('gyoza_front_plane0_mesh');
 const gyozaFrontPlane1Mesh = Scene.root.find('gyoza_front_plane1_mesh');
 
+const gyozaFrontTex0 = 'gyoza_front_tex0';
+const gyozaFrontTex1 = 'gyoza_front_tex1';
+
+// --------------------------------------------------------------------------------
+// RESOURCES for SANDWICH THEME
+
+const sandwichFrontFlag = Scene.root.find('sandwich_front_flag');
+const samdwichFrontCrabstick = Scene.root.find('sandwich_front_crabstick');
+const sandwichFront = Scene.root.find('sandwich_front');
+const sandwichFrontEgg = Scene.root.find('sandwich_front_egg');
+const sandwichFrontHam0 = Scene.root.find('sandwich_front_ham0');
+const sandwichFrontHam1 = Scene.root.find('sandwich_front_ham1');
+
+const sandwichFrontFlagMesh = Scene.root.find('sandwich_front_flag_mesh');
+const sandwichFrontCrabstickMesh = Scene.root.find('sandwich_front_crabstick_mesh');
+const sandwichFrontMesh = Scene.root.find('sandwich_front_mesh');
+const sandwichFrontEggMesh = Scene.root.find('sandwich_front_egg_mesh');
+const sandwichFrontHam0Mesh = Scene.root.find('sandwich_front_ham0_mesh');
+const sandwichFrontHam1Mesh = Scene.root.find('sandwich_front_ham1_mesh');
+
+const sandwichFragTex = "sandwich_flag_tex";
+const sandwichFullTex = "sandwich_full_tex";
+const sandwichHalfTex = "sandwich_half_tex";
+const sandwichEggFullTex = "sandwich_egg_full_tex";
+const sandwichEggHalfTex = "sandwich_egg_helf_tex";
+const sandwichHamFullTex = "sandwich_ham_full_tex";
+const sandwichHamHalfTex = "sandwich_ham_half_tex";
+const sandwichCrabstickVibTex = "sandwich_crabstick_vib_tex";
+const sandwichCrabstickFullTex = "sandwich_crabstick_full_tex";
+const sandwichCrabstickHalfTex = "sandwich_crabstick_half_tex";
+const sandwichCrush0Tex = "sandwich_crush_0_tex";
+const sandwichCrush1Tex = "sandwich_crush_1_tex";
+const sandwichGlassesTex = "sandwich_glasses_tex";
+const sandwichSwirlTex = "sandwich_swirl_tex";
+
 // --------------------------------------------------------------------------------
 // URL
 var GET_THEME_URL = "https://dev.oishidrink.com/eato/asset/getTheme.aspx";
@@ -133,8 +168,10 @@ var currentData = {};
 
 const PROD_MAT_NAME = "prod_mat0";
 
-const GYOZA_FRONT_MAT0 = "gyoza_front_mat0";
-const GYOZA_FRONT_MAT1 = "gyoza_front_mat1";
+const FRONT_MAT_LIST = [
+    "front_mat0", "front_mat1", "front_mat2", "front_mat3",
+    "front_mat4", "front_mat5", "front_mat6", "front_mat7"
+];
 
 // Create lookup table between SERVER data and texture name
 const PROD_NAME_LOOKUP_TABLE = {
@@ -302,18 +339,37 @@ function initProduct() {
 function initFrontFrame() {
 
     var themeName = currentData.theme;
+/*
+    if (themeName.localeCompare(THEME_NAME_LOOKUP_TABLE.gyoza) == 0)
+        showGyoza();
+    else if (themeName.localeCompare(THEME_NAME_LOOKUP_TABLE.sandwich) == 0)
+        showSandwich();
+    else
+        Diagnostics.log("Theme key not found with value: '" + themeName + "'");
+*/
 
-    if (themeName.localeCompare(THEME_NAME_LOOKUP_TABLE.gyoza) == 0) {
+    showSandwich();
+
+    function showGyoza() {
 
         // Apply mat for Gyoza theme
-        gyozaFrontPlane0Mesh.material = Materials.get(GYOZA_FRONT_MAT0);
-        gyozaFrontPlane1Mesh.material = Materials.get(GYOZA_FRONT_MAT1);
+        gyozaFrontPlane0Mesh.material = getMaterialWithDiffuse(FRONT_MAT_LIST[0], gyozaFrontTex0);
+        gyozaFrontPlane1Mesh.material = getMaterialWithDiffuse(FRONT_MAT_LIST[1], gyozaFrontTex1);
 
         // Show them all!
         frontGyoza.hidden = false;
     }
-    else {
-        Diagnostics.log("Theme key not found with value: '" + themeName + "'");
+
+    function showSandwich() {
+
+        // Apply mat for sandwich theme
+        var curMatIndex = 0;
+        sandwichFrontFlagMesh.material = getMaterialWithDiffuse(FRONT_MAT_LIST[curMatIndex++], sandwichFragTex);
+        sandwichFrontCrabstickMesh.material = getMaterialWithDiffuse(FRONT_MAT_LIST[curMatIndex++], sandwichCrabstickVibTex);
+        sandwichFrontMesh.material = getMaterialWithDiffuse(FRONT_MAT_LIST[curMatIndex++], sandwichFullTex);
+        sandwichFrontEggMesh.material = getMaterialWithDiffuse(FRONT_MAT_LIST[curMatIndex++], sandwichEggFullTex);
+        sandwichFrontHam0Mesh.material = getMaterialWithDiffuse(FRONT_MAT_LIST[curMatIndex++], sandwichHamFullTex);
+        sandwichFrontHam1Mesh.material = getMaterialWithDiffuse(FRONT_MAT_LIST[curMatIndex++], sandwichHamFullTex);
     }
 }
 
@@ -479,6 +535,15 @@ handleMouthOpeningState(
 // --------------------------------------------------------------------------------
 // GENERIC FUNCTIONS
 // --------------------------------------------------------------------------------
+
+function getMaterialWithDiffuse(matName, texName) {
+
+    var mat = Materials.get(matName);
+    var tex = Textures.get(texName);
+
+    mat.diffuse = tex;
+    return mat;
+}
 
 // Handle mouth opennes
 
