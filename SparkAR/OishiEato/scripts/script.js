@@ -16,6 +16,7 @@ const Time = require('Time');
 const Networking = require('Networking');
 const Materials = require('Materials');
 const Textures = require('Textures');
+const TouchGestures = require('TouchGestures');
 
 // --------------------------------------------------------------------------------
 // SCENE DATABASE
@@ -95,6 +96,12 @@ const prodPlane1Mesh = Scene.root.find('prod_plane1_mesh');
 
 const frontRoot = Scene.root.find('front_root');
 
+// Debug
+const dbgTxtTheme = Scene.root.find('dbg_txt_theme');
+const dbgTxtFace = Scene.root.find('dbg_txt_face')
+const dbgTxtProd = Scene.root.find('dbg_txt_prod');
+const dbgCanvas = Scene.root.find('debugPanelCanvas');
+
 // --------------------------------------------------------------------------------
 // RESOURCES for GYOZA THEME
 
@@ -158,7 +165,7 @@ const PROD_TEX_LOOKUP_TABLE = {
     crabstick_alaska: "not_found_tex",
     crabstick_kamaboko: "not_found_tex",
 
-    takoyaki: "not_found_tex",
+    takoyaki: "takoyaki_prod_tex0",
 
     meal_yakisoba: "not_found_tex",
     meal_clams: "not_found_tex",
@@ -167,6 +174,9 @@ const PROD_TEX_LOOKUP_TABLE = {
     npd_sandwich_crabstick_wasabi: "not_found_tex",
     npd_meal_in_7_11: "not_found_tex",
     npd_gyoza_pork_mala: "not_found_tex",
+
+    // For development
+    not_found_tex: "not_found_tex",
 }
 
 // --------------------------------------------------------------------------------
@@ -185,6 +195,17 @@ Diagnostics.watch("Mouth Center X ", FaceTracking.face(0).mouth.center.x);
 Diagnostics.watch("Mouth Center Y ", FaceTracking.face(0).mouth.center.y);
 Diagnostics.watch("Mouth Center Z ", FaceTracking.face(0).mouth.center.z);
 
+TouchGestures.onLongPress().subscribe(function (gesture) {
+
+    Diagnostics.log("LongPress new value: " + gesture.newValue);
+
+    var isHidden = dbgCanvas.hidden.pinLastValue();
+
+    Diagnostics.log("isHidden: " + isHidden);
+
+    dbgCanvas.hidden = !isHidden;
+});
+
 // --------------------------------------------------------------------------------
 // @ START
 
@@ -192,6 +213,7 @@ function initProduct() {
 
     var prodName = currentData.product;
     var prodKey = undefined;
+    var texName = undefined;
 
     var prodKeys = Object.keys(PROD_NAME_LOOKUP_TABLE);
 
@@ -202,29 +224,32 @@ function initProduct() {
 
         var key = prodKeys[i];
 
-        if (PROD_NAME_LOOKUP_TABLE[key] === prodName)
+        if (prodName.localeCompare(PROD_NAME_LOOKUP_TABLE[key]) == 0)
             prodKey = key;
     }
 
     if (prodKey === undefined) {
 
-        Diagnostics.log("Product key not found!");
-        return;
+        Diagnostics.log("Product key not found with value: '" + prodName + "'");
+
+        texName = PROD_TEX_LOOKUP_TABLE.not_found_tex;
     }
+    else {
 
-    Diagnostics.log("Got product key: " + prodKey);
+        Diagnostics.log("Got product key: " + prodKey);
 
-    // Get product texture
-    var texName = PROD_TEX_LOOKUP_TABLE[prodKey];
-
-    if (texName === undefined) {
-
-        Diagnostics.log("Texture name not found with key: " + prodKey);
-        return;
+        // Get product texture
+        texName = PROD_TEX_LOOKUP_TABLE[prodKey];
+    
+        if (texName === undefined) {
+    
+            Diagnostics.log("Texture name not found with key: " + prodKey);
+            return;
+        }
+         
+        Diagnostics.log("Got texture name: " + texName);    
     }
-     
-    Diagnostics.log("Got texture name: " + texName);
-
+    
     // Apply texture to product material
     var prodMat = Materials.get("prod_mat0");
     var prodTex = Textures.get(texName);
@@ -240,9 +265,12 @@ getThemeData(GET_THEME_URL, function(data, err) {
      
     if (!!data) {
         
-        Diagnostics.log("theme: "  + data.theme);
-        Diagnostics.log("face: " + data.face);
-        Diagnostics.log("product: " + data.product);
+        //Diagnostics.log("theme: "  + data.theme);
+        //Diagnostics.log("face: " + data.face);
+        //Diagnostics.log("product: " + data.product);
+        dbgTxtTheme.text = data.theme;
+        dbgTxtFace.text = data.face;
+        dbgTxtProd.text = data.product;
 
         // Update current data
         currentData = data;
