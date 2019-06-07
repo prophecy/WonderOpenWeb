@@ -123,7 +123,6 @@ const gyozaFrontTex0 = 'gyoza_front_tex0';
 const gyozaFrontTex1 = 'gyoza_front_tex1';
 
 const headGyozaRoot = Scene.root.find('head_gyoza_root');
-
 const headHachimakiMesh = Scene.root.find("head_hachimaki_mesh");
 const headHachimakiTex = "head_hachimaki";
 
@@ -164,7 +163,6 @@ const sandwichGlassesTex = "sandwich_glasses_tex";
 const sandwichSwirlTex = "sandwich_swirl_tex";
 
 const headSandwichRoot = Scene.root.find("head_sandwich_root");
-
 const headGlassesMesh = Scene.root.find("head_glasses_mesh");
 const headGlassesTex = "head_glasses";
 const headSwirl0Mesh = Scene.root.find("head_swirl0_mesh");
@@ -189,6 +187,21 @@ const takoyakiFrontOishiMesh = Scene.root.find("takoyaki_front_oishi_mesh");
 const takoyakiFrontSnackTex = "takoyaki_front_snack_tex";
 const takoyakiFrontTakoTex = "takoyaki_front_tako_tex";
 const takoyakiFrontOishiTex = "takoyaki_front_oishi_tex";
+
+// Head, takoyaki
+const headTakoyakiRoot = Scene.root.find("head_takoyaki_root");
+const headTakoyakiCatEarsMesh = Scene.root.find("head_takoyaki_cat_ears_mesh");
+const headTakoyakiNoseMesh = Scene.root.find("head_takoyaki_nose_mesh");
+const headTakoyakiWhisker0Mesh = Scene.root.find("head_takoyaki_whisker0_mesh");
+const headTakoyakiWhisker1Mesh = Scene.root.find("head_takoyaki_whisker1_mesh");
+const headCatEarsTex = "head_takoyaki_cat_ears";
+const headNoseTex = "head_takoyaki_nose";
+const headWhiskerTex = "head_takoyaki_whiskers";
+
+// Head, takoyaki special
+const headTakoyakiSpecialRoot = Scene.root.find("head_takoyaki_spec_root");
+const headTakoyakiBigMesh = Scene.root.find("head_takoyaki_big_mesh");
+const headTakoyakiBigTex = "head_takoyaki_big";
 
 // --------------------------------------------------------------------------------
 // URL
@@ -433,7 +446,9 @@ function initFrontFrame() {
 function initHead() {
 
     //showGyoza();
-    showSandwich();
+    //showSandwich();
+    showTakoyaki();
+    //showTakoyakiSpecial();
 
     function showGyoza() {
 
@@ -458,15 +473,31 @@ function initHead() {
 
         headSandwichRoot.hidden = false;
 
-        // Apply face paint mat and tex
+        // Todo: Apply face paint mat and tex
     }
 
     function showTakoyaki() {
 
+        // Apply head mat and tex
+        var curMatIndex = 0;
+        headTakoyakiCatEarsMesh.material = getMaterialWithDiffuse(HEAD_MAT_LIST[curMatIndex++], headCatEarsTex);
+        headTakoyakiNoseMesh.material = getMaterialWithDiffuse(HEAD_MAT_LIST[curMatIndex++], headNoseTex);
+        headTakoyakiWhisker0Mesh.material = getMaterialWithDiffuse(HEAD_MAT_LIST[curMatIndex++], headWhiskerTex);
+        headTakoyakiWhisker1Mesh.material = getMaterialWithDiffuse(HEAD_MAT_LIST[curMatIndex++], headWhiskerTex);
+
+        headTakoyakiRoot.hidden = false;
+        
+        // Todo: Apply face pain mat and tex
     }
 
     function showTakoyakiSpecial() {
 
+        var curMatIndex = 0;
+        headTakoyakiBigMesh.material = getMaterialWithDiffuse(HEAD_MAT_LIST[curMatIndex++], headTakoyakiBigTex);
+
+        headTakoyakiSpecialRoot.hidden = false;
+
+        // Todo: Apply face pain mat and tex
     }
 
     function showCrabstick() {
