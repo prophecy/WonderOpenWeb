@@ -165,6 +165,9 @@ const sandwichSwirlTex = "sandwich_swirl_tex";
 const headSandwichRoot = Scene.root.find("head_sandwich_root");
 const headGlassesMesh = Scene.root.find("head_glasses_mesh");
 const headGlassesTex = "head_glasses";
+
+const headSwirl0 = Scene.root.find("head_swirl0");
+const headSwirl1 = Scene.root.find("head_swirl1");
 const headSwirl0Mesh = Scene.root.find("head_swirl0_mesh");
 const headSwirl1Mesh = Scene.root.find("head_swirl1_mesh");
 const headSwirlTex = "head_swirl";
@@ -513,6 +516,9 @@ function initHead() {
         headSandwichRoot.hidden = false;
 
         // Todo: Apply face paint mat and tex
+        
+        applySpinMovement(headSwirl0Mesh, 2000);
+        applySpinMovement(headSwirl1Mesh, 2000);
     }
 
     function showTakoyaki() {
@@ -811,6 +817,35 @@ function axisRotation(axis_x, axis_y, axis_z, angle_degrees) {
     var sin = Math.sin(angle_radians/2);
     return Reactive.rotation(
         cos, axis_x*sin, axis_y*sin, axis_z*sin);
+}
+
+function applySpinMovement(obj, duration) {
+
+    var time_driver = Animation.timeDriver({
+        durationMilliseconds: duration,
+        loopCount: Infinity
+    });
+    
+    // Create a rotation sampler using Rotation objects generated
+    // by the previously-defined axisRotation() method.
+    var rotation_sampler = Animation.samplers.polyline({
+        keyframes: [
+            axisRotation(0, 1, 0, 0),
+            axisRotation(0, 1, 0, 90),
+            axisRotation(0, 1, 0, 180),
+            axisRotation(0, 1, 0, 270),
+            axisRotation(0, 1, 0, 356)
+        ],
+        knots: [
+            0, 2, 4, 6, 8
+        ]
+    });
+
+    // Start the animation
+    var rotation_signal = Animation.animate(time_driver, rotation_sampler);
+    time_driver.start();
+
+    obj.transform.rotation = rotation_signal;
 }
 
 function applyBalloonMovement(obj, rx, ry, rz, tx, ty, tz) {
