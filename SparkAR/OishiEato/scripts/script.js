@@ -214,6 +214,13 @@ const headCrabstickHatTex = "head_crabstick_hat_tex";
 const headCrabstickScalfTex = "head_crabstick_scalf_tex";
 
 // --------------------------------------------------------------------------------
+// RESOURCES for RAMEN THEME
+
+const headRamenRoot = Scene.root.find("head_ramen_root");
+const headRamenEyesMesh = Scene.root.find("head_ramen_eyes_mesh");
+const headRamenEyesTex = "head_ramen_eyes_tex";
+
+// --------------------------------------------------------------------------------
 // URL
 var GET_THEME_URL = "https://dev.oishidrink.com/eato/asset/getTheme.aspx";
 
@@ -459,7 +466,8 @@ function initHead() {
     //showSandwich();
     //showTakoyaki();
     //showTakoyakiSpecial();
-    showCrabstick();
+    //showCrabstick();
+    showRamen();
 
     function showGyoza() {
 
@@ -522,6 +530,10 @@ function initHead() {
 
     function showRamen() {
 
+        var curMatIndex = 0;
+        headRamenEyesMesh.material = getMaterialWithDiffuse(HEAD_MAT_LIST[curMatIndex++], headRamenEyesTex);
+
+        headRamenRoot.hidden = false;
     }
 }
 
