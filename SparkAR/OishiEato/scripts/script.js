@@ -154,6 +154,25 @@ const sandwichGlassesTex = "sandwich_glasses_tex";
 const sandwichSwirlTex = "sandwich_swirl_tex";
 
 // --------------------------------------------------------------------------------
+// RESOURCES for TAKOYAKI THEME
+
+const frontTakoyaki = Scene.root.find('front_takoyaki');
+
+const takoyakiFrontSnack0 = Scene.root.find("takoyaki_front_snack0");
+const takoyakiFrontSnack1 = Scene.root.find("takoyaki_front_snack1");
+const takoyakiFrontTako = Scene.root.find("takoyaki_front_tako");
+const takoyakiFrontOishi = Scene.root.find("takoyaki_front_oishi");
+
+const takoyakiFrontSnack0Mesh = Scene.root.find("takoyaki_front_snack0_mesh");
+const takoyakiFrontSnack1Mesh = Scene.root.find("takoyaki_front_snack1_mesh");
+const takoyakiFrontTakoMesh = Scene.root.find("takoyaki_front_tako_mesh");
+const takoyakiFrontOishiMesh = Scene.root.find("takoyaki_front_oishi_mesh");
+
+const takoyakiFrontSnackTex = "takoyaki_front_snack_tex";
+const takoyakiFrontTakoTex = "takoyaki_front_tako_tex";
+const takoyakiFrontOishiTex = "takoyaki_front_oishi_tex";
+
+// --------------------------------------------------------------------------------
 // URL
 var GET_THEME_URL = "https://dev.oishidrink.com/eato/asset/getTheme.aspx";
 
@@ -346,16 +365,17 @@ function initFrontFrame() {
         showGyoza();
     else if (themeName.localeCompare(THEME_NAME_LOOKUP_TABLE.sandwich) == 0)
         showSandwich();
+    else if (themeName.localeCompare(THEME_NAME_LOOKUP_TABLE.takoyaki) == 0)
+        showTakoyaki();
     else
         Diagnostics.log("Theme key not found with value: '" + themeName + "'");
-
-    //showSandwich();
 
     function showGyoza() {
 
         // Apply mat for Gyoza theme
-        gyozaFrontPlane0Mesh.material = getMaterialWithDiffuse(FRONT_MAT_LIST[0], gyozaFrontTex0);
-        gyozaFrontPlane1Mesh.material = getMaterialWithDiffuse(FRONT_MAT_LIST[1], gyozaFrontTex1);
+        var curMatIndex = 0;
+        gyozaFrontPlane0Mesh.material = getMaterialWithDiffuse(FRONT_MAT_LIST[curMatIndex++], gyozaFrontTex0);
+        gyozaFrontPlane1Mesh.material = getMaterialWithDiffuse(FRONT_MAT_LIST[curMatIndex++], gyozaFrontTex1);
 
         // Show them all!
         frontGyoza.hidden = false;
@@ -373,6 +393,17 @@ function initFrontFrame() {
         sandwichFrontHam1Mesh.material = getMaterialWithDiffuse(FRONT_MAT_LIST[curMatIndex++], sandwichHamFullTex);
 
         frontSandwich.hidden = false;
+    }
+
+    function showTakoyaki() {
+
+        var curMatIndex = 0;
+        takoyakiFrontSnack0Mesh.material = getMaterialWithDiffuse(FRONT_MAT_LIST[curMatIndex++], takoyakiFrontSnackTex);
+        takoyakiFrontSnack1Mesh.material = getMaterialWithDiffuse(FRONT_MAT_LIST[curMatIndex++], takoyakiFrontSnackTex);
+        takoyakiFrontTakoMesh.material = getMaterialWithDiffuse(FRONT_MAT_LIST[curMatIndex++], takoyakiFrontTakoTex);
+        takoyakiFrontOishiMesh.material = getMaterialWithDiffuse(FRONT_MAT_LIST[curMatIndex++], takoyakiFrontOishiTex);
+
+        frontTakoyaki.hidden = false;
     }
 }
 
