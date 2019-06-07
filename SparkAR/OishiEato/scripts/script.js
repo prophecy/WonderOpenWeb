@@ -204,6 +204,16 @@ const headTakoyakiBigMesh = Scene.root.find("head_takoyaki_big_mesh");
 const headTakoyakiBigTex = "head_takoyaki_big";
 
 // --------------------------------------------------------------------------------
+// RESOURCES for CRABSTICK THEME
+
+const headCrabstickRoot = Scene.root.find("head_crabstick_root");
+const headCrabstickHatMesh = Scene.root.find("head_crabstick_hat_mesh");
+const headCrabstickScalfMesh = Scene.root.find("head_crabstick_scalf_mesh");
+
+const headCrabstickHatTex = "head_crabstick_hat_tex";
+const headCrabstickScalfTex = "head_crabstick_scalf_tex";
+
+// --------------------------------------------------------------------------------
 // URL
 var GET_THEME_URL = "https://dev.oishidrink.com/eato/asset/getTheme.aspx";
 
@@ -447,8 +457,9 @@ function initHead() {
 
     //showGyoza();
     //showSandwich();
-    showTakoyaki();
+    //showTakoyaki();
     //showTakoyakiSpecial();
+    showCrabstick();
 
     function showGyoza() {
 
@@ -502,6 +513,11 @@ function initHead() {
 
     function showCrabstick() {
 
+        var curMatIndex = 0;
+        headCrabstickHatMesh.material = getMaterialWithDiffuse(HEAD_MAT_LIST[curMatIndex++], headCrabstickHatTex);
+        headCrabstickScalfMesh.material = getMaterialWithDiffuse(HEAD_MAT_LIST[curMatIndex++], headCrabstickScalfTex);
+
+        headCrabstickRoot.hidden = false;
     }
 
     function showRamen() {
