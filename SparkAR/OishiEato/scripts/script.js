@@ -312,6 +312,16 @@ const THEME_NAME_LOOKUP_TABLE = {
     meal: "Meal",
 }
 
+const FACE_NAME_LOOKUP_TABLE = {
+
+    gyoza: "reserve face2",
+    sandwich: "reserve face3",
+    crabstick: "reserve face4",
+    takoyaki: "reserve face5",
+    takoyaki_special: "Takoyaki Face",
+    meal: "reserve face6",
+}
+
 // --------------------------------------------------------------------------------
 // SCENE LOGIC
 // --------------------------------------------------------------------------------
@@ -462,12 +472,22 @@ function initFrontFrame() {
 
 function initHead() {
 
-    //showGyoza();
-    //showSandwich();
-    //showTakoyaki();
-    //showTakoyakiSpecial();
-    //showCrabstick();
-    showRamen();
+    var faceName = currentData.face;
+
+    if (faceName.localeCompare(FACE_NAME_LOOKUP_TABLE.gyoza) == 0)
+        showGyoza();
+    else if (faceName.localeCompare(FACE_NAME_LOOKUP_TABLE.sandwich) == 0)
+        showSandwich();
+    else if (faceName.localeCompare(FACE_NAME_LOOKUP_TABLE.crabstick) == 0)
+        showCrabstick();
+    else if (faceName.localeCompare(FACE_NAME_LOOKUP_TABLE.takoyaki) == 0)
+        showTakoyaki();
+    else if (faceName.localeCompare(FACE_NAME_LOOKUP_TABLE.takoyaki_special) == 0)
+        showTakoyakiSpecial();
+    else if (faceName.localeCompare(FACE_NAME_LOOKUP_TABLE.meal) == 0)
+        showRamen();
+    else
+        Diagnostics.log("Face key not found with value: '" + faceName + "'");
 
     function showGyoza() {
 
