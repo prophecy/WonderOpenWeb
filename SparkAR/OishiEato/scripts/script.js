@@ -122,6 +122,8 @@ const gyozaFrontTex1 = 'gyoza_front_tex1';
 // --------------------------------------------------------------------------------
 // RESOURCES for SANDWICH THEME
 
+const frontSandwich = Scene.root.find('front_sandwich');
+
 const sandwichFrontFlag = Scene.root.find('sandwich_front_flag');
 const samdwichFrontCrabstick = Scene.root.find('sandwich_front_crabstick');
 const sandwichFront = Scene.root.find('sandwich_front');
@@ -339,16 +341,15 @@ function initProduct() {
 function initFrontFrame() {
 
     var themeName = currentData.theme;
-/*
+
     if (themeName.localeCompare(THEME_NAME_LOOKUP_TABLE.gyoza) == 0)
         showGyoza();
     else if (themeName.localeCompare(THEME_NAME_LOOKUP_TABLE.sandwich) == 0)
         showSandwich();
     else
         Diagnostics.log("Theme key not found with value: '" + themeName + "'");
-*/
 
-    showSandwich();
+    //showSandwich();
 
     function showGyoza() {
 
@@ -370,6 +371,8 @@ function initFrontFrame() {
         sandwichFrontEggMesh.material = getMaterialWithDiffuse(FRONT_MAT_LIST[curMatIndex++], sandwichEggFullTex);
         sandwichFrontHam0Mesh.material = getMaterialWithDiffuse(FRONT_MAT_LIST[curMatIndex++], sandwichHamFullTex);
         sandwichFrontHam1Mesh.material = getMaterialWithDiffuse(FRONT_MAT_LIST[curMatIndex++], sandwichHamFullTex);
+
+        frontSandwich.hidden = false;
     }
 }
 
