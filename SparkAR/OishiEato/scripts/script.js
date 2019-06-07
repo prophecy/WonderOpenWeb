@@ -87,6 +87,9 @@ crushPoolList.push(Scene.root.find('crush9'));
 const facePoint0 = Patches.getVectorValue("facePoint0");
 const facePoint1 = Patches.getVectorValue("facePoint1");
 
+const facemesh0 = Scene.root.find("facemesh0");
+const facemesh1 = Scene.root.find("facemesh1");
+
 const prodRoot = Scene.root.find('prod_root');
 
 const prodPlane0 = Scene.root.find('prod_plane0');
@@ -118,6 +121,13 @@ const gyozaFrontPlane1Mesh = Scene.root.find('gyoza_front_plane1_mesh');
 
 const gyozaFrontTex0 = 'gyoza_front_tex0';
 const gyozaFrontTex1 = 'gyoza_front_tex1';
+
+const headGyozaRoot = Scene.root.find('head_gyoza_root');
+
+const headHachimakiMesh = Scene.root.find("head_hachimaki_mesh");
+const headHachimakiTex = "head_hachimaki";
+
+const facePaintGyozaMat = Materials.get("face_paint_gyoza_mat");
 
 // --------------------------------------------------------------------------------
 // RESOURCES for SANDWICH THEME
@@ -152,6 +162,14 @@ const sandwichCrush0Tex = "sandwich_crush_0_tex";
 const sandwichCrush1Tex = "sandwich_crush_1_tex";
 const sandwichGlassesTex = "sandwich_glasses_tex";
 const sandwichSwirlTex = "sandwich_swirl_tex";
+
+const headSandwichRoot = Scene.root.find("head_sandwich_root");
+
+const headGlassesMesh = Scene.root.find("head_glasses_mesh");
+const headGlassesTex = "head_glasses";
+const headSwirl0Mesh = Scene.root.find("head_swirl0_mesh");
+const headSwirl1Mesh = Scene.root.find("head_swirl1_mesh");
+const headSwirlTex = "head_swirl";
 
 // --------------------------------------------------------------------------------
 // RESOURCES for TAKOYAKI THEME
@@ -192,6 +210,11 @@ const PROD_MAT_NAME = "prod_mat0";
 const FRONT_MAT_LIST = [
     "front_mat0", "front_mat1", "front_mat2", "front_mat3",
     "front_mat4", "front_mat5", "front_mat6", "front_mat7"
+];
+
+const HEAD_MAT_LIST = [
+    "head_mat0", "head_mat1", "head_mat2", "head_mat3",
+    "head_mat4"
 ];
 
 // Create lookup table between SERVER data and texture name
@@ -407,6 +430,54 @@ function initFrontFrame() {
     }
 }
 
+function initHead() {
+
+    //showGyoza();
+    showSandwich();
+
+    function showGyoza() {
+
+        // Apply head mat and tex
+        var curMatIndex = 0;
+        headHachimakiMesh.material = getMaterialWithDiffuse(HEAD_MAT_LIST[curMatIndex++], headHachimakiTex);
+
+        headGyozaRoot.hidden = false;
+
+        // Apply face paint mat and tex
+        facemesh0.material = facePaintGyozaMat;
+        facemesh1.material = facePaintGyozaMat;
+    }
+
+    function showSandwich() {
+
+        // Apply head mat and tex
+        var curMatIndex = 0;
+        headGlassesMesh.material = getMaterialWithDiffuse(HEAD_MAT_LIST[curMatIndex++], headGlassesTex);
+        headSwirl0Mesh.material = getMaterialWithDiffuse(HEAD_MAT_LIST[curMatIndex++], headSwirlTex);
+        headSwirl1Mesh.material = getMaterialWithDiffuse(HEAD_MAT_LIST[curMatIndex++], headSwirlTex);
+
+        headSandwichRoot.hidden = false;
+
+        // Apply face paint mat and tex
+    }
+
+    function showTakoyaki() {
+
+    }
+
+    function showTakoyakiSpecial() {
+
+    }
+
+    function showCrabstick() {
+
+    }
+
+    function showRamen() {
+
+    }
+}
+
 // Get theme
 getThemeData(GET_THEME_URL, function(data, err) { 
      
@@ -429,6 +500,7 @@ getThemeData(GET_THEME_URL, function(data, err) {
 
     initProduct();
     initFrontFrame();
+    initHead();
 });
  
 // Handle env obj movements
