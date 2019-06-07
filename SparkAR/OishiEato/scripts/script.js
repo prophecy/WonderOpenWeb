@@ -206,6 +206,8 @@ const headTakoyakiSpecialRoot = Scene.root.find("head_takoyaki_spec_root");
 const headTakoyakiBigMesh = Scene.root.find("head_takoyaki_big_mesh");
 const headTakoyakiBigTex = "head_takoyaki_big";
 
+const pinkyFaceMat = Materials.get("pinky_face_mat");
+
 // --------------------------------------------------------------------------------
 // RESOURCES for CRABSTICK THEME
 
@@ -515,8 +517,11 @@ function initHead() {
 
         headSandwichRoot.hidden = false;
 
-        // Todo: Apply face paint mat and tex
-        
+        // Apply face paint mat and tex
+        facemesh0.material = pinkyFaceMat;
+        facemesh1.material = pinkyFaceMat;
+
+        // Use swirl glasses
         applySpinMovement(headSwirl0Mesh, 2000);
         applySpinMovement(headSwirl1Mesh, 2000);
     }
@@ -532,7 +537,9 @@ function initHead() {
 
         headTakoyakiRoot.hidden = false;
         
-        // Todo: Apply face pain mat and tex
+        // Apply face paint mat and tex
+        facemesh0.material = pinkyFaceMat;
+        facemesh1.material = pinkyFaceMat;
     }
 
     function showTakoyakiSpecial() {
@@ -542,7 +549,9 @@ function initHead() {
 
         headTakoyakiSpecialRoot.hidden = false;
 
-        // Todo: Apply face pain mat and tex
+        // Apply face paint mat and tex
+        facemesh0.material = pinkyFaceMat;
+        facemesh1.material = pinkyFaceMat;
     }
 
     function showCrabstick() {
