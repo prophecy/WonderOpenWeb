@@ -242,6 +242,11 @@ const headRamenRoot = Scene.root.find("head_ramen_root");
 const headRamenEyesMesh = Scene.root.find("head_ramen_eyes_mesh");
 const headRamenEyesTex = "head_ramen_eyes_tex";
 
+const frontMealRoot = Scene.root.find("front_meal");
+const mealFrontFlagMesh = Scene.root.find("flag_mesh");
+const mealFrontBowlMesh = Scene.root.find("bowl_mesh");
+const mealFrontStillRamenMesh = Scene.root.find("still_ramen_mesh");
+
 // --------------------------------------------------------------------------------
 // URL
 var GET_THEME_URL = "https://dev.oishidrink.com/eato/asset/getTheme.aspx";
@@ -549,8 +554,6 @@ function initFrontFrame() {
     else
         Diagnostics.log("Theme key not found with value: '" + themeName + "'");
 
-    //showCrabstick();
-
     function showGyoza() {
 
         // Apply mat for Gyoza theme
@@ -613,6 +616,25 @@ function initFrontFrame() {
     function showMeal() {
 
 
+        var meshList = [
+            mealFrontFlagMesh, mealFrontBowlMesh, mealFrontStillRamenMesh,
+        ]
+
+        var texPathList = [
+            "theme_meal/ramen3.png", "theme_meal/ramen1.png", "theme_meal/ramen_still.png",
+        ]
+
+        for (var i = 0; i<meshList.length; ++i) {
+
+            var url = BASE_TEX_URL + texPathList[i];
+
+            var tex = Textures.get(FRONT_TEX_LIST[i]);
+            tex.url = url;
+
+            meshList[i].material = getMaterialWithDiffuse(FRONT_MAT_LIST[i], FRONT_TEX_LIST[i]);
+        }
+
+        frontMealRoot.hidden = false;
     }
 }
 
