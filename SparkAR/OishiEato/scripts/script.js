@@ -18,6 +18,7 @@ const Materials = require('Materials');
 const Textures = require('Textures');
 const TouchGestures = require('TouchGestures');
 const CameraInfo = require('CameraInfo');
+const WorldTransform = require('WorldTransform');
 
 // --------------------------------------------------------------------------------
 // SCENE DATABASE
@@ -443,9 +444,9 @@ const FACE_NAME_LOOKUP_TABLE = {
 // --------------------------------------------------------------------------------
 // @ DEBUGGING
 
-Diagnostics.watch("facePoint0 X ", facePoint0.x);
-Diagnostics.watch("facePoint0 Y ", facePoint0.y);
-Diagnostics.watch("facePoint0 Z ", facePoint0.z);
+//Diagnostics.watch("facePoint0 X ", facePoint0.x);
+//Diagnostics.watch("facePoint0 Y ", facePoint0.y);
+//Diagnostics.watch("facePoint0 Z ", facePoint0.z);
 
 Diagnostics.watch("Mouth Openness - ", FaceTracking.face(0).mouth.openness);
 Diagnostics.watch("Mouth Center X ", FaceTracking.face(0).mouth.center.x);
@@ -540,7 +541,7 @@ function initProduct() {
 function initFrontFrame() {
 
     var themeName = currentData.theme;
-
+    /*
     if (themeName.localeCompare(THEME_NAME_LOOKUP_TABLE.gyoza) == 0)
         showGyoza();
     else if (themeName.localeCompare(THEME_NAME_LOOKUP_TABLE.sandwich) == 0)
@@ -553,6 +554,9 @@ function initFrontFrame() {
         showMeal();
     else
         Diagnostics.log("Theme key not found with value: '" + themeName + "'");
+    */
+
+    showMeal();
 
     function showGyoza() {
 
@@ -640,6 +644,7 @@ function initFrontFrame() {
 
 function initHead() {
 
+    /*
     var faceName = currentData.face;
 
     if (faceName.localeCompare(FACE_NAME_LOOKUP_TABLE.gyoza) == 0)
@@ -656,6 +661,9 @@ function initHead() {
         showRamen();
     else
         Diagnostics.log("Face key not found with value: '" + faceName + "'");
+    */
+
+   showTakoyaki();
 
     function showGyoza() {
 
@@ -808,7 +816,7 @@ function initFoodFeeder() {
 
             // Set tex URL
             var url = BASE_TEX_URL + texName;
-            Diagnostics.log("url: " + url);
+            //Diagnostics.log("url: " + url);
             tex.url = url
             
             // Apply tex to mat
@@ -977,8 +985,14 @@ function onFace0MouthOpen() {
     foodFeederRoot0.transform.y = mouth.center.y;
     foodFeederRoot0.transform.z = mouth.center.z;
 
+    // Manipulate ramen transform here
+
     foodFeederRoot0.hidden = false;
 }
+
+Diagnostics.watch("ffr: x: ", foodFeederRoot0.transform.x);
+Diagnostics.watch("ffr: y: ", foodFeederRoot0.transform.y);
+Diagnostics.watch("ffr: z: ", foodFeederRoot0.transform.z);
 
 function onFace0MouthClose() {
 
