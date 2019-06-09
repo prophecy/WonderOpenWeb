@@ -52,7 +52,7 @@ for (var i=0; i<bubbleList1.length; ++i)
     if (bubbleList1[i] === undefined)
         Diagnostics.log("obj is undefined");
 
-var foodFeederRoot0 = Scene.root.find('footFeederRoot0');
+var foodFeederRoot0 = Scene.root.find('foodFeederRoot0');
 
 var testyPoolList0 = [];
 testyPoolList0.push(Scene.root.find('testy00'));
