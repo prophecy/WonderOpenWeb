@@ -54,35 +54,66 @@ for (var i=0; i<bubbleList1.length; ++i)
 
 var foodFeederRoot0 = Scene.root.find('footFeederRoot0');
 
-var testyPoolList = [];
-testyPoolList.push(Scene.root.find('testy0'));
-testyPoolList.push(Scene.root.find('testy1'));
-testyPoolList.push(Scene.root.find('testy2'));
-testyPoolList.push(Scene.root.find('testy3'));
-testyPoolList.push(Scene.root.find('testy4'));
-testyPoolList.push(Scene.root.find('testy5'));
-testyPoolList.push(Scene.root.find('testy6'));
-testyPoolList.push(Scene.root.find('testy7'));
-testyPoolList.push(Scene.root.find('testy8'));
-testyPoolList.push(Scene.root.find('testy9'));
-testyPoolList.push(Scene.root.find('testy10'));
-testyPoolList.push(Scene.root.find('testy11'));
-testyPoolList.push(Scene.root.find('testy12'));
-testyPoolList.push(Scene.root.find('testy13'));
-testyPoolList.push(Scene.root.find('testy14'));
-testyPoolList.push(Scene.root.find('testy15'));
+var testyPoolList0 = [];
+testyPoolList0.push(Scene.root.find('testy00'));
+testyPoolList0.push(Scene.root.find('testy01'));
+testyPoolList0.push(Scene.root.find('testy02'));
+testyPoolList0.push(Scene.root.find('testy03'));
+testyPoolList0.push(Scene.root.find('testy04'));
+testyPoolList0.push(Scene.root.find('testy05'));
+testyPoolList0.push(Scene.root.find('testy06'));
+testyPoolList0.push(Scene.root.find('testy07'));
+testyPoolList0.push(Scene.root.find('testy08'));
+testyPoolList0.push(Scene.root.find('testy09'));
+testyPoolList0.push(Scene.root.find('testy010'));
+testyPoolList0.push(Scene.root.find('testy011'));
+testyPoolList0.push(Scene.root.find('testy012'));
+testyPoolList0.push(Scene.root.find('testy013'));
+testyPoolList0.push(Scene.root.find('testy014'));
+testyPoolList0.push(Scene.root.find('testy015'));
 
-var crushPoolList = [];
-crushPoolList.push(Scene.root.find('crush0'));
-crushPoolList.push(Scene.root.find('crush1'));
-crushPoolList.push(Scene.root.find('crush2'));
-crushPoolList.push(Scene.root.find('crush3'));
-crushPoolList.push(Scene.root.find('crush4'));
-crushPoolList.push(Scene.root.find('crush5'));
-crushPoolList.push(Scene.root.find('crush6'));
-crushPoolList.push(Scene.root.find('crush7'));
-crushPoolList.push(Scene.root.find('crush8'));
-crushPoolList.push(Scene.root.find('crush9'));
+var testyPoolMeshLit0 = [];
+testyPoolMeshLit0.push(Scene.root.find('testy00_mesh'));
+testyPoolMeshLit0.push(Scene.root.find('testy01_mesh'));
+testyPoolMeshLit0.push(Scene.root.find('testy02_mesh'));
+testyPoolMeshLit0.push(Scene.root.find('testy03_mesh'));
+testyPoolMeshLit0.push(Scene.root.find('testy04_mesh'));
+testyPoolMeshLit0.push(Scene.root.find('testy05_mesh'));
+testyPoolMeshLit0.push(Scene.root.find('testy06_mesh'));
+testyPoolMeshLit0.push(Scene.root.find('testy07_mesh'));
+testyPoolMeshLit0.push(Scene.root.find('testy08_mesh'));
+testyPoolMeshLit0.push(Scene.root.find('testy09_mesh'));
+testyPoolMeshLit0.push(Scene.root.find('testy010_mesh'));
+testyPoolMeshLit0.push(Scene.root.find('testy011_mesh'));
+testyPoolMeshLit0.push(Scene.root.find('testy012_mesh'));
+testyPoolMeshLit0.push(Scene.root.find('testy013_mesh'));
+testyPoolMeshLit0.push(Scene.root.find('testy014_mesh'));
+testyPoolMeshLit0.push(Scene.root.find('testy015_mesh'));
+
+var crushPoolList0 = [];
+crushPoolList0.push(Scene.root.find('crush00'));
+crushPoolList0.push(Scene.root.find('crush01'));
+crushPoolList0.push(Scene.root.find('crush02'));
+crushPoolList0.push(Scene.root.find('crush03'));
+crushPoolList0.push(Scene.root.find('crush04'));
+crushPoolList0.push(Scene.root.find('crush05'));
+crushPoolList0.push(Scene.root.find('crush06'));
+crushPoolList0.push(Scene.root.find('crush07'));
+crushPoolList0.push(Scene.root.find('crush08'));
+crushPoolList0.push(Scene.root.find('crush09'));
+
+var crushPoolMeshList0 = [];
+crushPoolMeshList0.push(Scene.root.find('crush00_mesh'));
+crushPoolMeshList0.push(Scene.root.find('crush01_mesh'));
+crushPoolMeshList0.push(Scene.root.find('crush02_mesh'));
+crushPoolMeshList0.push(Scene.root.find('crush03_mesh'));
+crushPoolMeshList0.push(Scene.root.find('crush04_mesh'));
+crushPoolMeshList0.push(Scene.root.find('crush05_mesh'));
+crushPoolMeshList0.push(Scene.root.find('crush06_mesh'));
+crushPoolMeshList0.push(Scene.root.find('crush07_mesh'));
+crushPoolMeshList0.push(Scene.root.find('crush08_mesh'));
+crushPoolMeshList0.push(Scene.root.find('crush09_mesh'));
+
 
 const facePoint0 = Patches.getVectorValue("facePoint0");
 const facePoint1 = Patches.getVectorValue("facePoint1");
@@ -607,6 +638,35 @@ function initHead() {
     }
 }
 
+foodFeederRoot0.hidden = true;
+
+function initFoodFeeder() {
+
+    // Init food feeder
+    const foodFeederArgs = {
+
+        range: 50.0,
+
+        feedVariantX: 2.0,
+        feedVariantY: 2.0,
+        yAngleVariant: 180.0,
+
+        FEED_SET_COUNT: 16,
+
+        feedInterval: 200,
+        feedDuration: 800,
+
+        crushDuration: 300,
+        crushInterval: 100,
+
+        crushVarianceX: 7.0,
+        crushVarianceY: 7.0,
+        crushVarianceZ: 7.0,
+    }
+
+    handleFoodFeeder(testyPoolList0, crushPoolList0, foodFeederArgs);
+}
+
 // Get theme
 getThemeData(GET_THEME_URL, function(data, err) { 
      
@@ -630,6 +690,7 @@ getThemeData(GET_THEME_URL, function(data, err) {
     initProduct();
     initFrontFrame();
     initHead();
+    initFoodFeeder();
 });
  
 // Handle env obj movements
@@ -639,31 +700,6 @@ applyRotationBounce(prodPlane1, 0, 50, 1600); // The big one
 applyRotationBounce(prodPlane2, 50, 20, 2000); // The big one
 
 applyParalaxMovement(undefined, prodRoot, 0.1, 0.1);
-
-// Init food feeder
-const foodFeederArgs = {
-
-    range: 50.0,
-
-    feedVariantX: 2.0,
-    feedVariantY: 2.0,
-    yAngleVariant: 180.0,
-
-    FEED_SET_COUNT: 16,
-
-    feedInterval: 200,
-    feedDuration: 800,
-
-    crushDuration: 300,
-    crushInterval: 100,
-
-    crushVarianceX: 7.0,
-    crushVarianceY: 7.0,
-    crushVarianceZ: 7.0,
-}
-
-foodFeederRoot0.hidden = true;
-initFoodFeeder(testyPoolList, crushPoolList, foodFeederArgs);
 
 // --------------------------------------------------------------------------------
 // @ FACE DETECTED
@@ -1067,7 +1103,7 @@ function hideBubble(obj) {
 // --------------------------------------------------------------------------------
 // Food feeder
 
-function initFoodFeeder(foodObjList, crushObjList, args) {
+function handleFoodFeeder(foodObjList, crushObjList, args) {
 
     // Create object list from randrom number
 
