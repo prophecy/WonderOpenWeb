@@ -230,6 +230,11 @@ const headCrabstickScalfMesh = Scene.root.find("head_crabstick_scalf_mesh");
 const headCrabstickHatTex = "head_crabstick_hat_tex";
 const headCrabstickScalfTex = "head_crabstick_scalf_tex";
 
+const frontCrabstick = Scene.root.find("front_crabstick");
+const crabstickFrontBareCrabMesh = Scene.root.find("bare_crab_mesh");
+const crabstickFrontHoldingCrabMesh = Scene.root.find("holding_crab_mesh");
+const crabstickFrontLogoCrabMesh = Scene.root.find("logo_crab_mesh");
+
 // --------------------------------------------------------------------------------
 // RESOURCES for RAMEN THEME
 
@@ -258,6 +263,11 @@ const PROD_MAT_NAME = "prod_mat0";
 const FRONT_MAT_LIST = [
     "front_mat0", "front_mat1", "front_mat2", "front_mat3",
     "front_mat4", "front_mat5", "front_mat6", "front_mat7"
+];
+
+const FRONT_TEX_LIST = [
+    "ext_front_tex0", "ext_front_tex1", "ext_front_tex2", "ext_front_tex3", 
+    "ext_front_tex4", "ext_front_tex5", "ext_front_tex6", "ext_front_tex7", 
 ];
 
 const HEAD_MAT_LIST = [
@@ -532,8 +542,14 @@ function initFrontFrame() {
         showSandwich();
     else if (themeName.localeCompare(THEME_NAME_LOOKUP_TABLE.takoyaki) == 0)
         showTakoyaki();
+    else if (themeName.localeCompare(THEME_NAME_LOOKUP_TABLE.crabstick) == 0)
+        showCrabstick();
+    else if (themeName.localeCompare(THEME_NAME_LOOKUP_TABLE.meal) == 0)
+        showMeal();
     else
         Diagnostics.log("Theme key not found with value: '" + themeName + "'");
+
+    //showCrabstick();
 
     function showGyoza() {
 
@@ -569,6 +585,34 @@ function initFrontFrame() {
         takoyakiFrontOishiMesh.material = getMaterialWithDiffuse(FRONT_MAT_LIST[curMatIndex++], takoyakiFrontOishiTex);
 
         frontTakoyaki.hidden = false;
+    }
+
+    function showCrabstick() {
+
+        var meshList = [
+            crabstickFrontBareCrabMesh, crabstickFrontHoldingCrabMesh, crabstickFrontLogoCrabMesh,
+        ]
+
+        var texPathList = [
+            "theme_crabstick/crab_12.png", "theme_crabstick/crab_10_L.png", "theme_crabstick/crab_10.png",
+        ]
+
+        for (var i = 0; i<meshList.length; ++i) {
+
+            var url = BASE_TEX_URL + texPathList[i];
+
+            var tex = Textures.get(FRONT_TEX_LIST[i]);
+            tex.url = url;
+
+            meshList[i].material = getMaterialWithDiffuse(FRONT_MAT_LIST[i], FRONT_TEX_LIST[i]);
+        }
+
+        frontCrabstick.hidden = false;
+    }
+
+    function showMeal() {
+
+
     }
 }
 
