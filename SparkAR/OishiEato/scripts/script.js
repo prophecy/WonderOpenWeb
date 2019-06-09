@@ -228,6 +228,7 @@ const headRamenEyesTex = "head_ramen_eyes_tex";
 // --------------------------------------------------------------------------------
 // URL
 var GET_THEME_URL = "https://dev.oishidrink.com/eato/asset/getTheme.aspx";
+var BASE_TEX_URL = "https://dev.oishidrink.com/eato/asset/";
 
 // --------------------------------------------------------------------------------
 // SHARED VARS & CALLBACKS
@@ -258,54 +259,83 @@ const PROD_NAME_LOOKUP_TABLE = {
     gyoza_pork_5pcs: "Gyoza Pork 5pcs",
     gyoza_pork_12pcs: "Gyoza Pork12pcs",
     gyoza_takoyaki_5pcs: "Gyoza Takoyaki 5pcs",
-    gyoza_chicken_12pcs: "Gyoza Chicken 12pcs",
     gyoza_shrimp_12pcs: "Gyoza Shrimp12pcs",
+    gyoza_chicken_yuzu_5pcs: "NPD Gyoza Yuzu",
+    gyoza_chicken_yuzu_12pcs: "Gyoza Chicken 12pcs",
+    gyoza_pork_mala_5pcs: "gyoza_pork_mala_5pcs",
+    gyoza_pork_mala_12pcs: "gyoza_pork_mala_12pcs",
+
+    gyoza_reserved_00: "gyoza_reserved_00",
+    gyoza_reserved_01: "gyoza_reserved_01",
 
     sandwich_alaska_wakame: "Sandwich Alaska&Wakame",
     sandwich_tuna: "Sandwich Tuna",
     sandwich_ham_egg: "Sandwich Ham&Egg",
+    sandwich_crabstick_wasabi: "sandwich_crabstick_wasabi",
 
-    crabstick_alaska: "Crab Stick Alaska",
-    crabstick_kamaboko: "Crab Stick Kamaboko",
+    sandwich_reserved_00: "sandwich_reserved_00",
+    sandwich_reserved_01: "sandwich_reserved_01",
 
-    takoyaki: "Tokoyaki",
+    crabstick_kani_kamaboko: "Crab Stick Kamaboko",
+    crabstick_kani_alaska: "Crab Stick Alaska",
+
+    crabstick_reserved_00: "crabstick_reserved_00",
+    crabstick_reserved_01: "crabstick_reserved_01",
+
+    takoyaki_takoyaki: "Tokoyaki",
+
+    takoyaki_reserved_00: "takoyaki_reserved_00",
+    takoyaki_reserved_01: "takoyaki_reserved_01",
 
     meal_yakisoba: "Meal Yakisoba",
     meal_clams: "Meal Clams",
+    meal_kraphrao: "meal_kraphrao",
+    meal_keemao: "meal_keemao",
 
-    npd_gyoza_yuzu: "NPD Gyoza Yuzu",
-    npd_sandwich_crabstick_wasabi: "NPD Sandwich Crabstick &Wasabi",
-    npd_meal_in_7_11: "NPD Meal in 7-11",
-    npd_gyoza_pork_mala: "NPD Gyoza Pork Mala",
+    meal_reserved_00: "meal_reserved_00",
+    meal_reserved_01: "meal_reserved_01",
 }
 
 const PROD_TEX_LOOKUP_TABLE = {
 
-    gyoza_pork_5pcs: "gyoza_prod_tex0",
-    gyoza_pork_12pcs: "gyoza_prod_tex0",
-    gyoza_takoyaki_5pcs: "gyoza_prod_tex0",
-    gyoza_chicken_12pcs: "gyoza_prod_tex0",
-    gyoza_shrimp_12pcs: "gyoza_prod_tex0",
+    gyoza_pork_5pcs: "theme_gyoza/product/pork_5pcs.png",
+    gyoza_pork_12pcs: "theme_gyoza/product/pork_12pcs.png",
+    gyoza_takoyaki_5pcs: "theme_gyoza/product/takoyaki_5pcs.png",
+    gyoza_shrimp_12pcs: "theme_gyoza/product/shrimp_12pcs.png",
+    gyoza_chicken_yuzu_5pcs: "theme_gyoza/product/chicken_yuzu_5pcs.png",
+    gyoza_chicken_yuzu_12pcs: "theme_gyoza/product/chicken_yuzu_12pcs.png",
+    gyoza_pork_mala_5pcs: "theme_gyoza/product/pork_mala_5pcs.png",
+    gyoza_pork_mala_12pcs: "theme_gyoza/product/pork_mala_12pcs.png",
 
-    sandwich_alaska_wakame: "sandwich_prod_tex0",
-    sandwich_tuna: "sandwich_prod_tex0",
-    sandwich_ham_egg: "sandwich_prod_tex0",
+    gyoza_reserved_00: "theme_gyoza/product/reserved_00.png",
+    gyoza_reserved_01: "theme_gyoza/product/reserved_01.png",
 
-    crabstick_alaska: "not_found_tex",
-    crabstick_kamaboko: "not_found_tex",
+    sandwich_alaska_wakame: "theme_sandwich/product/alaska_wakame.png",
+    sandwich_tuna: "theme_sandwich/product/tuna.png",
+    sandwich_ham_egg: "theme_sandwich/product/ham_egg.png",
+    sandwich_crabstick_wasabi: "theme_sandwich/product/crabstick_wasabi.png",
 
-    takoyaki: "takoyaki_prod_tex0",
+    sandwich_reserved_00: "theme_sandwich/product/reserved_00.png",
+    sandwich_reserved_01: "theme_sandwich/product/reserved_01.png",
 
-    meal_yakisoba: "not_found_tex",
-    meal_clams: "not_found_tex",
+    crabstick_kani_kamaboko: "theme_crabstick/product/kani_kamaboko.png",
+    crabstick_kani_alaska: "theme_crabstick/product/kani_alaska.png",
 
-    npd_gyoza_yuzu: "not_found_tex",
-    npd_sandwich_crabstick_wasabi: "not_found_tex",
-    npd_meal_in_7_11: "not_found_tex",
-    npd_gyoza_pork_mala: "not_found_tex",
+    crabstick_reserved_00: "theme_crabstick/product/reserved_00.png",
+    crabstick_reserved_01: "theme_crabstick/product/reserved_01.png",
 
-    // For development
-    not_found_tex: "not_found_tex",
+    takoyaki_takoyaki: "theme_tako/product/takoyaki.png",
+
+    takoyaki_reserved_00: "theme_tako/product/reserved_00.png",
+    takoyaki_reserved_01: "theme_tako/product/reserved_01.png",
+
+    meal_yakisoba: "theme_meal/product/yakisoba.png",
+    meal_clams: "theme_meal/product/clams.png",
+    meal_kraphrao: "theme_meal/product/kraphrao.png",
+    meal_keemao: "theme_meal/product/keemao.png",
+
+    meal_reserved_00: "theme_meal/product/reserved_00.png",
+    meal_reserved_01: "theme_meal/product/reserved_01.png",
 }
 
 const THEME_NAME_LOOKUP_TABLE = {
@@ -374,7 +404,7 @@ function initProduct() {
 
     var prodName = currentData.product;
     var prodKey = undefined;
-    var texName = undefined;
+    var prodTex = undefined;
 
     var prodKeys = Object.keys(PROD_NAME_LOOKUP_TABLE);
 
@@ -396,27 +426,32 @@ function initProduct() {
 
         Diagnostics.log("Product key not found with value: '" + prodName + "'");
 
-        texName = PROD_TEX_LOOKUP_TABLE.not_found_tex;
+        prodTex = Textures.get("not_found_tex");
     }
     else {
 
         Diagnostics.log("Got product key: " + prodKey);
 
-        // Get product texture
-        texName = PROD_TEX_LOOKUP_TABLE[prodKey];
-    
-        if (texName === undefined) {
+        if (!(prodKey in PROD_TEX_LOOKUP_TABLE)) {
     
             Diagnostics.log("Texture name not found with key: " + prodKey);
             return;
         }
-         
-        Diagnostics.log("Got texture name: " + texName);    
+        
+        Diagnostics.log("00");
+
+        // Get product texture
+        var texName = PROD_TEX_LOOKUP_TABLE[prodKey];
+    
+        Diagnostics.log("Got texture name: " + texName);   
+        
+        prodTex = Textures.get("ext_prod_tex0");
+        prodTex.url = BASE_TEX_URL + texName;
     }
     
     // Apply texture to product material
     var prodMat = Materials.get(PROD_MAT_NAME);
-    var prodTex = Textures.get(texName);
+
     prodMat.diffuse = prodTex;
 
     // Apply material to product object
@@ -747,13 +782,12 @@ function getMaterialWithDiffuse(matName, texName) {
 
 // Handle mouth opennes
 
-// TRICKED: Use this line to bind signal 
-//var mouth = FaceTracking.face(faceIndex).mouth;
-       
 function handleMouthOpeningState(faceIndex, openMinThres, closeMaxThres, openCallback, closCallback) {
 
-    var mouthOpen = FaceTracking.face(faceIndex).mouth.openness.gt(Reactive.val(openMinThres));
-    var mouthClose = FaceTracking.face(faceIndex).mouth.openness.lt(Reactive.val(closeMaxThres));
+    var mouth = FaceTracking.face(faceIndex).mouth;
+
+    var mouthOpen = mouth.openness.gt(Reactive.val(openMinThres));
+    var mouthClose = mouth.openness.lt(Reactive.val(closeMaxThres));
     
     mouthOpen.monitor().subscribe(function(flag) {
         if (flag.newValue)
