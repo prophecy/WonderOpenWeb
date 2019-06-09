@@ -52,74 +52,55 @@ for (var i=0; i<bubbleList1.length; ++i)
     if (bubbleList1[i] === undefined)
         Diagnostics.log("obj is undefined");
 
+// Food feeder for player #0
+
 var foodFeederRoot0 = Scene.root.find('foodFeederRoot0');
 
 var testyPoolList0 = [];
-testyPoolList0.push(Scene.root.find('testy00'));
-testyPoolList0.push(Scene.root.find('testy01'));
-testyPoolList0.push(Scene.root.find('testy02'));
-testyPoolList0.push(Scene.root.find('testy03'));
-testyPoolList0.push(Scene.root.find('testy04'));
-testyPoolList0.push(Scene.root.find('testy05'));
-testyPoolList0.push(Scene.root.find('testy06'));
-testyPoolList0.push(Scene.root.find('testy07'));
-testyPoolList0.push(Scene.root.find('testy08'));
-testyPoolList0.push(Scene.root.find('testy09'));
-testyPoolList0.push(Scene.root.find('testy010'));
-testyPoolList0.push(Scene.root.find('testy011'));
-testyPoolList0.push(Scene.root.find('testy012'));
-testyPoolList0.push(Scene.root.find('testy013'));
-testyPoolList0.push(Scene.root.find('testy014'));
-testyPoolList0.push(Scene.root.find('testy015'));
+for (var i=0; i<16; ++i)
+    testyPoolList0.push(Scene.root.find('testy0' + i));
 
-var testyPoolMeshLit0 = [];
-testyPoolMeshLit0.push(Scene.root.find('testy00_mesh'));
-testyPoolMeshLit0.push(Scene.root.find('testy01_mesh'));
-testyPoolMeshLit0.push(Scene.root.find('testy02_mesh'));
-testyPoolMeshLit0.push(Scene.root.find('testy03_mesh'));
-testyPoolMeshLit0.push(Scene.root.find('testy04_mesh'));
-testyPoolMeshLit0.push(Scene.root.find('testy05_mesh'));
-testyPoolMeshLit0.push(Scene.root.find('testy06_mesh'));
-testyPoolMeshLit0.push(Scene.root.find('testy07_mesh'));
-testyPoolMeshLit0.push(Scene.root.find('testy08_mesh'));
-testyPoolMeshLit0.push(Scene.root.find('testy09_mesh'));
-testyPoolMeshLit0.push(Scene.root.find('testy010_mesh'));
-testyPoolMeshLit0.push(Scene.root.find('testy011_mesh'));
-testyPoolMeshLit0.push(Scene.root.find('testy012_mesh'));
-testyPoolMeshLit0.push(Scene.root.find('testy013_mesh'));
-testyPoolMeshLit0.push(Scene.root.find('testy014_mesh'));
-testyPoolMeshLit0.push(Scene.root.find('testy015_mesh'));
+var testyPoolMeshList0 = [];
+for (var i=0; i<16; ++i)
+    testyPoolMeshList0.push(Scene.root.find('testy0' + i + "_mesh"));
 
 var crushPoolList0 = [];
-crushPoolList0.push(Scene.root.find('crush00'));
-crushPoolList0.push(Scene.root.find('crush01'));
-crushPoolList0.push(Scene.root.find('crush02'));
-crushPoolList0.push(Scene.root.find('crush03'));
-crushPoolList0.push(Scene.root.find('crush04'));
-crushPoolList0.push(Scene.root.find('crush05'));
-crushPoolList0.push(Scene.root.find('crush06'));
-crushPoolList0.push(Scene.root.find('crush07'));
-crushPoolList0.push(Scene.root.find('crush08'));
-crushPoolList0.push(Scene.root.find('crush09'));
+for (var i=0; i<10; ++i)
+    crushPoolList0.push(Scene.root.find('crush0' + i));
 
 var crushPoolMeshList0 = [];
-crushPoolMeshList0.push(Scene.root.find('crush00_mesh'));
-crushPoolMeshList0.push(Scene.root.find('crush01_mesh'));
-crushPoolMeshList0.push(Scene.root.find('crush02_mesh'));
-crushPoolMeshList0.push(Scene.root.find('crush03_mesh'));
-crushPoolMeshList0.push(Scene.root.find('crush04_mesh'));
-crushPoolMeshList0.push(Scene.root.find('crush05_mesh'));
-crushPoolMeshList0.push(Scene.root.find('crush06_mesh'));
-crushPoolMeshList0.push(Scene.root.find('crush07_mesh'));
-crushPoolMeshList0.push(Scene.root.find('crush08_mesh'));
-crushPoolMeshList0.push(Scene.root.find('crush09_mesh'));
+for (var i=0; i<10; ++i)
+    crushPoolMeshList0.push(Scene.root.find('crush0' + i + "_mesh"));
 
+// Food feeder for player #1
+
+var foodFeederRoot1 = Scene.root.find('foodFeederRoot1');
+
+var testyPoolList1 = [];
+for (var i=0; i<10; ++i)
+    testyPoolList1.push(Scene.root.find('testy1' + i));
+
+var testyPoolMeshList1 = [];
+for (var i=0; i<10; ++i)
+    testyPoolMeshList1.push(Scene.root.find('testy1' + i + "_mesh"));
+
+var crushPoolList1 = [];
+for (var i=0; i<10; ++i)
+    crushPoolList1.push(Scene.root.find('crush1' + i));
+
+var crushPoolMeshList1 = [];
+for (var i=0; i<10; ++i)
+    crushPoolMeshList1.push(Scene.root.find('crush1' + i + "_mesh"));
+
+// Face
 
 const facePoint0 = Patches.getVectorValue("facePoint0");
 const facePoint1 = Patches.getVectorValue("facePoint1");
 
 const facemesh0 = Scene.root.find("facemesh0");
 const facemesh1 = Scene.root.find("facemesh1");
+
+// Product
 
 const prodRoot = Scene.root.find('prod_root');
 
@@ -665,6 +646,7 @@ function initFoodFeeder() {
     }
 
     handleFoodFeeder(testyPoolList0, crushPoolList0, foodFeederArgs);
+    handleFoodFeeder(testyPoolList1, crushPoolList1, foodFeederArgs);
 }
 
 // Get theme
