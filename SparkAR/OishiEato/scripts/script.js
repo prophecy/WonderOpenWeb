@@ -384,11 +384,12 @@ const FOOD_TEX_LOOKUP_TABLE = {
         "theme_sandwich/sw2.png", "theme_sandwich/sw3.png", "theme_sandwich/sw4.png", "theme_sandwich/sw8.png", "theme_sandwich/sw10.png"
     ],
     crabstick: [
+        "theme_crabstick/crab_4.png", "theme_crabstick/crab_5.png", "theme_crabstick/crab_6.png", 
     ],
     takoyaki: [
         "theme_tako/ta4.png", "theme_tako/ta5.png", "theme_tako/ta6.png", 
     ],
-    meal: [],
+    meal: [ ],
 }
 
 const CRUSH_TEX_LOOKUP_TABLE = {
@@ -400,12 +401,14 @@ const CRUSH_TEX_LOOKUP_TABLE = {
         "theme_sandwich/sw2.png", "theme_sandwich/sw3_2.png", "theme_sandwich/sw9.png", "theme_sandwich/sw10_2.png",
         "theme_sandwich/sw11.png", "theme_sandwich/sw12.png"
     ],
-    crabstick: [],
+    crabstick: [
+        "theme_crabstick/crab_7.png", "theme_crabstick/crab_8.png", "theme_crabstick/crab_9.png", 
+    ],
     takoyaki: [
         "theme_tako/ta7.png", "theme_tako/ta8.png", "theme_tako/ta9.png", "theme_tako/ta10.png", 
         "theme_tako/ta11.png", 
     ],
-    meal: [],
+    meal: [ ],
 }
 
 const FACE_NAME_LOOKUP_TABLE = {
@@ -672,7 +675,7 @@ function initFoodFeeder() {
 
     // Setup materials & textures
     var themeName = currentData.theme;
-/*
+
     if (themeName.localeCompare(THEME_NAME_LOOKUP_TABLE.gyoza) == 0)
         setupGyozaFoodMat();
     else if (themeName.localeCompare(THEME_NAME_LOOKUP_TABLE.sandwich) == 0)
@@ -685,10 +688,6 @@ function initFoodFeeder() {
         setupMealFoodMat();
     else
         Diagnostics.log("Theme key not found with value: '" + themeName + "'");
-*/
-    //setupGyozaFoodMat();
-    //setupSandwichFoodMat();
-    setupTakoyakiFoodMat();
 
     function setupGyozaFoodMat() {
 
@@ -716,8 +715,7 @@ function initFoodFeeder() {
 
     function setupMealFoodMat() {
 
-        setupFoodMat(FOOD_TEX_LOOKUP_TABLE.meal);
-        setupCrushMat(CRUSH_TEX_LOOKUP_TABLE.meal);
+        // Todo: Implement a new module, ramen needs the other! So sad T_T
     }
 
     function setupMatTex(texPathList, matList, texList, objList) {
