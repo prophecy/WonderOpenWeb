@@ -56,13 +56,13 @@ for (var i=0; i<bubbleList1.length; ++i)
 
 var foodFeederRoot0 = Scene.root.find('foodFeederRoot0');
 
-var testyPoolList0 = [];
+var foodPoolList0 = [];
 for (var i=0; i<16; ++i)
-    testyPoolList0.push(Scene.root.find('testy0' + i));
+    foodPoolList0.push(Scene.root.find('testy0' + i));
 
-var testyPoolMeshList0 = [];
+var foodPoolMeshList0 = [];
 for (var i=0; i<16; ++i)
-    testyPoolMeshList0.push(Scene.root.find('testy0' + i + "_mesh"));
+    foodPoolMeshList0.push(Scene.root.find('testy0' + i + "_mesh"));
 
 var crushPoolList0 = [];
 for (var i=0; i<10; ++i)
@@ -76,13 +76,13 @@ for (var i=0; i<10; ++i)
 
 var foodFeederRoot1 = Scene.root.find('foodFeederRoot1');
 
-var testyPoolList1 = [];
+var foodPoolList1 = [];
 for (var i=0; i<10; ++i)
-    testyPoolList1.push(Scene.root.find('testy1' + i));
+    foodPoolList1.push(Scene.root.find('testy1' + i));
 
-var testyPoolMeshList1 = [];
+var foodPoolMeshList1 = [];
 for (var i=0; i<10; ++i)
-    testyPoolMeshList1.push(Scene.root.find('testy1' + i + "_mesh"));
+    foodPoolMeshList1.push(Scene.root.find('testy1' + i + "_mesh"));
 
 var crushPoolList1 = [];
 for (var i=0; i<10; ++i)
@@ -265,6 +265,22 @@ const HEAD_MAT_LIST = [
     "head_mat4"
 ];
 
+const FOOD_MAT_LIST = [
+    "food_mat0", "food_mat1", "food_mat2", "food_mat3",
+];
+
+const FOOD_TEX_LIST = [
+    "ext_food_tex0", "ext_food_tex1", "ext_food_tex2", "ext_food_tex3",
+]
+
+const CRUSH_MAT_LIST = [
+    "crush_mat0", "crush_mat1", "crush_mat2", "crush_mat3",
+]
+
+const CRUSH_TEX_LIST = [
+    "ext_crush_tex0", "ext_crush_tex1", "ext_crush_tex2", "ext_crush_tex3",
+]
+
 // Create lookup table between SERVER data and texture name
 const PROD_NAME_LOOKUP_TABLE = {
 
@@ -359,6 +375,28 @@ const THEME_NAME_LOOKUP_TABLE = {
     meal: "Meal",
 }
 
+const FOOD_TEX_LOOKUP_TABLE = {
+
+    gyoza: [
+        "theme_gyoza/gyoza_00.png", "theme_gyoza/gyoza_01.png", 
+    ],
+    sandwich: [],
+    crabstick: [],
+    takoyaki: [],
+    meal: [],
+}
+
+const CRUSH_TEX_LOOKUP_TABLE = {
+
+    gyoza: [
+        "theme_gyoza/gyoza_02.png", "theme_gyoza/gyoza_03.png", "theme_gyoza/gyoza_04.png", "theme_gyoza/gyoza_05.png",
+    ],
+    sandwich: [],
+    crabstick: [],
+    takoyaki: [],
+    meal: [],
+}
+
 const FACE_NAME_LOOKUP_TABLE = {
 
     gyoza: "reserve face2",
@@ -449,8 +487,6 @@ function initProduct() {
             Diagnostics.log("Texture name not found with key: " + prodKey);
             return;
         }
-        
-        Diagnostics.log("00");
 
         // Get product texture
         var texName = PROD_TEX_LOOKUP_TABLE[prodKey];
@@ -625,7 +661,7 @@ function initFoodFeeder() {
 
     // Setup materials & textures
     var themeName = currentData.theme;
-
+/*
     if (themeName.localeCompare(THEME_NAME_LOOKUP_TABLE.gyoza) == 0)
         setupGyozaFoodMat();
     else if (themeName.localeCompare(THEME_NAME_LOOKUP_TABLE.sandwich) == 0)
@@ -638,9 +674,45 @@ function initFoodFeeder() {
         setupMealFoodMat();
     else
         Diagnostics.log("Theme key not found with value: '" + themeName + "'");
+*/
+    setupGyozaFoodMat();
 
     function setupGyozaFoodMat() {
 
+        var curMatIndex = 0; // mat index MUST be = tex index
+        var curTexUrlIndex = 0;
+
+        for (var i=0; i<foodPoolMeshList0.length; ++i) {
+
+            // Get tex name
+            var texName = FOOD_TEX_LOOKUP_TABLE.gyoza[curTexUrlIndex];
+
+            // Move to the next name index
+            if (++curTexUrlIndex >= FOOD_TEX_LOOKUP_TABLE.gyoza.length)
+                curTexUrlIndex = 0;
+
+            // Get mat & text
+            var mat = Materials.get(FOOD_MAT_LIST[curMatIndex]);
+            var tex = Textures.get(FOOD_TEX_LIST[curMatIndex]);
+
+            // Move to the next mat index
+            if (++curMatIndex >= FOOD_MAT_LIST.length)
+                curMatIndex = 0;
+
+            // Set tex URL
+            var url = BASE_TEX_URL + texName;
+            Diagnostics.log("url: " + url);
+            tex.url = url
+            
+            // Apply tex to mat
+            mat.diffuse = tex;
+
+            // Get obj
+            var obj = foodPoolMeshList0[i];
+
+            // Apply mat to obj
+            obj.material = mat;
+        }
     }
 
     function setupSandwichFoodMat() {
@@ -682,8 +754,8 @@ function initFoodFeeder() {
     }
 
     // Handle object
-    handleFoodFeeder(testyPoolList0, crushPoolList0, foodFeederArgs);
-    handleFoodFeeder(testyPoolList1, crushPoolList1, foodFeederArgs);
+    handleFoodFeeder(foodPoolList0, crushPoolList0, foodFeederArgs);
+    handleFoodFeeder(foodPoolList1, crushPoolList1, foodFeederArgs);
 }
 
 // Get theme
