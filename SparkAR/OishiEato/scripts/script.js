@@ -677,26 +677,26 @@ function initFoodFeeder() {
 */
     setupGyozaFoodMat();
 
-    function setupGyozaFoodMat() {
+    function setupFoodMat(texPathList, matList, texList, objList) {
 
         var curMatIndex = 0; // mat index MUST be = tex index
         var curTexUrlIndex = 0;
 
-        for (var i=0; i<foodPoolMeshList0.length; ++i) {
+        for (var i=0; i<objList.length; ++i) {
 
             // Get tex name
-            var texName = FOOD_TEX_LOOKUP_TABLE.gyoza[curTexUrlIndex];
+            var texName = texPathList[curTexUrlIndex];
 
             // Move to the next name index
-            if (++curTexUrlIndex >= FOOD_TEX_LOOKUP_TABLE.gyoza.length)
+            if (++curTexUrlIndex >= texPathList.length)
                 curTexUrlIndex = 0;
 
             // Get mat & text
-            var mat = Materials.get(FOOD_MAT_LIST[curMatIndex]);
-            var tex = Textures.get(FOOD_TEX_LIST[curMatIndex]);
+            var mat = Materials.get(matList[curMatIndex]);
+            var tex = Textures.get(texList[curMatIndex]);
 
             // Move to the next mat index
-            if (++curMatIndex >= FOOD_MAT_LIST.length)
+            if (++curMatIndex >= matList.length)
                 curMatIndex = 0;
 
             // Set tex URL
@@ -708,11 +708,17 @@ function initFoodFeeder() {
             mat.diffuse = tex;
 
             // Get obj
-            var obj = foodPoolMeshList0[i];
+            var obj = objList[i];
 
             // Apply mat to obj
             obj.material = mat;
         }
+    }
+
+    function setupGyozaFoodMat() {
+
+        setupFoodMat(FOOD_TEX_LOOKUP_TABLE.gyoza, FOOD_MAT_LIST, FOOD_TEX_LIST, foodPoolMeshList0);
+        setupFoodMat(CRUSH_TEX_LOOKUP_TABLE.gyoza, CRUSH_MAT_LIST, CRUSH_TEX_LIST, crushPoolMeshList0);
     }
 
     function setupSandwichFoodMat() {
