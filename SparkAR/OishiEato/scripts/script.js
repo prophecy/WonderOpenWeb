@@ -623,7 +623,43 @@ foodFeederRoot0.hidden = true;
 
 function initFoodFeeder() {
 
-    // Init food feeder
+    // Setup materials & textures
+    var themeName = currentData.theme;
+
+    if (themeName.localeCompare(THEME_NAME_LOOKUP_TABLE.gyoza) == 0)
+        setupGyozaFoodMat();
+    else if (themeName.localeCompare(THEME_NAME_LOOKUP_TABLE.sandwich) == 0)
+        setupSandwichFoodMat();
+    else if (themeName.localeCompare(THEME_NAME_LOOKUP_TABLE.takoyaki) == 0)
+        setupTakoyakiFoodMat();
+    else if (themeName.localeCompare(THEME_NAME_LOOKUP_TABLE.crabstick) == 0)
+        setupCrabstickFoodMat();
+    else if (themeName.localeCompare(THEME_NAME_LOOKUP_TABLE.meal) == 0)
+        setupMealFoodMat();
+    else
+        Diagnostics.log("Theme key not found with value: '" + themeName + "'");
+
+    function setupGyozaFoodMat() {
+
+    }
+
+    function setupSandwichFoodMat() {
+
+    }
+
+    function setupCrabstickFoodMat() {
+
+    }
+
+    function setupTakoyakiFoodMat() {
+
+    }
+
+    function setupMealFoodMat() {
+
+    }
+
+    // Setup parameters
     const foodFeederArgs = {
 
         range: 50.0,
@@ -645,6 +681,7 @@ function initFoodFeeder() {
         crushVarianceZ: 7.0,
     }
 
+    // Handle object
     handleFoodFeeder(testyPoolList0, crushPoolList0, foodFeederArgs);
     handleFoodFeeder(testyPoolList1, crushPoolList1, foodFeederArgs);
 }
