@@ -380,9 +380,14 @@ const FOOD_TEX_LOOKUP_TABLE = {
     gyoza: [
         "theme_gyoza/gyoza_00.png", "theme_gyoza/gyoza_01.png", 
     ],
-    sandwich: [],
-    crabstick: [],
-    takoyaki: [],
+    sandwich: [
+        "theme_sandwich/sw2.png", "theme_sandwich/sw3.png", "theme_sandwich/sw4.png", "theme_sandwich/sw8.png", "theme_sandwich/sw10.png"
+    ],
+    crabstick: [
+    ],
+    takoyaki: [
+        "theme_tako/ta4.png", "theme_tako/ta5.png", "theme_tako/ta6.png", 
+    ],
     meal: [],
 }
 
@@ -391,9 +396,15 @@ const CRUSH_TEX_LOOKUP_TABLE = {
     gyoza: [
         "theme_gyoza/gyoza_02.png", "theme_gyoza/gyoza_03.png", "theme_gyoza/gyoza_04.png", "theme_gyoza/gyoza_05.png",
     ],
-    sandwich: [],
+    sandwich: [
+        "theme_sandwich/sw2.png", "theme_sandwich/sw3_2.png", "theme_sandwich/sw9.png", "theme_sandwich/sw10_2.png",
+        "theme_sandwich/sw11.png", "theme_sandwich/sw12.png"
+    ],
     crabstick: [],
-    takoyaki: [],
+    takoyaki: [
+        "theme_tako/ta7.png", "theme_tako/ta8.png", "theme_tako/ta9.png", "theme_tako/ta10.png", 
+        "theme_tako/ta11.png", 
+    ],
     meal: [],
 }
 
@@ -675,9 +686,41 @@ function initFoodFeeder() {
     else
         Diagnostics.log("Theme key not found with value: '" + themeName + "'");
 */
-    setupGyozaFoodMat();
+    //setupGyozaFoodMat();
+    //setupSandwichFoodMat();
+    setupTakoyakiFoodMat();
 
-    function setupFoodMat(texPathList, matList, texList, objList) {
+    function setupGyozaFoodMat() {
+
+        setupFoodMat(FOOD_TEX_LOOKUP_TABLE.gyoza);
+        setupCrushMat(CRUSH_TEX_LOOKUP_TABLE.gyoza);
+    }
+
+    function setupSandwichFoodMat() {
+
+        setupFoodMat(FOOD_TEX_LOOKUP_TABLE.sandwich);
+        setupCrushMat(CRUSH_TEX_LOOKUP_TABLE.sandwich);
+    }
+
+    function setupCrabstickFoodMat() {
+
+        setupFoodMat(FOOD_TEX_LOOKUP_TABLE.crabstick);
+        setupCrushMat(CRUSH_TEX_LOOKUP_TABLE.crabstick);
+    }
+
+    function setupTakoyakiFoodMat() {
+
+        setupFoodMat(FOOD_TEX_LOOKUP_TABLE.takoyaki);
+        setupCrushMat(CRUSH_TEX_LOOKUP_TABLE.takoyaki);
+    }
+
+    function setupMealFoodMat() {
+
+        setupFoodMat(FOOD_TEX_LOOKUP_TABLE.meal);
+        setupCrushMat(CRUSH_TEX_LOOKUP_TABLE.meal);
+    }
+
+    function setupMatTex(texPathList, matList, texList, objList) {
 
         var curMatIndex = 0; // mat index MUST be = tex index
         var curTexUrlIndex = 0;
@@ -715,26 +758,12 @@ function initFoodFeeder() {
         }
     }
 
-    function setupGyozaFoodMat() {
-
-        setupFoodMat(FOOD_TEX_LOOKUP_TABLE.gyoza, FOOD_MAT_LIST, FOOD_TEX_LIST, foodPoolMeshList0);
-        setupFoodMat(CRUSH_TEX_LOOKUP_TABLE.gyoza, CRUSH_MAT_LIST, CRUSH_TEX_LIST, crushPoolMeshList0);
+    function setupFoodMat(texPathList) {
+        setupMatTex(texPathList, FOOD_MAT_LIST, FOOD_TEX_LIST, foodPoolMeshList0);
     }
 
-    function setupSandwichFoodMat() {
-
-    }
-
-    function setupCrabstickFoodMat() {
-
-    }
-
-    function setupTakoyakiFoodMat() {
-
-    }
-
-    function setupMealFoodMat() {
-
+    function setupCrushMat(texPathList) {
+        setupMatTex(texPathList, CRUSH_MAT_LIST, CRUSH_TEX_LIST, crushPoolMeshList0);
     }
 
     // Setup parameters
