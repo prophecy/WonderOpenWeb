@@ -252,6 +252,9 @@ const mealFrontFlagMesh = Scene.root.find("flag_mesh");
 const mealFrontBowlMesh = Scene.root.find("bowl_mesh");
 const mealFrontStillRamenMesh = Scene.root.find("still_ramen_mesh");
 
+const mealShopstick00_pivot = Scene.root.find("shopstick00_pivot");
+const mealShopstick01_pivot = Scene.root.find("shopstick01_pivot");
+
 const mealShopstick00mesh = Scene.root.find("shopstick00_mesh");
 const mealShopstick01mesh = Scene.root.find("shopstick01_mesh");
 
@@ -737,6 +740,10 @@ function initFoodFeeder() {
 
         mealShopstick00mesh.material = mat;
         mealShopstick01mesh.material = mat;
+
+        // Animate shopsticks
+        applyShopsticksBound(mealShopstick00_pivot, -10, 20, 600);
+        applyShopsticksBound(mealShopstick01_pivot, 0, 30, 600);
     }
 
     function setupFoodMat(texPathList) {
@@ -1144,6 +1151,37 @@ function applyParalaxMovement(fLayer, bLayer, fw, bw) {
     }
 }
 
+function applyShopsticksBound(obj, minAngle, maxAngle, duration) {
+
+    var time_driver = Animation.timeDriver({
+        durationMilliseconds: duration,
+        loopCount: Infinity
+    });
+
+    // Create a rotation sampler using Rotation objects generated
+    // by the previously-defined axisRotation() method.
+    var rotation_sampler = Animation.samplers.polyline({
+        keyframes: [
+            axisRotation(0, 1, 0, minAngle),
+            axisRotation(0, 1, 0, minAngle),
+
+            axisRotation(0, 1, 0, maxAngle),
+
+            axisRotation(0, 1, 0, minAngle),
+        ],
+        knots: [
+            0, 5, 7, 9,
+        ]
+    });
+
+    // Start the animation
+    var rotation_signal = Animation.animate(time_driver, rotation_sampler);
+    
+    obj.transform.rotation = rotation_signal;
+
+    time_driver.start();
+}
+
 function applyRotationBounce(obj, minAngle, maxAngle, duration) {
 
     var time_driver = Animation.timeDriver({
@@ -1185,7 +1223,7 @@ function applyRotationBounce(obj, minAngle, maxAngle, duration) {
 function showBubble(obj, facePoint, xSideWeight, positionY, targetBubbleScale, isAlwaysLeft) { 
 
     return;
-    
+
     const facePointX = facePoint.x.pinLastValue(); 
     const facePointY = facePoint.y.pinLastValue();
     const facePointZ = facePoint.z.pinLastValue();
