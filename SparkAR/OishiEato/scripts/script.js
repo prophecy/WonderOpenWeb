@@ -1218,10 +1218,11 @@ function applyRotationBounce(obj, minAngle, maxAngle, duration) {
 
 function showBubble(obj, facePoint, xSideWeight, positionY, targetBubbleScale, isAlwaysLeft) { 
 
+    /*
     const facePointX = facePoint.x.pinLastValue(); 
     const facePointY = facePoint.y.pinLastValue();
-    const facePointZ = facePoint.z.pinLastValue();
-
+    const facePointZ = facePoint.z.pinLastValue();    
+    */
     obj.hidden = false;
 
     const showTimeDriverParameters = {
@@ -1230,7 +1231,7 @@ function showBubble(obj, facePoint, xSideWeight, positionY, targetBubbleScale, i
         loopCount: 1,
         mirror: false  
     };
-
+    /*
     // Range affects scale and position
     var range = Math.sqrt(facePointX*facePointX + facePointY*facePointY + facePointZ*facePointZ);
 
@@ -1244,11 +1245,11 @@ function showBubble(obj, facePoint, xSideWeight, positionY, targetBubbleScale, i
     const ySideNorm = -1.0;
     const Y_SIDE_WEIGHT = 0.14;
     const shownBubbleY = range * Y_SIDE_WEIGHT * ySideNorm;
-
+    */
     // Bind the translation animation signal to the x-axis position signal of the plane
-    obj.transform.x = shownBubbleX;
-    //obj.transform.y = positionY;
-    obj.transform.y = shownBubbleY;
+    
+    obj.transform.x = 3.5;
+    obj.transform.y = -4.3;
     obj.transform.z = 0.0;
 
     // Create a time driver using the parameters
@@ -1257,7 +1258,8 @@ function showBubble(obj, facePoint, xSideWeight, positionY, targetBubbleScale, i
     // Get scale factors (Linearly positive correlated with absolute Euclidean distance from camera)
     //     Find distance from bubble to camera | Given camera is always be at ( 0, 0, 0 )
     
-    var bubbleScale = targetBubbleScale * range;
+    //var bubbleScale = targetBubbleScale * range;
+    var bubbleScale = 0.08;
      
     // Scale animation
     const scaleQuadraticSampler = Animation.samplers.easeInOutQuad(0, bubbleScale);
