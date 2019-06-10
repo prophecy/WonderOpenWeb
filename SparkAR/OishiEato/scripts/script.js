@@ -57,6 +57,10 @@ for (var i=0; i<bubbleList1.length; ++i)
 
 var foodFeederRoot0 = Scene.root.find('foodFeederRoot0');
 
+var testyPool0 = Scene.root.find("testyPool0");
+var crushPool0 = Scene.root.find("crushPool0");
+var ramenPool0 = Scene.root.find("ramenPool0");
+
 var foodPoolList0 = [];
 for (var i=0; i<16; ++i)
     foodPoolList0.push(Scene.root.find('testy0' + i));
@@ -539,9 +543,9 @@ function initProduct() {
 }
 
 function initFrontFrame() {
-
+    
     var themeName = currentData.theme;
-    /*
+    
     if (themeName.localeCompare(THEME_NAME_LOOKUP_TABLE.gyoza) == 0)
         showGyoza();
     else if (themeName.localeCompare(THEME_NAME_LOOKUP_TABLE.sandwich) == 0)
@@ -554,9 +558,6 @@ function initFrontFrame() {
         showMeal();
     else
         Diagnostics.log("Theme key not found with value: '" + themeName + "'");
-    */
-
-    showMeal();
 
     function showGyoza() {
 
@@ -644,7 +645,6 @@ function initFrontFrame() {
 
 function initHead() {
 
-    /*
     var faceName = currentData.face;
 
     if (faceName.localeCompare(FACE_NAME_LOOKUP_TABLE.gyoza) == 0)
@@ -661,10 +661,7 @@ function initHead() {
         showRamen();
     else
         Diagnostics.log("Face key not found with value: '" + faceName + "'");
-    */
-
-   showTakoyaki();
-
+    
     function showGyoza() {
 
         // Apply head mat and tex
@@ -746,7 +743,7 @@ function initHead() {
 foodFeederRoot0.hidden = true;
 
 function initFoodFeeder() {
-
+    
     // Setup materials & textures
     var themeName = currentData.theme;
 
@@ -762,34 +759,39 @@ function initFoodFeeder() {
         setupMealFoodMat();
     else
         Diagnostics.log("Theme key not found with value: '" + themeName + "'");
-
+    
     function setupGyozaFoodMat() {
 
+        ramenPool0.hidden = true;
         setupFoodMat(FOOD_TEX_LOOKUP_TABLE.gyoza);
         setupCrushMat(CRUSH_TEX_LOOKUP_TABLE.gyoza);
     }
 
     function setupSandwichFoodMat() {
 
+        ramenPool0.hidden = true;
         setupFoodMat(FOOD_TEX_LOOKUP_TABLE.sandwich);
         setupCrushMat(CRUSH_TEX_LOOKUP_TABLE.sandwich);
     }
 
     function setupCrabstickFoodMat() {
 
+        ramenPool0.hidden = true;
         setupFoodMat(FOOD_TEX_LOOKUP_TABLE.crabstick);
         setupCrushMat(CRUSH_TEX_LOOKUP_TABLE.crabstick);
     }
 
     function setupTakoyakiFoodMat() {
 
+        ramenPool0.hidden = true;
         setupFoodMat(FOOD_TEX_LOOKUP_TABLE.takoyaki);
         setupCrushMat(CRUSH_TEX_LOOKUP_TABLE.takoyaki);
     }
 
     function setupMealFoodMat() {
 
-        // Todo: Implement a new module, ramen needs the other! So sad T_T
+        testyPool0.hidden = true;
+        crushPool0.hidden = true;
     }
 
     function setupMatTex(texPathList, matList, texList, objList) {
@@ -989,10 +991,6 @@ function onFace0MouthOpen() {
 
     foodFeederRoot0.hidden = false;
 }
-
-Diagnostics.watch("ffr: x: ", foodFeederRoot0.transform.x);
-Diagnostics.watch("ffr: y: ", foodFeederRoot0.transform.y);
-Diagnostics.watch("ffr: z: ", foodFeederRoot0.transform.z);
 
 function onFace0MouthClose() {
 
@@ -1308,6 +1306,87 @@ function hideBubble(obj) {
 // Food feeder
 
 function handleFoodFeeder(foodObjList, crushObjList, args) {
+
+    // For object
+    var ramenRoot = Scene.root.find("ramenRoot0");
+    var ramen00Mesh = Scene.root.find("ramen_00_mesh");
+
+    // Translate animation
+    const RAMEN_MAX_OFFSET = -5.0;
+    const RAMEN_DELTA_TIME = 800;
+    const RAMEN_MASK_DELTA_TIME = 200;
+
+    // --------------------------------------------------------------------------------
+    // ramen effect
+
+    // Load diffuse tex
+    var url = BASE_TEX_URL + "theme_meal/ramen_512.png";
+    var diffuseTex = Textures.get("ext_ramen_tex0");
+    diffuseTex.url = url;
+
+    // Apply to mat
+    var mat = Materials.get("ramen_mat");
+    mat.diffuse = diffuseTex;
+
+    var maskMatList = [
+        Materials.get("ramen_mask_mat0"), Materials.get("ramen_mask_mat1"), 
+        Materials.get("ramen_mask_mat2"), Materials.get("ramen_mask_mat3"), 
+        Materials.get("ramen_mask_mat4"), Materials.get("ramen_mask_mat5"), 
+        //Materials.get("ramen_mask_mat6"), Materials.get("ramen_mask_mat7"), 
+        //Materials.get("ramen_mask_mat8"), 
+    ]
+
+    // Apply diffuse tex
+    for (var i=0; i<maskMatList.length; ++i)
+        maskMatList[i].diffuse = diffuseTex;
+    
+    // Start animation
+    startRamenFeederAnim();
+    
+    updateRamenMask();
+
+    function startRamenFeederAnim() {
+
+        const interval = { 
+            durationMilliseconds: RAMEN_DELTA_TIME,
+            loopCount: Infinity,
+            mirror: false  
+        };
+    
+        const driver = Animation.timeDriver(interval);
+        const samp = Animation.samplers.linear(0, RAMEN_MAX_OFFSET);
+        const anim = Animation.animate(driver, samp);
+    
+        ramenRoot.transform.z = anim;
+
+        driver.start();
+
+        driver.onAfterIteration().subscribe(function () {
+           
+            ramen00Mesh.material = maskMatList[0];
+        });
+    }
+
+    function updateRamenMask() {
+
+        ramen00Mesh.material = maskMatList[0];
+
+        // For mask
+        const maskTimer = Time.setInterval(updateMask, RAMEN_MASK_DELTA_TIME);
+
+        function updateMask() {
+    
+            const zVal = ramenRoot.transform.z.pinLastValue();
+            const ratio = zVal / RAMEN_MAX_OFFSET;
+            const length = maskMatList.length;
+            const index = Math.floor( length * ratio );
+
+            ramen00Mesh.material = maskMatList[index];
+
+            // To clear interval
+            //Time.clearInterval(maskTimer);
+        }
+    }
 
     // Create object list from randrom number
 
