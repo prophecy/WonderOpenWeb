@@ -839,10 +839,6 @@ getThemeData(GET_THEME_URL, function(data, err) {
         Diagnostics.log("err: " + JSON.stringify(err));
     }
 
-    // Specify this for testing
-    currentData.theme = THEME_NAME_LOOKUP_TABLE.meal;
-    currentData.face = FACE_NAME_LOOKUP_TABLE.takoyaki;
-
     initProduct();
     initFrontFrame();
     initHead();
