@@ -1308,7 +1308,7 @@ function handleFoodFeeder(foodObjList, crushObjList, args) {
 
     // Translate animation
     const RAMEN_MAX_OFFSET = -5.0;
-    const RAMEN_DELTA_TIME = 800;
+    const RAMEN_DELTA_TIME = 600;
     const RAMEN_MASK_DELTA_TIME = 200;
 
     // --------------------------------------------------------------------------------
