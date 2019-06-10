@@ -409,10 +409,10 @@ const FACE_NAME_LOOKUP_TABLE = {
 //Diagnostics.watch("facePoint0 Y ", facePoint0.y);
 //Diagnostics.watch("facePoint0 Z ", facePoint0.z);
 
-Diagnostics.watch("Mouth Openness - ", FaceTracking.face(0).mouth.openness);
-Diagnostics.watch("Mouth Center X ", FaceTracking.face(0).mouth.center.x);
-Diagnostics.watch("Mouth Center Y ", FaceTracking.face(0).mouth.center.y);
-Diagnostics.watch("Mouth Center Z ", FaceTracking.face(0).mouth.center.z);
+//Diagnostics.watch("Mouth Openness - ", FaceTracking.face(0).mouth.openness);
+//Diagnostics.watch("Mouth Center X ", FaceTracking.face(0).mouth.center.x);
+//Diagnostics.watch("Mouth Center Y ", FaceTracking.face(0).mouth.center.y);
+//Diagnostics.watch("Mouth Center Z ", FaceTracking.face(0).mouth.center.z);
 
 // Toggle show/hidden debug panel
 TouchGestures.onLongPress().subscribe(function (gesture) {
