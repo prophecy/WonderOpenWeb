@@ -252,6 +252,9 @@ const mealFrontFlagMesh = Scene.root.find("flag_mesh");
 const mealFrontBowlMesh = Scene.root.find("bowl_mesh");
 const mealFrontStillRamenMesh = Scene.root.find("still_ramen_mesh");
 
+const mealShopstick00mesh = Scene.root.find("shopstick00_mesh");
+const mealShopstick01mesh = Scene.root.find("shopstick01_mesh");
+
 // --------------------------------------------------------------------------------
 // URL
 var GET_THEME_URL = "https://dev.oishidrink.com/eato/asset/getTheme.aspx";
@@ -723,6 +726,25 @@ function initFoodFeeder() {
 
         testyPool0.hidden = true;
         crushPool0.hidden = true;
+
+        // Setup shopstick
+        var url = BASE_TEX_URL + "theme_meal/chopsticks.png"
+        var tex = Textures.get(FOOD_TEX_LIST[0]);
+        var mat = Materials.get(FOOD_MAT_LIST[0]);
+
+        tex.url = url;
+        mat.diffuse = tex;
+
+        mealShopstick00mesh.material = mat;
+        mealShopstick01mesh.material = mat;
+    }
+
+    function setupFoodMat(texPathList) {
+        setupMatTex(texPathList, FOOD_MAT_LIST, FOOD_TEX_LIST, foodPoolMeshList0);
+    }
+
+    function setupCrushMat(texPathList) {
+        setupMatTex(texPathList, CRUSH_MAT_LIST, CRUSH_TEX_LIST, crushPoolMeshList0);
     }
 
     function setupMatTex(texPathList, matList, texList, objList) {
@@ -761,14 +783,6 @@ function initFoodFeeder() {
             // Apply mat to obj
             obj.material = mat;
         }
-    }
-
-    function setupFoodMat(texPathList) {
-        setupMatTex(texPathList, FOOD_MAT_LIST, FOOD_TEX_LIST, foodPoolMeshList0);
-    }
-
-    function setupCrushMat(texPathList) {
-        setupMatTex(texPathList, CRUSH_MAT_LIST, CRUSH_TEX_LIST, crushPoolMeshList0);
     }
 
     // Setup parameters
@@ -817,6 +831,10 @@ getThemeData(GET_THEME_URL, function(data, err) {
 
         Diagnostics.log("err: " + JSON.stringify(err));
     }
+
+    // Specify this for testing
+    currentData.theme = THEME_NAME_LOOKUP_TABLE.meal;
+    currentData.face = FACE_NAME_LOOKUP_TABLE.takoyaki;
 
     initProduct();
     initFrontFrame();
@@ -921,6 +939,12 @@ function onFace0MouthOpen() {
     // Manipulate ramen transform here
 
     foodFeederRoot0.hidden = false;
+
+    // Set logic to specific theme
+    if (currentData.theme == THEME_NAME_LOOKUP_TABLE.meal) {
+
+        mealFrontStillRamenMesh.hidden = true;
+    }
 }
 
 function onFace0MouthClose() {
@@ -928,6 +952,12 @@ function onFace0MouthClose() {
     //Diagnostics.log("onFaceMouthClose");
 
     foodFeederRoot0.hidden = true;
+
+    // Set logic to specific theme
+    if (currentData.theme == THEME_NAME_LOOKUP_TABLE.meal) {
+
+        mealFrontStillRamenMesh.hidden = false;
+    }
 }
 
 handleMouthOpeningState(
@@ -1154,6 +1184,8 @@ function applyRotationBounce(obj, minAngle, maxAngle, duration) {
 
 function showBubble(obj, facePoint, xSideWeight, positionY, targetBubbleScale, isAlwaysLeft) { 
 
+    return;
+    
     const facePointX = facePoint.x.pinLastValue(); 
     const facePointY = facePoint.y.pinLastValue();
     const facePointZ = facePoint.z.pinLastValue();
