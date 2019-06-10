@@ -1218,8 +1218,6 @@ function applyRotationBounce(obj, minAngle, maxAngle, duration) {
 
 function showBubble(obj, facePoint, xSideWeight, positionY, targetBubbleScale, isAlwaysLeft) { 
 
-    return;
-
     const facePointX = facePoint.x.pinLastValue(); 
     const facePointY = facePoint.y.pinLastValue();
     const facePointZ = facePoint.z.pinLastValue();
