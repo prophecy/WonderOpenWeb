@@ -301,49 +301,6 @@ const CRUSH_TEX_LIST = [
     "ext_crush_tex0", "ext_crush_tex1", "ext_crush_tex2", "ext_crush_tex3",
 ]
 
-// Create lookup table between SERVER data and texture name
-const PROD_NAME_LOOKUP_TABLE = {
-
-    gyoza_pork_5pcs: "Gyoza Pork 5pcs",
-    gyoza_pork_12pcs: "Gyoza Pork12pcs",
-    gyoza_takoyaki_5pcs: "Gyoza Takoyaki 5pcs",
-    gyoza_shrimp_12pcs: "Gyoza Shrimp12pcs",
-    gyoza_chicken_yuzu_5pcs: "NPD Gyoza Yuzu",
-    gyoza_chicken_yuzu_12pcs: "Gyoza Chicken 12pcs",
-    gyoza_pork_mala_5pcs: "gyoza_pork_mala_5pcs",
-    gyoza_pork_mala_12pcs: "gyoza_pork_mala_12pcs",
-
-    gyoza_reserved_00: "gyoza_reserved_00",
-    gyoza_reserved_01: "gyoza_reserved_01",
-
-    sandwich_alaska_wakame: "Sandwich Alaska&Wakame",
-    sandwich_tuna: "Sandwich Tuna",
-    sandwich_ham_egg: "Sandwich Ham&Egg",
-    sandwich_crabstick_wasabi: "sandwich_crabstick_wasabi",
-
-    sandwich_reserved_00: "sandwich_reserved_00",
-    sandwich_reserved_01: "sandwich_reserved_01",
-
-    crabstick_kani_kamaboko: "Crab Stick Kamaboko",
-    crabstick_kani_alaska: "Crab Stick Alaska",
-
-    crabstick_reserved_00: "crabstick_reserved_00",
-    crabstick_reserved_01: "crabstick_reserved_01",
-
-    takoyaki_takoyaki: "Tokoyaki",
-
-    takoyaki_reserved_00: "takoyaki_reserved_00",
-    takoyaki_reserved_01: "takoyaki_reserved_01",
-
-    meal_yakisoba: "Meal Yakisoba",
-    meal_clams: "Meal Clams",
-    meal_kraphrao: "meal_kraphrao",
-    meal_keemao: "meal_keemao",
-
-    meal_reserved_00: "meal_reserved_00",
-    meal_reserved_01: "meal_reserved_01",
-}
-
 const PROD_TEX_LOOKUP_TABLE = {
 
     gyoza_pork_5pcs: "theme_gyoza/product/pork_5pcs.png",
@@ -433,12 +390,12 @@ const CRUSH_TEX_LOOKUP_TABLE = {
 
 const FACE_NAME_LOOKUP_TABLE = {
 
-    gyoza: "reserve face2",
-    sandwich: "reserve face3",
-    crabstick: "reserve face4",
-    takoyaki: "reserve face5",
-    takoyaki_special: "Takoyaki Face",
-    meal: "reserve face6",
+    gyoza: "gyoza",
+    sandwich: "sandwich",
+    crabstick: "crabstick",
+    takoyaki: "takoyaki",
+    takoyaki_special: "takoyaki_special",
+    meal: "meal",
 }
 
 // --------------------------------------------------------------------------------
@@ -486,50 +443,24 @@ CameraInfo.isRecordingVideo.monitor().subscribe(function(value) {
 
 function initProduct() {
 
-    var prodName = currentData.product;
-    var prodKey = undefined;
+    var prodKey = currentData.product;
     var prodTex = undefined;
 
-    var prodKeys = Object.keys(PROD_NAME_LOOKUP_TABLE);
+    if (!(prodKey in PROD_TEX_LOOKUP_TABLE)) {
 
-    //Diagnostics.log("prodKeys: " + prodKeys);
-
-    // Search product key (O(n))
-    for (var i=0; i<prodKeys.length; ++i) {
-
-        var key = prodKeys[i];
-
-        if (prodName.localeCompare(PROD_NAME_LOOKUP_TABLE[key]) == 0) {
-
-            prodKey = key;
-            break;
-        }
-    }
-
-    if (prodKey === undefined) {
-
-        Diagnostics.log("Product key not found with value: '" + prodName + "'");
-
+        Diagnostics.log("Texture name not found with key: " + prodKey);
         prodTex = Textures.get("not_found_tex");
-    }
-    else {
-
-        Diagnostics.log("Got product key: " + prodKey);
-
-        if (!(prodKey in PROD_TEX_LOOKUP_TABLE)) {
-    
-            Diagnostics.log("Texture name not found with key: " + prodKey);
-            return;
-        }
-
-        // Get product texture
-        var texName = PROD_TEX_LOOKUP_TABLE[prodKey];
-    
-        Diagnostics.log("Got texture name: " + texName);   
         
-        prodTex = Textures.get("ext_prod_tex0");
-        prodTex.url = BASE_TEX_URL + texName;
+        return;
     }
+
+    // Get product texture
+    var texName = PROD_TEX_LOOKUP_TABLE[prodKey];
+
+    Diagnostics.log("Got texture name: " + texName);   
+    
+    prodTex = Textures.get("ext_prod_tex0");
+    prodTex.url = BASE_TEX_URL + texName;
     
     // Apply texture to product material
     var prodMat = Materials.get(PROD_MAT_NAME);
