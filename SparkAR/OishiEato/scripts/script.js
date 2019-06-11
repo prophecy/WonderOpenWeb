@@ -140,10 +140,16 @@ const gyozaFrontTex0 = 'gyoza_front_tex0';
 const gyozaFrontTex1 = 'gyoza_front_tex1';
 
 const headGyozaRoot = Scene.root.find('head_gyoza_root');
+const headGyozaRoot1 = Scene.root.find('head_gyoza_root1');
+
 const headHachimakiMesh = Scene.root.find("head_hachimaki_mesh");
 const headHachimakiTex = "head_hachimaki";
 
+const headHachimaki1Mesh = Scene.root.find("head_hachimaki1_mesh");
+
 const facePaintGyozaMat = Materials.get("face_paint_gyoza_mat");
+
+const facePaintInvisibleMat = Materials.get("face_paint_invisible_mat");
 
 // --------------------------------------------------------------------------------
 // RESOURCES for SANDWICH THEME
@@ -187,6 +193,12 @@ const headSwirl0 = Scene.root.find("head_swirl0");
 const headSwirl1 = Scene.root.find("head_swirl1");
 const headSwirl0Mesh = Scene.root.find("head_swirl0_mesh");
 const headSwirl1Mesh = Scene.root.find("head_swirl1_mesh");
+
+const headSandwichRoot1 = Scene.root.find("head_sandwich_root1");
+const headGlasses1Mesh = Scene.root.find("head_glasses1_mesh");
+const headSwirl01Mesh = Scene.root.find("head_swirl01_mesh");
+const headSwirl11Mesh = Scene.root.find("head_swirl11_mesh");
+
 const headSwirlTex = "head_swirl";
 
 // --------------------------------------------------------------------------------
@@ -218,10 +230,19 @@ const headCatEarsTex = "head_takoyaki_cat_ears";
 const headNoseTex = "head_takoyaki_nose";
 const headWhiskerTex = "head_takoyaki_whiskers";
 
+const headTakoyakiRoot1 = Scene.root.find("head_takoyaki_root1");
+const headTakoyakiCatEars1Mesh = Scene.root.find("head_takoyaki_cat_ears1_mesh");
+const headTakoyakiNose1Mesh = Scene.root.find("head_takoyaki_nose1_mesh");
+const headTakoyakiWhisker01Mesh = Scene.root.find("head_takoyaki_whisker01_mesh");
+const headTakoyakiWhisker11Mesh = Scene.root.find("head_takoyaki_whisker11_mesh");
+
 // Head, takoyaki special
 const headTakoyakiSpecialRoot = Scene.root.find("head_takoyaki_spec_root");
 const headTakoyakiBigMesh = Scene.root.find("head_takoyaki_big_mesh");
 const headTakoyakiBigTex = "head_takoyaki_big";
+
+const headTakoyakiSpecial1Root = Scene.root.find("head_takoyaki_spec_root1");
+const headTakoyakiBig1Mesh = Scene.root.find("head_takoyaki_big1_mesh");
 
 const pinkyFaceMat = Materials.get("pinky_face_mat");
 
@@ -231,6 +252,10 @@ const pinkyFaceMat = Materials.get("pinky_face_mat");
 const headCrabstickRoot = Scene.root.find("head_crabstick_root");
 const headCrabstickHatMesh = Scene.root.find("head_crabstick_hat_mesh");
 const headCrabstickScalfMesh = Scene.root.find("head_crabstick_scalf_mesh");
+
+const headCrabstickRoot1 = Scene.root.find("head_crabstick_root1");
+const headCrabstickHat1Mesh = Scene.root.find("head_crabstick_hat1_mesh");
+const headCrabstickScalf1Mesh = Scene.root.find("head_crabstick_scalf1_mesh");
 
 const headCrabstickHatTex = "head_crabstick_hat_tex";
 const headCrabstickScalfTex = "head_crabstick_scalf_tex";
@@ -246,6 +271,9 @@ const crabstickFrontLogoCrabMesh = Scene.root.find("logo_crab_mesh");
 const headRamenRoot = Scene.root.find("head_ramen_root");
 const headRamenEyesMesh = Scene.root.find("head_ramen_eyes_mesh");
 const headRamenEyesTex = "head_ramen_eyes_tex";
+
+const headRamenRoot1 = Scene.root.find("head_ramen_root1");
+const headRamenEyes1Mesh = Scene.root.find("head_ramen_eyes1_mesh");
 
 const frontMealRoot = Scene.root.find("front_meal");
 const mealFrontFlagMesh = Scene.root.find("flag_mesh");
@@ -287,8 +315,8 @@ const FRONT_TEX_LIST = [
 ];
 
 const HEAD_MAT_LIST = [
-    "head_mat0", "head_mat1", "head_mat2", "head_mat3",
-    "head_mat4"
+    "head_mat0", "head_mat1", "head_mat2", "head_mat3", 
+    "head_mat4",
 ];
 
 const FOOD_MAT_LIST = [
@@ -603,9 +631,13 @@ function initHead() {
 
         // Apply head mat and tex
         var curMatIndex = 0;
-        headHachimakiMesh.material = getMaterialWithDiffuse(HEAD_MAT_LIST[curMatIndex++], headHachimakiTex);
+
+        var mat = getMaterialWithDiffuse(HEAD_MAT_LIST[curMatIndex++], headHachimakiTex);
+        headHachimakiMesh.material = mat;
+        headHachimaki1Mesh.material = mat;
 
         headGyozaRoot.hidden = false;
+        headGyozaRoot1.hidden = false;
 
         // Apply face paint mat and tex
         facemesh0.material = facePaintGyozaMat;
@@ -616,11 +648,19 @@ function initHead() {
 
         // Apply head mat and tex
         var curMatIndex = 0;
-        headGlassesMesh.material = getMaterialWithDiffuse(HEAD_MAT_LIST[curMatIndex++], headGlassesTex);
-        headSwirl0Mesh.material = getMaterialWithDiffuse(HEAD_MAT_LIST[curMatIndex++], headSwirlTex);
-        headSwirl1Mesh.material = getMaterialWithDiffuse(HEAD_MAT_LIST[curMatIndex++], headSwirlTex);
+        var tmpMat = undefined;
+        
+        headGlassesMesh.material = tmpMat = getMaterialWithDiffuse(HEAD_MAT_LIST[curMatIndex++], headGlassesTex);
+        headGlasses1Mesh.material = tmpMat;
+
+        headSwirl0Mesh.material = tmpMat = getMaterialWithDiffuse(HEAD_MAT_LIST[curMatIndex++], headSwirlTex);
+        headSwirl01Mesh.material = tmpMat;
+
+        headSwirl1Mesh.material = tmpMat = getMaterialWithDiffuse(HEAD_MAT_LIST[curMatIndex++], headSwirlTex);
+        headSwirl11Mesh.material = tmpMat;
 
         headSandwichRoot.hidden = false;
+        headSandwichRoot1.hidden = false;
 
         // Apply face paint mat and tex
         facemesh0.material = pinkyFaceMat;
@@ -629,18 +669,32 @@ function initHead() {
         // Use swirl glasses
         applySpinMovement(headSwirl0Mesh, 2000);
         applySpinMovement(headSwirl1Mesh, 2000);
+
+        // Apply face paint mat and tex
+        facemesh0.material = facePaintInvisibleMat;
+        facemesh1.material = facePaintInvisibleMat;
     }
 
     function showTakoyaki() {
 
         // Apply head mat and tex
         var curMatIndex = 0;
-        headTakoyakiCatEarsMesh.material = getMaterialWithDiffuse(HEAD_MAT_LIST[curMatIndex++], headCatEarsTex);
-        headTakoyakiNoseMesh.material = getMaterialWithDiffuse(HEAD_MAT_LIST[curMatIndex++], headNoseTex);
-        headTakoyakiWhisker0Mesh.material = getMaterialWithDiffuse(HEAD_MAT_LIST[curMatIndex++], headWhiskerTex);
-        headTakoyakiWhisker1Mesh.material = getMaterialWithDiffuse(HEAD_MAT_LIST[curMatIndex++], headWhiskerTex);
+        var tmpMat = undefined;
+
+        headTakoyakiCatEarsMesh.material = tmpMat = getMaterialWithDiffuse(HEAD_MAT_LIST[curMatIndex++], headCatEarsTex);
+        headTakoyakiCatEars1Mesh.material = tmpMat;
+
+        headTakoyakiNoseMesh.material = tmpMat = getMaterialWithDiffuse(HEAD_MAT_LIST[curMatIndex++], headNoseTex);
+        headTakoyakiNose1Mesh.material = tmpMat;
+
+        headTakoyakiWhisker0Mesh.material = tmpMat = getMaterialWithDiffuse(HEAD_MAT_LIST[curMatIndex++], headWhiskerTex);
+        headTakoyakiWhisker01Mesh.material = tmpMat;
+
+        headTakoyakiWhisker1Mesh.material = tmpMat = getMaterialWithDiffuse(HEAD_MAT_LIST[curMatIndex++], headWhiskerTex);
+        headTakoyakiWhisker11Mesh.material = tmpMat;
 
         headTakoyakiRoot.hidden = false;
+        headTakoyakiRoot1.hidden = false;
         
         // Apply face paint mat and tex
         facemesh0.material = pinkyFaceMat;
@@ -650,9 +704,13 @@ function initHead() {
     function showTakoyakiSpecial() {
 
         var curMatIndex = 0;
-        headTakoyakiBigMesh.material = getMaterialWithDiffuse(HEAD_MAT_LIST[curMatIndex++], headTakoyakiBigTex);
+        var tmpMat = undefined;
+
+        headTakoyakiBigMesh.material = tmpMat = getMaterialWithDiffuse(HEAD_MAT_LIST[curMatIndex++], headTakoyakiBigTex);
+        headTakoyakiBig1Mesh.material = tmpMat;
 
         headTakoyakiSpecialRoot.hidden = false;
+        headTakoyakiSpecial1Root.hidden = false;
 
         // Apply face paint mat and tex
         facemesh0.material = pinkyFaceMat;
@@ -662,22 +720,41 @@ function initHead() {
     function showCrabstick() {
 
         var curMatIndex = 0;
-        headCrabstickHatMesh.material = getMaterialWithDiffuse(HEAD_MAT_LIST[curMatIndex++], headCrabstickHatTex);
-        headCrabstickScalfMesh.material = getMaterialWithDiffuse(HEAD_MAT_LIST[curMatIndex++], headCrabstickScalfTex);
+        var tmpMat = undefined;
+
+        headCrabstickHatMesh.material = tmpMat = getMaterialWithDiffuse(HEAD_MAT_LIST[curMatIndex++], headCrabstickHatTex);
+        headCrabstickHat1Mesh.material = tmpMat;
+
+        headCrabstickScalfMesh.material = tmpMat = getMaterialWithDiffuse(HEAD_MAT_LIST[curMatIndex++], headCrabstickScalfTex);
+        headCrabstickScalf1Mesh.material = tmpMat
 
         headCrabstickRoot.hidden = false;
+        headCrabstickRoot1.hidden = false;
+
+        // Apply face paint mat and tex
+        facemesh0.material = facePaintInvisibleMat;
+        facemesh1.material = facePaintInvisibleMat;
     }
 
     function showRamen() {
 
         var curMatIndex = 0;
-        headRamenEyesMesh.material = getMaterialWithDiffuse(HEAD_MAT_LIST[curMatIndex++], headRamenEyesTex);
+        var tmpMat = undefined;
+
+        headRamenEyesMesh.material = tmpMat = getMaterialWithDiffuse(HEAD_MAT_LIST[curMatIndex++], headRamenEyesTex);
+        headRamenEyes1Mesh.material = tmpMat;
 
         headRamenRoot.hidden = false;
+        headRamenRoot1.hidden = false;
+
+        // Apply face paint mat and tex
+        facemesh0.material = facePaintInvisibleMat;
+        facemesh1.material = facePaintInvisibleMat;
     }
 }
 
 foodFeederRoot0.hidden = true;
+foodFeederRoot1.hidden = true;
 
 function initFoodFeeder() {
     
@@ -894,14 +971,16 @@ function onFaceTracked(faceIndex) {
         curFacePoint = facePoint1;
     }
 
+    // Todo: Implement the real bubble logic
+
     // Check is in front of the other
-    if (!isBubbleVisible) {
+    if (!isBubbleVisible && faceIndex == 0) {
 
         showBubble(curBubble, curFacePoint, X_SIDE_WEIGHT, BUBBLE_POSITION_Y, TARGET_BUBBLE_SCALE, true);
         curFaceOwnBubble = faceIndex;
-    }
     
-    isBubbleVisible = true;
+        isBubbleVisible = true;
+    }
 }
 
 function onFaceUntracked(faceIndex) {
@@ -1307,46 +1386,48 @@ function hideBubble(obj) {
 
 function handleFoodFeeder(foodObjList, crushObjList, args) {
 
-    // For object
-    var ramenRoot = Scene.root.find("ramenRoot0");
-    var ramen00Mesh = Scene.root.find("ramen_00_mesh");
-
-    // Translate animation
-    const RAMEN_MAX_OFFSET = -5.0;
-    const RAMEN_DELTA_TIME = 600;
-    const RAMEN_MASK_DELTA_TIME = 200;
-
-    // --------------------------------------------------------------------------------
-    // ramen effect
-
-    // Load diffuse tex
-    var url = BASE_TEX_URL + "theme_meal/ramen_512.png";
-    var diffuseTex = Textures.get("ext_ramen_tex0");
-    diffuseTex.url = url;
-
-    // Apply to mat
-    var mat = Materials.get("ramen_mat");
-    mat.diffuse = diffuseTex;
-
-    var maskMatList = [
-        Materials.get("ramen_mask_mat0"), Materials.get("ramen_mask_mat1"), 
-        Materials.get("ramen_mask_mat2"), Materials.get("ramen_mask_mat3"), 
-        Materials.get("ramen_mask_mat4"), Materials.get("ramen_mask_mat5"), 
-        //Materials.get("ramen_mask_mat6"), Materials.get("ramen_mask_mat7"), 
-        //Materials.get("ramen_mask_mat8"), 
-    ]
-
-    // Apply diffuse tex
-    for (var i=0; i<maskMatList.length; ++i)
-        maskMatList[i].diffuse = diffuseTex;
-    
     // Start animation
-    startRamenFeederAnim();
-    
-    updateRamenMask();
+    if (currentData.theme === THEME_NAME_LOOKUP_TABLE.meal)
+        startRamenFeeder();
 
-    function startRamenFeederAnim() {
+    function startRamenFeeder() {
 
+        // Todo: Fix intensive looping here
+
+        // For object
+        var ramenRoot = Scene.root.find("ramenRoot0");
+        var ramen00Mesh = Scene.root.find("ramen_00_mesh");
+
+        // Translate animation
+        const RAMEN_MAX_OFFSET = -5.0;
+        const RAMEN_DELTA_TIME = 600;
+        const RAMEN_MASK_DELTA_TIME = 200;
+
+        // --------------------------------------------------------------------------------
+        // ramen effect
+
+        // Load diffuse tex
+        var url = BASE_TEX_URL + "theme_meal/ramen_512.png";
+        var diffuseTex = Textures.get("ext_ramen_tex0");
+        diffuseTex.url = url;
+
+        // Apply to mat
+        var mat = Materials.get("ramen_mat");
+        mat.diffuse = diffuseTex;
+
+        var maskMatList = [
+            Materials.get("ramen_mask_mat0"), Materials.get("ramen_mask_mat1"), 
+            Materials.get("ramen_mask_mat2"), Materials.get("ramen_mask_mat3"), 
+            Materials.get("ramen_mask_mat4"), Materials.get("ramen_mask_mat5"), 
+            //Materials.get("ramen_mask_mat6"), Materials.get("ramen_mask_mat7"), 
+            //Materials.get("ramen_mask_mat8"), 
+        ]
+
+        // Apply diffuse tex
+        for (var i=0; i<maskMatList.length; ++i)
+            maskMatList[i].diffuse = diffuseTex;
+        
+        // Start anim
         const interval = { 
             durationMilliseconds: RAMEN_DELTA_TIME,
             loopCount: Infinity,
@@ -1365,13 +1446,10 @@ function handleFoodFeeder(foodObjList, crushObjList, args) {
            
             ramen00Mesh.material = maskMatList[0];
         });
-    }
 
-    function updateRamenMask() {
-
+        // Update mask
         ramen00Mesh.material = maskMatList[0];
 
-        // For mask
         const maskTimer = Time.setInterval(updateMask, RAMEN_MASK_DELTA_TIME);
 
         function updateMask() {
@@ -1512,6 +1590,9 @@ function handleFoodFeeder(foodObjList, crushObjList, args) {
 
     // --------------------------------------------------------------------------------
     // Start food feeder effect
+
+    // Todo: Fix intensive looping here
+
     const feederTimeInMilliseconds = args.feedInterval;
     const feederIntervalTimer = Time.setInterval(shouldStartFeed, feederTimeInMilliseconds);
     var feedIndex = 0;
@@ -1549,7 +1630,6 @@ function handleFoodFeeder(foodObjList, crushObjList, args) {
 
         runCrushInterval(crushObjList, crushIndex++, args.crushDuration, 
             args.crushVarianceX, args.crushVarianceY, args.crushVarianceZ);
-
     }
 }
 
