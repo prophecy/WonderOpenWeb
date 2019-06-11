@@ -1366,6 +1366,8 @@ function handleFoodFeeder(foodObjList, crushObjList, args) {
     // Start animation
     if (currentData.theme === THEME_NAME_LOOKUP_TABLE.meal)
         startRamenFeeder();
+    else
+        startNormalFoodFeeder();
 
     function startRamenFeeder() {
 
@@ -1443,171 +1445,175 @@ function handleFoodFeeder(foodObjList, crushObjList, args) {
         }
     }
 
-    // Create object list from randrom number
+    function startNormalFoodFeeder() {
 
-    var xPointList = [
-        -4.64605, 2.01145, 0.15905, -5.46574, 1.48324, -0.88440, 5.19227, -0.17623, -4.53221, 3.80409,
-        -0.58917, -7.88229, 0.28566, -2.71326, -4.56251, 1.48852, 7.26982, -1.98159, -4.68881, 5.47105
-    ];
-    var yPointList = [
-        -4.02526, 3.29644, -4.92173, 4.44748, 1.83189, 5.47964, 3.90241, -5.72946, -0.65139, 5.41456,
-        -5.93434, 4.94540, 5.72991, -6.85919, -4.76642, 2.35872, -3.66115, 2.37872, 2.26890, -6.83019
-    ];
-    var yAngleList = [
-        0.88630, -0.34092, -0.36846, 0.48486, -0.67216, 0.76679, -0.03117, 0.98991, 0.38995, -0.14609,
-        0.80563, -0.07388, 0.56158, -0.68193, -0.38198, 0.07115, -0.72906, -0.09344, 0.37989, 0.87110
-    ];
-    var isFoodFlip = [
-        1, 1, 0, 0, 0, 1, 0, 0, 1, 0,
-        1, 1, 1, 0, 0, 0, 1, 0, 1, 0
-    ];
-     
-    var crushYAngleList0 = [
-        -0.08104, 0.44314, 0.52326, -0.30244, 0.82356, -0.26104, -0.85587, 0.80953, 0.90391, -0.21765
-    ];
-
-    var crushYAngleList1 = [
-        0.89408, -0.70547, 0.91741, -0.60386, 0.20676,-0.97222, 0.50191, 0.53523, -0.42530, 0.93437
-    ]; 
-
-    var crushNormDirList = [];
-    for (var i=0; i<crushYAngleList0.length; ++i) {
-
-        var radx = crushYAngleList0[i] * 2.0 * Math.PI;
-        var rady = crushYAngleList1[i] * 2.0 * Math.PI;
-
-        crushNormDirList.push([Math.cos(radx), Math.sin(rady)]);
-    }
-
-    // --------------------------------------------------------------------------------
-    // Feeder efx function
-    
-    function runFeedInterval(objList, index, duration) {
-
-        // Manipulate position transition
-        const shootFoodInterval = {
-            durationMilliseconds: duration,
-            loopCount: Infinity,
-            mirror: false  
-        };
-
-        var feedTimeDriver = Animation.timeDriver(shootFoodInterval);
- 
-        const txSamp = Animation.samplers.easeInOutQuad(xPointList[index] * args.feedVariantX, 0.0);
-        const txAnim = Animation.animate(feedTimeDriver, txSamp);
-
-        const tySamp = Animation.samplers.easeInOutQuad(yPointList[index] * args.feedVariantY, 0.0);
-        const tyAnim = Animation.animate(feedTimeDriver, tySamp);
-
-        const tzSamp = Animation.samplers.easeInOutQuad(args.range, 0.0);
-        const tzAnim = Animation.animate(feedTimeDriver, tzSamp);
+        // Create object list from randrom number
+        var xPointList = [
+            -4.64605, 2.01145, 0.15905, -5.46574, 1.48324, -0.88440, 5.19227, -0.17623, -4.53221, 3.80409,
+            -0.58917, -7.88229, 0.28566, -2.71326, -4.56251, 1.48852, 7.26982, -1.98159, -4.68881, 5.47105
+        ];
+        var yPointList = [
+            -4.02526, 3.29644, -4.92173, 4.44748, 1.83189, 5.47964, 3.90241, -5.72946, -0.65139, 5.41456,
+            -5.93434, 4.94540, 5.72991, -6.85919, -4.76642, 2.35872, -3.66115, 2.37872, 2.26890, -6.83019
+        ];
+        var yAngleList = [
+            0.88630, -0.34092, -0.36846, 0.48486, -0.67216, 0.76679, -0.03117, 0.98991, 0.38995, -0.14609,
+            0.80563, -0.07388, 0.56158, -0.68193, -0.38198, 0.07115, -0.72906, -0.09344, 0.37989, 0.87110
+        ];
+        var isFoodFlip = [
+            1, 1, 0, 0, 0, 1, 0, 0, 1, 0,
+            1, 1, 1, 0, 0, 0, 1, 0, 1, 0
+        ];
         
-        // Show object
-        objList[index].hidden = false; 
-            
-        objList[index].transform.x = txAnim;
-        objList[index].transform.y = tyAnim;
-        objList[index].transform.z = tzAnim;
+        var crushYAngleList0 = [
+            -0.08104, 0.44314, 0.52326, -0.30244, 0.82356, -0.26104, -0.85587, 0.80953, 0.90391, -0.21765
+        ];
 
-        feedTimeDriver.start();
+        var crushYAngleList1 = [
+            0.89408, -0.70547, 0.91741, -0.60386, 0.20676,-0.97222, 0.50191, 0.53523, -0.42530, 0.93437
+        ]; 
 
-        if (!(feedTimeDriverList.length > index))
-            feedTimeDriverList.push(feedTimeDriver);
-        else
-            feedTimeDriverList[index] = feedTimeDriver;
+        var crushNormDirList = [];
+        for (var i=0; i<crushYAngleList0.length; ++i) {
 
-        // Manipulate angle
-        objList[index].transform.rotationX = 0.0;
+            var radx = crushYAngleList0[i] * 2.0 * Math.PI;
+            var rady = crushYAngleList1[i] * 2.0 * Math.PI;
 
-        // Flip randomly
-        if (isFoodFlip[index] == 1)
-            objList[index].transform.rotationY = 180.0;
-        else
-            objList[index].transform.rotationY = 0.0;
-        
-        objList[index].transform.rotationZ = yAngleList[index] * args.yAngleVariant;
-    }
-
-    // --------------------------------------------------------------------------------
-    // Crush efx function
-
-    function runCrushInterval(objList, index, crushDuration, varianceX, varianceY, varianceZ) {
-
-        // Manipulate crush angle
-        const crushInterval = { 
-            durationMilliseconds: crushDuration,
-            loopCount: Infinity,
-            mirror: false  
-        };
-        var crushTimeDriver = Animation.timeDriver(crushInterval);
-
-        const cxSamp = Animation.samplers.easeInOutQuad(0, crushNormDirList[index][0] * varianceX);
-        const cxAnim = Animation.animate(crushTimeDriver, cxSamp);
-
-        const cySamp = Animation.samplers.easeInOutQuad(0, crushNormDirList[index][1] * varianceY);
-        const cyAnim = Animation.animate(crushTimeDriver, cySamp);
-
-        const czSamp = Animation.samplers.easeInOutQuad(0, varianceZ);
-        const czAnim = Animation.animate(crushTimeDriver, czSamp);
-
-        // Show object
-        objList[index].hidden = false;
-
-        objList[index].transform.x = cxAnim;
-        objList[index].transform.y = cyAnim;
-        objList[index].transform.z = czAnim;
-
-        crushTimeDriver.start();
-
-        if (!(crushTimeDriverList.length > index))
-            crushTimeDriverList.push(crushTimeDriver);
-        else
-            crushTimeDriverList[index] = crushTimeDriver; 
-    }
-
-    // --------------------------------------------------------------------------------
-    // Start food feeder effect
-
-    // Todo: Fix intensive looping here
-
-    const feederTimeInMilliseconds = args.feedInterval;
-    const feederIntervalTimer = Time.setInterval(shouldStartFeed, feederTimeInMilliseconds);
-    var feedIndex = 0;
-
-    // Hide all
-    for (var i=0; i<foodObjList.length; ++i)
-        foodObjList[i].hidden = true;
-
-    function shouldStartFeed() {
-
-        runFeedInterval(foodObjList, feedIndex++, args.feedDuration);
-
-        if (feedIndex >= foodObjList.length)
-            Time.clearInterval(feederIntervalTimer);
-    }
-
-    // --------------------------------------------------------------------------------
-    // Start crush effect
-
-    const crushTimeInMilliseconds = args.crushInterval;
-    const crushIntervalTimer = Time.setInterval(shouldStartCrush, crushTimeInMilliseconds);
-    var crushIndex = 0;
-
-    // Hide all
-    for (var i=0; i<crushObjList.length; ++i)
-        crushObjList[i].hidden = true;
-
-    function shouldStartCrush() {
-
-        if (crushIndex >= crushObjList.length) {
-
-            Time.clearInterval(crushIntervalTimer);
-            return;
+            crushNormDirList.push([Math.cos(radx), Math.sin(rady)]);
         }
 
-        runCrushInterval(crushObjList, crushIndex++, args.crushDuration, 
-            args.crushVarianceX, args.crushVarianceY, args.crushVarianceZ);
+        // --------------------------------------------------------------------------------
+        // Feeder efx function
+        
+        function runFeedInterval(objList, index, duration) {
+
+            // Manipulate position transition
+            const shootFoodInterval = {
+                durationMilliseconds: duration,
+                loopCount: Infinity,
+                mirror: false  
+            };
+
+            var feedTimeDriver = Animation.timeDriver(shootFoodInterval);
+    
+            const txSamp = Animation.samplers.easeInOutQuad(xPointList[index] * args.feedVariantX, 0.0);
+            const txAnim = Animation.animate(feedTimeDriver, txSamp);
+
+            const tySamp = Animation.samplers.easeInOutQuad(yPointList[index] * args.feedVariantY, 0.0);
+            const tyAnim = Animation.animate(feedTimeDriver, tySamp);
+
+            const tzSamp = Animation.samplers.easeInOutQuad(args.range, 0.0);
+            const tzAnim = Animation.animate(feedTimeDriver, tzSamp);
+            
+            // Show object
+            objList[index].hidden = false; 
+                
+            objList[index].transform.x = txAnim;
+            objList[index].transform.y = tyAnim;
+            objList[index].transform.z = tzAnim;
+
+            feedTimeDriver.start();
+
+            if (!(feedTimeDriverList.length > index))
+                feedTimeDriverList.push(feedTimeDriver);
+            else
+                feedTimeDriverList[index] = feedTimeDriver;
+
+            // Manipulate angle
+            objList[index].transform.rotationX = 0.0;
+
+            // Flip randomly
+            if (isFoodFlip[index] == 1)
+                objList[index].transform.rotationY = 180.0;
+            else
+                objList[index].transform.rotationY = 0.0;
+            
+            objList[index].transform.rotationZ = yAngleList[index] * args.yAngleVariant;
+        }
+
+        // --------------------------------------------------------------------------------
+        // Crush efx function
+
+        function runCrushInterval(objList, index, crushDuration, varianceX, varianceY, varianceZ) {
+
+            // Manipulate crush angle
+            const crushInterval = { 
+                durationMilliseconds: crushDuration,
+                loopCount: Infinity,
+                mirror: false  
+            };
+            var crushTimeDriver = Animation.timeDriver(crushInterval);
+
+            const cxSamp = Animation.samplers.easeInOutQuad(0, crushNormDirList[index][0] * varianceX);
+            const cxAnim = Animation.animate(crushTimeDriver, cxSamp);
+
+            const cySamp = Animation.samplers.easeInOutQuad(0, crushNormDirList[index][1] * varianceY);
+            const cyAnim = Animation.animate(crushTimeDriver, cySamp);
+
+            const czSamp = Animation.samplers.easeInOutQuad(0, varianceZ);
+            const czAnim = Animation.animate(crushTimeDriver, czSamp);
+
+            // Show object
+            objList[index].hidden = false;
+
+            objList[index].transform.x = cxAnim;
+            objList[index].transform.y = cyAnim;
+            objList[index].transform.z = czAnim;
+
+            crushTimeDriver.start();
+
+            if (!(crushTimeDriverList.length > index))
+                crushTimeDriverList.push(crushTimeDriver);
+            else
+                crushTimeDriverList[index] = crushTimeDriver; 
+        }
+
+        // --------------------------------------------------------------------------------
+        // Start food feeder effect
+
+        // Todo: Fix intensive looping here
+
+        const feederTimeInMilliseconds = args.feedInterval;
+        const feederIntervalTimer = Time.setInterval(shouldStartFeed, feederTimeInMilliseconds);
+        var feedIndex = 0;
+
+        // Hide all
+        for (var i=0; i<foodObjList.length; ++i)
+            foodObjList[i].hidden = true;
+
+        function shouldStartFeed() {
+
+            runFeedInterval(foodObjList, feedIndex++, args.feedDuration);
+
+            if (feedIndex >= foodObjList.length)
+                Time.clearInterval(feederIntervalTimer);
+        }
+
+        // --------------------------------------------------------------------------------
+        // Start crush effect
+
+        const crushTimeInMilliseconds = args.crushInterval;
+        const crushIntervalTimer = Time.setInterval(shouldStartCrush, crushTimeInMilliseconds);
+        var crushIndex = 0;
+
+        // Hide all
+        for (var i=0; i<crushObjList.length; ++i)
+            crushObjList[i].hidden = true;
+
+        function shouldStartCrush() {
+
+            if (crushIndex >= crushObjList.length) {
+
+                Time.clearInterval(crushIntervalTimer);
+                return;
+            }
+
+            runCrushInterval(crushObjList, crushIndex++, args.crushDuration, 
+                args.crushVarianceX, args.crushVarianceY, args.crushVarianceZ);
+        }
     }
+
+
 }
 
 // --------------------------------------------------------------------------------
