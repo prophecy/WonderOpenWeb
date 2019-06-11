@@ -942,7 +942,6 @@ const TARGET_BUBBLE_SCALE = 0.0032;
 var currentBibbleIndex = 0;
 const BUBBLE_SIZE = bubbleList0.length;
 var isBubbleVisible = false;
-var curFaceOwnBubble = -1;
 
 // Hide all bubbles
 function hideAllBubbles(bubbleList) {
@@ -955,45 +954,23 @@ hideAllBubbles(bubbleList1);
     
 function onFaceTracked(faceIndex) {
 
-    var curBubble = undefined;
-    var curFacePoint = undefined;
+    if (faceIndex != 0)
+        return;
 
-    Diagnostics.log("Face #" + faceIndex + " is tracked");
+    if (!isBubbleVisible) {
 
-    if (faceIndex == 0) {
-
-        curBubble = bubbleList0[currentBibbleIndex];
-        curFacePoint = facePoint0;
-    }
-    else if (faceIndex == 1) {
-
-        curBubble = bubbleList1[currentBibbleIndex];
-        curFacePoint = facePoint1;
-    }
-
-    // Todo: Implement the real bubble logic
-
-    // Check is in front of the other
-    if (!isBubbleVisible && faceIndex == 0) {
-
-        showBubble(curBubble, curFacePoint, X_SIDE_WEIGHT, BUBBLE_POSITION_Y, TARGET_BUBBLE_SCALE, true);
-        curFaceOwnBubble = faceIndex;
-    
+        var curBubble = bubbleList0[currentBibbleIndex];
+        showBubble(curBubble, facePoint0, X_SIDE_WEIGHT, BUBBLE_POSITION_Y, TARGET_BUBBLE_SCALE, true);    
         isBubbleVisible = true;
     }
 }
 
 function onFaceUntracked(faceIndex) {
 
-    var curBubble = undefined;
- 
-    Diagnostics.log("Face #" + faceIndex + " is untracked");
+    if (faceIndex != 0)
+        return;
 
-    if (faceIndex == 0)
-        curBubble = bubbleList0[currentBibbleIndex];
-    else if (faceIndex == 1)
-        curBubble = bubbleList1[currentBibbleIndex];
- 
+    var curBubble = bubbleList0[currentBibbleIndex];
     hideBubble(curBubble);
 
     if (! (++currentBibbleIndex < BUBBLE_SIZE))
