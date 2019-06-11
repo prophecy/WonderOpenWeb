@@ -1364,10 +1364,15 @@ function hideBubble(obj) {
 function handleFoodFeeder(foodObjList, crushObjList, args) {
 
     // Start animation
-    if (currentData.theme === THEME_NAME_LOOKUP_TABLE.meal)
+    if (currentData.theme === THEME_NAME_LOOKUP_TABLE.meal) {
+
         startRamenFeeder();
-    else
-        startNormalFoodFeeder(foodObjList, crushObjList, args);
+    }
+    else {
+
+        startNormalFoodFeeder(foodObjList, args);
+        startNormalCrushFeeder(crushObjList, args);
+    }
 }
 
 function startRamenFeeder() {
@@ -1446,7 +1451,7 @@ function startRamenFeeder() {
     }
 }
 
-function startNormalFoodFeeder(foodObjList, crushObjList, args) {
+function startNormalFoodFeeder(foodObjList, args) {
 
     // Create object list from randrom number
     var xPointList = [
@@ -1466,23 +1471,6 @@ function startNormalFoodFeeder(foodObjList, crushObjList, args) {
         1, 1, 1, 0, 0, 0, 1, 0, 1, 0
     ];
     
-    var crushYAngleList0 = [
-        -0.08104, 0.44314, 0.52326, -0.30244, 0.82356, -0.26104, -0.85587, 0.80953, 0.90391, -0.21765
-    ];
-
-    var crushYAngleList1 = [
-        0.89408, -0.70547, 0.91741, -0.60386, 0.20676,-0.97222, 0.50191, 0.53523, -0.42530, 0.93437
-    ]; 
-
-    var crushNormDirList = [];
-    for (var i=0; i<crushYAngleList0.length; ++i) {
-
-        var radx = crushYAngleList0[i] * 2.0 * Math.PI;
-        var rady = crushYAngleList1[i] * 2.0 * Math.PI;
-
-        crushNormDirList.push([Math.cos(radx), Math.sin(rady)]);
-    }
-
     // --------------------------------------------------------------------------------
     // Feeder efx function
     
@@ -1532,8 +1520,41 @@ function startNormalFoodFeeder(foodObjList, crushObjList, args) {
         objList[index].transform.rotationZ = yAngleList[index] * args.yAngleVariant;
     }
 
-    // --------------------------------------------------------------------------------
-    // Crush efx function
+    const feederTimeInMilliseconds = args.feedInterval;
+    const feederIntervalTimer = Time.setInterval(shouldStartFeed, feederTimeInMilliseconds);
+    var feedIndex = 0;
+
+    // Hide all
+    for (var i=0; i<foodObjList.length; ++i)
+        foodObjList[i].hidden = true;
+
+    function shouldStartFeed() {
+
+        runFeedInterval(foodObjList, feedIndex++, args.feedDuration);
+
+        if (feedIndex >= foodObjList.length)
+            Time.clearInterval(feederIntervalTimer);
+    }
+}
+
+function startNormalCrushFeeder(crushObjList, args) {
+
+    var crushYAngleList0 = [
+        -0.08104, 0.44314, 0.52326, -0.30244, 0.82356, -0.26104, -0.85587, 0.80953, 0.90391, -0.21765
+    ];
+
+    var crushYAngleList1 = [
+        0.89408, -0.70547, 0.91741, -0.60386, 0.20676,-0.97222, 0.50191, 0.53523, -0.42530, 0.93437
+    ]; 
+
+    var crushNormDirList = [];
+    for (var i=0; i<crushYAngleList0.length; ++i) {
+
+        var radx = crushYAngleList0[i] * 2.0 * Math.PI;
+        var rady = crushYAngleList1[i] * 2.0 * Math.PI;
+
+        crushNormDirList.push([Math.cos(radx), Math.sin(rady)]);
+    }
 
     function runCrushInterval(objList, index, crushDuration, varianceX, varianceY, varianceZ) {
 
@@ -1568,30 +1589,6 @@ function startNormalFoodFeeder(foodObjList, crushObjList, args) {
         else
             crushTimeDriverList[index] = crushTimeDriver; 
     }
-
-    // --------------------------------------------------------------------------------
-    // Start food feeder effect
-
-    // Todo: Fix intensive looping here
-
-    const feederTimeInMilliseconds = args.feedInterval;
-    const feederIntervalTimer = Time.setInterval(shouldStartFeed, feederTimeInMilliseconds);
-    var feedIndex = 0;
-
-    // Hide all
-    for (var i=0; i<foodObjList.length; ++i)
-        foodObjList[i].hidden = true;
-
-    function shouldStartFeed() {
-
-        runFeedInterval(foodObjList, feedIndex++, args.feedDuration);
-
-        if (feedIndex >= foodObjList.length)
-            Time.clearInterval(feederIntervalTimer);
-    }
-
-    // --------------------------------------------------------------------------------
-    // Start crush effect
 
     const crushTimeInMilliseconds = args.crushInterval;
     const crushIntervalTimer = Time.setInterval(shouldStartCrush, crushTimeInMilliseconds);
