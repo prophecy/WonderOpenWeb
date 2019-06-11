@@ -77,26 +77,6 @@ var crushPoolMeshList0 = [];
 for (var i=0; i<10; ++i)
     crushPoolMeshList0.push(Scene.root.find('crush0' + i + "_mesh"));
 
-// Food feeder for player #1
-
-var foodFeederRoot1 = Scene.root.find('foodFeederRoot1');
-
-var foodPoolList1 = [];
-for (var i=0; i<10; ++i)
-    foodPoolList1.push(Scene.root.find('testy1' + i));
-
-var foodPoolMeshList1 = [];
-for (var i=0; i<10; ++i)
-    foodPoolMeshList1.push(Scene.root.find('testy1' + i + "_mesh"));
-
-var crushPoolList1 = [];
-for (var i=0; i<10; ++i)
-    crushPoolList1.push(Scene.root.find('crush1' + i));
-
-var crushPoolMeshList1 = [];
-for (var i=0; i<10; ++i)
-    crushPoolMeshList1.push(Scene.root.find('crush1' + i + "_mesh"));
-
 // Face
 
 const facePoint0 = Patches.getVectorValue("facePoint0");
@@ -754,7 +734,6 @@ function initHead() {
 }
 
 foodFeederRoot0.hidden = true;
-foodFeederRoot1.hidden = true;
 
 function initFoodFeeder() {
     
