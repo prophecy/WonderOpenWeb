@@ -1411,10 +1411,13 @@ function startFoodFeederV2(foodObjList, args) {
     for (var i=0; i<foodObjList.length; ++i) {
 
         var rad = positionDataList[i][3];
-        var signal0 = testyPool0.transform.rotationX.sub(rad).lt(Reactive.val(Math.PI));
-        var signal1 = testyPool0.transform.rotationX.sub(rad).gt(Reactive.val(0));
 
-        foodObjList[i].hidden = signal0.and(signal1).not();
+        var signal0 = testyPool0.transform.rotationX.sub(rad).lt(Reactive.val(0.5 * Math.PI));
+        var signal1 = testyPool0.transform.rotationX.sub(rad).gt(Reactive.val(-0.5 * Math.PI));
+        var signal3 = testyPool0.transform.rotationX.sub(rad).gt(Reactive.val(1.5 * Math.PI));        
+        var signalOut = signal0.and(signal1).or(signal3);
+
+        foodObjList[i].hidden = signalOut.not();
     }
 
     // Rotate food objs
@@ -1423,6 +1426,11 @@ function startFoodFeederV2(foodObjList, args) {
         var rad = positionDataList[i][3];
         foodObjList[i].transform.rotationX = (Math.PI * 0.5) - rad;
     }
+
+    Diagnostics.watch("rx: ", testyPool0.transform.rotationX);
+
+    var rad = positionDataList[10][3];
+    Diagnostics.watch("rx2: ", testyPool0.transform.rotationX.sub(rad).gt(Reactive.val(Math.PI)));
 }
 
 function startRamenFeeder() {
