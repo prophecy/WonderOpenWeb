@@ -1378,6 +1378,23 @@ function handleFoodFeeder(foodObjList, crushObjList, args) {
     }
     else {
 
+        /* // Use food effect V1
+        var testyPoolContainer = Scene.root.find("testyPoolContainer");
+        testyPoolContainer.transform.x = 0;
+        testyPoolContainer.transform.y = 0;
+        testyPoolContainer.transform.z = 0;
+        testyPoolContainer.transform.rotationX = 0;
+        testyPoolContainer.transform.rotationY = 0;
+        testyPoolContainer.transform.rotationZ = 0;
+        testyPool0.transform.x = 0;
+        testyPool0.transform.y = 0;
+        testyPool0.transform.z = 0;
+        testyPool0.transform.rotationX = 0;
+        testyPool0.transform.rotationY = 0;
+        testyPool0.transform.rotationZ = 0;
+        startNormalFoodFeeder(foodObjList, args);
+        */
+
         startFoodFeederV2(foodObjList, args);
         startNormalCrushFeeder(crushObjList, args);
     }
