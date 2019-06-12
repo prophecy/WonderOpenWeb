@@ -880,9 +880,10 @@ getThemeData(GET_THEME_URL, function(data, err) {
      
     if (!!data) {
         
-        //Diagnostics.log("theme: "  + data.theme);
-        //Diagnostics.log("face: " + data.face);
-        //Diagnostics.log("product: " + data.product);
+        Diagnostics.log("theme: "  + data.theme);
+        Diagnostics.log("face: " + data.face);
+        Diagnostics.log("product: " + data.product);
+
         dbgTxtTheme.text = data.theme;
         dbgTxtFace.text = data.face;
         dbgTxtProd.text = data.product;
