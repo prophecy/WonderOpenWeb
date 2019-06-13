@@ -580,17 +580,31 @@ function initFrontFrame() {
 
     function showTakoyaki() {
 
-        var curMatIndex = 0;
-        takoyakiFrontSnack0Mesh.material = getMaterialWithDiffuse(FRONT_MAT_LIST[curMatIndex++], takoyakiFrontSnackTex);
-        takoyakiFrontSnack1Mesh.material = getMaterialWithDiffuse(FRONT_MAT_LIST[curMatIndex++], takoyakiFrontSnackTex);
-        takoyakiFrontTakoMesh.material = getMaterialWithDiffuse(FRONT_MAT_LIST[curMatIndex++], takoyakiFrontTakoTex);
-        takoyakiFrontOishiMesh.material = getMaterialWithDiffuse(FRONT_MAT_LIST[curMatIndex++], takoyakiFrontOishiTex);
+        // Apply mat for takoyami theme
+        var meshList = [
+            takoyakiFrontSnack0Mesh, takoyakiFrontSnack1Mesh, takoyakiFrontTakoMesh, takoyakiFrontOishiMesh,
+        ]
+
+        var texPathList = [
+            "theme_tako/ta12.png", "theme_tako/ta12.png", "theme_tako/ta3_2.png", "theme_tako/logo_tako.png",
+        ]
+
+        for (var i = 0; i<meshList.length; ++i) {
+
+            var url = CONFIG.BASE_TEX_URL + texPathList[i];
+
+            var tex = Textures.get(FRONT_TEX_LIST[i]);
+            tex.url = url;
+
+            meshList[i].material = getMaterialWithDiffuse(FRONT_MAT_LIST[i], FRONT_TEX_LIST[i]);
+        }
 
         frontTakoyaki.hidden = false;
     }
 
     function showCrabstick() {
 
+        // Apply mat for crabstick theme
         var meshList = [
             crabstickFrontBareCrabMesh, crabstickFrontHoldingCrabMesh, crabstickFrontLogoCrabMesh,
         ]
@@ -614,7 +628,7 @@ function initFrontFrame() {
 
     function showMeal() {
 
-
+        // Apply mat for meal theme
         var meshList = [
             mealFrontFlagMesh, mealFrontBowlMesh, mealFrontStillRamenMesh,
         ]
