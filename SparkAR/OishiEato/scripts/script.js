@@ -9,25 +9,25 @@
 const ENV_PROD = "ENV_PROD";
 const ENV_DEV = "ENV_DEV";
 
-const GET_THEME_URL_DEV = "https://dev.oishidrink.com/eato/asset/getTheme.aspx";
-const BASE_TEX_URL_DEV = "https://dev.oishidrink.com/eato/asset/";
+const BASE_URL_DEV = "https://dev.oishidrink.com/eato/asset/";
+const BASE_URL_PROD = "";
 
-const GET_THEME_URL_PROD = "";
-const BASE_TEX_URL_PROD = "";
+// **** **** **** ****  **** **** **** ****  **** **** **** ****  **** **** **** ****
+// Change ENV (Environment)
+const ENV = ENV_DEV;
+
+// --------------------------------------------------------------------------------
+// Configuration logic
+var BASE_URL = BASE_URL_PROD;
+
+if (ENV === ENV_DEV)
+    BASE_URL = BASE_URL_DEV;
 
 const CONFIG = {
-    ENV: ENV_DEV,
-    GET_THEME_URL: GET_THEME_URL_DEV,
-    BASE_TEX_URL: BASE_TEX_URL_DEV,
+    ENV: ENV,
+    GET_THEME_URL: BASE_URL + "getTheme.aspx",
+    BASE_TEX_URL: BASE_URL,
 }
-
-/*
-const CONFIG = {
-    ENV: ENV_PROD,
-    GET_THEME_URL: GET_THEME_URL_DEV,
-    BASE_TEX_URL: BASE_TEX_URL_DEV,
-}
-*/
 
 // --------------------------------------------------------------------------------
 // IMPORT EXTERNAL MODULES
