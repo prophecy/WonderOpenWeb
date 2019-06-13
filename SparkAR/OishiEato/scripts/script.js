@@ -110,11 +110,10 @@ const dbgCanvas = Scene.root.find('debugPanelCanvas');
 
 const frontGyoza = Scene.root.find('front_gyoza');
 
-const gyozaFrontPlane0 = Scene.root.find('gyoza_front_plane0');
-const gyozaFrontPlane1 = Scene.root.find('gyoza_front_plane1');
+const gyozaFloat = Scene.root.find('gyoza_float');
 
-const gyozaFrontPlane0Mesh = Scene.root.find('gyoza_front_plane0_mesh');
-const gyozaFrontPlane1Mesh = Scene.root.find('gyoza_front_plane1_mesh');
+const gyozaFloatMesh = Scene.root.find('gyoza_float_mesh');
+const gyozaLogoMesh = Scene.root.find('gyoza_logo_mesh');
 
 const gyozaFrontTex0 = 'gyoza_front_tex0';
 const gyozaFrontTex1 = 'gyoza_front_tex1';
@@ -508,8 +507,8 @@ function initFrontFrame() {
 
         // Apply mat for Gyoza theme
         var curMatIndex = 0;
-        gyozaFrontPlane0Mesh.material = getMaterialWithDiffuse(FRONT_MAT_LIST[curMatIndex++], gyozaFrontTex0);
-        gyozaFrontPlane1Mesh.material = getMaterialWithDiffuse(FRONT_MAT_LIST[curMatIndex++], gyozaFrontTex1);
+        gyozaFloatMesh.material = getMaterialWithDiffuse(FRONT_MAT_LIST[curMatIndex++], gyozaFrontTex0);
+        gyozaLogoMesh.material = getMaterialWithDiffuse(FRONT_MAT_LIST[curMatIndex++], gyozaFrontTex1);
 
         // Show them all!
         frontGyoza.hidden = false;
@@ -903,7 +902,7 @@ getThemeData(GET_THEME_URL, function(data, err) {
 });
  
 // Handle env obj movements
-applyBalloonMovement(gyozaFrontPlane0, 0.6, 0.4, 0.2, 1500, -3000, 4500);
+applyBalloonMovement(gyozaFloat, 0.6, 0.4, 0.2, 1500, -3000, 4500);
 applyRotationBounce(prodPlane0, 50, 20, 1800); // The small one
 applyRotationBounce(prodPlane1, 0, 50, 1600); // The big one
 applyRotationBounce(prodPlane2, 50, 20, 2000); // The big one
