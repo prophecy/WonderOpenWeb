@@ -4,6 +4,32 @@
 // --------------------------------------------------------------------------------
 
 // --------------------------------------------------------------------------------
+// Environment Configurations
+
+const ENV_PROD = "ENV_PROD";
+const ENV_DEV = "ENV_DEV";
+
+const GET_THEME_URL_DEV = "https://dev.oishidrink.com/eato/asset/getTheme.aspx";
+const BASE_TEX_URL_DEV = "https://dev.oishidrink.com/eato/asset/";
+
+const GET_THEME_URL_PROD = "";
+const BASE_TEX_URL_PROD = "";
+
+const CONFIG = {
+    ENV: ENV_DEV,
+    GET_THEME_URL: GET_THEME_URL_DEV,
+    BASE_TEX_URL: BASE_TEX_URL_DEV,
+}
+
+/*
+const CONFIG = {
+    ENV: ENV_PROD,
+    GET_THEME_URL: GET_THEME_URL_DEV,
+    BASE_TEX_URL: BASE_TEX_URL_DEV,
+}
+*/
+
+// --------------------------------------------------------------------------------
 // IMPORT EXTERNAL MODULES
 
 const Scene = require('Scene');
@@ -266,11 +292,6 @@ const mealShopstick00mesh = Scene.root.find("shopstick00_mesh");
 const mealShopstick01mesh = Scene.root.find("shopstick01_mesh");
 
 // --------------------------------------------------------------------------------
-// URL
-var GET_THEME_URL = "https://dev.oishidrink.com/eato/asset/getTheme.aspx";
-var BASE_TEX_URL = "https://dev.oishidrink.com/eato/asset/";
-
-// --------------------------------------------------------------------------------
 // SHARED VARS & CALLBACKS
 
 const MOUTH_OPENNESS_MIN_THRESHOLD = 0.1;
@@ -316,6 +337,7 @@ const CRUSH_TEX_LIST = [
 
 const PROD_TEX_LOOKUP_TABLE = {
 
+    /*
     gyoza_pork_5pcs: "theme_gyoza/product/pork_5pcs.png",
     gyoza_pork_12pcs: "theme_gyoza/product/pork_12pcs.png",
     gyoza_takoyaki_5pcs: "theme_gyoza/product/takoyaki_5pcs.png",
@@ -324,6 +346,7 @@ const PROD_TEX_LOOKUP_TABLE = {
     gyoza_chicken_yuzu_12pcs: "theme_gyoza/product/chicken_yuzu_12pcs.png",
     gyoza_pork_mala_5pcs: "theme_gyoza/product/pork_mala_5pcs.png",
     gyoza_pork_mala_12pcs: "theme_gyoza/product/pork_mala_12pcs.png",
+    */
 
     gyoza_reserved_00: "theme_gyoza/product/reserved_00.png",
     gyoza_reserved_01: "theme_gyoza/product/reserved_01.png",
@@ -462,19 +485,23 @@ function initProduct() {
     if (!(prodKey in PROD_TEX_LOOKUP_TABLE)) {
 
         Diagnostics.log("Texture name not found with key: " + prodKey);
-        prodTex = Textures.get("not_found_tex");
-        
-        return;
+
+        if (CONFIG.ENV === ENV_DEV)
+            prodTex = Textures.get("not_found_tex");
+        else if (CONFIG.ENV === ENV_PROD)
+            prodTex = Textures.get("transparent");
+    }
+    else {
+
+        // Get product texture
+        var texName = PROD_TEX_LOOKUP_TABLE[prodKey];
+
+        Diagnostics.log("Got texture name: " + texName);   
+
+        prodTex = Textures.get("ext_prod_tex0");
+        prodTex.url = CONFIG.BASE_TEX_URL + texName;
     }
 
-    // Get product texture
-    var texName = PROD_TEX_LOOKUP_TABLE[prodKey];
-
-    Diagnostics.log("Got texture name: " + texName);   
-    
-    prodTex = Textures.get("ext_prod_tex0");
-    prodTex.url = BASE_TEX_URL + texName;
-    
     // Apply texture to product material
     var prodMat = Materials.get(PROD_MAT_NAME);
 
@@ -506,11 +533,31 @@ function initFrontFrame() {
     function showGyoza() {
 
         // Apply mat for Gyoza theme
+        /*
         var curMatIndex = 0;
         gyozaFloatMesh.material = getMaterialWithDiffuse(FRONT_MAT_LIST[curMatIndex++], gyozaFrontTex0);
         gyozaLogoMesh.material = getMaterialWithDiffuse(FRONT_MAT_LIST[curMatIndex++], gyozaFrontTex1);
 
         // Show them all!
+        */
+        var meshList = [
+            gyozaFloatMesh, gyozaLogoMesh,
+        ]
+
+        var texPathList = [
+            "theme_gyoza/front_00.png", "theme_gyoza/front_01.png",
+        ]
+
+        for (var i = 0; i<meshList.length; ++i) {
+
+            var url = CONFIG.BASE_TEX_URL + texPathList[i];
+
+            var tex = Textures.get(FRONT_TEX_LIST[i]);
+            tex.url = url;
+
+            meshList[i].material = getMaterialWithDiffuse(FRONT_MAT_LIST[i], FRONT_TEX_LIST[i]);
+        }
+
         frontGyoza.hidden = false;
     }
 
@@ -551,7 +598,7 @@ function initFrontFrame() {
 
         for (var i = 0; i<meshList.length; ++i) {
 
-            var url = BASE_TEX_URL + texPathList[i];
+            var url = CONFIG.BASE_TEX_URL + texPathList[i];
 
             var tex = Textures.get(FRONT_TEX_LIST[i]);
             tex.url = url;
@@ -575,7 +622,7 @@ function initFrontFrame() {
 
         for (var i = 0; i<meshList.length; ++i) {
 
-            var url = BASE_TEX_URL + texPathList[i];
+            var url = CONFIG.BASE_TEX_URL + texPathList[i];
 
             var tex = Textures.get(FRONT_TEX_LIST[i]);
             tex.url = url;
@@ -786,7 +833,7 @@ function initFoodFeeder() {
         crushPool0.hidden = true;
 
         // Setup shopstick
-        var url = BASE_TEX_URL + "theme_meal/chopsticks.png"
+        var url = CONFIG.BASE_TEX_URL + "theme_meal/chopsticks.png"
         var tex = Textures.get(FOOD_TEX_LIST[0]);
         var mat = Materials.get(FOOD_MAT_LIST[0]);
 
@@ -832,7 +879,7 @@ function initFoodFeeder() {
                 curMatIndex = 0;
 
             // Set tex URL
-            var url = BASE_TEX_URL + texName;
+            var url = CONFIG.BASE_TEX_URL + texName;
             //Diagnostics.log("url: " + url);
             tex.url = url
             
@@ -875,7 +922,7 @@ function initFoodFeeder() {
 }
 
 // Get theme
-getThemeData(GET_THEME_URL, function(data, err) { 
+getThemeData(CONFIG.GET_THEME_URL, function(data, err) { 
      
     if (!!data) {
         
@@ -1467,7 +1514,7 @@ function startRamenFeeder() {
     // ramen effect
 
     // Load diffuse tex
-    var url = BASE_TEX_URL + "theme_meal/ramen_512.png";
+    var url = CONFIG.BASE_TEX_URL + "theme_meal/ramen_512.png";
     var diffuseTex = Textures.get("ext_ramen_tex0");
     diffuseTex.url = url;
 
