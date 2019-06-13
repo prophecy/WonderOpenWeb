@@ -337,7 +337,6 @@ const CRUSH_TEX_LIST = [
 
 const PROD_TEX_LOOKUP_TABLE = {
 
-    /*
     gyoza_pork_5pcs: "theme_gyoza/product/pork_5pcs.png",
     gyoza_pork_12pcs: "theme_gyoza/product/pork_12pcs.png",
     gyoza_takoyaki_5pcs: "theme_gyoza/product/takoyaki_5pcs.png",
@@ -346,7 +345,6 @@ const PROD_TEX_LOOKUP_TABLE = {
     gyoza_chicken_yuzu_12pcs: "theme_gyoza/product/chicken_yuzu_12pcs.png",
     gyoza_pork_mala_5pcs: "theme_gyoza/product/pork_mala_5pcs.png",
     gyoza_pork_mala_12pcs: "theme_gyoza/product/pork_mala_12pcs.png",
-    */
 
     gyoza_reserved_00: "theme_gyoza/product/reserved_00.png",
     gyoza_reserved_01: "theme_gyoza/product/reserved_01.png",
@@ -533,13 +531,6 @@ function initFrontFrame() {
     function showGyoza() {
 
         // Apply mat for Gyoza theme
-        /*
-        var curMatIndex = 0;
-        gyozaFloatMesh.material = getMaterialWithDiffuse(FRONT_MAT_LIST[curMatIndex++], gyozaFrontTex0);
-        gyozaLogoMesh.material = getMaterialWithDiffuse(FRONT_MAT_LIST[curMatIndex++], gyozaFrontTex1);
-
-        // Show them all!
-        */
         var meshList = [
             gyozaFloatMesh, gyozaLogoMesh,
         ]
@@ -564,13 +555,25 @@ function initFrontFrame() {
     function showSandwich() {
 
         // Apply mat for sandwich theme
-        var curMatIndex = 0;
-        sandwichFrontFlagMesh.material = getMaterialWithDiffuse(FRONT_MAT_LIST[curMatIndex++], sandwichFragTex);
-        sandwichFrontCrabstickMesh.material = getMaterialWithDiffuse(FRONT_MAT_LIST[curMatIndex++], sandwichCrabstickVibTex);
-        sandwichFrontMesh.material = getMaterialWithDiffuse(FRONT_MAT_LIST[curMatIndex++], sandwichFullTex);
-        sandwichFrontEggMesh.material = getMaterialWithDiffuse(FRONT_MAT_LIST[curMatIndex++], sandwichEggFullTex);
-        sandwichFrontHam0Mesh.material = getMaterialWithDiffuse(FRONT_MAT_LIST[curMatIndex++], sandwichHamFullTex);
-        sandwichFrontHam1Mesh.material = getMaterialWithDiffuse(FRONT_MAT_LIST[curMatIndex++], sandwichHamFullTex);
+        var meshList = [
+            sandwichFrontFlagMesh, sandwichFrontCrabstickMesh, sandwichFrontMesh, sandwichFrontEggMesh,
+            sandwichFrontHam0Mesh, sandwichFrontHam1Mesh,
+        ]
+
+        var texPathList = [
+            "theme_sandwich/sw7.png", "theme_sandwich/sw4.png", "theme_sandwich/sw2.png", "theme_sandwich/sw3.png",
+            "theme_sandwich/sw8.png", "theme_sandwich/sw8.png"
+        ]
+
+        for (var i = 0; i<meshList.length; ++i) {
+
+            var url = CONFIG.BASE_TEX_URL + texPathList[i];
+
+            var tex = Textures.get(FRONT_TEX_LIST[i]);
+            tex.url = url;
+
+            meshList[i].material = getMaterialWithDiffuse(FRONT_MAT_LIST[i], FRONT_TEX_LIST[i]);
+        }
 
         frontSandwich.hidden = false;
     }
