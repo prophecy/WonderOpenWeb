@@ -964,7 +964,22 @@ getThemeData(CONFIG.GET_THEME_URL, function(data, err) {
     initHead();
     initFoodFeeder();
 });
- 
+
+// Init bubbles' tex
+function initBubbleTex() {
+
+    var texName = "bubbleTex";
+    var texUrl = CONFIG.BASE_TEX_URL + "getQuote.png"
+
+    for (var i=0; i<7; ++i) {
+
+        var tex = Textures.get(texName + i);
+        tex.url = texUrl;
+    }
+}
+
+initBubbleTex();
+
 // Handle env obj movements
 applyBalloonMovement(gyozaFloat, 0.6, 0.4, 0.2, 1500, -3000, 4500);
 applyRotationBounce(prodPlane0, 50, 20, 1800); // The small one
