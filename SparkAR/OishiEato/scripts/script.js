@@ -10,17 +10,19 @@ const ENV_PROD = "ENV_PROD";
 const ENV_DEV = "ENV_DEV";
 
 const BASE_URL_DEV = "https://dev.oishidrink.com/eato/asset/";
-const BASE_URL_PROD = "";
+const BASE_URL_PROD = "https://www.oishidrink.com/eato/asset/";
 
 // **** **** **** ****  **** **** **** ****  **** **** **** ****  **** **** **** ****
 // Change ENV (Environment)
-const ENV = ENV_DEV;
+const ENV = ENV_PROD;
 
 // --------------------------------------------------------------------------------
 // Configuration logic
-var BASE_URL = BASE_URL_PROD;
+var BASE_URL = undefined;
 
-if (ENV === ENV_DEV)
+if (ENV === ENV_PROD)
+    BASE_URL = BASE_URL_PROD;
+else if (ENV === ENV_DEV)
     BASE_URL = BASE_URL_DEV;
 
 const CONFIG = {
