@@ -1118,52 +1118,50 @@ function handleMouthOpeningState(faceIndex, openMinThres, closeMaxThres, openCal
     });
 }
 
+// [2019.06.13] Fixed face not show on iOS
+//     This is about Facebook AR platform implementation problem occuring when user's face is tracked before finish loading.
+//        Then cause mismatch state
+var isFaceTracked = [ false, false ];
+
+function checkTrackedStateWithDelay(faceIndex, trackCallback, untrackCallback) {
+
+    const interval = Time.setInterval(checkTrackedState, 400);
+
+    function checkTrackedState() {
+
+        var state = FaceTracking.face(faceIndex).isTracked.pinLastValue();
+
+        if (state != isFaceTracked[faceIndex]) {
+
+            Diagnostics.log("state: " + state);
+
+            if (state == true)
+                trackCallback();
+            else
+                untrackCallback();
+
+            Time.clearInterval(interval);
+        }
+    }
+}
+
 function handleFaceTrackingState(faceIndex, trackCallback, untrackCallback) {
 
-    // Check weather the face is tracked
+    checkTrackedStateWithDelay(faceIndex, trackCallback, untrackCallback);
+
+    // Monitor tracking state
     FaceTracking.face(faceIndex).isTracked.monitor().subscribe(function(e) {
         
-        var mouthCenterPoint = [0, 0, 0];
+        Diagnostics.log("Callback in!");
+
+        if (isFaceTracked[faceIndex] != e.newValue) {
+
+            isFaceTracked[faceIndex] = e.newValue;
         
-        var mouth = FaceTracking.face(faceIndex).mouth;
-    
-        // Untracked to tracked state
-        if (e.newValue) {
-    
-            // Reset counter
-            var counter = 3;
-    
-            // Show feed effect by face+mouth transform
-            var valXSub = mouth.center.x.monitor().subscribe(function(v) {
-                mouthCenterPoint[0] = v.newValue;
-                valXSub.unsubscribe();
-                notifyIfTracked();
-            }); 
-    
-            var valYSub = mouth.center.y.monitor().subscribe(function(v) {
-                mouthCenterPoint[1] = v.newValue;
-                valYSub.unsubscribe();
-                notifyIfTracked();
-            });
-    
-            var valZSub = mouth.center.z.monitor().subscribe(function(v) {
-                mouthCenterPoint[2] = v.newValue;
-                valZSub.unsubscribe();
-                notifyIfTracked();
-            });
-
-            function notifyIfTracked() {
-
-                --counter;
-
-                if (counter == 0)
-                    trackCallback(mouthCenterPoint);
-            }
-        }
-        // Tracked to untracked state
-        else {
-            
-            untrackCallback();
+            if (e.newValue)
+                trackCallback();
+            else
+                untrackCallback();
         }
     }); 
 }
