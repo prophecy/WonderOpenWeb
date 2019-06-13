@@ -1388,9 +1388,10 @@ function showBubble(obj, facePoint, xSideWeight, positionY, targetBubbleScale, i
     const shownBubbleY = range * Y_SIDE_WEIGHT * ySideNorm;
 
     // Bind the translation animation signal to the x-axis position signal of the plane
-    obj.transform.x = shownBubbleX;
-    //obj.transform.y = positionY;
-    obj.transform.y = shownBubbleY;
+    //obj.transform.x = shownBubbleX;
+    obj.transform.x = 0.0;
+    //obj.transform.y = shownBubbleY;
+    obj.transform.y = 0.0;
     obj.transform.z = 0.0;
 
     // Create a time driver using the parameters
@@ -1399,7 +1400,8 @@ function showBubble(obj, facePoint, xSideWeight, positionY, targetBubbleScale, i
     // Get scale factors (Linearly positive correlated with absolute Euclidean distance from camera)
     //     Find distance from bubble to camera | Given camera is always be at ( 0, 0, 0 )
     
-    var bubbleScale = targetBubbleScale * range;
+    //var bubbleScale = targetBubbleScale * range;
+    var bubbleScale = 0.1;
      
     // Scale animation
     const scaleQuadraticSampler = Animation.samplers.easeInOutQuad(0, bubbleScale);
