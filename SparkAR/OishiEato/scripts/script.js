@@ -250,10 +250,13 @@ const headTakoyakiWhisker11Mesh = Scene.root.find("head_takoyaki_whisker11_mesh"
 // Head, takoyaki special
 const headTakoyakiSpecialRoot = Scene.root.find("head_takoyaki_spec_root");
 const headTakoyakiBigMesh = Scene.root.find("head_takoyaki_big_mesh");
+const headTakoyakiBackMesh = Scene.root.find("head_takoyaki_back_mesh");
 const headTakoyakiBigTex = "head_takoyaki_big";
+const headTakoyakiBackTex = "head_takoyaki_back";
 
 const headTakoyakiSpecial1Root = Scene.root.find("head_takoyaki_spec_root1");
 const headTakoyakiBig1Mesh = Scene.root.find("head_takoyaki_big1_mesh");
+const headTakoyakiBack1Mesh = Scene.root.find("head_takoyaki_back1_mesh");
 
 const pinkyFaceMat = Materials.get("pinky_face_mat");
 
@@ -764,6 +767,9 @@ function initHead() {
 
         headTakoyakiBigMesh.material = tmpMat = getMaterialWithDiffuse(HEAD_MAT_LIST[curMatIndex++], headTakoyakiBigTex);
         headTakoyakiBig1Mesh.material = tmpMat;
+
+        headTakoyakiBackMesh.material = tmpMat = getMaterialWithDiffuse(HEAD_MAT_LIST[curMatIndex++], headTakoyakiBackTex);
+        headTakoyakiBack1Mesh.material = tmpMat;
 
         headTakoyakiSpecialRoot.hidden = false;
         headTakoyakiSpecial1Root.hidden = false;
