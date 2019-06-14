@@ -526,8 +526,6 @@ function initProduct() {
 
 function initFrontFrame() {
 
-    currentData.theme = THEME_NAME_LOOKUP_TABLE.crabstick;
-
     var themeName = currentData.theme;
     
     if (themeName.localeCompare(THEME_NAME_LOOKUP_TABLE.gyoza) == 0)
@@ -1007,9 +1005,10 @@ applyParalaxMovement(undefined, prodRoot, 0.1, 0.1);
 // @ FACE DETECTED
 
 // Bubble transformations
-const X_SIDE_WEIGHT = 0.16;
+const X_SIDE_WEIGHT = 0.14;
+const Y_SIDE_WEIGHT = 0.15;
 const BUBBLE_POSITION_Y = -8.8;
-const TARGET_BUBBLE_SCALE = 0.0032;
+const TARGET_BUBBLE_SCALE = 0.0028;
 
 // Bubble list mgr vars
 var currentBibbleIndex = 0;
@@ -1393,7 +1392,6 @@ function showBubble(obj, facePoint, xSideWeight, positionY, targetBubbleScale, i
     var shownBubbleX = range * xSideNorm * xSideWeight;
 
     const ySideNorm = -1.0;
-    const Y_SIDE_WEIGHT = 0.14;
     const shownBubbleY = range * Y_SIDE_WEIGHT * ySideNorm;
 
     // Bind the translation animation signal to the x-axis position signal of the plane
