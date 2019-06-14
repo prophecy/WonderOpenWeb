@@ -1075,6 +1075,7 @@ function onFace0MouthOpen() {
     if (currentData.theme == THEME_NAME_LOOKUP_TABLE.meal) {
 
         mealFrontStillRamenMesh.hidden = true;
+        frontLogoRamen1.hidden = true;
     }
 }
 
@@ -1088,6 +1089,7 @@ function onFace0MouthClose() {
     if (currentData.theme == THEME_NAME_LOOKUP_TABLE.meal) {
 
         mealFrontStillRamenMesh.hidden = false;
+        frontLogoRamen1.hidden = false;
     }
 }
 
