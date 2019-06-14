@@ -158,6 +158,8 @@ const facePaintGyozaMat = Materials.get("face_paint_gyoza_mat");
 
 const facePaintInvisibleMat = Materials.get("face_paint_invisible_mat");
 
+const frontLogoGyoza = Scene.root.find("front_logo_gyoza");
+
 // --------------------------------------------------------------------------------
 // RESOURCES for SANDWICH THEME
 
@@ -208,6 +210,8 @@ const headSwirl11Mesh = Scene.root.find("head_swirl11_mesh");
 
 const headSwirlTex = "head_swirl";
 
+const frontLogoSandwich = Scene.root.find("front_logo_sandwich");
+
 // --------------------------------------------------------------------------------
 // RESOURCES for TAKOYAKI THEME
 
@@ -253,6 +257,8 @@ const headTakoyakiBig1Mesh = Scene.root.find("head_takoyaki_big1_mesh");
 
 const pinkyFaceMat = Materials.get("pinky_face_mat");
 
+const frontLogoTakoyaki = Scene.root.find("front_logo_takoyaki");
+
 // --------------------------------------------------------------------------------
 // RESOURCES for CRABSTICK THEME
 
@@ -271,6 +277,8 @@ const frontCrabstick = Scene.root.find("front_crabstick");
 const crabstickFrontBareCrabMesh = Scene.root.find("bare_crab_mesh");
 const crabstickFrontHoldingCrabMesh = Scene.root.find("holding_crab_mesh");
 const crabstickFrontLogoCrabMesh = Scene.root.find("logo_crab_mesh");
+
+const frontLogoCrabstick = Scene.root.find("front_logo_crabstick");
 
 // --------------------------------------------------------------------------------
 // RESOURCES for RAMEN THEME
@@ -292,6 +300,9 @@ const mealShopstick01_pivot = Scene.root.find("shopstick01_pivot");
 
 const mealShopstick00mesh = Scene.root.find("shopstick00_mesh");
 const mealShopstick01mesh = Scene.root.find("shopstick01_mesh");
+
+const frontLogoRamen0 = Scene.root.find("front_logo_ramen0");
+const frontLogoRamen1 = Scene.root.find("front_logo_ramen1");
 
 // --------------------------------------------------------------------------------
 // SHARED VARS & CALLBACKS
@@ -514,7 +525,9 @@ function initProduct() {
 }
 
 function initFrontFrame() {
-    
+
+    currentData.theme = THEME_NAME_LOOKUP_TABLE.crabstick;
+
     var themeName = currentData.theme;
     
     if (themeName.localeCompare(THEME_NAME_LOOKUP_TABLE.gyoza) == 0)
@@ -534,7 +547,7 @@ function initFrontFrame() {
 
         // Apply mat for Gyoza theme
         var meshList = [
-            gyozaFloatMesh, gyozaLogoMesh,
+            gyozaFloatMesh, frontLogoGyoza,
         ]
 
         var texPathList = [
@@ -558,7 +571,7 @@ function initFrontFrame() {
 
         // Apply mat for sandwich theme
         var meshList = [
-            sandwichFrontFlagMesh, sandwichFrontCrabstickMesh, sandwichFrontMesh, sandwichFrontEggMesh,
+            frontLogoSandwich, sandwichFrontCrabstickMesh, sandwichFrontMesh, sandwichFrontEggMesh,
             sandwichFrontHam0Mesh, sandwichFrontHam1Mesh,
         ]
 
@@ -584,7 +597,7 @@ function initFrontFrame() {
 
         // Apply mat for takoyami theme
         var meshList = [
-            takoyakiFrontSnack0Mesh, takoyakiFrontSnack1Mesh, takoyakiFrontTakoMesh, takoyakiFrontOishiMesh,
+            takoyakiFrontSnack0Mesh, takoyakiFrontSnack1Mesh, takoyakiFrontTakoMesh, frontLogoTakoyaki,
         ]
 
         var texPathList = [
@@ -608,7 +621,7 @@ function initFrontFrame() {
 
         // Apply mat for crabstick theme
         var meshList = [
-            crabstickFrontBareCrabMesh, crabstickFrontHoldingCrabMesh, crabstickFrontLogoCrabMesh,
+            crabstickFrontBareCrabMesh, crabstickFrontHoldingCrabMesh, frontLogoCrabstick,
         ]
 
         var texPathList = [
@@ -632,7 +645,7 @@ function initFrontFrame() {
 
         // Apply mat for meal theme
         var meshList = [
-            mealFrontFlagMesh, mealFrontBowlMesh, mealFrontStillRamenMesh,
+            mealFrontFlagMesh, frontLogoRamen0, frontLogoRamen1,
         ]
 
         var texPathList = [
@@ -1133,8 +1146,6 @@ function checkTrackedStateWithDelay(faceIndex, trackCallback, untrackCallback) {
 
         if (state != isFaceTracked[faceIndex]) {
 
-            Diagnostics.log("state: " + state);
-
             if (state == true)
                 trackCallback();
             else
@@ -1151,8 +1162,6 @@ function handleFaceTrackingState(faceIndex, trackCallback, untrackCallback) {
 
     // Monitor tracking state
     FaceTracking.face(faceIndex).isTracked.monitor().subscribe(function(e) {
-        
-        Diagnostics.log("Callback in!");
 
         if (isFaceTracked[faceIndex] != e.newValue) {
 
