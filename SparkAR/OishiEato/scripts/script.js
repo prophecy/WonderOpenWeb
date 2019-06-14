@@ -526,6 +526,8 @@ function initProduct() {
 
 function initFrontFrame() {
 
+    currentData.theme = THEME_NAME_LOOKUP_TABLE.crabstick;
+
     var themeName = currentData.theme;
     
     if (themeName.localeCompare(THEME_NAME_LOOKUP_TABLE.gyoza) == 0)
