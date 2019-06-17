@@ -479,22 +479,52 @@ const themeSelector4 = Scene.root.find("theme_selector_4");
 
 TouchGestures.onTap(themeSelector0).subscribe(function (gesture) {
     Diagnostics.log("Select #0");
+
+    currentData.theme = THEME_NAME_LOOKUP_TABLE.gyoza;
+    currentData.face = FACE_NAME_LOOKUP_TABLE.gyoza;
+    currentData.product = "gyoza_chicken_yuzu_12pcs";
+
+    initTheme();
 });
 
 TouchGestures.onTap(themeSelector1).subscribe(function (gesture) {
     Diagnostics.log("Select #1");
+
+    currentData.theme = THEME_NAME_LOOKUP_TABLE.sandwich;
+    currentData.face = FACE_NAME_LOOKUP_TABLE.sandwich;
+    currentData.product = "sandwich_alaska_wakame";
+
+    initTheme();
 });
 
 TouchGestures.onTap(themeSelector2).subscribe(function (gesture) {
     Diagnostics.log("Select #2");
+
+    currentData.theme = THEME_NAME_LOOKUP_TABLE.takoyaki;
+    currentData.face = FACE_NAME_LOOKUP_TABLE.takoyaki_special;
+    currentData.product = "takoyaki_takoyaki";
+
+    initTheme();
 });
 
 TouchGestures.onTap(themeSelector3).subscribe(function (gesture) {
     Diagnostics.log("Select #3");
+
+    currentData.theme = THEME_NAME_LOOKUP_TABLE.crabstick;
+    currentData.face = FACE_NAME_LOOKUP_TABLE.crabstick;
+    currentData.product = "crabstick_kani_kamaboko";
+
+    initTheme();
 });
 
 TouchGestures.onTap(themeSelector4).subscribe(function (gesture) {
     Diagnostics.log("Select #4");
+
+    currentData.theme = THEME_NAME_LOOKUP_TABLE.meal;
+    currentData.face = FACE_NAME_LOOKUP_TABLE.meal;
+    currentData.product = "meal_kraphrao";
+
+    initTheme();
 });
 
 // --------------------------------------------------------------------------------
@@ -1038,7 +1068,7 @@ function initFoodFeeder() {
 
     // Handle object
     handleFoodFeeder(foodPoolList0, crushPoolList0, foodFeederArgs);
-    handleFoodFeeder(foodPoolList1, crushPoolList1, foodFeederArgs);
+    //handleFoodFeeder(foodPoolList1, crushPoolList1, foodFeederArgs);
 }
 
 // Get theme
@@ -1062,11 +1092,17 @@ getThemeData(CONFIG.GET_THEME_URL, function(data, err) {
         Diagnostics.log("err: " + JSON.stringify(err));
     }
 
+    initTheme();
+});
+
+// Theme will be initialized by currentData
+function initTheme() {
+
     initProduct();
     initFrontFrame();
     initHead();
     initFoodFeeder();
-});
+}
 
 // Init bubbles' tex
 function initBubbleTex() {
