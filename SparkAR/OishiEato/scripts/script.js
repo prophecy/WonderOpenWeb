@@ -476,6 +476,14 @@ const newQuoteBg = Scene.root.find("new_quote_bg");
 const newQuoteTxt = Scene.root.find("new_quote_text");
 const newProdBig = Scene.root.find("new_prod_big");
 const newProdSmall = Scene.root.find("new_prod_small");
+const newGyozaLeft = Scene.root.find("new_gyoza_left");
+
+const newFeedRoot = Scene.root.find("new_feed_root");
+const newGyozaLeftOffset = Scene.root.find("new_gyoza_left_offset");
+const newGyozaRight = Scene.root.find("new_gyoza_right");
+
+applyRotationBounceLessDelay(newGyozaLeftOffset, 0, 20, 700); // The small one
+applyRotationBounceLessDelay(newGyozaRight, 0, 50, 600); // The big one
 
 const SHOW_ANIM_DURATION = 300;
 
@@ -1187,14 +1195,18 @@ handleFaceTrackingState(1, function() { onFaceTracked(1); }, function() { onFace
 // --------------------------------------------------------------------------------
 // @ OPEN MOUTH
 
+newFeedRoot.hidden = true;
+
 function onFace0MouthOpen() {
 
     showNewProdBig();
+    newFeedRoot.hidden = false;
 }
 
 function onFace0MouthClose() {
 
     showNewProdSmall();
+    newFeedRoot.hidden = true;
 }
 
 handleMouthOpeningState(
@@ -1454,6 +1466,37 @@ function applyRotationBounce(obj, minAngle, maxAngle, duration) {
         ],
         knots: [
             0, 12, 13, 14,
+        ]
+    });
+
+    // Start the animation
+    var rotation_signal = Animation.animate(time_driver, rotation_sampler);
+    
+    obj.transform.rotation = rotation_signal;
+
+    time_driver.start();
+}
+
+function applyRotationBounceLessDelay(obj, minAngle, maxAngle, duration) {
+
+    var time_driver = Animation.timeDriver({
+        durationMilliseconds: duration,
+        loopCount: Infinity
+    });
+
+    // Create a rotation sampler using Rotation objects generated
+    // by the previously-defined axisRotation() method.
+    var rotation_sampler = Animation.samplers.polyline({
+        keyframes: [
+            axisRotation(0, 1, 0, minAngle),
+            axisRotation(0, 1, 0, minAngle),
+
+            axisRotation(0, 1, 0, maxAngle),
+
+            axisRotation(0, 1, 0, minAngle),
+        ],
+        knots: [
+            0, 6, 8, 10,
         ]
     });
 
