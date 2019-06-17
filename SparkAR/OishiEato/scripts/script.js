@@ -471,6 +471,109 @@ TouchGestures.onLongPress().subscribe(function (gesture) {
     dbgCanvas.hidden = !isHidden;
 });
 
+const newQuoteBg = Scene.root.find("new_quote_bg");
+const newQuoteTxt = Scene.root.find("new_quote_text");
+const newProdBig = Scene.root.find("new_prod_big");
+const newProdSmall = Scene.root.find("new_prod_small");
+
+const SHOW_ANIM_DURATION = 300;
+
+newQuoteBg.hidden = true;
+newQuoteTxt.hidden = true;
+newProdBig.hidden = true;
+newProdSmall.hidden = true;
+
+function showNewQuote() {
+
+    newQuoteBg.hidden = false;
+
+    const driverParams = {
+
+        durationMilliseconds: SHOW_ANIM_DURATION,
+        loopCount: 1,
+        mirror: false  
+    };
+
+    const timeDriver = Animation.timeDriver(driverParams);
+    const sampler = Animation.samplers.easeInOutQuad(0, 1);
+    const anim = Animation.animate(timeDriver, sampler);
+
+    newQuoteBg.transform.scaleX = anim;
+    newQuoteBg.transform.scaleZ = anim;
+
+    timeDriver.start();
+}
+
+function hideNewQuote() {
+
+    newQuoteBg.hidden = true;
+}
+
+function showNewQuoteTxt() {
+
+    newQuoteTxt.hidden = false;
+
+    const driverParams = {
+
+        durationMilliseconds: SHOW_ANIM_DURATION,
+        loopCount: 1,
+        mirror: false  
+    };
+
+    const timeDriver = Animation.timeDriver(driverParams);
+    const sampler = Animation.samplers.easeInOutQuad(0, 1);
+    const anim = Animation.animate(timeDriver, sampler);
+
+    newQuoteTxt.transform.scaleX = anim;
+    newQuoteTxt.transform.scaleZ = anim;
+
+    timeDriver.start();
+}
+
+function hideNewQuoteText() {
+
+    newQuoteTxt.hidden = true;
+}
+
+function showNewProdInit() {
+
+    newProdSmall.hidden = false;
+
+    const driverParams = {
+
+        durationMilliseconds: SHOW_ANIM_DURATION,
+        loopCount: 1,
+        mirror: false  
+    };
+
+    const timeDriver = Animation.timeDriver(driverParams);
+    const sampler = Animation.samplers.easeInOutQuad(0, 1);
+    const anim = Animation.animate(timeDriver, sampler);
+
+    newProdSmall.transform.scaleX = anim;
+    newProdSmall.transform.scaleZ = anim;
+
+    timeDriver.start();
+}
+
+function showNewProdBig() {
+
+    newProdBig.hidden = false;
+    newProdSmall.hidden = true;
+}
+
+function showNewProdSmall() {
+
+    newProdSmall.hidden = false;
+    newProdBig.hidden = true;
+}
+
+function hideNewProd() {
+
+    newProdBig.hidden = true;
+    newProdSmall.hidden = true;
+}
+
 // --------------------------------------------------------------------------------
 // @ START
 
@@ -1037,13 +1140,25 @@ function onFaceTracked(faceIndex) {
     if (faceIndex != 0)
         return;
 
-    if (!isBubbleVisible) {
+    showNewQuote();
 
-        /*
-        var curBubble = bubbleList0[currentBibbleIndex];
-        showBubble(curBubble, facePoint0, X_SIDE_WEIGHT, BUBBLE_POSITION_Y, TARGET_BUBBLE_SCALE, true);    
-        isBubbleVisible = true;
-        */
+    const quoteTxtTimer = Time.setInterval(showQuoteText, 500);
+    const prodTimer = Time.setInterval(showProd, 1000);
+
+    function showQuoteText() {
+
+        showNewQuoteTxt();
+
+        // clear interval
+        Time.clearInterval(quoteTxtTimer);
+    }
+
+    function showProd() {
+
+        showNewProdInit();
+
+        // clear interval
+        Time.clearInterval(prodTimer);
     }
 }
 
@@ -1052,13 +1167,9 @@ function onFaceUntracked(faceIndex) {
     if (faceIndex != 0)
         return;
 
-    var curBubble = bubbleList0[currentBibbleIndex];
-    hideBubble(curBubble);
-
-    if (! (++currentBibbleIndex < BUBBLE_SIZE))
-        currentBibbleIndex = 0;
-
-    isBubbleVisible = false;
+    hideNewQuote();
+    hideNewQuoteText();
+    hideNewProd();
 }
 
 handleFaceTrackingState(0, function() { onFaceTracked(0); }, function() { onFaceUntracked(0); });
@@ -1069,38 +1180,12 @@ handleFaceTrackingState(1, function() { onFaceTracked(1); }, function() { onFace
 
 function onFace0MouthOpen() {
 
-    //Diagnostics.log("onFace0MouthOpen"); 
-
-    var mouth = FaceTracking.face(0).mouth;
-    
-    foodFeederRoot0.transform.x = mouth.center.x;
-    foodFeederRoot0.transform.y = mouth.center.y;
-    foodFeederRoot0.transform.z = mouth.center.z;
-
-    // Manipulate ramen transform here
-
-    foodFeederRoot0.hidden = false;
-
-    // Set logic to specific theme
-    if (currentData.theme == THEME_NAME_LOOKUP_TABLE.meal) {
-
-        mealFrontStillRamenMesh.hidden = true;
-        frontLogoRamen1.hidden = true;
-    }
+    showNewProdBig();
 }
 
 function onFace0MouthClose() {
 
-    //Diagnostics.log("onFaceMouthClose");
-
-    foodFeederRoot0.hidden = true;
-
-    // Set logic to specific theme
-    if (currentData.theme == THEME_NAME_LOOKUP_TABLE.meal) {
-
-        mealFrontStillRamenMesh.hidden = false;
-        frontLogoRamen1.hidden = false;
-    }
+    showNewProdSmall();
 }
 
 handleMouthOpeningState(
