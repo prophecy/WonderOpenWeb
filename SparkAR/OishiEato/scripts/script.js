@@ -531,18 +531,42 @@ function initFrontFrame() {
 
     var themeName = currentData.theme;
     
-    if (themeName.localeCompare(THEME_NAME_LOOKUP_TABLE.gyoza) == 0)
+    if (themeName.localeCompare(THEME_NAME_LOOKUP_TABLE.gyoza) == 0) {
+
+        hideAllFrames();
         showGyoza();
-    else if (themeName.localeCompare(THEME_NAME_LOOKUP_TABLE.sandwich) == 0)
+    }
+    else if (themeName.localeCompare(THEME_NAME_LOOKUP_TABLE.sandwich) == 0) {
+
+        hideAllFrames();
         showSandwich();
-    else if (themeName.localeCompare(THEME_NAME_LOOKUP_TABLE.takoyaki) == 0)
+    }
+    else if (themeName.localeCompare(THEME_NAME_LOOKUP_TABLE.takoyaki) == 0) {
+
+        hideAllFrames();
         showTakoyaki();
-    else if (themeName.localeCompare(THEME_NAME_LOOKUP_TABLE.crabstick) == 0)
+    }
+    else if (themeName.localeCompare(THEME_NAME_LOOKUP_TABLE.crabstick) == 0) {
+        
+        hideAllFrames();
         showCrabstick();
-    else if (themeName.localeCompare(THEME_NAME_LOOKUP_TABLE.meal) == 0)
+    }
+    else if (themeName.localeCompare(THEME_NAME_LOOKUP_TABLE.meal) == 0) {
+
+        hideAllFrames();
         showMeal();
+    }
     else
         Diagnostics.log("Theme key not found with value: '" + themeName + "'");
+
+    function hideAllFrames() {
+
+        frontGyoza.hidden = true;
+        frontSandwich.hidden = true;
+        frontTakoyaki.hidden = true;
+        frontCrabstick.hidden = true;
+        frontMealRoot.hidden = true;
+    }
 
     function showGyoza() {
 
@@ -671,21 +695,55 @@ function initHead() {
 
     var faceName = currentData.face;
 
-    if (faceName.localeCompare(FACE_NAME_LOOKUP_TABLE.gyoza) == 0)
+    if (faceName.localeCompare(FACE_NAME_LOOKUP_TABLE.gyoza) == 0) {
+
+        hideAllHeads();
         showGyoza();
-    else if (faceName.localeCompare(FACE_NAME_LOOKUP_TABLE.sandwich) == 0)
+    }   
+    else if (faceName.localeCompare(FACE_NAME_LOOKUP_TABLE.sandwich) == 0) {
+
+        hideAllHeads();
         showSandwich();
-    else if (faceName.localeCompare(FACE_NAME_LOOKUP_TABLE.crabstick) == 0)
+    }
+    else if (faceName.localeCompare(FACE_NAME_LOOKUP_TABLE.crabstick) == 0) {
+
+        hideAllHeads();
         showCrabstick();
-    else if (faceName.localeCompare(FACE_NAME_LOOKUP_TABLE.takoyaki) == 0)
+    }
+    else if (faceName.localeCompare(FACE_NAME_LOOKUP_TABLE.takoyaki) == 0) {
+
+        hideAllHeads();
         showTakoyaki();
-    else if (faceName.localeCompare(FACE_NAME_LOOKUP_TABLE.takoyaki_special) == 0)
+    }
+    else if (faceName.localeCompare(FACE_NAME_LOOKUP_TABLE.takoyaki_special) == 0) {
+
+        hideAllHeads();
         showTakoyakiSpecial();
-    else if (faceName.localeCompare(FACE_NAME_LOOKUP_TABLE.meal) == 0)
+    }
+    else if (faceName.localeCompare(FACE_NAME_LOOKUP_TABLE.meal) == 0) {
+
+        hideAllHeads();
         showRamen();
+    }
     else
         Diagnostics.log("Face key not found with value: '" + faceName + "'");
     
+    function hideAllHeads() {
+
+        headGyozaRoot.hidden = true;
+        headGyozaRoot1.hidden = true;
+        headSandwichRoot.hidden = true;
+        headSandwichRoot1.hidden = true;
+        headTakoyakiRoot.hidden = true;
+        headTakoyakiRoot1.hidden = true;
+        headTakoyakiSpecialRoot.hidden = true;
+        headTakoyakiSpecial1Root.hidden = true;
+        headCrabstickRoot.hidden = true;
+        headCrabstickRoot1.hidden = true;
+        headRamenRoot.hidden = true;
+        headRamenRoot1.hidden = true;
+    }
+
     function showGyoza() {
 
         // Apply head mat and tex
