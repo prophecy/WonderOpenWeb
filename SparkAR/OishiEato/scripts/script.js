@@ -957,6 +957,7 @@ function initFoodFeeder() {
     handleFoodFeeder(foodPoolList1, crushPoolList1, foodFeederArgs);
 }
 
+/*
 // Get theme
 getThemeData(CONFIG.GET_THEME_URL, function(data, err) { 
      
@@ -983,6 +984,7 @@ getThemeData(CONFIG.GET_THEME_URL, function(data, err) {
     initHead();
     initFoodFeeder();
 });
+*/
 
 // Init bubbles' tex
 function initBubbleTex() {
@@ -1037,9 +1039,11 @@ function onFaceTracked(faceIndex) {
 
     if (!isBubbleVisible) {
 
+        /*
         var curBubble = bubbleList0[currentBibbleIndex];
         showBubble(curBubble, facePoint0, X_SIDE_WEIGHT, BUBBLE_POSITION_Y, TARGET_BUBBLE_SCALE, true);    
         isBubbleVisible = true;
+        */
     }
 }
 
