@@ -1092,6 +1092,12 @@ getThemeData(CONFIG.GET_THEME_URL, function(data, err) {
 });
 */
 
+// Init with gyoza face
+
+currentData.face = FACE_NAME_LOOKUP_TABLE.gyoza;
+
+initHead();
+
 // Init bubbles' tex
 function initBubbleTex() {
 
