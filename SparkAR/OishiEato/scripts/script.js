@@ -471,6 +471,7 @@ TouchGestures.onLongPress().subscribe(function (gesture) {
     dbgCanvas.hidden = !isHidden;
 });
 
+const newFrontRoot = Scene.root.find("new_front_root");
 const newQuoteBg = Scene.root.find("new_quote_bg");
 const newQuoteTxt = Scene.root.find("new_quote_text");
 const newProdBig = Scene.root.find("new_prod_big");
@@ -482,6 +483,8 @@ newQuoteBg.hidden = true;
 newQuoteTxt.hidden = true;
 newProdBig.hidden = true;
 newProdSmall.hidden = true;
+
+applyParalaxMovement(newFrontRoot, undefined, 0.1, 0.1);
 
 function showNewQuote() {
 
