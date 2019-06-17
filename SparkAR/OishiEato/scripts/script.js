@@ -471,6 +471,32 @@ TouchGestures.onLongPress().subscribe(function (gesture) {
     dbgCanvas.hidden = !isHidden;
 });
 
+const themeSelector0 = Scene.root.find("theme_selector_0");
+const themeSelector1 = Scene.root.find("theme_selector_1");
+const themeSelector2 = Scene.root.find("theme_selector_2");
+const themeSelector3 = Scene.root.find("theme_selector_3");
+const themeSelector4 = Scene.root.find("theme_selector_4");
+
+TouchGestures.onTap(themeSelector0).subscribe(function (gesture) {
+    Diagnostics.log("Select #0");
+});
+
+TouchGestures.onTap(themeSelector1).subscribe(function (gesture) {
+    Diagnostics.log("Select #1");
+});
+
+TouchGestures.onTap(themeSelector2).subscribe(function (gesture) {
+    Diagnostics.log("Select #2");
+});
+
+TouchGestures.onTap(themeSelector3).subscribe(function (gesture) {
+    Diagnostics.log("Select #3");
+});
+
+TouchGestures.onTap(themeSelector4).subscribe(function (gesture) {
+    Diagnostics.log("Select #4");
+});
+
 // --------------------------------------------------------------------------------
 // @ START
 
