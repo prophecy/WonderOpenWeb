@@ -618,10 +618,20 @@ function initFrontFrame() {
     function hideAllFrames() {
 
         frontGyoza.hidden = true;
+        frontLogoGyoza.hidden = true;
+
         frontSandwich.hidden = true;
+        frontLogoSandwich.hidden = true;
+
         frontTakoyaki.hidden = true;
+        frontLogoTakoyaki.hidden = true;
+
         frontCrabstick.hidden = true;
+        frontLogoCrabstick.hidden = true;
+
         frontMealRoot.hidden = true;
+        frontLogoRamen0.hidden = true;
+        frontLogoRamen1.hidden = true;
     }
 
     function showGyoza() {
@@ -646,6 +656,7 @@ function initFrontFrame() {
         }
 
         frontGyoza.hidden = false;
+        frontLogoGyoza.hidden = false;
     }
 
     function showSandwich() {
@@ -672,6 +683,7 @@ function initFrontFrame() {
         }
 
         frontSandwich.hidden = false;
+        frontLogoSandwich.hidden = false;
     }
 
     function showTakoyaki() {
@@ -696,6 +708,7 @@ function initFrontFrame() {
         }
 
         frontTakoyaki.hidden = false;
+        frontLogoTakoyaki.hidden = false;
     }
 
     function showCrabstick() {
@@ -720,6 +733,7 @@ function initFrontFrame() {
         }
 
         frontCrabstick.hidden = false;
+        frontLogoCrabstick.hidden = false;
     }
 
     function showMeal() {
@@ -744,6 +758,8 @@ function initFrontFrame() {
         }
 
         frontMealRoot.hidden = false;
+        frontLogoRamen0.hidden = false;
+        frontLogoRamen1.hidden = false;
     }
 }
 
@@ -794,6 +810,8 @@ function initHead() {
         headTakoyakiRoot1.hidden = true;
         headTakoyakiSpecialRoot.hidden = true;
         headTakoyakiSpecial1Root.hidden = true;
+        headTakoyakiBackMesh.hidden = true;
+        headTakoyakiBack1Mesh.hidden = true;
         headCrabstickRoot.hidden = true;
         headCrabstickRoot1.hidden = true;
         headRamenRoot.hidden = true;
@@ -936,51 +954,80 @@ function initFoodFeeder() {
     // Setup materials & textures
     var themeName = currentData.theme;
 
-    if (themeName.localeCompare(THEME_NAME_LOOKUP_TABLE.gyoza) == 0)
+    if (themeName.localeCompare(THEME_NAME_LOOKUP_TABLE.gyoza) == 0) {
+
+        hideAllFoodFeeder();
         setupGyozaFoodMat();
-    else if (themeName.localeCompare(THEME_NAME_LOOKUP_TABLE.sandwich) == 0)
+    }
+    else if (themeName.localeCompare(THEME_NAME_LOOKUP_TABLE.sandwich) == 0) {
+
+        hideAllFoodFeeder();
         setupSandwichFoodMat();
-    else if (themeName.localeCompare(THEME_NAME_LOOKUP_TABLE.takoyaki) == 0)
+    }
+    else if (themeName.localeCompare(THEME_NAME_LOOKUP_TABLE.takoyaki) == 0) {
+
+        hideAllFoodFeeder();
         setupTakoyakiFoodMat();
-    else if (themeName.localeCompare(THEME_NAME_LOOKUP_TABLE.crabstick) == 0)
+    }
+    else if (themeName.localeCompare(THEME_NAME_LOOKUP_TABLE.crabstick) == 0) {
+
+        hideAllFoodFeeder();
         setupCrabstickFoodMat();
-    else if (themeName.localeCompare(THEME_NAME_LOOKUP_TABLE.meal) == 0)
+    }
+    else if (themeName.localeCompare(THEME_NAME_LOOKUP_TABLE.meal) == 0) {
+
+        hideAllFoodFeeder();
         setupMealFoodMat();
+    }
     else
         Diagnostics.log("Theme key not found with value: '" + themeName + "'");
     
+    function hideAllFoodFeeder() {
+      
+        testyPool0.hidden = true;
+        crushPool0.hidden = true;
+        ramenPool0.hidden = true;  
+    }
+
     function setupGyozaFoodMat() {
 
-        ramenPool0.hidden = true;
+        testyPool0.hidden = false;
+        crushPool0.hidden = false;
+
         setupFoodMat(FOOD_TEX_LOOKUP_TABLE.gyoza);
         setupCrushMat(CRUSH_TEX_LOOKUP_TABLE.gyoza);
     }
 
     function setupSandwichFoodMat() {
 
-        ramenPool0.hidden = true;
+        testyPool0.hidden = false;
+        crushPool0.hidden = false;
+
         setupFoodMat(FOOD_TEX_LOOKUP_TABLE.sandwich);
         setupCrushMat(CRUSH_TEX_LOOKUP_TABLE.sandwich);
     }
 
     function setupCrabstickFoodMat() {
 
-        ramenPool0.hidden = true;
+        testyPool0.hidden = false;
+        crushPool0.hidden = false;
+        
         setupFoodMat(FOOD_TEX_LOOKUP_TABLE.crabstick);
         setupCrushMat(CRUSH_TEX_LOOKUP_TABLE.crabstick);
     }
 
     function setupTakoyakiFoodMat() {
 
-        ramenPool0.hidden = true;
+        testyPool0.hidden = false;
+        crushPool0.hidden = false;
+        
         setupFoodMat(FOOD_TEX_LOOKUP_TABLE.takoyaki);
         setupCrushMat(CRUSH_TEX_LOOKUP_TABLE.takoyaki);
     }
 
     function setupMealFoodMat() {
 
-        testyPool0.hidden = true;
-        crushPool0.hidden = true;
+        ramenPool0.hidden = false;
 
         // Setup shopstick
         var url = CONFIG.BASE_TEX_URL + "theme_meal/chopsticks.png"
