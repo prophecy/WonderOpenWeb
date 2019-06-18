@@ -584,9 +584,35 @@ function loadNewDesignGyoza() {
 
 loadNewDesignGyoza();
 
-applyRotationBounceLessDelay(newGyozaLeft, 0, 20, 700); // The small one
-applyRotationBounceLessDelay(newGyozaRight, 0, 50, 600); // The big one
+applyRotationBounceLessDelay(newGyozaLeft, 0, 20, 700);
+applyRotationBounceLessDelay(newGyozaRight, 0, 50, 600);
 applyParalaxMovement(newFrontRoot, undefined, 0.1, 0.1);
+
+var curGyozaLeftSeqIndex = 0;
+var curGyozaRightSeqIndex = 0;
+
+function runGyozaSequence() {
+
+    Time.setInterval(updateLeftSeq, 700);
+    Time.setInterval(updateRightSeq, 600); 
+    
+    function updateLeftSeq() {
+
+        newGyozaLeftMesh.material = gyozaSeqMatList[curGyozaLeftSeqIndex];
+        
+        if (++curGyozaLeftSeqIndex >= gyozaSeqMatList.length)
+            curGyozaLeftSeqIndex = 0;
+    }
+
+    function updateRightSeq() {
+
+        newGyozaRightMesh.material = gyozaSeqMatList[curGyozaRightSeqIndex];
+        
+        if (++curGyozaRightSeqIndex >= gyozaSeqMatList.length)
+            curGyozaRightSeqIndex = 0;
+    }
+}
+runGyozaSequence();
 
 function showNewQuote() {
 
