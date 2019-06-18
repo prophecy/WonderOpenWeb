@@ -336,6 +336,8 @@ const newGyozaRoot = Scene.root.find("new_gyoza_root");
 
 const facemesh01 = Scene.root.find("facemesh01");
 
+const howToRect = Scene.root.find("howto_rect");
+
 // --------------------------------------------------------------------------------
 // SHARED VARS & CALLBACKS
 
@@ -1014,6 +1016,8 @@ hideAllBubbles(bubbleList0);
 hideAllBubbles(bubbleList1);
     
 function onFaceTracked(faceIndex) {
+
+    howToRect.hidden = true;
 
     if (faceIndex != 0)
         return;
