@@ -324,15 +324,17 @@ const newProdBigMesh = Scene.root.find("new_prod_big_mesh");
 const newProdSmall = Scene.root.find("new_prod_small");
 const newProdSmallMesh = Scene.root.find("new_prod_small_mesh");
 
-const newFeedRoot = Scene.root.find("new_feed_root");
-
 const newGyozaLeft = Scene.root.find("new_gyoza_left");
 const newGyozaLeftMesh = Scene.root.find("new_gyoza_left_mesh");
 
 const newGyozaRight = Scene.root.find("new_gyoza_right");
 const newGyozaRightMesh = Scene.root.find("new_gyoza_right_mesh");
 
+const newTakoyakiRoot = Scene.root.find("takoyaki_root");
 const newSmokeRoot = Scene.root.find("smoke_root");
+const newGyozaRoot = Scene.root.find("new_gyoza_root");
+
+const facemesh01 = Scene.root.find("facemesh01");
 
 // --------------------------------------------------------------------------------
 // SHARED VARS & CALLBACKS
@@ -549,17 +551,27 @@ newQuoteTxt.hidden = true;
 newProdBig.hidden = true;
 newProdSmall.hidden = true;
 newSmokeRoot.hidden = true;
+newTakoyakiRoot.hidden = true;
+newGyozaRoot.hidden = true;
 
 var gyozaSeqMatList = [];
 
 function loadNewDesignGyoza() {
+
+    newGyozaRoot.hidden = false;
+    newTakoyakiRoot.hidden = true;
+    newSmokeRoot.hidden = true;
+    headGyozaRoot.hidden = false;
+    facemesh01.hidden = true;
+    facemesh0.hidden = false;
 
     var curResIndex = 0;
 
     setupMaterial(newQuoteBgMesh, curResIndex++, NEW_DESIGN_URL_TABLE.gyoza_bubble_bg);
     setupMaterial(newQuoteTxtMesh, curResIndex++, NEW_DESIGN_URL_TABLE.gyoza_bubble_txt_00);
     setupMaterial(newProdBigMesh, curResIndex++, NEW_DESIGN_URL_TABLE.gyoza_prod_big);
-    setupMaterial(newProdSmallMesh, curResIndex++, NEW_DESIGN_URL_TABLE.gyoza_prod_small);
+    setupMaterial(newProdSmallMesh, curResIndex++, NEW_DESIGN_URL_TABLE.gyoza_prod_big);
+    //setupMaterial(newProdSmallMesh, curResIndex++, NEW_DESIGN_URL_TABLE.gyoza_prod_small);
 
     // Add gyoza sequence
     var mat = getMaterialWithDiffuseByUrl(
@@ -596,16 +608,19 @@ function loadNewDesignGyoza() {
 
 function loadNewDesignTakoyaki() {
 
-    //takoyaki_bubble_bg: "new_design/sample_takoyaki/bubble.png",
-    //takoyaki_bubble_txt: "new_design/sample_takoyaki/copy.png",
+    newGyozaRoot.hidden = true;
+    newTakoyakiRoot.hidden = false;
+    newSmokeRoot.hidden = false;
+    headGyozaRoot.hidden = true;
+    facemesh01.hidden = false;
+    facemesh0.hidden = true;
+
     var curResIndex = 0;
 
     setupMaterial(newQuoteBgMesh, curResIndex++, NEW_DESIGN_URL_TABLE.takoyaki_bubble_bg);
     setupMaterial(newQuoteTxtMesh, curResIndex++, NEW_DESIGN_URL_TABLE.takoyaki_bubble_txt);
     setupMaterial(newProdBigMesh, curResIndex++, NEW_DESIGN_URL_TABLE.takoyaki_prod);
     setupMaterial(newProdSmallMesh, curResIndex++, NEW_DESIGN_URL_TABLE.takoyaki_prod);
-
-    //setupMaterial(newQuoteBgMesh, curResIndex++, NEW_DESIGN_URL_TABLE.gyoza_bubble_bg);
 
     function setupMaterial(mesh, index, texName) {
 
@@ -618,7 +633,8 @@ function loadNewDesignTakoyaki() {
 
 // Todo: set the better theme setting here
 var curTheme = THEME_NAME_LOOKUP_TABLE.takoyaki;
-showTakoyaki();
+//showTakoyaki();
+showGyoza();
 
 function showGyoza() {
 
@@ -1040,19 +1056,23 @@ handleFaceTrackingState(1, function() { onFaceTracked(1); }, function() { onFace
 // --------------------------------------------------------------------------------
 // @ OPEN MOUTH
 
-newFeedRoot.hidden = true;
+newGyozaRoot.hidden = true;
 
 function onFace0MouthOpen() {
 
     showNewProdBig();
-    newFeedRoot.hidden = false;
-    newSmokeRoot.hidden = false;
+
+    if (curTheme === THEME_NAME_LOOKUP_TABLE.gyoza)
+        newGyozaRoot.hidden = false;
+    else if (curTheme === THEME_NAME_LOOKUP_TABLE.takoyaki)
+        newSmokeRoot.hidden = false;
 }
 
 function onFace0MouthClose() {
 
     showNewProdSmall();
-    newFeedRoot.hidden = true;
+
+    newGyozaRoot.hidden = true;
     newSmokeRoot.hidden = true;
 }
 
