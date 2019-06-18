@@ -538,6 +538,8 @@ newQuoteTxt.hidden = true;
 newProdBig.hidden = true;
 newProdSmall.hidden = true;
 
+var gyozaSeqMatList = [];
+
 function loadNewDesignGyoza() {
 
     var curResIndex = 0;
@@ -546,9 +548,31 @@ function loadNewDesignGyoza() {
     setupMaterial(newQuoteTxtMesh, curResIndex++, NEW_DESIGN_URL_TABLE.gyoza_bubble_txt_00);
     setupMaterial(newProdBigMesh, curResIndex++, NEW_DESIGN_URL_TABLE.gyoza_prod_big);
     setupMaterial(newProdSmallMesh, curResIndex++, NEW_DESIGN_URL_TABLE.gyoza_prod_small);
-    setupMaterial(newGyozaLeftMesh, curResIndex++, NEW_DESIGN_URL_TABLE.gyoza_feed_00);
-    setupMaterial(newGyozaRightMesh, curResIndex++, NEW_DESIGN_URL_TABLE.gyoza_feed_00);
 
+    // Add gyoza sequence
+    var mat = getMaterialWithDiffuseByUrl(
+        NEW_DESIGN_MAT_LIST[curResIndex], 
+        NEW_DESIGN_TEX_LIST[curResIndex], 
+        BASE_URL + NEW_DESIGN_URL_TABLE.gyoza_feed_00);
+    gyozaSeqMatList.push(mat);
+    ++curResIndex;
+
+    mat = getMaterialWithDiffuseByUrl(
+        NEW_DESIGN_MAT_LIST[curResIndex], 
+        NEW_DESIGN_TEX_LIST[curResIndex], 
+        BASE_URL + NEW_DESIGN_URL_TABLE.gyoza_feed_01);
+    gyozaSeqMatList.push(mat);
+    ++curResIndex;
+
+    mat = getMaterialWithDiffuseByUrl(
+        NEW_DESIGN_MAT_LIST[curResIndex], 
+        NEW_DESIGN_TEX_LIST[curResIndex], 
+        BASE_URL + NEW_DESIGN_URL_TABLE.gyoza_feed_02);
+    gyozaSeqMatList.push(mat);
+    ++curResIndex;
+    
+    newGyozaLeftMesh.material = newGyozaRightMesh.material = gyozaSeqMatList[0];
+    
     function setupMaterial(mesh, index, texName) {
 
         mesh.material = getMaterialWithDiffuseByUrl(
