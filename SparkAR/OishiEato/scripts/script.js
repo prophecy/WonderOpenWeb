@@ -503,6 +503,11 @@ const NEW_DESIGN_URL_TABLE = {
     gyoza_prod_small: "new_design/sample_gyoza/01_03_product.png",
     gyoza_prod_big: "new_design/sample_gyoza/01_03_product2_action.png",
     gyoza_prod_bg: "new_design/sample_gyoza/01_02_bg2.png",
+
+    // Takoyaki sample
+    takoyaki_bubble_bg: "new_design/sample_takoyaki/bubble.png",
+    takoyaki_bubble_txt: "new_design/sample_takoyaki/copy.png",
+    takoyaki_prod: "new_desing/sample_takoyaki/takopack.png",
 };
 
 // --------------------------------------------------------------------------------
@@ -579,10 +584,37 @@ function loadNewDesignGyoza() {
             NEW_DESIGN_MAT_LIST[index], 
             NEW_DESIGN_TEX_LIST[index], 
             BASE_URL + texName);    
+    }    
+}
+
+function loadNewDesignTakoyaki() {
+
+    //takoyaki_bubble_bg: "new_design/sample_takoyaki/bubble.png",
+    //takoyaki_bubble_txt: "new_design/sample_takoyaki/copy.png",
+    var curResIndex = 0;
+
+    setupMaterial(newQuoteBgMesh, curResIndex++, NEW_DESIGN_URL_TABLE.takoyaki_bubble_bg);
+    setupMaterial(newQuoteTxtMesh, curResIndex++, NEW_DESIGN_URL_TABLE.takoyaki_bubble_txt);
+    setupMaterial(newProdBigMesh, curResIndex++, NEW_DESIGN_URL_TABLE.takoyaki_prod);
+    //setupMaterial(newProdSmallMesh, curResIndex++, NEW_DESIGN_URL_TABLE.gyoza_prod_small);
+
+    //setupMaterial(newQuoteBgMesh, curResIndex++, NEW_DESIGN_URL_TABLE.gyoza_bubble_bg);
+
+    function setupMaterial(mesh, index, texName) {
+
+        mesh.material = getMaterialWithDiffuseByUrl(
+            NEW_DESIGN_MAT_LIST[index], 
+            NEW_DESIGN_TEX_LIST[index], 
+            BASE_URL + texName);    
     }
 }
 
-loadNewDesignGyoza();
+// Gyoza functions
+//loadNewDesignGyoza();
+//runGyozaSequence();
+
+// Takoyaki functions
+loadNewDesignTakoyaki();
 
 applyRotationBounceLessDelay(newGyozaLeft, 0, 20, 700);
 applyRotationBounceLessDelay(newGyozaRight, 0, 50, 600);
@@ -612,7 +644,6 @@ function runGyozaSequence() {
             curGyozaRightSeqIndex = 0;
     }
 }
-runGyozaSequence();
 
 function showNewQuote() {
 
@@ -669,7 +700,7 @@ function hideNewQuoteText() {
 function showNewProdInit() {
 
     newProdSmall.hidden = false;
-
+/*
     const driverParams = {
 
         durationMilliseconds: SHOW_ANIM_DURATION,
@@ -685,6 +716,7 @@ function showNewProdInit() {
     newProdSmall.transform.scaleZ = anim;
 
     timeDriver.start();
+    */
 }
 
 function showNewProdBig() {
