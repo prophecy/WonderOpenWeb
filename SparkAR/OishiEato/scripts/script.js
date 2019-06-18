@@ -507,7 +507,7 @@ const NEW_DESIGN_URL_TABLE = {
     // Takoyaki sample
     takoyaki_bubble_bg: "new_design/sample_takoyaki/bubble.png",
     takoyaki_bubble_txt: "new_design/sample_takoyaki/copy.png",
-    takoyaki_prod: "new_desing/sample_takoyaki/takopack.png",
+    takoyaki_prod: "new_design/sample_takoyaki/takopack.png",
 };
 
 // --------------------------------------------------------------------------------
@@ -596,7 +596,7 @@ function loadNewDesignTakoyaki() {
     setupMaterial(newQuoteBgMesh, curResIndex++, NEW_DESIGN_URL_TABLE.takoyaki_bubble_bg);
     setupMaterial(newQuoteTxtMesh, curResIndex++, NEW_DESIGN_URL_TABLE.takoyaki_bubble_txt);
     setupMaterial(newProdBigMesh, curResIndex++, NEW_DESIGN_URL_TABLE.takoyaki_prod);
-    //setupMaterial(newProdSmallMesh, curResIndex++, NEW_DESIGN_URL_TABLE.gyoza_prod_small);
+    setupMaterial(newProdSmallMesh, curResIndex++, NEW_DESIGN_URL_TABLE.takoyaki_prod);
 
     //setupMaterial(newQuoteBgMesh, curResIndex++, NEW_DESIGN_URL_TABLE.gyoza_bubble_bg);
 
@@ -612,12 +612,12 @@ function loadNewDesignTakoyaki() {
 // Gyoza functions
 //loadNewDesignGyoza();
 //runGyozaSequence();
+//applyRotationBounceLessDelay(newGyozaLeft, 0, 20, 700);
+//applyRotationBounceLessDelay(newGyozaRight, 0, 50, 600);
 
 // Takoyaki functions
 loadNewDesignTakoyaki();
 
-applyRotationBounceLessDelay(newGyozaLeft, 0, 20, 700);
-applyRotationBounceLessDelay(newGyozaRight, 0, 50, 600);
 applyParalaxMovement(newFrontRoot, undefined, 0.1, 0.1);
 
 var curGyozaLeftSeqIndex = 0;
@@ -700,7 +700,7 @@ function hideNewQuoteText() {
 function showNewProdInit() {
 
     newProdSmall.hidden = false;
-/*
+
     const driverParams = {
 
         durationMilliseconds: SHOW_ANIM_DURATION,
@@ -716,7 +716,6 @@ function showNewProdInit() {
     newProdSmall.transform.scaleZ = anim;
 
     timeDriver.start();
-    */
 }
 
 function showNewProdBig() {
