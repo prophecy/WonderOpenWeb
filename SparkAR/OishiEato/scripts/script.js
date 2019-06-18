@@ -562,8 +562,8 @@ function loadNewDesignGyoza() {
     newTakoyakiRoot.hidden = true;
     newSmokeRoot.hidden = true;
     headGyozaRoot.hidden = false;
-    facemesh01.hidden = true;
     facemesh0.hidden = false;
+    facemesh01.hidden = true;
 
     var curResIndex = 0;
 
@@ -571,7 +571,6 @@ function loadNewDesignGyoza() {
     setupMaterial(newQuoteTxtMesh, curResIndex++, NEW_DESIGN_URL_TABLE.gyoza_bubble_txt_00);
     setupMaterial(newProdBigMesh, curResIndex++, NEW_DESIGN_URL_TABLE.gyoza_prod_big);
     setupMaterial(newProdSmallMesh, curResIndex++, NEW_DESIGN_URL_TABLE.gyoza_prod_big);
-    //setupMaterial(newProdSmallMesh, curResIndex++, NEW_DESIGN_URL_TABLE.gyoza_prod_small);
 
     // Add gyoza sequence
     var mat = getMaterialWithDiffuseByUrl(
@@ -612,8 +611,8 @@ function loadNewDesignTakoyaki() {
     newTakoyakiRoot.hidden = false;
     newSmokeRoot.hidden = false;
     headGyozaRoot.hidden = true;
-    facemesh01.hidden = false;
     facemesh0.hidden = true;
+    facemesh01.hidden = false;
 
     var curResIndex = 0;
 
@@ -632,8 +631,9 @@ function loadNewDesignTakoyaki() {
 }
 
 // Todo: set the better theme setting here
-var curTheme = THEME_NAME_LOOKUP_TABLE.takoyaki;
+//var curTheme = THEME_NAME_LOOKUP_TABLE.takoyaki;
 //showTakoyaki();
+var curTheme = THEME_NAME_LOOKUP_TABLE.gyoza;
 showGyoza();
 
 function showGyoza() {
