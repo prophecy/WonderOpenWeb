@@ -332,6 +332,8 @@ const newGyozaLeftMesh = Scene.root.find("new_gyoza_left_mesh");
 const newGyozaRight = Scene.root.find("new_gyoza_right");
 const newGyozaRightMesh = Scene.root.find("new_gyoza_right_mesh");
 
+const newSmokeRoot = Scene.root.find("smoke_root");
+
 // --------------------------------------------------------------------------------
 // SHARED VARS & CALLBACKS
 
@@ -542,6 +544,7 @@ newQuoteBg.hidden = true;
 newQuoteTxt.hidden = true;
 newProdBig.hidden = true;
 newProdSmall.hidden = true;
+newSmokeRoot.hidden = true;
 
 var gyozaSeqMatList = [];
 
@@ -1016,12 +1019,14 @@ function onFace0MouthOpen() {
 
     showNewProdBig();
     newFeedRoot.hidden = false;
+    newSmokeRoot.hidden = false;
 }
 
 function onFace0MouthClose() {
 
     showNewProdSmall();
     newFeedRoot.hidden = true;
+    newSmokeRoot.hidden = true;
 }
 
 handleMouthOpeningState(
