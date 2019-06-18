@@ -558,7 +558,7 @@ var gyozaSeqMatList = [];
 
 function loadNewDesignGyoza() {
 
-    newGyozaRoot.hidden = false;
+    newGyozaRoot.hidden = true;
     newTakoyakiRoot.hidden = true;
     newSmokeRoot.hidden = true;
     headGyozaRoot.hidden = false;
@@ -609,7 +609,7 @@ function loadNewDesignTakoyaki() {
 
     newGyozaRoot.hidden = true;
     newTakoyakiRoot.hidden = false;
-    newSmokeRoot.hidden = false;
+    newSmokeRoot.hidden = true;
     headGyozaRoot.hidden = true;
     facemesh0.hidden = true;
     facemesh01.hidden = false;
@@ -631,10 +631,10 @@ function loadNewDesignTakoyaki() {
 }
 
 // Todo: set the better theme setting here
-//var curTheme = THEME_NAME_LOOKUP_TABLE.takoyaki;
-//showTakoyaki();
-var curTheme = THEME_NAME_LOOKUP_TABLE.gyoza;
-showGyoza();
+var curTheme = THEME_NAME_LOOKUP_TABLE.takoyaki;
+showTakoyaki();
+//var curTheme = THEME_NAME_LOOKUP_TABLE.gyoza;
+//showGyoza();
 
 function showGyoza() {
 
