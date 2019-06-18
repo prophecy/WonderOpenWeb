@@ -308,6 +308,31 @@ const frontLogoRamen0 = Scene.root.find("front_logo_ramen0");
 const frontLogoRamen1 = Scene.root.find("front_logo_ramen1");
 
 // --------------------------------------------------------------------------------
+// RESOURCES for NEW PRODUCT
+
+const newFrontRoot = Scene.root.find("new_front_root");
+
+const newQuoteBg = Scene.root.find("new_quote_bg");
+const newQuoteBgMesh = Scene.root.find("new_quote_bg_mesh");
+
+const newQuoteTxt = Scene.root.find("new_quote_text");
+const newQuoteTxtMesh = Scene.root.find("new_quote_text_mesh");
+
+const newProdBig = Scene.root.find("new_prod_big");
+const newProdBigMesh = Scene.root.find("new_prod_big_mesh");
+
+const newProdSmall = Scene.root.find("new_prod_small");
+const newProdSmallMesh = Scene.root.find("new_prod_small_mesh");
+
+const newFeedRoot = Scene.root.find("new_feed_root");
+
+const newGyozaLeft = Scene.root.find("new_gyoza_left");
+const newGyozaLeftMesh = Scene.root.find("new_gyoza_left_mesh");
+
+const newGyozaRight = Scene.root.find("new_gyoza_right");
+const newGyozaRightMesh = Scene.root.find("new_gyoza_right_mesh");
+
+// --------------------------------------------------------------------------------
 // SHARED VARS & CALLBACKS
 
 const MOUTH_OPENNESS_MIN_THRESHOLD = 0.1;
@@ -449,6 +474,38 @@ const FACE_NAME_LOOKUP_TABLE = {
 }
 
 // --------------------------------------------------------------------------------
+// NEW DESIGN VARS
+// --------------------------------------------------------------------------------
+
+const NEW_DESIGN_MAT_LIST = [
+    "new_design_mat0", "new_design_mat1", "new_design_mat2", "new_design_mat3", 
+    "new_design_mat4", "new_design_mat5", "new_design_mat6", "new_design_mat7",  
+    "new_design_mat8", "new_design_mat9", "new_design_mat10", "new_design_mat11", 
+    "new_design_mat12", "new_design_mat13", "new_design_mat14", "new_design_mat15", 
+];
+
+const NEW_DESIGN_TEX_LIST = [
+    "ext_new_design_tex0", "ext_new_design_tex1", "ext_new_design_tex2", "ext_new_design_tex3", 
+    "ext_new_design_tex4", "ext_new_design_tex5", "ext_new_design_tex6", "ext_new_design_tex7", 
+    "ext_new_design_tex8", "ext_new_design_tex9", "ext_new_design_tex10", "ext_new_design_tex11", 
+    "ext_new_design_tex12", "ext_new_design_tex13", "ext_new_design_tex14", "ext_new_design_tex15", 
+];
+
+const NEW_DESIGN_URL_TABLE = {
+    
+    // Gyoza sample
+    gyoza_bubble_bg: "new_design/sample_gyoza/01_01_bg.png",
+    gyoza_bubble_txt_00: "new_design/sample_gyoza/tx_01.png",
+    gyoza_bubble_txt_01: "new_design/sample_gyoza/tx_02.png",
+    gyoza_feed_00: "new_design/sample_gyoza/01_04_gyuza1_action.png",
+    gyoza_feed_01: "new_design/sample_gyoza/01_04_gyuza2_action.png",
+    gyoza_feed_02: "new_design/sample_gyoza/01_04_gyuza3_action.png",
+    gyoza_prod_small: "new_design/sample_gyoza/01_03_product.png",
+    gyoza_prod_big: "new_design/sample_gyoza/01_03_product2_action.png",
+    gyoza_prod_bg: "new_design/sample_gyoza/01_02_bg2.png",
+};
+
+// --------------------------------------------------------------------------------
 // SCENE LOGIC
 // --------------------------------------------------------------------------------
 
@@ -471,19 +528,8 @@ TouchGestures.onLongPress().subscribe(function (gesture) {
     dbgCanvas.hidden = !isHidden;
 });
 
-const newFrontRoot = Scene.root.find("new_front_root");
-const newQuoteBg = Scene.root.find("new_quote_bg");
-const newQuoteTxt = Scene.root.find("new_quote_text");
-const newProdBig = Scene.root.find("new_prod_big");
-const newProdSmall = Scene.root.find("new_prod_small");
-const newGyozaLeft = Scene.root.find("new_gyoza_left");
-
-const newFeedRoot = Scene.root.find("new_feed_root");
-const newGyozaLeftOffset = Scene.root.find("new_gyoza_left_offset");
-const newGyozaRight = Scene.root.find("new_gyoza_right");
-
-applyRotationBounceLessDelay(newGyozaLeftOffset, 0, 20, 700); // The small one
-applyRotationBounceLessDelay(newGyozaRight, 0, 50, 600); // The big one
+// --------------------------------------------------------------------------------
+// @ START
 
 const SHOW_ANIM_DURATION = 300;
 
@@ -492,6 +538,30 @@ newQuoteTxt.hidden = true;
 newProdBig.hidden = true;
 newProdSmall.hidden = true;
 
+function loadNewDesignGyoza() {
+
+    var curResIndex = 0;
+
+    setupMaterial(newQuoteBgMesh, curResIndex++, NEW_DESIGN_URL_TABLE.gyoza_bubble_bg);
+    setupMaterial(newQuoteTxtMesh, curResIndex++, NEW_DESIGN_URL_TABLE.gyoza_bubble_txt_00);
+    setupMaterial(newProdBigMesh, curResIndex++, NEW_DESIGN_URL_TABLE.gyoza_prod_big);
+    setupMaterial(newProdSmallMesh, curResIndex++, NEW_DESIGN_URL_TABLE.gyoza_prod_small);
+    setupMaterial(newGyozaLeftMesh, curResIndex++, NEW_DESIGN_URL_TABLE.gyoza_feed_00);
+    setupMaterial(newGyozaRightMesh, curResIndex++, NEW_DESIGN_URL_TABLE.gyoza_feed_00);
+
+    function setupMaterial(mesh, index, texName) {
+
+        mesh.material = getMaterialWithDiffuseByUrl(
+            NEW_DESIGN_MAT_LIST[index], 
+            NEW_DESIGN_TEX_LIST[index], 
+            BASE_URL + texName);    
+    }
+}
+
+loadNewDesignGyoza();
+
+applyRotationBounceLessDelay(newGyozaLeft, 0, 20, 700); // The small one
+applyRotationBounceLessDelay(newGyozaRight, 0, 50, 600); // The big one
 applyParalaxMovement(newFrontRoot, undefined, 0.1, 0.1);
 
 function showNewQuote() {
@@ -583,202 +653,6 @@ function hideNewProd() {
 
     newProdBig.hidden = true;
     newProdSmall.hidden = true;
-}
-
-// --------------------------------------------------------------------------------
-// @ START
-
-// Send events for data analytics
-CameraInfo.isCapturingPhoto.monitor().subscribe(function(value) {
-
-    Diagnostics.log("Capturing Proto: value: " + value.newValue);
-
-    // If new value == true -> means begin
-    //        value == false -> means finish
-});
-
-CameraInfo.isRecordingVideo.monitor().subscribe(function(value) {
-
-    Diagnostics.log("Recording Video: value: " + value.newValue);
-
-    // If new value == true -> means begin
-    //        value == false -> means finish
-});
-
-function initProduct() {
-
-    var prodKey = currentData.product;
-    var prodTex = undefined;
-
-    if (!(prodKey in PROD_TEX_LOOKUP_TABLE)) {
-
-        Diagnostics.log("Texture name not found with key: " + prodKey);
-
-        if (CONFIG.ENV === ENV_DEV)
-            prodTex = Textures.get("not_found_tex");
-        else if (CONFIG.ENV === ENV_PROD)
-            prodTex = Textures.get("transparent");
-    }
-    else {
-
-        // Get product texture
-        var texName = PROD_TEX_LOOKUP_TABLE[prodKey];
-
-        Diagnostics.log("Got texture name: " + texName);   
-
-        prodTex = Textures.get("ext_prod_tex0");
-        prodTex.url = CONFIG.BASE_TEX_URL + texName;
-    }
-
-    // Apply texture to product material
-    var prodMat = Materials.get(PROD_MAT_NAME);
-
-    prodMat.diffuse = prodTex;
-
-    // Apply material to product object
-    prodPlane0Mesh.material = prodMat;
-    prodPlane1Mesh.material = prodMat; 
-    prodPlane2Mesh.material = prodMat;
-}
-
-function initFrontFrame() {
-
-    var themeName = currentData.theme;
-    
-    if (themeName.localeCompare(THEME_NAME_LOOKUP_TABLE.gyoza) == 0)
-        showGyoza();
-    else if (themeName.localeCompare(THEME_NAME_LOOKUP_TABLE.sandwich) == 0)
-        showSandwich();
-    else if (themeName.localeCompare(THEME_NAME_LOOKUP_TABLE.takoyaki) == 0)
-        showTakoyaki();
-    else if (themeName.localeCompare(THEME_NAME_LOOKUP_TABLE.crabstick) == 0)
-        showCrabstick();
-    else if (themeName.localeCompare(THEME_NAME_LOOKUP_TABLE.meal) == 0)
-        showMeal();
-    else
-        Diagnostics.log("Theme key not found with value: '" + themeName + "'");
-
-    function showGyoza() {
-
-        // Apply mat for Gyoza theme
-        var meshList = [
-            gyozaFloatMesh, frontLogoGyoza,
-        ]
-
-        var texPathList = [
-            "theme_gyoza/front_00.png", "theme_gyoza/front_01.png",
-        ]
-
-        for (var i = 0; i<meshList.length; ++i) {
-
-            var url = CONFIG.BASE_TEX_URL + texPathList[i];
-
-            var tex = Textures.get(FRONT_TEX_LIST[i]);
-            tex.url = url;
-
-            meshList[i].material = getMaterialWithDiffuse(FRONT_MAT_LIST[i], FRONT_TEX_LIST[i]);
-        }
-
-        frontGyoza.hidden = false;
-    }
-
-    function showSandwich() {
-
-        // Apply mat for sandwich theme
-        var meshList = [
-            frontLogoSandwich, sandwichFrontCrabstickMesh, sandwichFrontMesh, sandwichFrontEggMesh,
-            sandwichFrontHam0Mesh, sandwichFrontHam1Mesh,
-        ]
-
-        var texPathList = [
-            "theme_sandwich/sw7.png", "theme_sandwich/sw4.png", "theme_sandwich/sw2.png", "theme_sandwich/sw3.png",
-            "theme_sandwich/sw8.png", "theme_sandwich/sw8.png"
-        ]
-
-        for (var i = 0; i<meshList.length; ++i) {
-
-            var url = CONFIG.BASE_TEX_URL + texPathList[i];
-
-            var tex = Textures.get(FRONT_TEX_LIST[i]);
-            tex.url = url;
-
-            meshList[i].material = getMaterialWithDiffuse(FRONT_MAT_LIST[i], FRONT_TEX_LIST[i]);
-        }
-
-        frontSandwich.hidden = false;
-    }
-
-    function showTakoyaki() {
-
-        // Apply mat for takoyami theme
-        var meshList = [
-            takoyakiFrontSnack0Mesh, takoyakiFrontSnack1Mesh, takoyakiFrontTakoMesh, frontLogoTakoyaki,
-        ]
-
-        var texPathList = [
-            "theme_tako/ta12.png", "theme_tako/ta12.png", "theme_tako/ta3_2.png", "theme_tako/logo_tako.png",
-        ]
-
-        for (var i = 0; i<meshList.length; ++i) {
-
-            var url = CONFIG.BASE_TEX_URL + texPathList[i];
-
-            var tex = Textures.get(FRONT_TEX_LIST[i]);
-            tex.url = url;
-
-            meshList[i].material = getMaterialWithDiffuse(FRONT_MAT_LIST[i], FRONT_TEX_LIST[i]);
-        }
-
-        frontTakoyaki.hidden = false;
-    }
-
-    function showCrabstick() {
-
-        // Apply mat for crabstick theme
-        var meshList = [
-            crabstickFrontBareCrabMesh, crabstickFrontHoldingCrabMesh, frontLogoCrabstick,
-        ]
-
-        var texPathList = [
-            "theme_crabstick/crab_12.png", "theme_crabstick/crab_10_L.png", "theme_crabstick/crab_10.png",
-        ]
-
-        for (var i = 0; i<meshList.length; ++i) {
-
-            var url = CONFIG.BASE_TEX_URL + texPathList[i];
-
-            var tex = Textures.get(FRONT_TEX_LIST[i]);
-            tex.url = url;
-
-            meshList[i].material = getMaterialWithDiffuse(FRONT_MAT_LIST[i], FRONT_TEX_LIST[i]);
-        }
-
-        frontCrabstick.hidden = false;
-    }
-
-    function showMeal() {
-
-        // Apply mat for meal theme
-        var meshList = [
-            mealFrontFlagMesh, frontLogoRamen0, frontLogoRamen1,
-        ]
-
-        var texPathList = [
-            "theme_meal/ramen3.png", "theme_meal/ramen1.png", "theme_meal/ramen_still.png",
-        ]
-
-        for (var i = 0; i<meshList.length; ++i) {
-
-            var url = CONFIG.BASE_TEX_URL + texPathList[i];
-
-            var tex = Textures.get(FRONT_TEX_LIST[i]);
-            tex.url = url;
-
-            meshList[i].material = getMaterialWithDiffuse(FRONT_MAT_LIST[i], FRONT_TEX_LIST[i]);
-        }
-
-        frontMealRoot.hidden = false;
-    }
 }
 
 function initHead() {
@@ -931,146 +805,6 @@ function initHead() {
 
 foodFeederRoot0.hidden = true;
 
-function initFoodFeeder() {
-    
-    // Setup materials & textures
-    var themeName = currentData.theme;
-
-    if (themeName.localeCompare(THEME_NAME_LOOKUP_TABLE.gyoza) == 0)
-        setupGyozaFoodMat();
-    else if (themeName.localeCompare(THEME_NAME_LOOKUP_TABLE.sandwich) == 0)
-        setupSandwichFoodMat();
-    else if (themeName.localeCompare(THEME_NAME_LOOKUP_TABLE.takoyaki) == 0)
-        setupTakoyakiFoodMat();
-    else if (themeName.localeCompare(THEME_NAME_LOOKUP_TABLE.crabstick) == 0)
-        setupCrabstickFoodMat();
-    else if (themeName.localeCompare(THEME_NAME_LOOKUP_TABLE.meal) == 0)
-        setupMealFoodMat();
-    else
-        Diagnostics.log("Theme key not found with value: '" + themeName + "'");
-    
-    function setupGyozaFoodMat() {
-
-        ramenPool0.hidden = true;
-        setupFoodMat(FOOD_TEX_LOOKUP_TABLE.gyoza);
-        setupCrushMat(CRUSH_TEX_LOOKUP_TABLE.gyoza);
-    }
-
-    function setupSandwichFoodMat() {
-
-        ramenPool0.hidden = true;
-        setupFoodMat(FOOD_TEX_LOOKUP_TABLE.sandwich);
-        setupCrushMat(CRUSH_TEX_LOOKUP_TABLE.sandwich);
-    }
-
-    function setupCrabstickFoodMat() {
-
-        ramenPool0.hidden = true;
-        setupFoodMat(FOOD_TEX_LOOKUP_TABLE.crabstick);
-        setupCrushMat(CRUSH_TEX_LOOKUP_TABLE.crabstick);
-    }
-
-    function setupTakoyakiFoodMat() {
-
-        ramenPool0.hidden = true;
-        setupFoodMat(FOOD_TEX_LOOKUP_TABLE.takoyaki);
-        setupCrushMat(CRUSH_TEX_LOOKUP_TABLE.takoyaki);
-    }
-
-    function setupMealFoodMat() {
-
-        testyPool0.hidden = true;
-        crushPool0.hidden = true;
-
-        // Setup shopstick
-        var url = CONFIG.BASE_TEX_URL + "theme_meal/chopsticks.png"
-        var tex = Textures.get(FOOD_TEX_LIST[0]);
-        var mat = Materials.get(FOOD_MAT_LIST[0]);
-
-        tex.url = url;
-        mat.diffuse = tex;
-
-        mealShopstick00mesh.material = mat;
-        mealShopstick01mesh.material = mat;
-
-        // Animate shopsticks
-        applyShopsticksBound(mealShopstick00_pivot, -10, 20, 600);
-        applyShopsticksBound(mealShopstick01_pivot, 0, 30, 600);
-    }
-
-    function setupFoodMat(texPathList) {
-        setupMatTex(texPathList, FOOD_MAT_LIST, FOOD_TEX_LIST, foodPoolMeshList0);
-    }
-
-    function setupCrushMat(texPathList) {
-        setupMatTex(texPathList, CRUSH_MAT_LIST, CRUSH_TEX_LIST, crushPoolMeshList0);
-    }
-
-    function setupMatTex(texPathList, matList, texList, objList) {
-
-        var curMatIndex = 0; // mat index MUST be = tex index
-        var curTexUrlIndex = 0;
-
-        for (var i=0; i<objList.length; ++i) {
-
-            // Get tex name
-            var texName = texPathList[curTexUrlIndex];
-
-            // Move to the next name index
-            if (++curTexUrlIndex >= texPathList.length)
-                curTexUrlIndex = 0;
-
-            // Get mat & text
-            var mat = Materials.get(matList[curMatIndex]);
-            var tex = Textures.get(texList[curMatIndex]);
-
-            // Move to the next mat index
-            if (++curMatIndex >= matList.length)
-                curMatIndex = 0;
-
-            // Set tex URL
-            var url = CONFIG.BASE_TEX_URL + texName;
-            //Diagnostics.log("url: " + url);
-            tex.url = url
-            
-            // Apply tex to mat
-            mat.diffuse = tex;
-
-            // Get obj
-            var obj = objList[i];
-
-            // Apply mat to obj
-            obj.material = mat;
-        }
-    }
-
-    // Setup parameters
-    const foodFeederArgs = {
-
-        range: 50.0,
-
-        feedVariantX: 2.0,
-        feedVariantY: 2.0,
-        yAngleVariant: 180.0,
-
-        FEED_SET_COUNT: 16,
-
-        feedInterval: 200,
-        feedDuration: 800,
-
-        crushDuration: 300,
-        crushInterval: 100,
-
-        crushVarianceX: 7.0,
-        crushVarianceY: 7.0,
-        crushVarianceZ: 7.0,
-    }
-
-    // Handle object
-    handleFoodFeeder(foodPoolList0, crushPoolList0, foodFeederArgs);
-    handleFoodFeeder(foodPoolList1, crushPoolList1, foodFeederArgs);
-}
-
 /*
 // Get theme
 getThemeData(CONFIG.GET_THEME_URL, function(data, err) { 
@@ -1219,10 +953,42 @@ handleMouthOpeningState(
 // GENERIC FUNCTIONS
 // --------------------------------------------------------------------------------
 
+// Send events for data analytics
+CameraInfo.isCapturingPhoto.monitor().subscribe(function(value) {
+
+    Diagnostics.log("Capturing Proto: value: " + value.newValue);
+
+    // If new value == true -> means begin
+    //        value == false -> means finish
+});
+
+CameraInfo.isRecordingVideo.monitor().subscribe(function(value) {
+
+    Diagnostics.log("Recording Video: value: " + value.newValue);
+
+    // If new value == true -> means begin
+    //        value == false -> means finish
+});
+
 function getMaterialWithDiffuse(matName, texName) {
 
     var mat = Materials.get(matName);
     var tex = Textures.get(texName);
+
+    mat.diffuse = tex;
+    return mat;
+}
+
+function getMaterialWithDiffuseByUrl(matName, texName, url) {
+
+    Diagnostics.log("Get mat: " + matName);
+    Diagnostics.log("Get tex: " + texName);
+    Diagnostics.log("Load texture with URL: " + url);
+
+    var tex = Textures.get(texName);
+    tex.url = url;
+
+    var mat = Materials.get(matName);
 
     mat.diffuse = tex;
     return mat;
