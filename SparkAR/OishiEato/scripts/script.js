@@ -535,6 +535,10 @@ TouchGestures.onLongPress().subscribe(function (gesture) {
     dbgCanvas.hidden = !isHidden;
 });
 
+TouchGestures.onTap().subscribe(function (gesture) {
+    changeTheme();
+});
+
 // --------------------------------------------------------------------------------
 // @ START
 
@@ -612,14 +616,37 @@ function loadNewDesignTakoyaki() {
     }
 }
 
-// Gyoza functions
-//loadNewDesignGyoza();
-//runGyozaSequence();
-//applyRotationBounceLessDelay(newGyozaLeft, 0, 20, 700);
-//applyRotationBounceLessDelay(newGyozaRight, 0, 50, 600);
+// Todo: set the better theme setting here
+var curTheme = THEME_NAME_LOOKUP_TABLE.takoyaki;
+showTakoyaki();
 
-// Takoyaki functions
-loadNewDesignTakoyaki();
+function showGyoza() {
+
+    loadNewDesignGyoza();
+    runGyozaSequence();
+    applyRotationBounceLessDelay(newGyozaLeft, 0, 20, 700);
+    applyRotationBounceLessDelay(newGyozaRight, 0, 50, 600);
+}
+
+function showTakoyaki() {
+
+    loadNewDesignTakoyaki();
+}
+
+function changeTheme() {
+
+    // Change theme
+    if (curTheme === THEME_NAME_LOOKUP_TABLE.takoyaki)
+        curTheme = THEME_NAME_LOOKUP_TABLE.gyoza;
+    else if (curTheme === THEME_NAME_LOOKUP_TABLE.gyoza)
+        curTheme = THEME_NAME_LOOKUP_TABLE.takoyaki;
+
+    // Show theme
+    if (curTheme === THEME_NAME_LOOKUP_TABLE.gyoza)
+        showGyoza();
+    else if (curTheme === THEME_NAME_LOOKUP_TABLE.takoyaki)
+        showTakoyaki();
+}
 
 applyParalaxMovement(newFrontRoot, undefined, 0.1, 0.1);
 
