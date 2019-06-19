@@ -465,11 +465,13 @@ const FACE_NAME_LOOKUP_TABLE = {
 //Diagnostics.watch("Mouth Center Z ", FaceTracking.face(0).mouth.center.z);
 
 // Toggle show/hidden debug panel
+/*
 TouchGestures.onLongPress().subscribe(function (gesture) {
 
     var isHidden = dbgCanvas.hidden.pinLastValue();
     dbgCanvas.hidden = !isHidden;
 });
+*/
 
 // --------------------------------------------------------------------------------
 // @ START
