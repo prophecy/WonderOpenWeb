@@ -494,20 +494,28 @@ const SHOW_ANIM_DURATION = 300;
 
 var curTheme = undefined;
 
-hideAllThemes();
-showTakoyaki();
+// ********************************************************************************
+// This function starts first, but call at the last line
+
+function main() {
+
+    hideAllThemes();
+    showGyoza();    
+}
+
+// ********************************************************************************
 
 function changeTheme() {
 
     hideAllThemes();
 
     // Change theme
-    if (curTheme === THEME_NAME_LOOKUP_TABLE.takoyaki)
-        showGyoza();
-    else if (curTheme === THEME_NAME_LOOKUP_TABLE.gyoza)
+    if (curTheme === THEME_NAME_LOOKUP_TABLE.gyoza)
         showTakoyaki();
-    else if (curTheme === THEME_NAME_LOOKUP_TABLE.crabstick)
-        showCrabstick();
+    else if (curTheme === THEME_NAME_LOOKUP_TABLE.takoyaki)
+        showSandwich();
+    else if (curTheme === THEME_NAME_LOOKUP_TABLE.sandwich)
+        showGyoza();
 }
 
 function hideAllThemes() {
@@ -1749,4 +1757,7 @@ function getThemeData(url, callback) {
     });
 }
 
-
+// ********************************************************************************
+// Keep this block at the last line of code
+main()
+// ********************************************************************************
