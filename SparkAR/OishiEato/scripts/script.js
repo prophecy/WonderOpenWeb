@@ -1138,7 +1138,7 @@ function getMaterialWithDiffuseByUrl(matName, texName, url) {
     return mat;
 }
 
-// Handle mouth opennes
+// Handle mouth opening state
 
 function handleMouthOpeningState(faceIndex, openMinThres, closeMaxThres, openCallback, closCallback) {
 
