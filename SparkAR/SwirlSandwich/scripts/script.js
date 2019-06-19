@@ -31,12 +31,12 @@ for (var i=0; i<7; ++i)
 for (var i=0; i<7; ++i)
     backSandwichMeshList.push(Scene.root.find("sandwichb" + i + "_mesh"));
 
-initSwirlSandwich(frontSwirl, frontSandwichList, frontSandwichMeshList);
-initSwirlSandwich(backSwirl, backSandwichList, backSandwichMeshList);
+initSwirlSandwich(frontSwirl, frontSandwichList, frontSandwichMeshList, true);
+initSwirlSandwich(backSwirl, backSandwichList, backSandwichMeshList, false);
 
 // Functions
 
-function initSwirlSandwich(swirl, sandwichList, sandwichMeshList) {
+function initSwirlSandwich(swirl, sandwichList, sandwichMeshList, isFront) {
 
     // Setup object transform
     const RADIOUS = 13.0;
@@ -55,6 +55,22 @@ function initSwirlSandwich(swirl, sandwichList, sandwichMeshList) {
         obj.transform.z = z;
 
         obj.transform.rotationY = (Math.PI * 0.5) - radian;
+
+        // Visibility signals
+        var signal0 = swirl.transform.rotationZ.sub(radian).gt(Reactive.val(0));
+        var signal1 = swirl.transform.rotationZ.sub(radian).lt(Reactive.val(-Math.PI));
+
+//        var signal0 = swirl.transform.rotationX.sub(radian).lt(Reactive.val(0.5 * Math.PI));
+  //      var signal1 = swirl.transform.rotationX.sub(radian).gt(Reactive.val(-0.5 * Math.PI));
+    //    var signal3 = swirl.transform.rotationX.sub(radian).gt(Reactive.val(1.5 * Math.PI));        
+      //  var signalOut = signal0.and(signal1).or(signal3);
+
+        var signalOut = signal0.or(signal1);
+
+        if (isFront)
+            obj.hidden = signalOut;
+        else
+            obj.hidden = signalOut.not();
     }
 
     for (var i=0; i<sandwichMeshList.length; ++i) {
