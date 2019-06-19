@@ -1111,7 +1111,7 @@ function getMaterialWithDiffuse(matName, texName) {
 
     var mat = Materials.get(matName);
     var tex = Textures.get(texName);
-
+    
     mat.diffuse = tex;
     return mat;
 }
