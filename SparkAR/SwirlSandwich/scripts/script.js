@@ -13,17 +13,30 @@ const Scene = require("Scene");
 const Animation = require("Animation");
 const Reactive = require("Reactive");
 
-const swirl = Scene.root.find("swirl");
-const sandwichList = [];
-const sandwichMeshList = [];
+const frontSwirl = Scene.root.find("swirl_foreground");
+const backSwirl = Scene.root.find("swirl_background");
+
+const frontSandwichList = [];
+const frontSandwichMeshList = [];
+const backSandwichList = [];
+const backSandwichMeshList = [];
 
 for (var i=0; i<7; ++i)
-    sandwichList.push(Scene.root.find("sandwich" + i));
+    frontSandwichList.push(Scene.root.find("sandwichf" + i));
+for (var i=0; i<7; ++i)
+    frontSandwichMeshList.push(Scene.root.find("sandwichf" + i + "_mesh"));
 
 for (var i=0; i<7; ++i)
-    sandwichMeshList.push(Scene.root.find("sandwich" + i + "_mesh"));
+    backSandwichList.push(Scene.root.find("sandwichb" + i));
+for (var i=0; i<7; ++i)
+    backSandwichMeshList.push(Scene.root.find("sandwichb" + i + "_mesh"));
 
-function initSwirlSandwich() {
+initSwirlSandwich(frontSwirl, frontSandwichList, frontSandwichMeshList);
+initSwirlSandwich(backSwirl, backSandwichList, backSandwichMeshList);
+
+// Functions
+
+function initSwirlSandwich(swirl, sandwichList, sandwichMeshList) {
 
     // Setup object transform
     const RADIOUS = 13.0;
@@ -93,4 +106,3 @@ function applySwirlMovement(obj, a, b, c, duration) {
 
     obj.transform.rotation = rotation_signal;
 }
-initSwirlSandwich();
