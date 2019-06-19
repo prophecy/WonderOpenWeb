@@ -274,7 +274,7 @@ const newTakoyakiRoot = Scene.root.find("takoyaki_root");
 const newSmokeRoot = Scene.root.find("smoke_root");
 const newGyozaRoot = Scene.root.find("new_gyoza_root");
 
-const facemesh01 = Scene.root.find("facemesh01");
+const facemesh0Tako = Scene.root.find("facemesh0_tako");
 
 const howToRect = Scene.root.find("howto_rect");
 
@@ -496,7 +496,7 @@ function hideAllThemes() {
     newTakoyakiRoot.hidden = true;
     newGyozaRoot.hidden = true;    
     facemesh0.hidden = true;
-    facemesh01.hidden = true;
+    facemesh0Tako.hidden = true;
 }
 
 function showGyoza() {
@@ -519,7 +519,7 @@ function showTakoyaki() {
     curTheme = THEME_NAME_LOOKUP_TABLE.takoyaki;
 
     newTakoyakiRoot.hidden = false;
-    facemesh01.hidden = false;
+    facemesh0Tako.hidden = false;
 
     loadNewDesignTakoyaki();
 }
