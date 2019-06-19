@@ -461,6 +461,11 @@ const NEW_DESIGN_URL_TABLE = {
     takoyaki_bubble_bg: "new_design/sample_takoyaki/bubble.png",
     takoyaki_bubble_txt: "new_design/sample_takoyaki/copy.png",
     takoyaki_prod: "new_design/sample_takoyaki/takopack.png",
+
+    // Sandwich sample
+    sandwich_bubble_bg: "new_design/sample_sandwich/bb_sandwich.png",
+    sandwich_bubble_txt: "new_design/sample_takoyaki/copy.png",
+    sandwich_prod: "new_design/sample_sandwich/sandwich_crab.png",
 };
 
 // --------------------------------------------------------------------------------
@@ -583,6 +588,8 @@ function showSandwich() {
     bodySegmentationRect.hidden = false;
 
     facemesh0.material = facePaintInvisibleMat;
+
+    loadNewDesignSandwich();
 }
 
 function initSwirlSandwich(swirl, sandwichList, sandwichMeshList, isFront) {
@@ -683,6 +690,24 @@ function loadNewDesignTakoyaki() {
     setupMaterial(newQuoteTxtMesh, curResIndex++, NEW_DESIGN_URL_TABLE.takoyaki_bubble_txt);
     setupMaterial(newProdBigMesh, curResIndex++, NEW_DESIGN_URL_TABLE.takoyaki_prod);
     setupMaterial(newProdSmallMesh, curResIndex++, NEW_DESIGN_URL_TABLE.takoyaki_prod);
+
+    function setupMaterial(mesh, index, texName) {
+
+        mesh.material = getMaterialWithDiffuseByUrl(
+            NEW_DESIGN_MAT_LIST[index], 
+            NEW_DESIGN_TEX_LIST[index], 
+            BASE_URL + texName);    
+    }
+}
+
+function loadNewDesignSandwich() {
+
+    var curResIndex = 0;
+
+    setupMaterial(newQuoteBgMesh, curResIndex++, NEW_DESIGN_URL_TABLE.sandwich_bubble_bg);
+    setupMaterial(newQuoteTxtMesh, curResIndex++, NEW_DESIGN_URL_TABLE.sandwich_bubble_txt);
+    setupMaterial(newProdBigMesh, curResIndex++, NEW_DESIGN_URL_TABLE.sandwich_prod);
+    setupMaterial(newProdSmallMesh, curResIndex++, NEW_DESIGN_URL_TABLE.sandwich_prod);
 
     function setupMaterial(mesh, index, texName) {
 
