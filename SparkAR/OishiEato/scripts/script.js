@@ -250,6 +250,8 @@ const frontLogoRamen1 = Scene.root.find("front_logo_ramen1");
 // --------------------------------------------------------------------------------
 // RESOURCES for NEW PRODUCT
 
+const bodySegmentationRect = Scene.root.find("body_segment_rect");
+
 const newFrontRoot = Scene.root.find("new_front_root");
 
 const newQuoteBg = Scene.root.find("new_quote_bg");
@@ -281,6 +283,7 @@ const howToRect = Scene.root.find("howto_rect");
 // --------------------------------------------------------------------------------
 // RESOURCES for SWIRL SANDWICH
 
+const sandwichRoot = Scene.root.find("sandwich_root");
 const frontSwirl = Scene.root.find("swirl_foreground");
 const backSwirl = Scene.root.find("swirl_background");
 
@@ -499,8 +502,11 @@ var curTheme = undefined;
 
 function main() {
 
+    initSwirlSandwich(frontSwirl, frontSandwichList, frontSandwichMeshList, true);
+    initSwirlSandwich(backSwirl, backSandwichList, backSandwichMeshList, false);
+        
     hideAllThemes();
-    showGyoza();    
+    showSandwich();    
 }
 
 // ********************************************************************************
@@ -524,11 +530,15 @@ function hideAllThemes() {
     //newQuoteTxt.hidden = true;
     //newProdBig.hidden = true;
     //newProdSmall.hidden = true;
+
     newSmokeRoot.hidden = true;
     newTakoyakiRoot.hidden = true;
     newGyozaRoot.hidden = true;    
     facemesh0.hidden = true;
     facemesh0Tako.hidden = true;
+    sandwichRoot.hidden = true;
+    headGyozaRoot.hidden = true;
+    bodySegmentationRect.hidden = true;
 }
 
 function showGyoza() {
@@ -537,6 +547,8 @@ function showGyoza() {
 
     headGyozaRoot.hidden = false;
     facemesh0.hidden = false;
+    newGyozaRoot.hidden = false;
+    headGyozaRoot.hidden = false;
 
     loadNewDesignGyoza();
     runGyozaSequence();
@@ -562,12 +574,15 @@ function showCrabstick() {
 
 }
 
-initSwirlSandwich(frontSwirl, frontSandwichList, frontSandwichMeshList, true);
-initSwirlSandwich(backSwirl, backSandwichList, backSandwichMeshList, false);
-    
 function showSandwich() {
 
     curTheme = THEME_NAME_LOOKUP_TABLE.sandwich;
+
+    facemesh0.hidden = false;
+    sandwichRoot.hidden = false;
+    bodySegmentationRect.hidden = false;
+
+    facemesh0.material = facePaintInvisibleMat;
 }
 
 function initSwirlSandwich(swirl, sandwichList, sandwichMeshList, isFront) {
@@ -859,7 +874,7 @@ function initHead() {
         //headGyozaRoot1.hidden = false;
 
         // Apply face paint mat and tex
-        facemesh0.material = facePaintGyozaMat;
+        //facemesh0.material = facePaintGyozaMat;
         // stub
         //facemesh1.material = facePaintGyozaMat;
     }
