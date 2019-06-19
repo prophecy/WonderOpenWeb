@@ -46,12 +46,13 @@ const Materials = require('Materials');
 const Textures = require('Textures');
 const TouchGestures = require('TouchGestures');
 const CameraInfo = require('CameraInfo');
-const WorldTransform = require('WorldTransform');
 
 // --------------------------------------------------------------------------------
 // SCENE DATABASE
 
+// stub
 // Handle bubbles of face #0
+/*
 var bubbleList0 = [];
 bubbleList0.push(Scene.root.find('bubble00'));
 bubbleList0.push(Scene.root.find('bubble01'));
@@ -80,22 +81,11 @@ bubbleList1.push(Scene.root.find('bubble16'));
 for (var i=0; i<bubbleList1.length; ++i)
     if (bubbleList1[i] === undefined)
         Diagnostics.log("obj is undefined");
+*/
 
 // Food feeder for player #0
 
 var foodFeederRoot0 = Scene.root.find('foodFeederRoot0');
-
-var testyPool0 = Scene.root.find("testyPool0");
-var crushPool0 = Scene.root.find("crushPool0");
-var ramenPool0 = Scene.root.find("ramenPool0");
-
-var foodPoolList0 = [];
-for (var i=0; i<32; ++i)
-    foodPoolList0.push(Scene.root.find('testy0' + i));
-
-var foodPoolMeshList0 = [];
-for (var i=0; i<32; ++i)
-    foodPoolMeshList0.push(Scene.root.find('testy0' + i + "_mesh"));
 
 var crushPoolList0 = [];
 for (var i=0; i<10; ++i)
@@ -111,21 +101,8 @@ const facePoint0 = Patches.getVectorValue("facePoint0");
 const facePoint1 = Patches.getVectorValue("facePoint1");
 
 const facemesh0 = Scene.root.find("facemesh0");
-const facemesh1 = Scene.root.find("facemesh1");
-
-// Product
-
-const prodRoot = Scene.root.find('prod_root');
-
-const prodPlane0 = Scene.root.find('prod_plane0');
-const prodPlane1 = Scene.root.find('prod_plane1');
-const prodPlane2 = Scene.root.find('prod_plane2');
-
-const prodPlane0Mesh = Scene.root.find('prod_plane0_mesh');
-const prodPlane1Mesh = Scene.root.find('prod_plane1_mesh');
-const prodPlane2Mesh = Scene.root.find('prod_plane2_mesh');
-
-const frontRoot = Scene.root.find('front_root');
+// Stub
+//const facemesh1 = Scene.root.find("facemesh1");
 
 // Debug
 const dbgTxtTheme = Scene.root.find('dbg_txt_theme');
@@ -136,64 +113,20 @@ const dbgCanvas = Scene.root.find('debugPanelCanvas');
 // --------------------------------------------------------------------------------
 // RESOURCES for GYOZA THEME
 
-const frontGyoza = Scene.root.find('front_gyoza');
-
-const gyozaFloat = Scene.root.find('gyoza_float');
-
-const gyozaFloatMesh = Scene.root.find('gyoza_float_mesh');
-const gyozaLogoMesh = Scene.root.find('gyoza_logo_mesh');
-
-const gyozaFrontTex0 = 'gyoza_front_tex0';
-const gyozaFrontTex1 = 'gyoza_front_tex1';
-
 const headGyozaRoot = Scene.root.find('head_gyoza_root');
-const headGyozaRoot1 = Scene.root.find('head_gyoza_root1');
 
+// stub
 const headHachimakiMesh = Scene.root.find("head_hachimaki_mesh");
 const headHachimakiTex = "head_hachimaki";
-
-const headHachimaki1Mesh = Scene.root.find("head_hachimaki1_mesh");
-
+// stub
+//const headHachimaki1Mesh = Scene.root.find("head_hachimaki1_mesh");
 const facePaintGyozaMat = Materials.get("face_paint_gyoza_mat");
-
 const facePaintInvisibleMat = Materials.get("face_paint_invisible_mat");
-
-const frontLogoGyoza = Scene.root.find("front_logo_gyoza");
 
 // --------------------------------------------------------------------------------
 // RESOURCES for SANDWICH THEME
-
-const frontSandwich = Scene.root.find('front_sandwich');
-
-const sandwichFrontFlag = Scene.root.find('sandwich_front_flag');
-const samdwichFrontCrabstick = Scene.root.find('sandwich_front_crabstick');
-const sandwichFront = Scene.root.find('sandwich_front');
-const sandwichFrontEgg = Scene.root.find('sandwich_front_egg');
-const sandwichFrontHam0 = Scene.root.find('sandwich_front_ham0');
-const sandwichFrontHam1 = Scene.root.find('sandwich_front_ham1');
-
-const sandwichFrontFlagMesh = Scene.root.find('sandwich_front_flag_mesh');
-const sandwichFrontCrabstickMesh = Scene.root.find('sandwich_front_crabstick_mesh');
-const sandwichFrontMesh = Scene.root.find('sandwich_front_mesh');
-const sandwichFrontEggMesh = Scene.root.find('sandwich_front_egg_mesh');
-const sandwichFrontHam0Mesh = Scene.root.find('sandwich_front_ham0_mesh');
-const sandwichFrontHam1Mesh = Scene.root.find('sandwich_front_ham1_mesh');
-
-const sandwichFragTex = "sandwich_flag_tex";
-const sandwichFullTex = "sandwich_full_tex";
-const sandwichHalfTex = "sandwich_half_tex";
-const sandwichEggFullTex = "sandwich_egg_full_tex";
-const sandwichEggHalfTex = "sandwich_egg_helf_tex";
-const sandwichHamFullTex = "sandwich_ham_full_tex";
-const sandwichHamHalfTex = "sandwich_ham_half_tex";
-const sandwichCrabstickVibTex = "sandwich_crabstick_vib_tex";
-const sandwichCrabstickFullTex = "sandwich_crabstick_full_tex";
-const sandwichCrabstickHalfTex = "sandwich_crabstick_half_tex";
-const sandwichCrush0Tex = "sandwich_crush_0_tex";
-const sandwichCrush1Tex = "sandwich_crush_1_tex";
-const sandwichGlassesTex = "sandwich_glasses_tex";
-const sandwichSwirlTex = "sandwich_swirl_tex";
-
+// stub
+/*
 const headSandwichRoot = Scene.root.find("head_sandwich_root");
 const headGlassesMesh = Scene.root.find("head_glasses_mesh");
 const headGlassesTex = "head_glasses";
@@ -211,10 +144,13 @@ const headSwirl11Mesh = Scene.root.find("head_swirl11_mesh");
 const headSwirlTex = "head_swirl";
 
 const frontLogoSandwich = Scene.root.find("front_logo_sandwich");
+*/
 
 // --------------------------------------------------------------------------------
 // RESOURCES for TAKOYAKI THEME
 
+// stub
+/*
 const frontTakoyaki = Scene.root.find('front_takoyaki');
 
 const takoyakiFrontSnack0 = Scene.root.find("takoyaki_front_snack0");
@@ -261,10 +197,12 @@ const headTakoyakiBack1Mesh = Scene.root.find("head_takoyaki_back1_mesh");
 const pinkyFaceMat = Materials.get("pinky_face_mat");
 
 const frontLogoTakoyaki = Scene.root.find("front_logo_takoyaki");
+*/
 
 // --------------------------------------------------------------------------------
 // RESOURCES for CRABSTICK THEME
-
+// stub
+/*
 const headCrabstickRoot = Scene.root.find("head_crabstick_root");
 const headCrabstickHatMesh = Scene.root.find("head_crabstick_hat_mesh");
 const headCrabstickScalfMesh = Scene.root.find("head_crabstick_scalf_mesh");
@@ -282,10 +220,12 @@ const crabstickFrontHoldingCrabMesh = Scene.root.find("holding_crab_mesh");
 const crabstickFrontLogoCrabMesh = Scene.root.find("logo_crab_mesh");
 
 const frontLogoCrabstick = Scene.root.find("front_logo_crabstick");
+*/
 
 // --------------------------------------------------------------------------------
 // RESOURCES for RAMEN THEME
-
+// stub
+/*
 const headRamenRoot = Scene.root.find("head_ramen_root");
 const headRamenEyesMesh = Scene.root.find("head_ramen_eyes_mesh");
 const headRamenEyesTex = "head_ramen_eyes_tex";
@@ -306,7 +246,7 @@ const mealShopstick01mesh = Scene.root.find("shopstick01_mesh");
 
 const frontLogoRamen0 = Scene.root.find("front_logo_ramen0");
 const frontLogoRamen1 = Scene.root.find("front_logo_ramen1");
-
+*/
 // --------------------------------------------------------------------------------
 // RESOURCES for NEW PRODUCT
 
@@ -817,14 +757,17 @@ function initHead() {
 
         var mat = getMaterialWithDiffuse(HEAD_MAT_LIST[curMatIndex++], headHachimakiTex);
         headHachimakiMesh.material = mat;
-        headHachimaki1Mesh.material = mat;
+        // stub
+        //headHachimaki1Mesh.material = mat;
 
         headGyozaRoot.hidden = false;
-        headGyozaRoot1.hidden = false;
+        // stub
+        //headGyozaRoot1.hidden = false;
 
         // Apply face paint mat and tex
         facemesh0.material = facePaintGyozaMat;
-        facemesh1.material = facePaintGyozaMat;
+        // stub
+        //facemesh1.material = facePaintGyozaMat;
     }
 
     function showSandwich() {
@@ -992,12 +935,12 @@ function initBubbleTex() {
 initBubbleTex();
 
 // Handle env obj movements
-applyBalloonMovement(gyozaFloat, 0.6, 0.4, 0.2, 1500, -3000, 4500);
-applyRotationBounce(prodPlane0, 50, 20, 1800); // The small one
-applyRotationBounce(prodPlane1, 0, 50, 1600); // The big one
-applyRotationBounce(prodPlane2, 50, 20, 2000); // The big one
+//applyBalloonMovement(gyozaFloat, 0.6, 0.4, 0.2, 1500, -3000, 4500);
+//applyRotationBounce(prodPlane0, 50, 20, 1800); // The small one
+//applyRotationBounce(prodPlane1, 0, 50, 1600); // The big one
+//applyRotationBounce(prodPlane2, 50, 20, 2000); // The big one
 
-applyParalaxMovement(undefined, prodRoot, 0.1, 0.1);
+//applyParalaxMovement(undefined, prodRoot, 0.1, 0.1);
 
 // --------------------------------------------------------------------------------
 // @ FACE DETECTED
@@ -1008,19 +951,20 @@ const Y_SIDE_WEIGHT = 0.15;
 const BUBBLE_POSITION_Y = -8.8;
 const TARGET_BUBBLE_SCALE = 0.0028;
 
+// Stub
 // Bubble list mgr vars
-var currentBibbleIndex = 0;
-const BUBBLE_SIZE = bubbleList0.length;
-var isBubbleVisible = false;
+//var currentBibbleIndex = 0;
+//const BUBBLE_SIZE = bubbleList0.length;
+//var isBubbleVisible = false;
 
 // Hide all bubbles
-function hideAllBubbles(bubbleList) {
-    for (var i=0; i<bubbleList.length; ++i)
-        bubbleList[i].hidden = true;
-} 
+//function hideAllBubbles(bubbleList) {
+//    for (var i=0; i<bubbleList.length; ++i)
+//        bubbleList[i].hidden = true;
+//} 
     
-hideAllBubbles(bubbleList0);
-hideAllBubbles(bubbleList1);
+//hideAllBubbles(bubbleList0);
+//hideAllBubbles(bubbleList1);
     
 function onFaceTracked(faceIndex) {
 
@@ -1519,80 +1463,8 @@ function handleFoodFeeder(foodObjList, crushObjList, args) {
     if (currentData.theme === THEME_NAME_LOOKUP_TABLE.meal) {
 
         startRamenFeeder();
+        startNormalCrushFeeder();
     }
-    else {
-
-        /* // Use food effect V1
-        var testyPoolContainer = Scene.root.find("testyPoolContainer");
-        testyPoolContainer.transform.x = 0;
-        testyPoolContainer.transform.y = 0;
-        testyPoolContainer.transform.z = 0;
-        testyPoolContainer.transform.rotationX = 0;
-        testyPoolContainer.transform.rotationY = 0;
-        testyPoolContainer.transform.rotationZ = 0;
-        testyPool0.transform.x = 0;
-        testyPool0.transform.y = 0;
-        testyPool0.transform.z = 0;
-        testyPool0.transform.rotationX = 0;
-        testyPool0.transform.rotationY = 0;
-        testyPool0.transform.rotationZ = 0;
-        startNormalFoodFeeder(foodObjList, args);
-        */
-
-        startFoodFeederV2(foodObjList, args);
-        startNormalCrushFeeder(crushObjList, args);
-    }
-}
-
-function startFoodFeederV2(foodObjList, args) {
-
-    var RADIUS = 120;
-    var VARIANT = 3;
-
-    // This line is generated by my code
-    // https://github.com/prophecy/JupyterTreasure/blob/master/ParticleAndSpace/rand_space_test.ipynb
-    var positionDataList = [[0.5, 0.0, 0.33334982101141, -3.141592653589793], [0.4903926402016152, 0.09754516100806412, 0.46842710660150877, -2.945243112740431], [0.46193976625564337, 0.1913417161825449, 0.8839066245390096, -2.748893571891069], [0.4157348061512726, 0.2777851165098011, 0.12137837693082998, -2.552544031041707], [0.3535533905932738, 0.3535533905932738, 0.32717713553909844, -2.356194490192345], [0.27778511650980114, 0.4157348061512726, 0.8182034317356615, -2.1598449493429825], [0.19134171618254492, 0.46193976625564337, 0.536854630610528, -1.9634954084936207], [0.09754516100806417, 0.4903926402016152, 0.2844606399775256, -1.7671458676442586], [3.061616997868383e-17, 0.5, 0.6465451404809336, -1.5707963267948966], [-0.0975451610080641, 0.4903926402016152, 0.17338180021830063, -1.3744467859455345], [-0.19134171618254486, 0.46193976625564337, 0.010980740051857452, -1.1780972450961724], [-0.277785116509801, 0.4157348061512727, 0.9460418690482676, -0.9817477042468106], [-0.35355339059327373, 0.3535533905932738, 0.651944823493125, -0.7853981633974483], [-0.4157348061512727, 0.2777851165098011, 0.7002338474529368, -0.589048622548086], [-0.46193976625564337, 0.19134171618254495, 0.19016005328993268, -0.39269908169872414], [-0.4903926402016152, 0.0975451610080643, 0.17562483870307088, -0.1963495408493623], [-0.5, 6.123233995736766e-17, 0.5016377600353438, 0.0], [-0.4903926402016152, -0.09754516100806418, 0.795380246080834, 0.1963495408493623], [-0.4619397662556434, -0.19134171618254484, 0.39687383843712876, 0.39269908169872414], [-0.41573480615127273, -0.277785116509801, 0.20302102091906538, 0.589048622548086], [-0.35355339059327384, -0.35355339059327373, 0.9334190292976969, 0.7853981633974483], [-0.2777851165098011, -0.4157348061512726, 0.7820873692113656, 0.9817477042468106], [-0.19134171618254517, -0.46193976625564326, 0.5756959232309105, 1.178097245096172], [-0.09754516100806433, -0.49039264020161516, 0.6274769677975915, 1.3744467859455343], [-9.184850993605148e-17, -0.5, 0.6459109815125021, 1.5707963267948966], [0.09754516100806415, -0.4903926402016152, 0.5152847505661805, 1.7671458676442588], [0.191341716182545, -0.4619397662556433, 0.06653534997140886, 1.9634954084936211], [0.2777851165098009, -0.41573480615127273, 0.9835949086218772, 2.1598449493429825], [0.3535533905932737, -0.35355339059327384, 0.9052709690794294, 2.356194490192345], [0.4157348061512726, -0.2777851165098011, 0.7806837457248509, 2.552544031041707], [0.46193976625564326, -0.1913417161825452, 0.20997480564056825, 2.7488935718910685], [0.49039264020161516, -0.09754516100806436, 0.502660261699298, 2.945243112740431]];
-
-    // Setup food positioning
-    for (var i=0; i<foodObjList.length; ++i) {
-
-        if (i >= positionDataList.length)
-            break;
-
-        var px = positionDataList[i][2];
-        var py = positionDataList[i][1];
-        var pz = positionDataList[i][0];
-        
-        foodObjList[i].transform.x = (px * VARIANT) - (VARIANT * 0.5);
-        foodObjList[i].transform.y = py * RADIUS;
-        foodObjList[i].transform.z = pz * RADIUS;
-    }
-
-    applyFoodSpinMovement(testyPool0, 3000);
-
-    for (var i=0; i<foodObjList.length; ++i) {
-
-        var rad = positionDataList[i][3];
-
-        var signal0 = testyPool0.transform.rotationX.sub(rad).lt(Reactive.val(0.5 * Math.PI));
-        var signal1 = testyPool0.transform.rotationX.sub(rad).gt(Reactive.val(-0.5 * Math.PI));
-        var signal3 = testyPool0.transform.rotationX.sub(rad).gt(Reactive.val(1.5 * Math.PI));        
-        var signalOut = signal0.and(signal1).or(signal3);
-
-        foodObjList[i].hidden = signalOut.not();
-    }
-
-    // Rotate food objs
-    for (var i=0; i<foodObjList.length; ++i) {
-
-        var rad = positionDataList[i][3];
-        foodObjList[i].transform.rotationX = (Math.PI * 0.5) - rad;
-    }
-
-    Diagnostics.watch("rx: ", testyPool0.transform.rotationX);
-
-    var rad = positionDataList[10][3];
-    Diagnostics.watch("rx2: ", testyPool0.transform.rotationX.sub(rad).gt(Reactive.val(Math.PI)));
 }
 
 function startRamenFeeder() {
@@ -1668,92 +1540,6 @@ function startRamenFeeder() {
 
         // To clear interval
         //Time.clearInterval(maskTimer);
-    }
-}
-
-function startNormalFoodFeeder(foodObjList, args) {
-
-    // Create object list from randrom number
-    var xPointList = [
-        -4.64605, 2.01145, 0.15905, -5.46574, 1.48324, -0.88440, 5.19227, -0.17623, -4.53221, 3.80409,
-        -0.58917, -7.88229, 0.28566, -2.71326, -4.56251, 1.48852, 7.26982, -1.98159, -4.68881, 5.47105
-    ];
-    var yPointList = [
-        -4.02526, 3.29644, -4.92173, 4.44748, 1.83189, 5.47964, 3.90241, -5.72946, -0.65139, 5.41456,
-        -5.93434, 4.94540, 5.72991, -6.85919, -4.76642, 2.35872, -3.66115, 2.37872, 2.26890, -6.83019
-    ];
-    var yAngleList = [
-        0.88630, -0.34092, -0.36846, 0.48486, -0.67216, 0.76679, -0.03117, 0.98991, 0.38995, -0.14609,
-        0.80563, -0.07388, 0.56158, -0.68193, -0.38198, 0.07115, -0.72906, -0.09344, 0.37989, 0.87110
-    ];
-    var isFoodFlip = [
-        1, 1, 0, 0, 0, 1, 0, 0, 1, 0,
-        1, 1, 1, 0, 0, 0, 1, 0, 1, 0
-    ];
-    
-    // --------------------------------------------------------------------------------
-    // Feeder efx function
-    
-    function runFeedInterval(objList, index, duration) {
-
-        // Manipulate position transition
-        const shootFoodInterval = {
-            durationMilliseconds: duration,
-            loopCount: Infinity,
-            mirror: false  
-        };
-
-        var feedTimeDriver = Animation.timeDriver(shootFoodInterval);
-
-        const txSamp = Animation.samplers.easeInOutQuad(xPointList[index] * args.feedVariantX, 0.0);
-        const txAnim = Animation.animate(feedTimeDriver, txSamp);
-
-        const tySamp = Animation.samplers.easeInOutQuad(yPointList[index] * args.feedVariantY, 0.0);
-        const tyAnim = Animation.animate(feedTimeDriver, tySamp);
-
-        const tzSamp = Animation.samplers.easeInOutQuad(args.range, 0.0);
-        const tzAnim = Animation.animate(feedTimeDriver, tzSamp);
-        
-        // Show object
-        objList[index].hidden = false; 
-            
-        objList[index].transform.x = txAnim;
-        objList[index].transform.y = tyAnim;
-        objList[index].transform.z = tzAnim;
-
-        feedTimeDriver.start();
-
-        if (!(feedTimeDriverList.length > index))
-            feedTimeDriverList.push(feedTimeDriver);
-        else
-            feedTimeDriverList[index] = feedTimeDriver;
-
-        // Manipulate angle
-        objList[index].transform.rotationX = 0.0;
-
-        // Flip randomly
-        if (isFoodFlip[index] == 1)
-            objList[index].transform.rotationY = 180.0;
-        else
-            objList[index].transform.rotationY = 0.0;
-        
-        objList[index].transform.rotationZ = yAngleList[index] * args.yAngleVariant;
-    }
-
-    const feederTimeInMilliseconds = args.feedInterval;
-    const feederIntervalTimer = Time.setInterval(shouldStartFeed, feederTimeInMilliseconds);
-    var feedIndex = 0;
-
-    // Hide all
-    for (var i=0; i<foodObjList.length; ++i)
-        foodObjList[i].hidden = true;
-
-    function shouldStartFeed() {
-
-        runFeedInterval(foodObjList, feedIndex++, args.feedDuration);
-
-        if (feedIndex >= foodObjList.length)
-            Time.clearInterval(feederIntervalTimer);
     }
 }
 
