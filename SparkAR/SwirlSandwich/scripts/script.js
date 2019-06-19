@@ -39,15 +39,15 @@ initSwirlSandwich(backSwirl, backSandwichList, backSandwichMeshList, false);
 function initSwirlSandwich(swirl, sandwichList, sandwichMeshList, isFront) {
 
     // Setup object transform
-    const RADIOUS = 12.0;
+    const SWIRL_RADIOUS = 12.0;
     const SWIRL_DURATION = 3000;
 
     for (var i=0; i<sandwichList.length; ++i) {
 
         var radian = Math.PI * 2.0 / sandwichList.length * i;
 
-        var x = Math.cos(radian) * RADIOUS;
-        var z = Math.sin(radian) * RADIOUS;
+        var x = Math.cos(radian) * SWIRL_RADIOUS;
+        var z = Math.sin(radian) * SWIRL_RADIOUS;
 
         var obj = sandwichList[i];
         

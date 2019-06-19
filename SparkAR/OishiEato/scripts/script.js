@@ -279,6 +279,27 @@ const facemesh0Tako = Scene.root.find("facemesh0_tako");
 const howToRect = Scene.root.find("howto_rect");
 
 // --------------------------------------------------------------------------------
+// RESOURCES for SWIRL SANDWICH
+
+const frontSwirl = Scene.root.find("swirl_foreground");
+const backSwirl = Scene.root.find("swirl_background");
+
+const frontSandwichList = [];
+const frontSandwichMeshList = [];
+const backSandwichList = [];
+const backSandwichMeshList = [];
+
+for (var i=0; i<7; ++i)
+    frontSandwichList.push(Scene.root.find("sandwichf" + i));
+for (var i=0; i<7; ++i)
+    frontSandwichMeshList.push(Scene.root.find("sandwichf" + i + "_mesh"));
+
+for (var i=0; i<7; ++i)
+    backSandwichList.push(Scene.root.find("sandwichb" + i));
+for (var i=0; i<7; ++i)
+    backSandwichMeshList.push(Scene.root.find("sandwichb" + i + "_mesh"));
+
+// --------------------------------------------------------------------------------
 // SHARED VARS & CALLBACKS
 
 const MOUTH_OPENNESS_MIN_THRESHOLD = 0.1;
@@ -288,6 +309,9 @@ var feedTimeDriverList = [];
 var crushTimeDriverList = [];
 
 var currentData = {};
+
+const SWIRL_RADIOUS = 12.0;
+const SWIRL_DURATION = 3000;
 
 const HEAD_MAT_LIST = [
     "head_mat0", "head_mat1", "head_mat2", "head_mat3", 
@@ -528,7 +552,60 @@ function showCrabstick() {
 
     curTheme = THEME_NAME_LOOKUP_TABLE.crabstick;
 
+}
 
+initSwirlSandwich(frontSwirl, frontSandwichList, frontSandwichMeshList, true);
+initSwirlSandwich(backSwirl, backSandwichList, backSandwichMeshList, false);
+    
+function showSandwich() {
+
+    curTheme = THEME_NAME_LOOKUP_TABLE.sandwich;
+}
+
+function initSwirlSandwich(swirl, sandwichList, sandwichMeshList, isFront) {
+
+    // Setup object transform
+    const SWIRL_RADIOUS = 12.0;
+    const SWIRL_DURATION = 3000;
+
+    for (var i=0; i<sandwichList.length; ++i) {
+
+        var radian = Math.PI * 2.0 / sandwichList.length * i;
+
+        var x = Math.cos(radian) * SWIRL_RADIOUS;
+        var z = Math.sin(radian) * SWIRL_RADIOUS;
+
+        var obj = sandwichList[i];
+        
+        obj.transform.x = x;
+        obj.transform.z = z;
+
+        obj.transform.rotationY = (Math.PI * 0.5) - radian;
+
+        // Visibility signals
+        var signal0 = swirl.transform.rotationZ.sub(radian).gt(Reactive.val(0));
+        var signal1 = swirl.transform.rotationZ.sub(radian).lt(Reactive.val(-Math.PI));
+
+//        var signal0 = swirl.transform.rotationX.sub(radian).lt(Reactive.val(0.5 * Math.PI));
+//      var signal1 = swirl.transform.rotationX.sub(radian).gt(Reactive.val(-0.5 * Math.PI));
+    //    var signal3 = swirl.transform.rotationX.sub(radian).gt(Reactive.val(1.5 * Math.PI));        
+    //  var signalOut = signal0.and(signal1).or(signal3);
+
+        var signalOut = signal0.or(signal1);
+
+        if (isFront)
+            obj.hidden = signalOut;
+        else
+            obj.hidden = signalOut.not();
+    }
+
+    for (var i=0; i<sandwichMeshList.length; ++i) {
+
+        var obj = sandwichMeshList[i];
+        applySwirlMovement(obj, 0, 0, -1, SWIRL_DURATION);
+    }
+
+    applySwirlMovement(swirl, 0, 1, 0, SWIRL_DURATION);
 }
 
 var gyozaSeqMatList = [];
@@ -618,6 +695,35 @@ function runGyozaSequence() {
         if (++curGyozaRightSeqIndex >= gyozaSeqMatList.length)
             curGyozaRightSeqIndex = 0;
     }
+}
+
+function applySwirlMovement(obj, a, b, c, duration) {
+
+    var time_driver = Animation.timeDriver({
+        durationMilliseconds: duration,
+        loopCount: Infinity
+    });
+    
+    // Create a rotation sampler using Rotation objects generated
+    // by the previously-defined axisRotation() method.
+    var rotation_sampler = Animation.samplers.polyline({
+        keyframes: [
+            axisRotation(a, b, c, 360),
+            axisRotation(a, b, c, 270),
+            axisRotation(a, b, c, 180),
+            axisRotation(a, b, c, 90),
+            axisRotation(a, b, c, 0),
+        ],
+        knots: [
+            0, 2, 4, 6, 8
+        ]
+    });
+
+    // Start the animation
+    var rotation_signal = Animation.animate(time_driver, rotation_sampler);
+    time_driver.start();
+
+    obj.transform.rotation = rotation_signal;
 }
 
 function showNewQuote() {
