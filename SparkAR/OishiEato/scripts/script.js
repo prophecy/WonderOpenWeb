@@ -289,30 +289,10 @@ var crushTimeDriverList = [];
 
 var currentData = {};
 
-const PROD_MAT_NAME = "prod_mat0";
-
-const FRONT_MAT_LIST = [
-    "front_mat0", "front_mat1", "front_mat2", "front_mat3",
-    "front_mat4", "front_mat5", "front_mat6", "front_mat7"
-];
-
-const FRONT_TEX_LIST = [
-    "ext_front_tex0", "ext_front_tex1", "ext_front_tex2", "ext_front_tex3", 
-    "ext_front_tex4", "ext_front_tex5", "ext_front_tex6", "ext_front_tex7", 
-];
-
 const HEAD_MAT_LIST = [
     "head_mat0", "head_mat1", "head_mat2", "head_mat3", 
     "head_mat4",
 ];
-
-const FOOD_MAT_LIST = [
-    "food_mat0", "food_mat1", "food_mat2", "food_mat3",
-];
-
-const FOOD_TEX_LIST = [
-    "ext_food_tex0", "ext_food_tex1", "ext_food_tex2", "ext_food_tex3",
-]
 
 const CRUSH_MAT_LIST = [
     "crush_mat0", "crush_mat1", "crush_mat2", "crush_mat3",
