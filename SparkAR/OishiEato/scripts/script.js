@@ -548,24 +548,72 @@ TouchGestures.onTap().subscribe(function (gesture) {
 
 const SHOW_ANIM_DURATION = 300;
 
-newQuoteBg.hidden = true;
-newQuoteTxt.hidden = true;
-newProdBig.hidden = true;
-newProdSmall.hidden = true;
-newSmokeRoot.hidden = true;
-newTakoyakiRoot.hidden = true;
-newGyozaRoot.hidden = true;
+var curTheme = undefined;
+
+hideAllThemes();
+showTakoyaki();
+
+function changeTheme() {
+
+    hideAllThemes();
+
+    // Change theme
+    if (curTheme === THEME_NAME_LOOKUP_TABLE.takoyaki)
+        showGyoza();
+    else if (curTheme === THEME_NAME_LOOKUP_TABLE.gyoza)
+        showTakoyaki();
+    else if (curTheme === THEME_NAME_LOOKUP_TABLE.crabstick)
+        showCrabstick();
+}
+
+function hideAllThemes() {
+
+    //newQuoteBg.hidden = true;
+    //newQuoteTxt.hidden = true;
+    //newProdBig.hidden = true;
+    //newProdSmall.hidden = true;
+    newSmokeRoot.hidden = true;
+    newTakoyakiRoot.hidden = true;
+    newGyozaRoot.hidden = true;    
+    facemesh0.hidden = true;
+    facemesh01.hidden = true;
+}
+
+function showGyoza() {
+
+    curTheme = THEME_NAME_LOOKUP_TABLE.gyoza;
+
+    headGyozaRoot.hidden = false;
+    facemesh0.hidden = false;
+
+    loadNewDesignGyoza();
+    runGyozaSequence();
+    applyRotationBounceLessDelay(newGyozaLeft, 0, 20, 700);
+    applyRotationBounceLessDelay(newGyozaRight, 0, 50, 600);
+
+    facemesh0.material = facePaintGyozaMat;
+}
+
+function showTakoyaki() {
+
+    curTheme = THEME_NAME_LOOKUP_TABLE.takoyaki;
+
+    newTakoyakiRoot.hidden = false;
+    facemesh01.hidden = false;
+
+    loadNewDesignTakoyaki();
+}
+
+function showCrabstick() {
+
+    curTheme = THEME_NAME_LOOKUP_TABLE.crabstick;
+
+
+}
 
 var gyozaSeqMatList = [];
 
 function loadNewDesignGyoza() {
-
-    newGyozaRoot.hidden = true;
-    newTakoyakiRoot.hidden = true;
-    newSmokeRoot.hidden = true;
-    headGyozaRoot.hidden = false;
-    facemesh0.hidden = false;
-    facemesh01.hidden = true;
 
     var curResIndex = 0;
 
@@ -609,13 +657,6 @@ function loadNewDesignGyoza() {
 
 function loadNewDesignTakoyaki() {
 
-    newGyozaRoot.hidden = true;
-    newTakoyakiRoot.hidden = false;
-    newSmokeRoot.hidden = true;
-    headGyozaRoot.hidden = true;
-    facemesh0.hidden = true;
-    facemesh01.hidden = false;
-
     var curResIndex = 0;
 
     setupMaterial(newQuoteBgMesh, curResIndex++, NEW_DESIGN_URL_TABLE.takoyaki_bubble_bg);
@@ -630,40 +671,6 @@ function loadNewDesignTakoyaki() {
             NEW_DESIGN_TEX_LIST[index], 
             BASE_URL + texName);    
     }
-}
-
-// Todo: set the better theme setting here
-var curTheme = THEME_NAME_LOOKUP_TABLE.takoyaki;
-showTakoyaki();
-//var curTheme = THEME_NAME_LOOKUP_TABLE.gyoza;
-//showGyoza();
-
-function showGyoza() {
-
-    loadNewDesignGyoza();
-    runGyozaSequence();
-    applyRotationBounceLessDelay(newGyozaLeft, 0, 20, 700);
-    applyRotationBounceLessDelay(newGyozaRight, 0, 50, 600);
-}
-
-function showTakoyaki() {
-
-    loadNewDesignTakoyaki();
-}
-
-function changeTheme() {
-
-    // Change theme
-    if (curTheme === THEME_NAME_LOOKUP_TABLE.takoyaki)
-        curTheme = THEME_NAME_LOOKUP_TABLE.gyoza;
-    else if (curTheme === THEME_NAME_LOOKUP_TABLE.gyoza)
-        curTheme = THEME_NAME_LOOKUP_TABLE.takoyaki;
-
-    // Show theme
-    if (curTheme === THEME_NAME_LOOKUP_TABLE.gyoza)
-        showGyoza();
-    else if (curTheme === THEME_NAME_LOOKUP_TABLE.takoyaki)
-        showTakoyaki();
 }
 
 applyParalaxMovement(newFrontRoot, undefined, 0.1, 0.1);
