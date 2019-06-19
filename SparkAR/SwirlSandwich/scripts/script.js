@@ -39,7 +39,7 @@ initSwirlSandwich(backSwirl, backSandwichList, backSandwichMeshList, false);
 function initSwirlSandwich(swirl, sandwichList, sandwichMeshList, isFront) {
 
     // Setup object transform
-    const RADIOUS = 16.0;
+    const RADIOUS = 12.0;
     const SWIRL_DURATION = 3000;
 
     for (var i=0; i<sandwichList.length; ++i) {
