@@ -812,8 +812,8 @@ function initHead() {
         headRamenRoot1.hidden = false;
 
         // Apply face paint mat and tex
-        facemesh0.material = facePaintInvisibleMat;
-        facemesh1.material = facePaintInvisibleMat;
+        //facemesh0.material = facePaintInvisibleMat;
+        //facemesh1.material = facePaintInvisibleMat;
     }
 }
 
@@ -870,6 +870,7 @@ function initFoodFeeder() {
         testyPool0.hidden = true;
         crushPool0.hidden = true;
 
+        /*
         // Setup shopstick
         var url = CONFIG.BASE_TEX_URL + "theme_meal/chopsticks.png"
         var tex = Textures.get(FOOD_TEX_LIST[0]);
@@ -877,9 +878,10 @@ function initFoodFeeder() {
 
         tex.url = url;
         mat.diffuse = tex;
+        */
 
-        mealShopstick00mesh.material = mat;
-        mealShopstick01mesh.material = mat;
+        mealShopstick00mesh.material = Materials.get("new_chopstick_mat");
+        mealShopstick01mesh.material = Materials.get("new_chopstick_mat");
 
         // Animate shopsticks
         applyShopsticksBound(mealShopstick00_pivot, -10, 20, 600);
@@ -980,9 +982,14 @@ getThemeData(CONFIG.GET_THEME_URL, function(data, err) {
         Diagnostics.log("err: " + JSON.stringify(err));
     }
 
-    initProduct();
-    initFrontFrame();
-    initHead();
+    // Show only ramen
+    currentData.theme = THEME_NAME_LOOKUP_TABLE.meal;
+    currentData.face = FACE_NAME_LOOKUP_TABLE.meal;
+    currentData.product = PROD_TEX_LOOKUP_TABLE.meal_kraphrao;
+
+    //initProduct();
+    //initFrontFrame();
+    //initHead();
     initFoodFeeder();
 });
 
