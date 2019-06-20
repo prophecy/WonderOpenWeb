@@ -512,9 +512,10 @@ function main() {
 
     initSwirlSandwich(frontSwirl, frontSandwichList, frontSandwichMeshList, true);
     initSwirlSandwich(backSwirl, backSandwichList, backSandwichMeshList, false);
-        
+    
     hideAllThemes();
-    showSandwich();    
+    showGyoza();
+    //showSandwich();    
 }
 
 // ********************************************************************************
