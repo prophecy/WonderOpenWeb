@@ -586,8 +586,8 @@ function startGame() {
     
     //showGyoza();
     //showSandwich();
-    showCrabstick();
-    //showMeal();
+    //showCrabstick();
+    showMeal();
     //showTakoyaki();
 }
 
@@ -2037,9 +2037,9 @@ function handleFoodFeeder(crushObjList) {
         crushDuration: 300,
         crushInterval: 100,
 
-        crushVarianceX: 7.0,
-        crushVarianceY: 7.0,
-        crushVarianceZ: 7.0,
+        crushVarianceX: 3.5,
+        crushVarianceY: 3.5,
+        crushVarianceZ: 3.5,
     }
 
     startRamenFeeder();
@@ -2076,7 +2076,7 @@ function startRamenFeeder() {
         Materials.get("ramen_mask_mat1"), 
         Materials.get("ramen_mask_mat2"), Materials.get("ramen_mask_mat3"), 
         Materials.get("ramen_mask_mat4"), Materials.get("ramen_mask_mat5"), 
-        Materials.get("ramen_mask_mat6"),// Materials.get("ramen_mask_mat7"), 
+        Materials.get("ramen_mask_mat6"), Materials.get("ramen_mask_mat7"), 
         //Materials.get("ramen_mask_mat8"), 
     ]
 
