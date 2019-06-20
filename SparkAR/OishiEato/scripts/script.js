@@ -566,9 +566,9 @@ function startGame() {
     hideHowtoWithDelay();
     
     //showGyoza();
-    //showSandwich();
+    showSandwich();
     //showCrabstick();
-    showMeal();
+    //showMeal();
     //showTakoyaki();
 }
 
@@ -634,16 +634,16 @@ const QUOTE_PROD_POSITION = {
         new_quote_text: [-8.39964, 0, 0],
     },
     sandwich: {
-        new_prod_small: [30, 0, 0],
-        new_prod_big: [30, 0, 0],
-        new_quote_bg: [-8.39964, 0, 0],
-        new_quote_text: [-8.39964, 0, 0],
+        new_prod_small: [-25, 0, 27],
+        new_prod_big: [-25, 0, 27],
+        new_quote_bg: [6, 0, 0],
+        new_quote_text: [6, 0, 0],
     },
     crabstick: {
-        new_prod_small: [30, 0, 0],
-        new_prod_big: [30, 0, 0],
-        new_quote_bg: [-8.39964, 0, 0],
-        new_quote_text: [-8.39964, 0, 0],
+        new_prod_small: [-25, 0, 27],
+        new_prod_big: [-25, 0, 27],
+        new_quote_bg: [0, 0, 0],
+        new_quote_text: [0, 0, 0],
     },
     takoyaki: {
         new_prod_small: [30, 0, 0],
