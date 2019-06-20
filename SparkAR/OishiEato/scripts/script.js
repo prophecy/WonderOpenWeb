@@ -293,6 +293,9 @@ const mealShopstick01mesh = Scene.root.find("shopstick01_mesh");
 const mealShopstick00_pivot = Scene.root.find("shopstick00_pivot");
 const mealShopstick01_pivot = Scene.root.find("shopstick01_pivot");
 
+const newHand = Scene.root.find("new_hand");
+const newHandMesh = Scene.root.find("new_hand_mesh");
+
 // --------------------------------------------------------------------------------
 // RESOURCES for SWIRL SANDWICH
 
@@ -491,6 +494,7 @@ const NEW_DESIGN_URL_TABLE = {
     sandwich_bubble_bg: "new_design/sample_sandwich/bb_sandwich.png",
     sandwich_bubble_txt: "new_design/sample_takoyaki/copy.png",
     sandwich_prod: "new_design/sample_sandwich/sandwich_crab.png",
+    sandwich_hand: "new_design/sample_sandwich/hand.png",
 
     // Crabstick sample
     crabstick_bubble_bg: "new_design/sample_crabstick/new_crab.png",
@@ -638,6 +642,7 @@ const QUOTE_PROD_POSITION = {
         new_prod_big: [-25, 0, 27],
         new_quote_bg: [6, 0, 0],
         new_quote_text: [6, 0, 0],
+        hand: [-30, 0, 36],
     },
     crabstick: {
         new_prod_small: [-25, 0, 27],
@@ -862,8 +867,14 @@ function loadNewDesignSandwich() {
     setupMaterial(newProdBigMesh, curResIndex++, NEW_DESIGN_URL_TABLE.sandwich_prod);
     setupMaterial(newProdSmallMesh, curResIndex++, NEW_DESIGN_URL_TABLE.sandwich_prod);
 
+    setupMaterial(newHandMesh, curResIndex++, NEW_DESIGN_URL_TABLE.sandwich_hand);
+
     // Setup position
     setupQuoteProdPosition(QUOTE_PROD_POSITION.sandwich);
+
+    newHand.transform.x = QUOTE_PROD_POSITION.sandwich.hand[0];
+    newHand.transform.y = QUOTE_PROD_POSITION.sandwich.hand[1];
+    newHand.transform.z = QUOTE_PROD_POSITION.sandwich.hand[2];
     
     function setupMaterial(mesh, index, texName) {
 
