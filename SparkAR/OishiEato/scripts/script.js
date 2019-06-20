@@ -46,6 +46,8 @@ const Materials = require('Materials');
 const Textures = require('Textures');
 const TouchGestures = require('TouchGestures');
 const CameraInfo = require('CameraInfo');
+const FaceGestures = require('FaceGestures');
+const IrisTracking = require("IrisTracking");
 
 // --------------------------------------------------------------------------------
 // SCENE DATABASE
@@ -306,6 +308,15 @@ for (var i=0; i<7; ++i)
     backSandwichMeshList.push(Scene.root.find("sandwichb" + i + "_mesh"));
 
 // --------------------------------------------------------------------------------
+// RESOURCES for CRABSTICK
+
+const laserBeamLeft = Scene.root.find("laser_beam_left");
+const laserBeamLeftMesh = Scene.root.find("laser_beam_left_mesh");
+
+const laserBeamRight = Scene.root.find("laser_beam_right");
+const laserBeamRightMesh = Scene.root.find("laser_beam_right_mesh");
+
+// --------------------------------------------------------------------------------
 // SHARED VARS & CALLBACKS
 
 const MOUTH_OPENNESS_MIN_THRESHOLD = 0.1;
@@ -514,8 +525,21 @@ function main() {
     initSwirlSandwich(backSwirl, backSandwichList, backSandwichMeshList, false);
     
     hideAllThemes();
-    showGyoza();
-    //showSandwich();    
+    //showGyoza();
+    //showSandwich();
+    showCrabstick();
+
+    handleEyeOpeningState(0, 0, function() { onEyeOpened(0, 0); }, function() { onEyeClosed(0, 0); });
+    handleEyeOpeningState(0, 1, function() { onEyeOpened(0, 1); }, function() { onEyeClosed(0, 1); });    
+
+    handleFaceTrackingState(0, function() { onFaceTracked(0); }, function() { onFaceUntracked(0); });
+    handleFaceTrackingState(1, function() { onFaceTracked(1); }, function() { onFaceUntracked(1); });
+
+
+    handleMouthOpeningState(
+        0, 
+        MOUTH_OPENNESS_MIN_THRESHOLD, MOUTH_CLOSSNESS_MAX_THRESHOLD, 
+        onFace0MouthOpen, onFace0MouthClose);
 }
 
 // ********************************************************************************
@@ -530,15 +554,12 @@ function changeTheme() {
     else if (curTheme === THEME_NAME_LOOKUP_TABLE.takoyaki)
         showSandwich();
     else if (curTheme === THEME_NAME_LOOKUP_TABLE.sandwich)
+        showCrabstick();
+    else if (curTheme === THEME_NAME_LOOKUP_TABLE.crabstick)
         showGyoza();
 }
 
 function hideAllThemes() {
-
-    //newQuoteBg.hidden = true;
-    //newQuoteTxt.hidden = true;
-    //newProdBig.hidden = true;
-    //newProdSmall.hidden = true;
 
     newSmokeRoot.hidden = true;
     newTakoyakiRoot.hidden = true;
@@ -549,6 +570,10 @@ function hideAllThemes() {
     headGyozaRoot.hidden = true;
     bodySegmentationRect.hidden = true;
     takoDirectionalLight0.hidden = true;
+    laserBeamLeft.hidden = true;
+    laserBeamRight.hidden = true;
+    newGyozaLeft.hidden = true;
+    newGyozaRight.hidden = true;
 }
 
 function showGyoza() {
@@ -582,7 +607,11 @@ function showTakoyaki() {
 function showCrabstick() {
 
     curTheme = THEME_NAME_LOOKUP_TABLE.crabstick;
+    facemesh0.hidden = false;
+    laserBeamLeft.hidden = false;
+    laserBeamRight.hidden = false;
 
+    facemesh0.material = facePaintInvisibleMat;
 }
 
 function showSandwich() {
@@ -1145,8 +1174,50 @@ function onFaceUntracked(faceIndex) {
     hideNewProd();
 }
 
-handleFaceTrackingState(0, function() { onFaceTracked(0); }, function() { onFaceUntracked(0); });
-handleFaceTrackingState(1, function() { onFaceTracked(1); }, function() { onFaceUntracked(1); });
+
+function onEyeOpened(faceIndex, eyeIndex) {
+
+    Diagnostics.log("On eye open! eyeIndex: " + eyeIndex);
+
+    if (curTheme !== THEME_NAME_LOOKUP_TABLE.crabstick)
+        return;
+
+    var face = FaceTracking.face(faceIndex);
+
+    if (eyeIndex == 0) {
+
+        laserBeamLeft.hidden = false;
+
+        // Iris ref
+        // https://developers.facebook.com/docs/ar-studio/tracking-people-and-places/faces/Iris-tracking/
+        var eyeballInfo = IrisTracking.leftEyeball(face);
+
+        laserBeamLeft.transform.position = eyeballInfo.iris;
+        //laserBeamLeft.transform.rotation = eyeballInfo.rotation;
+    }
+    else if (eyeIndex == 1) {
+
+        laserBeamRight.hidden = false;
+
+        var eyeballInfo = IrisTracking.rightEyeball(face);
+
+        laserBeamRight.transform.position = eyeballInfo.iris;
+        //laserBeamRight.transform.rotation = eyeballInfo.rotation;
+    }
+}
+
+function onEyeClosed(faceIndex, eyeIndex) {
+
+    Diagnostics.log("On eye close! eyeIndex: " + eyeIndex);
+    
+    if (curTheme !== THEME_NAME_LOOKUP_TABLE.crabstick)
+        return;
+
+    if (eyeIndex == 0)
+        laserBeamLeft.hidden = true;
+    else if (eyeIndex == 1)
+        laserBeamRight.hidden = true;
+}
 
 // --------------------------------------------------------------------------------
 // @ OPEN MOUTH
@@ -1170,12 +1241,6 @@ function onFace0MouthClose() {
     newGyozaRoot.hidden = true;
     newSmokeRoot.hidden = true;
 }
-
-handleMouthOpeningState(
-    0, 
-    MOUTH_OPENNESS_MIN_THRESHOLD, MOUTH_CLOSSNESS_MAX_THRESHOLD, 
-    onFace0MouthOpen, onFace0MouthClose);
-
 
 // --------------------------------------------------------------------------------
 // GENERIC FUNCTIONS
@@ -1239,6 +1304,30 @@ function handleMouthOpeningState(faceIndex, openMinThres, closeMaxThres, openCal
     mouthClose.monitor().subscribe(function(flag) {
         if (flag.newValue)
             closCallback();
+    });
+}
+
+// Check eye closing/opening and blink from
+// Reference: https://developers.facebook.com/docs/ar-studio/reference/classes/facegesturesmodule/
+function handleEyeOpeningState(faceIndex, eyeIndex, openCallback, closeCallback) {
+
+    var face = FaceTracking.face(faceIndex);
+
+    var hasEyeClosed = undefined;
+
+    // Get from closeness callback
+    if (eyeIndex == 0)
+        hasEyeClosed = FaceGestures.hasLeftEyeClosed(face);
+    else if (eyeIndex == 1)
+        hasEyeClosed = FaceGestures.hasRightEyeClosed(face);
+
+    // Monitor from closeness callback
+    hasEyeClosed.monitor().subscribe(function(val) {
+
+        if (val.newValue == true)
+            closeCallback(faceIndex, eyeIndex);
+        else
+            openCallback(faceIndex, eyeIndex);
     });
 }
 
