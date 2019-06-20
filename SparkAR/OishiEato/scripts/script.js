@@ -333,10 +333,10 @@ for (var i=0; i<7; ++i)
 // RESOURCES for CRABSTICK
 
 const laserBeamLeft = Scene.root.find("laser_beam_left");
-const laserBeamLeftMesh = Scene.root.find("laser_beam_left_mesh");
-
 const laserBeamRight = Scene.root.find("laser_beam_right");
-const laserBeamRightMesh = Scene.root.find("laser_beam_right_mesh");
+
+const laserBeamLeft1 = Scene.root.find("laser_beam_left1");
+const laserBeamRight1 = Scene.root.find("laser_beam_right1");
 
 // --------------------------------------------------------------------------------
 // SHARED VARS & CALLBACKS
@@ -566,9 +566,15 @@ function main() {
     
     hideAllThemes();
 
+    // Handle eye state for face #0
     handleEyeOpeningState(0, 0, function() { onEyeOpened(0, 0); }, function() { onEyeClosed(0, 0); });
-    handleEyeOpeningState(0, 1, function() { onEyeOpened(0, 1); }, function() { onEyeClosed(0, 1); });    
-
+    handleEyeOpeningState(0, 1, function() { onEyeOpened(0, 1); }, function() { onEyeClosed(0, 1); }); 
+    
+    // Handle eye state for face #1
+    handleEyeOpeningState(1, 0, function() { onEyeOpened(1, 0); }, function() { onEyeClosed(1, 0); });
+    handleEyeOpeningState(1, 1, function() { onEyeOpened(1, 1); }, function() { onEyeClosed(1, 1); }); 
+    
+    // Handle face tracking state
     handleFaceTrackingState(0, function() { onFaceTracked(0); }, function() { onFaceUntracked(0); });
     handleFaceTrackingState(1, function() { onFaceTracked(1); }, function() { onFaceUntracked(1); });
 
@@ -584,9 +590,9 @@ function startGame() {
 
     hideHowtoWithDelay();
     
-    showGyoza();
+    //showGyoza();
     //showSandwich();
-    //showCrabstick();
+    showCrabstick();
     //showMeal();
     //showTakoyaki();
 }
@@ -639,6 +645,8 @@ function hideAllThemes() {
     //takoDirectionalLight0.hidden = true;
     laserBeamLeft.hidden = true;
     laserBeamRight.hidden = true;
+    laserBeamLeft1.hidden = true;
+    laserBeamRight1.hidden = true;
     newGyozaLeft.hidden = true;
     newGyozaRight.hidden = true;
     facemesh0Meal.hidden = true;
@@ -1428,25 +1436,36 @@ function onEyeOpened(faceIndex, eyeIndex) {
 
     var face = FaceTracking.face(faceIndex);
 
+    Diagnostics.log("faceIndex: " + faceIndex + " eyeIndex: " + eyeIndex);
+
+    var curLaserBeamLeft = laserBeamLeft;
+    var curLaserBeamRight = laserBeamRight;
+
+    if (faceIndex == 1) {
+
+        curLaserBeamLeft = laserBeamLeft1;
+        curLaserBeamRight = laserBeamRight1;
+    }
+
     if (eyeIndex == 0) {
 
-        laserBeamLeft.hidden = false;
+        curLaserBeamLeft.hidden = false;
 
         // Iris ref
         // https://developers.facebook.com/docs/ar-studio/tracking-people-and-places/faces/Iris-tracking/
         var eyeballInfo = IrisTracking.leftEyeball(face);
 
-        laserBeamLeft.transform.position = eyeballInfo.iris;
-        //laserBeamLeft.transform.rotation = eyeballInfo.rotation;
+        curLaserBeamLeft.transform.position = eyeballInfo.iris;
+        //curLaserBeamRight.transform.rotation = eyeballInfo.rotation;
     }
     else if (eyeIndex == 1) {
 
-        laserBeamRight.hidden = false;
+        curLaserBeamRight.hidden = false;
 
         var eyeballInfo = IrisTracking.rightEyeball(face);
 
-        laserBeamRight.transform.position = eyeballInfo.iris;
-        //laserBeamRight.transform.rotation = eyeballInfo.rotation;
+        curLaserBeamRight.transform.position = eyeballInfo.iris;
+        //curLaserBeamRight.transform.rotation = eyeballInfo.rotation;
     }
 }
 
@@ -1457,10 +1476,20 @@ function onEyeClosed(faceIndex, eyeIndex) {
     if (curTheme !== THEME_NAME_LOOKUP_TABLE.crabstick)
         return;
 
-    if (eyeIndex == 0)
-        laserBeamLeft.hidden = true;
-    else if (eyeIndex == 1)
-        laserBeamRight.hidden = true;
+    if (faceIndex == 0) {
+
+        if (eyeIndex == 0)
+            laserBeamLeft.hidden = true;
+        else if (eyeIndex == 1)
+            laserBeamRight.hidden = true;
+    }
+    else if (faceIndex == 1) {
+
+        if (eyeIndex == 0)
+            laserBeamLeft1.hidden = true;
+        else if (eyeIndex == 1)
+            laserBeamRight1.hidden = true;
+    }
 }
 
 // --------------------------------------------------------------------------------
