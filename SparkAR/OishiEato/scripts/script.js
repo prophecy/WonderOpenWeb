@@ -1394,6 +1394,18 @@ function onFaceTracked(faceIndex) {
         // clear interval
         Time.clearInterval(prodTimer);
     }
+
+    // Show the current theme
+    if (curTheme === THEME_NAME_LOOKUP_TABLE.gyoza)
+        showGyoza();
+    else if (curTheme === THEME_NAME_LOOKUP_TABLE.sandwich)
+        showSandwich();
+    else if (curTheme === THEME_NAME_LOOKUP_TABLE.crabstick)
+        showCrabstick();
+    else if (curTheme === THEME_NAME_LOOKUP_TABLE.takoyaki)
+        showTakoyaki();
+    else if (curTheme === THEME_NAME_LOOKUP_TABLE.meal)
+        showMeal();
 }
 
 function onFaceUntracked(faceIndex) {
@@ -1404,6 +1416,7 @@ function onFaceUntracked(faceIndex) {
     hideNewQuote();
     hideNewQuoteText();
     hideNewProd();
+    hideAllThemes();
 }
 
 function onEyeOpened(faceIndex, eyeIndex) {
@@ -1474,6 +1487,7 @@ function onFace0MouthOpen() {
         var mouth = FaceTracking.face(0).mouth;
 
         foodFeederRoot0.hidden = false;
+        newRamen.hidden = true;
 
         foodFeederRoot0.transform.x = mouth.center.x;
         foodFeederRoot0.transform.y = mouth.center.y;
@@ -1492,6 +1506,11 @@ function onFace0MouthClose() {
     //newSmokeRoot.hidden = true;
 
     foodFeederRoot0.hidden = true;
+
+    if (curTheme == THEME_NAME_LOOKUP_TABLE.meal) {
+
+        newRamen.hidden = false;
+    }
 }
 
 // --------------------------------------------------------------------------------
