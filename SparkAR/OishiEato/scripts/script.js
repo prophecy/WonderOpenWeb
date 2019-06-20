@@ -293,8 +293,17 @@ const mealShopstick01mesh = Scene.root.find("shopstick01_mesh");
 const mealShopstick00_pivot = Scene.root.find("shopstick00_pivot");
 const mealShopstick01_pivot = Scene.root.find("shopstick01_pivot");
 
+// For sandwich
 const newHand = Scene.root.find("new_hand");
 const newHandMesh = Scene.root.find("new_hand_mesh");
+
+// For crabstick
+const newCrabBg = Scene.root.find("new_crab_bg");
+const newCrabBgMesh = Scene.root.find("new_crab_bg_mesh");
+const newCrabFg = Scene.root.find("new_crab_fg");
+const newCrabFgMesh = Scene.root.find("new_crab_fg_mesh");
+const newCrabLogo = Scene.root.find("new_crab_logo");
+const newCrabLogoMesh = Scene.root.find("new_crab_logo_mesh");
 
 // --------------------------------------------------------------------------------
 // RESOURCES for SWIRL SANDWICH
@@ -500,6 +509,9 @@ const NEW_DESIGN_URL_TABLE = {
     crabstick_bubble_bg: "new_design/sample_crabstick/new_crab.png",
     crabstick_bubble_txt: "new_design/sample_takoyaki/copy.png",
     crabstick_prod: "new_design/sample_crabstick/crab_pack.png",
+    crabstick_crab_bg: "new_design/sample_crabstick/handcrab1.png",
+    crabstick_crab_fg: "new_design/sample_crabstick/handcrab1.2.png",
+    crabstick_crab_logo: "new_design/sample_crabstick/handcrab_logo.png",
 
     // Meal sample
     meal_bubble_bg: "new_design/sample_meal/bb_ramen.png",
@@ -570,8 +582,8 @@ function startGame() {
     hideHowtoWithDelay();
     
     //showGyoza();
-    showSandwich();
-    //showCrabstick();
+    //showSandwich();
+    showCrabstick();
     //showMeal();
     //showTakoyaki();
 }
@@ -649,6 +661,9 @@ const QUOTE_PROD_POSITION = {
         new_prod_big: [-25, 0, 27],
         new_quote_bg: [0, 0, 0],
         new_quote_text: [0, 0, 0],
+        new_crab_bg: [-12, 0, 40],
+        new_crab_fg: [-12, 0, 40],
+        new_crab_logo: [26, 0, 40],
     },
     takoyaki: {
         new_prod_small: [30, 0, 0],
@@ -893,6 +908,22 @@ function loadNewDesignCrabstick() {
     setupMaterial(newQuoteTxtMesh, curResIndex++, NEW_DESIGN_URL_TABLE.crabstick_bubble_txt);
     setupMaterial(newProdBigMesh, curResIndex++, NEW_DESIGN_URL_TABLE.crabstick_prod);
     setupMaterial(newProdSmallMesh, curResIndex++, NEW_DESIGN_URL_TABLE.crabstick_prod);
+
+    setupMaterial(newCrabBgMesh, curResIndex++, NEW_DESIGN_URL_TABLE.crabstick_crab_bg);
+    setupMaterial(newCrabFgMesh, curResIndex++, NEW_DESIGN_URL_TABLE.crabstick_crab_fg);
+    setupMaterial(newCrabLogoMesh, curResIndex++, NEW_DESIGN_URL_TABLE.crabstick_crab_logo);
+
+    newCrabBg.transform.x = QUOTE_PROD_POSITION.crabstick.new_crab_bg[0];
+    newCrabBg.transform.y = QUOTE_PROD_POSITION.crabstick.new_crab_bg[1];
+    newCrabBg.transform.z = QUOTE_PROD_POSITION.crabstick.new_crab_bg[2];
+    
+    newCrabFg.transform.x = QUOTE_PROD_POSITION.crabstick.new_crab_fg[0];
+    newCrabFg.transform.y = QUOTE_PROD_POSITION.crabstick.new_crab_fg[1];
+    newCrabFg.transform.z = QUOTE_PROD_POSITION.crabstick.new_crab_fg[2];
+
+    newCrabLogo.transform.x = QUOTE_PROD_POSITION.crabstick.new_crab_logo[0];
+    newCrabLogo.transform.y = QUOTE_PROD_POSITION.crabstick.new_crab_logo[1];
+    newCrabLogo.transform.z = QUOTE_PROD_POSITION.crabstick.new_crab_logo[2];
 
     // Setup position
     setupQuoteProdPosition(QUOTE_PROD_POSITION.crabstick);
