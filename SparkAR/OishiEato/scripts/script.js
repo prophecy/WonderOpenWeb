@@ -276,10 +276,12 @@ const newGyozaRight = Scene.root.find("new_gyoza_right");
 const newGyozaRightMesh = Scene.root.find("new_gyoza_right_mesh");
 
 const newTakoyakiRoot = Scene.root.find("takoyaki_root");
-const newSmokeRoot = Scene.root.find("smoke_root");
+//const newSmokeRoot = Scene.root.find("smoke_root");
 const newGyozaRoot = Scene.root.find("new_gyoza_root");
 
 const facemesh0Tako = Scene.root.find("facemesh0_tako");
+const facemesh1Tako = Scene.root.find("facemesh1_tako");
+
 const facemesh0Meal = Scene.root.find("facemesh0_meal");
 
 const howtoRect = Scene.root.find("howto_rect");
@@ -592,9 +594,9 @@ function startGame() {
     
     //showGyoza();
     //showSandwich();
-    showCrabstick();
+    //showCrabstick();
     //showMeal();
-    //showTakoyaki();
+    showTakoyaki();
 }
 
 const HIDE_HOWTO_DELAY = 1500;
@@ -634,11 +636,11 @@ function changeTheme() {
 
 function hideAllThemes() {
 
-    newSmokeRoot.hidden = true;
     newTakoyakiRoot.hidden = true;
     newGyozaRoot.hidden = true;    
     facemesh0.hidden = true;
     facemesh0Tako.hidden = true;
+    facemesh1Tako.hidden = true;
     sandwichRoot.hidden = true;
     headGyozaRoot.hidden = true;
     bodySegmentationRect.hidden = true;
@@ -719,6 +721,7 @@ function showTakoyaki() {
 
     newTakoyakiRoot.hidden = false;
     facemesh0Tako.hidden = false;
+    facemesh1Tako.hidden = false;
     //takoDirectionalLight0.hidden = false;
 
     loadNewDesignTakoyaki();
