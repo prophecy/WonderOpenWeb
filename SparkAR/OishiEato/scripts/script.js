@@ -753,8 +753,10 @@ function showCrabstick() {
 
     curTheme = THEME_NAME_LOOKUP_TABLE.crabstick;
     facemesh0.hidden = false;
+    facemesh1.hidden = false;
 
     facemesh0.material = facePaintInvisibleMat;
+    facemesh1.material = facePaintInvisibleMat;
 
     newCrabBg.hidden = false;
     newCrabFg.hidden = false;
