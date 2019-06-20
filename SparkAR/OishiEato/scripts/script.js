@@ -121,6 +121,7 @@ const headHachimakiTex = "head_hachimaki";
 // stub
 //const headHachimaki1Mesh = Scene.root.find("head_hachimaki1_mesh");
 const facePaintGyozaMat = Materials.get("face_paint_gyoza_mat");
+const facePaintSandwichMat = Materials.get("face_paint_sandwich_mat");
 const facePaintInvisibleMat = Materials.get("face_paint_invisible_mat");
 
 // --------------------------------------------------------------------------------
@@ -563,7 +564,7 @@ function showGyoza() {
     applyRotationBounceLessDelay(newGyozaLeft, 0, 20, 700);
     applyRotationBounceLessDelay(newGyozaRight, 0, 50, 600);
 
-    //facemesh0.material = facePaintGyozaMat;
+    facemesh0.material = facePaintGyozaMat;
 }
 
 function showTakoyaki() {
@@ -591,7 +592,7 @@ function showSandwich() {
     sandwichRoot.hidden = false;
     bodySegmentationRect.hidden = false;
 
-    facemesh0.material = facePaintInvisibleMat;
+    facemesh0.material = facePaintSandwichMat;
 
     loadNewDesignSandwich();
 }
