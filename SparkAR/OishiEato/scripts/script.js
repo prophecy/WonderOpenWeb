@@ -282,7 +282,8 @@ const newGyozaRoot = Scene.root.find("new_gyoza_root");
 const facemesh0Tako = Scene.root.find("facemesh0_tako");
 const facemesh0Meal = Scene.root.find("facemesh0_meal");
 
-const howToRect = Scene.root.find("howto_rect");
+const howtoRect = Scene.root.find("howto_rect");
+const howtoBgRect = Scene.root.find("howto_bg_rect");
 
 const takoDirectionalLight0 = Scene.root.find("tako_directional_ligh0");
 
@@ -545,11 +546,6 @@ function main() {
     initSwirlSandwich(backSwirl, backSandwichList, backSandwichMeshList, false);
     
     hideAllThemes();
-    //showGyoza();
-    showSandwich();
-    //showCrabstick();
-    //showMeal();
-    //showTakoyaki();
 
     handleEyeOpeningState(0, 0, function() { onEyeOpened(0, 0); }, function() { onEyeClosed(0, 0); });
     handleEyeOpeningState(0, 1, function() { onEyeOpened(0, 1); }, function() { onEyeClosed(0, 1); });    
@@ -563,6 +559,33 @@ function main() {
         onFace0MouthOpen, onFace0MouthClose);
 
     handleFoodFeeder(crushPoolList0);
+}
+
+function startGame() {
+
+    hideHowtoWithDelay();
+    
+    //showGyoza();
+    //showSandwich();
+    //showCrabstick();
+    //showMeal();
+    showTakoyaki();
+}
+
+const HIDE_HOWTO_DELAY = 1500;
+
+function hideHowtoWithDelay() {
+
+    const timer = Time.setInterval(hideHowto, HIDE_HOWTO_DELAY);
+
+    function hideHowto() {
+
+        howtoRect.hidden = true;
+        howtoBgRect.hidden = true;
+
+        // clear interval
+        Time.clearInterval(timer);
+    }
 }
 
 // ********************************************************************************
@@ -1225,10 +1248,16 @@ const TARGET_BUBBLE_SCALE = 0.0028;
     
 //hideAllBubbles(bubbleList0);
 //hideAllBubbles(bubbleList1);
-    
+
+var hasStarted = false;
+
 function onFaceTracked(faceIndex) {
 
-    howToRect.hidden = true;
+    if (!hasStarted) {
+
+        startGame();
+        hasStarted = true;
+    }
 
     if (faceIndex != 0)
         return;
