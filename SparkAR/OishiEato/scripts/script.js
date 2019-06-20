@@ -545,10 +545,10 @@ function main() {
     initSwirlSandwich(backSwirl, backSandwichList, backSandwichMeshList, false);
     
     hideAllThemes();
-    //showGyoza();
+    showGyoza();
     //showSandwich();
     //showCrabstick();
-    showMeal();
+    //showMeal();
 
     handleEyeOpeningState(0, 0, function() { onEyeOpened(0, 0); }, function() { onEyeClosed(0, 0); });
     handleEyeOpeningState(0, 1, function() { onEyeOpened(0, 1); }, function() { onEyeClosed(0, 1); });    
