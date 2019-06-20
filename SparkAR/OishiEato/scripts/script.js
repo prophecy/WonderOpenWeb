@@ -495,6 +495,11 @@ const NEW_DESIGN_URL_TABLE = {
     crabstick_bubble_bg: "new_design/sample_crabstick/new_crab.png",
     crabstick_bubble_txt: "new_design/sample_takoyaki/copy.png",
     crabstick_prod: "new_design/sample_crabstick/crab_pack.png",
+
+    // Meal sample
+    meal_bubble_bg: "new_design/sample_meal/bb_ramen.png",
+    meal_bubble_txt: "new_design/sample_takoyaki/copy.png",
+    meal_prod: "new_design/sample_meal/ramenL.png",
 };
 
 // --------------------------------------------------------------------------------
@@ -655,6 +660,8 @@ function showMeal() {
 
     facemesh0.hidden = false;
     facemesh0Meal.hidden = false;
+
+    loadNewDesignMeal();
 }
 
 function initSwirlSandwich(swirl, sandwichList, sandwichMeshList, isFront) {
@@ -791,6 +798,24 @@ function loadNewDesignCrabstick() {
     setupMaterial(newQuoteTxtMesh, curResIndex++, NEW_DESIGN_URL_TABLE.crabstick_bubble_txt);
     setupMaterial(newProdBigMesh, curResIndex++, NEW_DESIGN_URL_TABLE.crabstick_prod);
     setupMaterial(newProdSmallMesh, curResIndex++, NEW_DESIGN_URL_TABLE.crabstick_prod);
+
+    function setupMaterial(mesh, index, texName) {
+
+        mesh.material = getMaterialWithDiffuseByUrl(
+            NEW_DESIGN_MAT_LIST[index], 
+            NEW_DESIGN_TEX_LIST[index], 
+            BASE_URL + texName);    
+    }
+}
+
+function loadNewDesignMeal() {
+
+    var curResIndex = 0;
+
+    setupMaterial(newQuoteBgMesh, curResIndex++, NEW_DESIGN_URL_TABLE.meal_bubble_bg);
+    setupMaterial(newQuoteTxtMesh, curResIndex++, NEW_DESIGN_URL_TABLE.meal_bubble_txt);
+    setupMaterial(newProdBigMesh, curResIndex++, NEW_DESIGN_URL_TABLE.meal_prod);
+    setupMaterial(newProdSmallMesh, curResIndex++, NEW_DESIGN_URL_TABLE.meal_prod);
 
     function setupMaterial(mesh, index, texName) {
 
