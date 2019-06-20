@@ -546,10 +546,10 @@ function main() {
     
     hideAllThemes();
     //showGyoza();
-    //showSandwich();
+    showSandwich();
     //showCrabstick();
     //showMeal();
-    showTakoyaki();
+    //showTakoyaki();
 
     handleEyeOpeningState(0, 0, function() { onEyeOpened(0, 0); }, function() { onEyeClosed(0, 0); });
     handleEyeOpeningState(0, 1, function() { onEyeOpened(0, 1); }, function() { onEyeClosed(0, 1); });    
@@ -601,6 +601,23 @@ function hideAllThemes() {
     newGyozaRight.hidden = true;
     facemesh0Meal.hidden = true;
 }
+
+const QUOTE_PROD_POSITION = {
+
+    gyoza: {
+
+        new_prod_small: [30, 0, 0],
+        new_prod_big: [30, 0, 0],
+        new_quote_bg: [-8.39964, 0, 0],
+        new_quote_text: [-8.39964, 0, 0],
+    },
+    sandwich: { },
+    crabstick: { },
+    takoyaki: { },
+    meal: { },
+};
+
+// Todo: Apply position to to the front object
 
 function showGyoza() {
 
