@@ -286,6 +286,12 @@ const howToRect = Scene.root.find("howto_rect");
 
 const takoDirectionalLight0 = Scene.root.find("tako_directional_ligh0");
 
+const mealShopstick00mesh = Scene.root.find("shopstick00_mesh");
+const mealShopstick01mesh = Scene.root.find("shopstick01_mesh");
+
+const mealShopstick00_pivot = Scene.root.find("shopstick00_pivot");
+const mealShopstick01_pivot = Scene.root.find("shopstick01_pivot");
+
 // --------------------------------------------------------------------------------
 // RESOURCES for SWIRL SANDWICH
 
@@ -428,7 +434,10 @@ const CRUSH_TEX_LOOKUP_TABLE = {
         "theme_tako/ta7.png", "theme_tako/ta8.png", "theme_tako/ta9.png", "theme_tako/ta10.png", 
         "theme_tako/ta11.png", 
     ],
-    meal: [ ],
+    meal: [ 
+        "theme_meal/ramen_detail1.png", "theme_meal/ramen_detail2.png", 
+        "theme_meal/ramen_detail3.png", "theme_meal/ramen_detail4.png", 
+    ],
 }
 
 const FACE_NAME_LOOKUP_TABLE = {
@@ -547,30 +556,7 @@ function main() {
         MOUTH_OPENNESS_MIN_THRESHOLD, MOUTH_CLOSSNESS_MAX_THRESHOLD, 
         onFace0MouthOpen, onFace0MouthClose);
 
-    // Setup parameters
-    const foodFeederArgs = {
-
-        range: 50.0,
-
-        feedVariantX: 2.0,
-        feedVariantY: 2.0,
-        yAngleVariant: 180.0,
-
-        FEED_SET_COUNT: 16,
-
-        feedInterval: 200,
-        feedDuration: 800,
-
-        crushDuration: 300,
-        crushInterval: 100,
-
-        crushVarianceX: 7.0,
-        crushVarianceY: 7.0,
-        crushVarianceZ: 7.0,
-    }
-
-    startRamenFeeder();
-    startNormalCrushFeeder(crushPoolList0, foodFeederArgs);
+    handleFoodFeeder(crushPoolList0);
 }
 
 // ********************************************************************************
@@ -667,6 +653,7 @@ function showMeal() {
 
     curTheme = THEME_NAME_LOOKUP_TABLE.meal;
 
+    facemesh0.hidden = false;
     facemesh0Meal.hidden = false;
 }
 
@@ -1238,7 +1225,7 @@ function onFaceUntracked(faceIndex) {
 
 function onEyeOpened(faceIndex, eyeIndex) {
 
-    Diagnostics.log("On eye open! eyeIndex: " + eyeIndex);
+    //Diagnostics.log("On eye open! eyeIndex: " + eyeIndex);
 
     if (curTheme !== THEME_NAME_LOOKUP_TABLE.crabstick)
         return;
@@ -1269,7 +1256,7 @@ function onEyeOpened(faceIndex, eyeIndex) {
 
 function onEyeClosed(faceIndex, eyeIndex) {
 
-    Diagnostics.log("On eye close! eyeIndex: " + eyeIndex);
+    //Diagnostics.log("On eye close! eyeIndex: " + eyeIndex);
     
     if (curTheme !== THEME_NAME_LOOKUP_TABLE.crabstick)
         return;
@@ -1299,10 +1286,15 @@ function onFace0MouthOpen() {
 
         newSmokeRoot.hidden = false;
     }
-    else if (curTheme.theme == THEME_NAME_LOOKUP_TABLE.meal) {
+    else if (curTheme == THEME_NAME_LOOKUP_TABLE.meal) {
 
-        mealFrontStillRamenMesh.hidden = false;
-        frontLogoRamen1.hidden = false;
+        var mouth = FaceTracking.face(0).mouth;
+
+        foodFeederRoot0.hidden = false;
+
+        foodFeederRoot0.transform.x = mouth.center.x;
+        foodFeederRoot0.transform.y = mouth.center.y;
+        foodFeederRoot0.transform.z = mouth.center.z;
     }   
 }
 
@@ -1315,6 +1307,8 @@ function onFace0MouthClose() {
     newGyozaRight.hidden = false;
 
     newSmokeRoot.hidden = true;
+
+    foodFeederRoot0.hidden = true;
 }
 
 // --------------------------------------------------------------------------------
@@ -1761,14 +1755,93 @@ function hideBubble(obj) {
 // --------------------------------------------------------------------------------
 // Food feeder
 
-function handleFoodFeeder(foodObjList, crushObjList, args) {
+function handleFoodFeeder(crushObjList) {
 
-    // Start animation
-    if (currentData.theme === THEME_NAME_LOOKUP_TABLE.meal) {
+    // Setup mat
+    setupCrushMat(CRUSH_TEX_LOOKUP_TABLE.meal);
+    /*
+    // Setup shopstick
+    var url = CONFIG.BASE_TEX_URL + "theme_meal/chopsticks.png"
+    var tex = Textures.get(FOOD_TEX_LIST[0]);
+    var mat = Materials.get(FOOD_MAT_LIST[0]);
 
-        startRamenFeeder();
-        startNormalCrushFeeder();
+    tex.url = url;
+    mat.diffuse = tex;
+    */
+
+    mealShopstick00mesh.material = Materials.get("new_chopstick_mat");
+    mealShopstick01mesh.material = Materials.get("new_chopstick_mat");
+
+    // Animate shopsticks
+    applyShopsticksBound(mealShopstick00_pivot, -10, 20, 600);
+    applyShopsticksBound(mealShopstick01_pivot, 0, 30, 600);
+
+    function setupCrushMat(texPathList) {
+        setupMatTex(texPathList, CRUSH_MAT_LIST, CRUSH_TEX_LIST, crushPoolMeshList0);
     }
+
+    function setupMatTex(texPathList, matList, texList, objList) {
+
+        var curMatIndex = 0; // mat index MUST be = tex index
+        var curTexUrlIndex = 0;
+
+        for (var i=0; i<objList.length; ++i) {
+
+            // Get tex name
+            var texName = texPathList[curTexUrlIndex];
+
+            // Move to the next name index
+            if (++curTexUrlIndex >= texPathList.length)
+                curTexUrlIndex = 0;
+
+            // Get mat & text
+            var mat = Materials.get(matList[curMatIndex]);
+            var tex = Textures.get(texList[curMatIndex]);
+
+            // Move to the next mat index
+            if (++curMatIndex >= matList.length)
+                curMatIndex = 0;
+
+            // Set tex URL
+            var url = CONFIG.BASE_TEX_URL + texName;
+            //Diagnostics.log("url: " + url);
+            tex.url = url
+            
+            // Apply tex to mat
+            mat.diffuse = tex;
+
+            // Get obj
+            var obj = objList[i];
+
+            // Apply mat to obj
+            obj.material = mat;
+        }
+    }
+
+    // Setup parameters
+    const foodFeederArgs = {
+
+        range: 50.0,
+
+        feedVariantX: 2.0,
+        feedVariantY: 2.0,
+        yAngleVariant: 180.0,
+
+        FEED_SET_COUNT: 16,
+
+        feedInterval: 200,
+        feedDuration: 800,
+
+        crushDuration: 300,
+        crushInterval: 100,
+
+        crushVarianceX: 7.0,
+        crushVarianceY: 7.0,
+        crushVarianceZ: 7.0,
+    }
+
+    startRamenFeeder();
+    startNormalCrushFeeder(crushObjList, foodFeederArgs);
 }
 
 function startRamenFeeder() {
