@@ -103,8 +103,7 @@ const facePoint0 = Patches.getVectorValue("facePoint0");
 const facePoint1 = Patches.getVectorValue("facePoint1");
 
 const facemesh0 = Scene.root.find("facemesh0");
-// Stub
-//const facemesh1 = Scene.root.find("facemesh1");
+const facemesh1 = Scene.root.find("facemesh1");
 
 // Debug
 const dbgTxtTheme = Scene.root.find('dbg_txt_theme');
@@ -316,6 +315,10 @@ const sandwichRoot = Scene.root.find("sandwich_root");
 const frontSwirl = Scene.root.find("swirl_foreground");
 const backSwirl = Scene.root.find("swirl_background");
 
+const sandwichRoot1 = Scene.root.find("sandwich_root1");
+const frontSwirl1 = Scene.root.find("swirl_foreground1");
+const backSwirl1 = Scene.root.find("swirl_background1");
+
 const frontSandwichList = [];
 const frontSandwichMeshList = [];
 const backSandwichList = [];
@@ -330,6 +333,21 @@ for (var i=0; i<7; ++i)
     backSandwichList.push(Scene.root.find("sandwichb" + i));
 for (var i=0; i<7; ++i)
     backSandwichMeshList.push(Scene.root.find("sandwichb" + i + "_mesh"));
+
+const frontSandwichList1 = [];
+const frontSandwichMeshList1 = [];
+const backSandwichList1 = [];
+const backSandwichMeshList1 = [];
+
+for (var i=0; i<7; ++i)
+    frontSandwichList1.push(Scene.root.find("sandwichf" + i + "_1"));
+for (var i=0; i<7; ++i)
+    frontSandwichMeshList1.push(Scene.root.find("sandwichf" + i + "_1_mesh"));
+
+for (var i=0; i<7; ++i)
+    backSandwichList1.push(Scene.root.find("sandwichb" + i + "_1"));
+for (var i=0; i<7; ++i)
+    backSandwichMeshList1.push(Scene.root.find("sandwichb" + i + "_1_mesh"));
 
 // --------------------------------------------------------------------------------
 // RESOURCES for CRABSTICK
@@ -563,6 +581,9 @@ var curTheme = undefined;
 
 function main() {
 
+    initSwirlSandwich(frontSwirl1, frontSandwichList1, frontSandwichMeshList1, true);
+    initSwirlSandwich(backSwirl1, backSandwichList1, backSandwichMeshList1, false);
+    
     initSwirlSandwich(frontSwirl, frontSandwichList, frontSandwichMeshList, true);
     initSwirlSandwich(backSwirl, backSandwichList, backSandwichMeshList, false);
     
@@ -593,10 +614,10 @@ function startGame() {
     hideHowtoWithDelay();
     
     //showGyoza();
-    //showSandwich();
+    showSandwich();
     //showCrabstick();
     //showMeal();
-    showTakoyaki();
+    //showTakoyaki();
 }
 
 const HIDE_HOWTO_DELAY = 1500;
@@ -642,6 +663,7 @@ function hideAllThemes() {
     facemesh0Tako.hidden = true;
     facemesh1Tako.hidden = true;
     sandwichRoot.hidden = true;
+    sandwichRoot1.hidden = true;
     headGyozaRoot.hidden = true;
     bodySegmentationRect.hidden = true;
     //takoDirectionalLight0.hidden = true;
@@ -746,11 +768,16 @@ function showSandwich() {
     curTheme = THEME_NAME_LOOKUP_TABLE.sandwich;
 
     facemesh0.hidden = false;
+    facemesh1.hidden = false;
+
     sandwichRoot.hidden = false;
+    sandwichRoot1.hidden = false;
+
     bodySegmentationRect.hidden = false;
     newHand.hidden = false;
 
     facemesh0.material = facePaintSandwichMat;
+    facemesh1.material = facePaintSandwichMat;
 
     loadNewDesignSandwich();
 }
@@ -1136,7 +1163,7 @@ function hideNewProd() {
     newProdBig.hidden = true;
     newProdSmall.hidden = true;
 }
-
+/*
 function initHead() {
 
     var faceName = currentData.face;
@@ -1193,10 +1220,6 @@ function initHead() {
 
         headSandwichRoot.hidden = false;
         headSandwichRoot1.hidden = false;
-
-        // Apply face paint mat and tex
-        facemesh0.material = pinkyFaceMat;
-        facemesh1.material = pinkyFaceMat;
 
         // Use swirl glasses
         applySpinMovement(headSwirl0Mesh, 2000);
@@ -1287,7 +1310,7 @@ function initHead() {
         facemesh1.material = facePaintInvisibleMat;
     }
 }
-
+*/
 foodFeederRoot0.hidden = true;
 
 /*
@@ -1323,7 +1346,7 @@ getThemeData(CONFIG.GET_THEME_URL, function(data, err) {
 
 currentData.face = FACE_NAME_LOOKUP_TABLE.gyoza;
 
-initHead();
+//initHead();
 
 // Init bubbles' tex
 function initBubbleTex() {
