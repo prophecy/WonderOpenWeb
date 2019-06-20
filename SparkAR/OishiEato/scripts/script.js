@@ -115,10 +115,8 @@ const dbgCanvas = Scene.root.find('debugPanelCanvas');
 // RESOURCES for GYOZA THEME
 
 const headGyozaRoot = Scene.root.find('head_gyoza_root');
+const headGyozaRoot1 = Scene.root.find('head_gyoza_root1');
 
-// stub
-const headHachimakiMesh = Scene.root.find("head_hachimaki_mesh");
-const headHachimakiTex = "head_hachimaki";
 // stub
 //const headHachimaki1Mesh = Scene.root.find("head_hachimaki1_mesh");
 const facePaintGyozaMat = Materials.get("face_paint_gyoza_mat");
@@ -613,8 +611,8 @@ function startGame() {
 
     hideHowtoWithDelay();
     
-    //showGyoza();
-    showSandwich();
+    showGyoza();
+    //showSandwich();
     //showCrabstick();
     //showMeal();
     //showTakoyaki();
@@ -665,6 +663,7 @@ function hideAllThemes() {
     sandwichRoot.hidden = true;
     sandwichRoot1.hidden = true;
     headGyozaRoot.hidden = true;
+    headGyozaRoot1.hidden = true;
     bodySegmentationRect.hidden = true;
     //takoDirectionalLight0.hidden = true;
     laserBeamLeft.hidden = true;
@@ -725,9 +724,9 @@ function showGyoza() {
     curTheme = THEME_NAME_LOOKUP_TABLE.gyoza;
 
     headGyozaRoot.hidden = false;
+    headGyozaRoot1.hidden = false;
     facemesh0.hidden = false;
     newGyozaRoot.hidden = false;
-    headGyozaRoot.hidden = false;
 
     loadNewDesignGyoza();
     runGyozaSequence();
@@ -735,6 +734,7 @@ function showGyoza() {
     applyRotationBounceLessDelay(newGyozaRight, 0, 50, 600);
 
     facemesh0.material = facePaintGyozaMat;
+    facemesh1.material = facePaintGyozaMat;
 }
 
 function showTakoyaki() {
