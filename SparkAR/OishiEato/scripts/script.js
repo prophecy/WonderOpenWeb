@@ -480,6 +480,11 @@ const NEW_DESIGN_URL_TABLE = {
     sandwich_bubble_bg: "new_design/sample_sandwich/bb_sandwich.png",
     sandwich_bubble_txt: "new_design/sample_takoyaki/copy.png",
     sandwich_prod: "new_design/sample_sandwich/sandwich_crab.png",
+
+    // Crabstick sample
+    crabstick_bubble_bg: "new_design/sample_crabstick/new_crab.png",
+    crabstick_bubble_txt: "new_design/sample_takoyaki/copy.png",
+    crabstick_prod: "new_design/sample_crabstick/crab_pack.png",
 };
 
 // --------------------------------------------------------------------------------
@@ -534,7 +539,6 @@ function main() {
 
     handleFaceTrackingState(0, function() { onFaceTracked(0); }, function() { onFaceUntracked(0); });
     handleFaceTrackingState(1, function() { onFaceTracked(1); }, function() { onFaceUntracked(1); });
-
 
     handleMouthOpeningState(
         0, 
@@ -612,6 +616,8 @@ function showCrabstick() {
     laserBeamRight.hidden = false;
 
     facemesh0.material = facePaintInvisibleMat;
+
+    loadNewDesignCrabstick();
 }
 
 function showSandwich() {
@@ -743,6 +749,24 @@ function loadNewDesignSandwich() {
     setupMaterial(newQuoteTxtMesh, curResIndex++, NEW_DESIGN_URL_TABLE.sandwich_bubble_txt);
     setupMaterial(newProdBigMesh, curResIndex++, NEW_DESIGN_URL_TABLE.sandwich_prod);
     setupMaterial(newProdSmallMesh, curResIndex++, NEW_DESIGN_URL_TABLE.sandwich_prod);
+
+    function setupMaterial(mesh, index, texName) {
+
+        mesh.material = getMaterialWithDiffuseByUrl(
+            NEW_DESIGN_MAT_LIST[index], 
+            NEW_DESIGN_TEX_LIST[index], 
+            BASE_URL + texName);    
+    }
+}
+
+function loadNewDesignCrabstick() {
+
+    var curResIndex = 0;
+
+    setupMaterial(newQuoteBgMesh, curResIndex++, NEW_DESIGN_URL_TABLE.crabstick_bubble_bg);
+    setupMaterial(newQuoteTxtMesh, curResIndex++, NEW_DESIGN_URL_TABLE.crabstick_bubble_txt);
+    setupMaterial(newProdBigMesh, curResIndex++, NEW_DESIGN_URL_TABLE.crabstick_prod);
+    setupMaterial(newProdSmallMesh, curResIndex++, NEW_DESIGN_URL_TABLE.crabstick_prod);
 
     function setupMaterial(mesh, index, texName) {
 
