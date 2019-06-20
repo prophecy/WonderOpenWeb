@@ -2072,10 +2072,11 @@ function startRamenFeeder() {
     mat.diffuse = diffuseTex;
 
     var maskMatList = [
-        Materials.get("ramen_mask_mat0"), Materials.get("ramen_mask_mat1"), 
+        //Materials.get("ramen_mask_mat0"),
+        Materials.get("ramen_mask_mat1"), 
         Materials.get("ramen_mask_mat2"), Materials.get("ramen_mask_mat3"), 
         Materials.get("ramen_mask_mat4"), Materials.get("ramen_mask_mat5"), 
-        //Materials.get("ramen_mask_mat6"), Materials.get("ramen_mask_mat7"), 
+        Materials.get("ramen_mask_mat6"),// Materials.get("ramen_mask_mat7"), 
         //Materials.get("ramen_mask_mat8"), 
     ]
 
