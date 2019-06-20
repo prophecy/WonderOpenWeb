@@ -285,7 +285,7 @@ const facemesh0Meal = Scene.root.find("facemesh0_meal");
 const howtoRect = Scene.root.find("howto_rect");
 const howtoBgRect = Scene.root.find("howto_bg_rect");
 
-const takoDirectionalLight0 = Scene.root.find("tako_directional_ligh0");
+//const takoDirectionalLight0 = Scene.root.find("tako_directional_ligh0");
 
 const mealShopstick00mesh = Scene.root.find("shopstick00_mesh");
 const mealShopstick01mesh = Scene.root.find("shopstick01_mesh");
@@ -304,6 +304,8 @@ const newCrabFg = Scene.root.find("new_crab_fg");
 const newCrabFgMesh = Scene.root.find("new_crab_fg_mesh");
 const newCrabLogo = Scene.root.find("new_crab_logo");
 const newCrabLogoMesh = Scene.root.find("new_crab_logo_mesh");
+const newRamen = Scene.root.find("new_ramen");
+const newRamenMesh = Scene.root.find("new_ramen_mesh");
 
 // --------------------------------------------------------------------------------
 // RESOURCES for SWIRL SANDWICH
@@ -517,6 +519,7 @@ const NEW_DESIGN_URL_TABLE = {
     meal_bubble_bg: "new_design/sample_meal/bb_ramen.png",
     meal_bubble_txt: "new_design/sample_takoyaki/copy.png",
     meal_prod: "new_design/sample_meal/ramenL.png",
+    meal_ramen: "new_design/sample_meal/ramen_still.png",
 };
 
 // --------------------------------------------------------------------------------
@@ -582,9 +585,9 @@ function startGame() {
     hideHowtoWithDelay();
     
     //showGyoza();
-    showSandwich();
+    //showSandwich();
     //showCrabstick();
-    //showMeal();
+    showMeal();
     //showTakoyaki();
 }
 
@@ -633,7 +636,7 @@ function hideAllThemes() {
     sandwichRoot.hidden = true;
     headGyozaRoot.hidden = true;
     bodySegmentationRect.hidden = true;
-    takoDirectionalLight0.hidden = true;
+    //takoDirectionalLight0.hidden = true;
     laserBeamLeft.hidden = true;
     laserBeamRight.hidden = true;
     newGyozaLeft.hidden = true;
@@ -643,6 +646,7 @@ function hideAllThemes() {
     newCrabBg.hidden = true;
     newCrabFg.hidden = true;
     newCrabLogo.hidden = true;
+    newRamen.hidden = true;
 }
 
 const QUOTE_PROD_POSITION = {
@@ -676,10 +680,11 @@ const QUOTE_PROD_POSITION = {
         new_quote_text: [-8.39964, 0, 10],
     },
     meal: {
-        new_prod_small: [-25, 0, 29],
-        new_prod_big: [-25, 0, 29],
+        new_prod_small: [-26, 0, 29],
+        new_prod_big: [-26, 0, 29],
         new_quote_bg: [6, 0, 5],
         new_quote_text: [6, 0, 5],
+        new_ramen: [-35, 0, 12],
     },
 };
 
@@ -706,7 +711,7 @@ function showTakoyaki() {
 
     newTakoyakiRoot.hidden = false;
     facemesh0Tako.hidden = false;
-    takoDirectionalLight0.hidden = false;
+    //takoDirectionalLight0.hidden = false;
 
     loadNewDesignTakoyaki();
 }
@@ -745,6 +750,7 @@ function showMeal() {
 
     facemesh0.hidden = false;
     facemesh0Meal.hidden = false;
+    newRamen.hidden = false;
 
     loadNewDesignMeal();
 }
@@ -954,6 +960,12 @@ function loadNewDesignMeal() {
     setupMaterial(newQuoteTxtMesh, curResIndex++, NEW_DESIGN_URL_TABLE.meal_bubble_txt);
     setupMaterial(newProdBigMesh, curResIndex++, NEW_DESIGN_URL_TABLE.meal_prod);
     setupMaterial(newProdSmallMesh, curResIndex++, NEW_DESIGN_URL_TABLE.meal_prod);
+
+    setupMaterial(newRamenMesh, curResIndex++, NEW_DESIGN_URL_TABLE.meal_ramen);
+
+    newRamen.transform.x = QUOTE_PROD_POSITION.meal.new_ramen[0];
+    newRamen.transform.y = QUOTE_PROD_POSITION.meal.new_ramen[1];
+    newRamen.transform.z = QUOTE_PROD_POSITION.meal.new_ramen[2];
 
     // Setup position
     setupQuoteProdPosition(QUOTE_PROD_POSITION.meal);
