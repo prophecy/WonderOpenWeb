@@ -1310,7 +1310,7 @@ function onFace0MouthOpen() {
     }
     else if (curTheme === THEME_NAME_LOOKUP_TABLE.takoyaki) {
 
-        newSmokeRoot.hidden = false;
+        //newSmokeRoot.hidden = false;
     }
     else if (curTheme == THEME_NAME_LOOKUP_TABLE.meal) {
 
@@ -1332,7 +1332,7 @@ function onFace0MouthClose() {
     newGyozaLeft.hidden = false;
     newGyozaRight.hidden = false;
 
-    newSmokeRoot.hidden = true;
+    //newSmokeRoot.hidden = true;
 
     foodFeederRoot0.hidden = true;
 }
