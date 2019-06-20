@@ -1228,8 +1228,12 @@ function onFace0MouthOpen() {
 
     showNewProdBig();
 
-    if (curTheme === THEME_NAME_LOOKUP_TABLE.gyoza)
+    if (curTheme === THEME_NAME_LOOKUP_TABLE.gyoza) {
+
         newGyozaRoot.hidden = false;
+        newGyozaLeft.hidden = false;
+        newGyozaRight.hidden = false;
+    }
     else if (curTheme === THEME_NAME_LOOKUP_TABLE.takoyaki)
         newSmokeRoot.hidden = false;
 }
@@ -1239,6 +1243,9 @@ function onFace0MouthClose() {
     showNewProdSmall();
 
     newGyozaRoot.hidden = true;
+    newGyozaLeft.hidden = false;
+    newGyozaRight.hidden = false;
+
     newSmokeRoot.hidden = true;
 }
 
