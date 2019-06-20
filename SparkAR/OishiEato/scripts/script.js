@@ -568,8 +568,8 @@ function startGame() {
     //showGyoza();
     //showSandwich();
     //showCrabstick();
-    //showMeal();
-    showTakoyaki();
+    showMeal();
+    //showTakoyaki();
 }
 
 const HIDE_HOWTO_DELAY = 1500;
@@ -628,19 +628,36 @@ function hideAllThemes() {
 const QUOTE_PROD_POSITION = {
 
     gyoza: {
-
         new_prod_small: [30, 0, 0],
         new_prod_big: [30, 0, 0],
         new_quote_bg: [-8.39964, 0, 0],
         new_quote_text: [-8.39964, 0, 0],
     },
-    sandwich: { },
-    crabstick: { },
-    takoyaki: { },
-    meal: { },
+    sandwich: {
+        new_prod_small: [30, 0, 0],
+        new_prod_big: [30, 0, 0],
+        new_quote_bg: [-8.39964, 0, 0],
+        new_quote_text: [-8.39964, 0, 0],
+    },
+    crabstick: {
+        new_prod_small: [30, 0, 0],
+        new_prod_big: [30, 0, 0],
+        new_quote_bg: [-8.39964, 0, 0],
+        new_quote_text: [-8.39964, 0, 0],
+    },
+    takoyaki: {
+        new_prod_small: [30, 0, 0],
+        new_prod_big: [30, 0, 0],
+        new_quote_bg: [-8.39964, 0, 0],
+        new_quote_text: [-8.39964, 0, 0],
+    },
+    meal: {
+        new_prod_small: [-25, 0, 27],
+        new_prod_big: [-25, 0, 27],
+        new_quote_bg: [6, 0, 0],
+        new_quote_text: [6, 0, 0],
+    },
 };
-
-// Todo: Apply position to to the front object
 
 function showGyoza() {
 
@@ -674,8 +691,6 @@ function showCrabstick() {
 
     curTheme = THEME_NAME_LOOKUP_TABLE.crabstick;
     facemesh0.hidden = false;
-    laserBeamLeft.hidden = false;
-    laserBeamRight.hidden = false;
 
     facemesh0.material = facePaintInvisibleMat;
 
@@ -753,6 +768,25 @@ function initSwirlSandwich(swirl, sandwichList, sandwichMeshList, isFront) {
 
 var gyozaSeqMatList = [];
 
+function setupQuoteProdPosition(positionData) {
+
+    newQuoteBg.transform.x = positionData.new_quote_bg[0];
+    newQuoteBg.transform.y = positionData.new_quote_bg[1];
+    newQuoteBg.transform.z = positionData.new_quote_bg[2];
+
+    newQuoteTxt.transform.x = positionData.new_quote_text[0];
+    newQuoteTxt.transform.y = positionData.new_quote_text[1];
+    newQuoteTxt.transform.z = positionData.new_quote_text[2];
+
+    newProdBig.transform.x = positionData.new_prod_big[0];
+    newProdBig.transform.y = positionData.new_prod_big[1];
+    newProdBig.transform.z = positionData.new_prod_big[2];
+
+    newProdSmall.transform.x = positionData.new_prod_small[0];
+    newProdSmall.transform.y = positionData.new_prod_small[1];
+    newProdSmall.transform.z = positionData.new_prod_small[2];
+}
+
 function loadNewDesignGyoza() {
 
     var curResIndex = 0;
@@ -762,6 +796,9 @@ function loadNewDesignGyoza() {
     setupMaterial(newProdBigMesh, curResIndex++, NEW_DESIGN_URL_TABLE.gyoza_prod_big);
     setupMaterial(newProdSmallMesh, curResIndex++, NEW_DESIGN_URL_TABLE.gyoza_prod_big);
 
+    // Setup position
+    setupQuoteProdPosition(QUOTE_PROD_POSITION.gyoza);
+    
     // Add gyoza sequence
     var mat = getMaterialWithDiffuseByUrl(
         NEW_DESIGN_MAT_LIST[curResIndex], 
@@ -804,6 +841,9 @@ function loadNewDesignTakoyaki() {
     setupMaterial(newProdBigMesh, curResIndex++, NEW_DESIGN_URL_TABLE.takoyaki_prod);
     setupMaterial(newProdSmallMesh, curResIndex++, NEW_DESIGN_URL_TABLE.takoyaki_prod);
 
+    // Setup position
+    setupQuoteProdPosition(QUOTE_PROD_POSITION.takoyaki);
+    
     function setupMaterial(mesh, index, texName) {
 
         mesh.material = getMaterialWithDiffuseByUrl(
@@ -822,6 +862,9 @@ function loadNewDesignSandwich() {
     setupMaterial(newProdBigMesh, curResIndex++, NEW_DESIGN_URL_TABLE.sandwich_prod);
     setupMaterial(newProdSmallMesh, curResIndex++, NEW_DESIGN_URL_TABLE.sandwich_prod);
 
+    // Setup position
+    setupQuoteProdPosition(QUOTE_PROD_POSITION.sandwich);
+    
     function setupMaterial(mesh, index, texName) {
 
         mesh.material = getMaterialWithDiffuseByUrl(
@@ -840,6 +883,9 @@ function loadNewDesignCrabstick() {
     setupMaterial(newProdBigMesh, curResIndex++, NEW_DESIGN_URL_TABLE.crabstick_prod);
     setupMaterial(newProdSmallMesh, curResIndex++, NEW_DESIGN_URL_TABLE.crabstick_prod);
 
+    // Setup position
+    setupQuoteProdPosition(QUOTE_PROD_POSITION.crabstick);
+    
     function setupMaterial(mesh, index, texName) {
 
         mesh.material = getMaterialWithDiffuseByUrl(
@@ -858,6 +904,9 @@ function loadNewDesignMeal() {
     setupMaterial(newProdBigMesh, curResIndex++, NEW_DESIGN_URL_TABLE.meal_prod);
     setupMaterial(newProdSmallMesh, curResIndex++, NEW_DESIGN_URL_TABLE.meal_prod);
 
+    // Setup position
+    setupQuoteProdPosition(QUOTE_PROD_POSITION.meal);
+    
     function setupMaterial(mesh, index, texName) {
 
         mesh.material = getMaterialWithDiffuseByUrl(
@@ -1293,7 +1342,6 @@ function onFaceUntracked(faceIndex) {
     hideNewQuoteText();
     hideNewProd();
 }
-
 
 function onEyeOpened(faceIndex, eyeIndex) {
 
