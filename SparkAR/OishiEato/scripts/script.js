@@ -639,6 +639,10 @@ function hideAllThemes() {
     newGyozaLeft.hidden = true;
     newGyozaRight.hidden = true;
     facemesh0Meal.hidden = true;
+    newHand.hidden = true;
+    newCrabBg.hidden = true;
+    newCrabFg.hidden = true;
+    newCrabLogo.hidden = true;
 }
 
 const QUOTE_PROD_POSITION = {
@@ -714,6 +718,10 @@ function showCrabstick() {
 
     facemesh0.material = facePaintInvisibleMat;
 
+    newCrabBg.hidden = false;
+    newCrabFg.hidden = false;
+    newCrabLogo.hidden = false;
+
     loadNewDesignCrabstick();
 }
 
@@ -724,6 +732,7 @@ function showSandwich() {
     facemesh0.hidden = false;
     sandwichRoot.hidden = false;
     bodySegmentationRect.hidden = false;
+    newHand.hidden = false;
 
     facemesh0.material = facePaintSandwichMat;
 
