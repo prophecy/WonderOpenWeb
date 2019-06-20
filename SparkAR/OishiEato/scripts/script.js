@@ -280,6 +280,8 @@ const facemesh0Tako = Scene.root.find("facemesh0_tako");
 
 const howToRect = Scene.root.find("howto_rect");
 
+const takoDirectionalLight0 = Scene.root.find("tako_directional_ligh0");
+
 // --------------------------------------------------------------------------------
 // RESOURCES for SWIRL SANDWICH
 
@@ -544,6 +546,7 @@ function hideAllThemes() {
     sandwichRoot.hidden = true;
     headGyozaRoot.hidden = true;
     bodySegmentationRect.hidden = true;
+    takoDirectionalLight0.hidden = true;
 }
 
 function showGyoza() {
@@ -560,7 +563,7 @@ function showGyoza() {
     applyRotationBounceLessDelay(newGyozaLeft, 0, 20, 700);
     applyRotationBounceLessDelay(newGyozaRight, 0, 50, 600);
 
-    facemesh0.material = facePaintGyozaMat;
+    //facemesh0.material = facePaintGyozaMat;
 }
 
 function showTakoyaki() {
@@ -569,6 +572,7 @@ function showTakoyaki() {
 
     newTakoyakiRoot.hidden = false;
     facemesh0Tako.hidden = false;
+    takoDirectionalLight0.hidden = false;
 
     loadNewDesignTakoyaki();
 }
