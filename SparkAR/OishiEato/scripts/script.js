@@ -582,8 +582,8 @@ function startGame() {
     hideHowtoWithDelay();
     
     //showGyoza();
-    //showSandwich();
-    showCrabstick();
+    showSandwich();
+    //showCrabstick();
     //showMeal();
     //showTakoyaki();
 }
@@ -753,7 +753,7 @@ function initSwirlSandwich(swirl, sandwichList, sandwichMeshList, isFront) {
 
     // Setup object transform
     const SWIRL_RADIOUS = 12.0;
-    const SWIRL_DURATION = 3000;
+    const SWIRL_DURATION = 6000;
 
     for (var i=0; i<sandwichList.length; ++i) {
 
@@ -789,7 +789,7 @@ function initSwirlSandwich(swirl, sandwichList, sandwichMeshList, isFront) {
     for (var i=0; i<sandwichMeshList.length; ++i) {
 
         var obj = sandwichMeshList[i];
-        applySwirlMovement(obj, 0, 0, -1, SWIRL_DURATION);
+        applySwirlMovement(obj, 0, 1, 0, SWIRL_DURATION);
     }
 
     applySwirlMovement(swirl, 0, 1, 0, SWIRL_DURATION);
