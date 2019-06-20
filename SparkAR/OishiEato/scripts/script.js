@@ -280,6 +280,7 @@ const facemesh0Tako = Scene.root.find("facemesh0_tako");
 const facemesh1Tako = Scene.root.find("facemesh1_tako");
 
 const facemesh0Meal = Scene.root.find("facemesh0_meal");
+const facemesh1Meal = Scene.root.find("facemesh1_meal");
 
 const howtoRect = Scene.root.find("howto_rect");
 const howtoBgRect = Scene.root.find("howto_bg_rect");
@@ -611,10 +612,10 @@ function startGame() {
 
     hideHowtoWithDelay();
     
-    showGyoza();
+    //showGyoza();
     //showSandwich();
     //showCrabstick();
-    //showMeal();
+    showMeal();
     //showTakoyaki();
 }
 
@@ -673,6 +674,7 @@ function hideAllThemes() {
     newGyozaLeft.hidden = true;
     newGyozaRight.hidden = true;
     facemesh0Meal.hidden = true;
+    facemesh1Meal.hidden = true;
     newHand.hidden = true;
     newCrabBg.hidden = true;
     newCrabFg.hidden = true;
@@ -790,6 +792,7 @@ function showMeal() {
 
     facemesh0.hidden = false;
     facemesh0Meal.hidden = false;
+    facemesh1Meal.hidden = false;
     newRamen.hidden = false;
 
     loadNewDesignMeal();
