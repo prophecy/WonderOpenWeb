@@ -280,6 +280,7 @@ const newSmokeRoot = Scene.root.find("smoke_root");
 const newGyozaRoot = Scene.root.find("new_gyoza_root");
 
 const facemesh0Tako = Scene.root.find("facemesh0_tako");
+const facemesh0Meal = Scene.root.find("facemesh0_meal");
 
 const howToRect = Scene.root.find("howto_rect");
 
@@ -532,7 +533,8 @@ function main() {
     hideAllThemes();
     //showGyoza();
     //showSandwich();
-    showCrabstick();
+    //showCrabstick();
+    showMeal();
 
     handleEyeOpeningState(0, 0, function() { onEyeOpened(0, 0); }, function() { onEyeClosed(0, 0); });
     handleEyeOpeningState(0, 1, function() { onEyeOpened(0, 1); }, function() { onEyeClosed(0, 1); });    
@@ -544,6 +546,31 @@ function main() {
         0, 
         MOUTH_OPENNESS_MIN_THRESHOLD, MOUTH_CLOSSNESS_MAX_THRESHOLD, 
         onFace0MouthOpen, onFace0MouthClose);
+
+    // Setup parameters
+    const foodFeederArgs = {
+
+        range: 50.0,
+
+        feedVariantX: 2.0,
+        feedVariantY: 2.0,
+        yAngleVariant: 180.0,
+
+        FEED_SET_COUNT: 16,
+
+        feedInterval: 200,
+        feedDuration: 800,
+
+        crushDuration: 300,
+        crushInterval: 100,
+
+        crushVarianceX: 7.0,
+        crushVarianceY: 7.0,
+        crushVarianceZ: 7.0,
+    }
+
+    startRamenFeeder();
+    startNormalCrushFeeder(crushPoolList0, foodFeederArgs);
 }
 
 // ********************************************************************************
@@ -560,6 +587,8 @@ function changeTheme() {
     else if (curTheme === THEME_NAME_LOOKUP_TABLE.sandwich)
         showCrabstick();
     else if (curTheme === THEME_NAME_LOOKUP_TABLE.crabstick)
+        showMeal();
+    else if (curTheme === THEME_NAME_LOOKUP_TABLE.meal)
         showGyoza();
 }
 
@@ -578,6 +607,7 @@ function hideAllThemes() {
     laserBeamRight.hidden = true;
     newGyozaLeft.hidden = true;
     newGyozaRight.hidden = true;
+    facemesh0Meal.hidden = true;
 }
 
 function showGyoza() {
@@ -631,6 +661,13 @@ function showSandwich() {
     facemesh0.material = facePaintSandwichMat;
 
     loadNewDesignSandwich();
+}
+
+function showMeal() {
+
+    curTheme = THEME_NAME_LOOKUP_TABLE.meal;
+
+    facemesh0Meal.hidden = false;
 }
 
 function initSwirlSandwich(swirl, sandwichList, sandwichMeshList, isFront) {
@@ -1258,8 +1295,15 @@ function onFace0MouthOpen() {
         newGyozaLeft.hidden = false;
         newGyozaRight.hidden = false;
     }
-    else if (curTheme === THEME_NAME_LOOKUP_TABLE.takoyaki)
+    else if (curTheme === THEME_NAME_LOOKUP_TABLE.takoyaki) {
+
         newSmokeRoot.hidden = false;
+    }
+    else if (curTheme.theme == THEME_NAME_LOOKUP_TABLE.meal) {
+
+        mealFrontStillRamenMesh.hidden = false;
+        frontLogoRamen1.hidden = false;
+    }   
 }
 
 function onFace0MouthClose() {
