@@ -485,8 +485,8 @@ const NEW_DESIGN_URL_TABLE = {
     
     // Gyoza sample
     gyoza_bubble_bg: "new_design/sample_gyoza/01_01_bg.png",
-    gyoza_bubble_txt_00: "new_design/sample_gyoza/tx_01.png",
-    gyoza_bubble_txt_01: "new_design/sample_gyoza/tx_02.png",
+    gyoza_bubble_txt_00: "new_design/sample_takoyaki/copy.png",
+    gyoza_bubble_txt_01: "new_design/sample_takoyaki/copy.png",
     gyoza_feed_00: "new_design/sample_gyoza/01_04_gyuza1_action.png",
     gyoza_feed_01: "new_design/sample_gyoza/01_04_gyuza2_action.png",
     gyoza_feed_02: "new_design/sample_gyoza/01_04_gyuza3_action.png",
@@ -648,38 +648,38 @@ function hideAllThemes() {
 const QUOTE_PROD_POSITION = {
 
     gyoza: {
-        new_prod_small: [30, 0, 0],
-        new_prod_big: [30, 0, 0],
-        new_quote_bg: [-8.39964, 0, 0],
-        new_quote_text: [-8.39964, 0, 0],
+        new_prod_small: [30, 0, 10],
+        new_prod_big: [30, 0, 10],
+        new_quote_bg: [-8.39964, 0, 10],
+        new_quote_text: [-8.39964, 0, 10],
     },
     sandwich: {
         new_prod_small: [-25, 0, 27],
         new_prod_big: [-25, 0, 27],
-        new_quote_bg: [6, 0, 0],
-        new_quote_text: [6, 0, 0],
+        new_quote_bg: [6, 0, 10],
+        new_quote_text: [6, 0, 10],
         hand: [-30, 0, 36],
     },
     crabstick: {
         new_prod_small: [-25, 0, 27],
         new_prod_big: [-25, 0, 27],
-        new_quote_bg: [0, 0, 0],
-        new_quote_text: [0, 0, 0],
+        new_quote_bg: [0, 0, 5],
+        new_quote_text: [0, 0, 5],
         new_crab_bg: [-12, 0, 40],
         new_crab_fg: [-12, 0, 40],
         new_crab_logo: [26, 0, 40],
     },
     takoyaki: {
-        new_prod_small: [30, 0, 0],
-        new_prod_big: [30, 0, 0],
-        new_quote_bg: [-8.39964, 0, 0],
-        new_quote_text: [-8.39964, 0, 0],
+        new_prod_small: [30, 0, 10],
+        new_prod_big: [30, 0, 10],
+        new_quote_bg: [-8.39964, 0, 10],
+        new_quote_text: [-8.39964, 0, 10],
     },
     meal: {
-        new_prod_small: [-25, 0, 27],
-        new_prod_big: [-25, 0, 27],
-        new_quote_bg: [6, 0, 0],
-        new_quote_text: [6, 0, 0],
+        new_prod_small: [-25, 0, 29],
+        new_prod_big: [-25, 0, 29],
+        new_quote_bg: [6, 0, 5],
+        new_quote_text: [6, 0, 5],
     },
 };
 
