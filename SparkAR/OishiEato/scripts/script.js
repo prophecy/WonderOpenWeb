@@ -27,7 +27,7 @@ else if (ENV === ENV_DEV)
 
 const CONFIG = {
     ENV: ENV,
-    GET_THEME_URL: BASE_URL + "getTheme.aspx",
+    GET_ASSET_LIST_URL: BASE_URL + "getAssetList.aspx",
     BASE_TEX_URL: BASE_URL,
 }
 
@@ -280,23 +280,6 @@ const THEME_NAME_LOOKUP_TABLE = {
     meal: "Meal",
 }
 
-const FOOD_TEX_LOOKUP_TABLE = {
-
-    gyoza: [
-        "theme_gyoza/gyoza_00.png", "theme_gyoza/gyoza_01.png", 
-    ],
-    sandwich: [
-        "theme_sandwich/sw2.png", "theme_sandwich/sw3.png", "theme_sandwich/sw4.png", "theme_sandwich/sw8.png", "theme_sandwich/sw10.png"
-    ],
-    crabstick: [
-        "theme_crabstick/crab_4.png", "theme_crabstick/crab_5.png", "theme_crabstick/crab_6.png", 
-    ],
-    takoyaki: [
-        "theme_tako/ta4.png", "theme_tako/ta5.png", "theme_tako/ta6.png", 
-    ],
-    meal: [ ],
-}
-
 const CRUSH_TEX_LOOKUP_TABLE = {
 
     gyoza: [
@@ -387,6 +370,106 @@ const NEW_DESIGN_URL_TABLE = {
 };
 
 // --------------------------------------------------------------------------------
+// CORE DATA
+// --------------------------------------------------------------------------------
+
+var currentThemeData = {};
+
+function storeData(data) {
+    currentThemeData = data;
+}
+
+function getNpdList() {
+
+    if (!currentThemeData.assetlist)
+        return;
+
+    for (var i=0; i<currentThemeData.assetlist.length; ++i) {
+
+        var item = currentThemeData.assetlist[i];
+
+        if (item.type == "productNPD")
+            return item.items;
+    }
+
+    // Return empty arry if no NPD
+    return [];
+}
+
+function getItemList() {
+
+    if (!currentThemeData.assetlist)
+        return;
+
+    var itemList = [];
+
+    for (var i=0; i<currentThemeData.assetlist.length; ++i) {
+
+        var item = currentThemeData.assetlist[i];
+
+        if (item.type == "product")
+            itemList.push(item);
+    }
+
+    return itemList;
+}
+
+// Store round order, so the game will loop in the certain way
+var roundOrder = [];
+var itemQueue = [];
+var productCounter = {
+    gyoza: 0,
+    sandwich: 0,
+    crabstick: 0,
+    takoyaki: 0,
+    meal: 0,
+}
+
+// Beware, this's in O(n)
+function isThemeExistInRoundOrder(theme) {
+
+    for (var i=0; i<roundOrder.length; ++i) {
+
+        var it = roundOrder[i];
+        if (theme == it)
+            return true;
+    }
+
+    return false;
+}
+
+function createDataRound0() {
+
+    // Clear
+    roundOrder = [];
+    itemQueue = [];
+
+    // Add npd item
+    var npdList = getNpdList();
+    for (var i=0; i<npdList.length; ++i) {
+
+        var item = npdList[i];
+        itemQueue.push(item);
+        
+        var isExist = isThemeExistInRoundOrder(item.theme);
+        if (!isExist)
+            roundOrder.push(item.theme);
+    }
+
+    // Add item
+    var itemList = getItemList();
+    for (var i=0; i<itemList.length; ++i) {
+
+        var item = itemList[i];
+        var isExist = isThemeExistInRoundOrder(item.theme);
+        if (!isExist) {
+            itemQueue.push(item);
+            roundOrder.push(item.theme);
+        }
+    } 
+}
+
+// --------------------------------------------------------------------------------
 // SCENE LOGIC
 // --------------------------------------------------------------------------------
 
@@ -451,6 +534,30 @@ function main() {
         onFace0MouthOpen, onFace0MouthClose);
 
     handleFoodFeeder(crushPoolList0);
+
+    // Request
+    getThemeData(CONFIG.GET_ASSET_LIST_URL, function(data, error) {
+
+        if (data) {
+
+            storeData(data);
+            
+            var npdList = getNpdList();
+            Diagnostics.log("npdLits.length: " + npdList.length);
+            Diagnostics.log("npdList: " + JSON.stringify(npdList));
+
+            var itemList = getItemList();
+            Diagnostics.log("itemList.length: " + itemList.length);
+
+            createDataRound0();
+            Diagnostics.log("itemQueue: " + JSON.stringify(itemQueue));
+            Diagnostics.log("roundOrder: " + JSON.stringify(roundOrder));
+        }
+        else {
+
+            Diagnostics.log("API request error!");
+        }
+    });
 }
 
 function startGame() {
