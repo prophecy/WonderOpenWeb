@@ -445,6 +445,39 @@ function resetProductCounter() {
     productCounter.meal = -1;
 }
 
+var currentProductTitle = undefined;
+
+function setCurrentProduct(themeData) {
+
+    var prodTitle = undefined;
+
+    if (themeData.type == "productNPD") {
+
+        prodTitle = themeData.title;
+    }
+    else if (themeData.type = "product") {
+
+        var theme = themeData.theme;
+        
+        Diagnostics.log("themeData: " + JSON.stringify(themeData));
+        Diagnostics.log("productCounter: " + JSON.stringify(productCounter));
+
+        if (theme == THEME_NAME_LOOKUP_TABLE.gyoza)
+            prodTitle = themeData.items[productCounter.gyoza].title;
+        else if (theme == THEME_NAME_LOOKUP_TABLE.sandwich)
+            prodTitle = themeData.items[productCounter.sandwich].title;
+        else if (theme == THEME_NAME_LOOKUP_TABLE.crabstick)
+            prodTitle = themeData.items[productCounter.crabstick].title;
+        else if (theme == THEME_NAME_LOOKUP_TABLE.takoyaki)
+            prodTitle = themeData.items[productCounter.takoyaki].title;
+        else if (theme == THEME_NAME_LOOKUP_TABLE.meal)
+            prodTitle = themeData.items[productCounter.meal].title;
+    }
+
+    Diagnostics.log("Got product title: " + prodTitle);
+    currentProductTitle = prodTitle;
+}
+
 function nextProduct(themeData) {
 
     //Diagnostics.log("themeData: " + JSON.stringify(themeData));
@@ -708,6 +741,7 @@ function startGame() {
     Diagnostics.log("currentRound: " + currentRound);
 
     nextProduct(firstTheme);
+    setCurrentProduct(firstTheme);
 
     if (THEME_NAME_LOOKUP_TABLE.gyoza == firstTheme.theme)
         showGyoza();
@@ -741,6 +775,7 @@ function changeTheme() {
     hideAllThemes();
 
     nextProduct(nextTheme);
+    setCurrentProduct(nextTheme);
 
     // Change theme
     if (THEME_NAME_LOOKUP_TABLE.gyoza == nextTheme.theme)
@@ -1112,53 +1147,9 @@ function getCurBubbleTxtUrl(theme) {
     return ret;
 }
 
-// Todo: need the real logic
 function getCurProdTxtUrl(theme) {
 
-    Diagnostics.log("Get cur prod with theme: " + theme);
-
-    var ret = undefined;
-
-    if (THEME_NAME_LOOKUP_TABLE.gyoza === theme) {
-
-        if (isHigh())
-            ret = PROD_TEX_LOOKUP_TABLE.gyoza_chicken_yuzu_12pcs;
-        else
-            ret = PROD_TEX_LOOKUP_TABLE.gyoza_pork_5pcs;
-    }
-    else if (THEME_NAME_LOOKUP_TABLE.sandwich === theme) {
-
-        if (isHigh())
-            ret = PROD_TEX_LOOKUP_TABLE.sandwich_alaska_wakame;
-        else
-            ret = PROD_TEX_LOOKUP_TABLE.sandwich_ham_egg;
-    }
-    else if (THEME_NAME_LOOKUP_TABLE.takoyaki === theme) {
-
-        ret = PROD_TEX_LOOKUP_TABLE.takoyaki_takoyaki;
-
-        isHigh();
-    }
-    else if (THEME_NAME_LOOKUP_TABLE.crabstick === theme) {
-        
-        if (isHigh())
-            ret = PROD_TEX_LOOKUP_TABLE.crabstick_kani_alaska;
-        else
-            ret = PROD_TEX_LOOKUP_TABLE.crabstick_kani_kamaboko;
-    }
-    else if (THEME_NAME_LOOKUP_TABLE.meal === theme) {
-
-        if (isHigh())
-            ret = PROD_TEX_LOOKUP_TABLE.meal_clams;
-        else
-            ret = PROD_TEX_LOOKUP_TABLE.meal_keemao;
-    }
-    else {
-
-        Diagnostics.log("unsupported theme: " + theme);
-    }
-
-    return ret;
+    return PROD_TEX_LOOKUP_TABLE[currentProductTitle];
 }
 
 // Todo: remove this
@@ -1565,7 +1556,7 @@ function onFaceTracked(faceIndex) {
         // clear interval
         Time.clearInterval(prodTimer);
     }
-
+    
     // Show the current theme
     if (curTheme === THEME_NAME_LOOKUP_TABLE.gyoza)
         showGyoza();
