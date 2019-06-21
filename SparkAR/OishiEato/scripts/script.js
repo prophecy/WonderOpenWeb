@@ -434,6 +434,15 @@ var productCounter = {
     meal: 0
 }
 
+function resetProductCounter() {
+
+    productCounter.gyoza = 0;
+    productCounter.sandwich = 0;
+    productCounter.crabstick = 0;
+    productCounter.takoyaki = 0;
+    productCounter.meal = 0;
+}
+
 // Beware, this's in O(n)
 function isThemeExistInRoundOrder(theme) {
 
@@ -606,23 +615,21 @@ function main() {
             storeData(data);
             //Diagnostics.log("data: " + JSON.stringify(data));
             setupItemIndex();
-            Diagnostics.log("itemIndex: " + JSON.stringify(itemIndex));
+            //Diagnostics.log("itemIndex: " + JSON.stringify(itemIndex));
             
-            var npdList = getNpdList();
-            Diagnostics.log("npdLits.length: " + npdList.length);
-            Diagnostics.log("npdList: " + JSON.stringify(npdList));
-
-            var itemList = getItemList();
-            Diagnostics.log("itemList.length: " + itemList.length);
+            // The lines below is for debugging
+            //var npdList = getNpdList();
+            //Diagnostics.log("npdLits.length: " + npdList.length);
+            //Diagnostics.log("npdList: " + JSON.stringify(npdList));
+            //var itemList = getItemList();
+            //Diagnostics.log("itemList.length: " + itemList.length);
             //Diagnostics.log("itemList: " + JSON.stringify(itemList));
-
-            createDataRoundZero();
-            Diagnostics.log("itemQueue: " + JSON.stringify(itemQueue));
-            Diagnostics.log("roundOrder: " + JSON.stringify(themeOrder));
-
-            createDataRoundMoreThanZero();
-            Diagnostics.log("itemQueue: " + JSON.stringify(itemQueue));
-            Diagnostics.log("roundOrder: " + JSON.stringify(themeOrder));
+            //createDataRoundZero();
+            //Diagnostics.log("itemQueue: " + JSON.stringify(itemQueue));
+            //Diagnostics.log("roundOrder: " + JSON.stringify(themeOrder));
+            //createDataRoundMoreThanZero();
+            //Diagnostics.log("itemQueue: " + JSON.stringify(itemQueue));
+            //Diagnostics.log("roundOrder: " + JSON.stringify(themeOrder));
         }
         else {
 
@@ -635,11 +642,45 @@ function startGame() {
 
     hideHowtoWithDelay();
     
-    showGyoza();
-    //showSandwich();
-    //showCrabstick();
-    //showMeal();
-    //showTakoyaki();
+    // Start round
+    createDataRoundZero();
+    resetProductCounter();
+
+    // Show first theme
+    var firstTheme = itemQueue[0];
+
+    // Pop the theme
+    itemQueue.shift();
+
+    Diagnostics.log("firstTheme: " + JSON.stringify(firstTheme));
+
+    if (THEME_NAME_LOOKUP_TABLE.gyoza == firstTheme.theme)
+        showGyoza();
+    else if (THEME_NAME_LOOKUP_TABLE.sandwich == firstTheme.theme)
+        showSandwich();
+    else if (THEME_NAME_LOOKUP_TABLE.crabstick == firstTheme.theme)
+        showCrabstick();
+    else if (THEME_NAME_LOOKUP_TABLE.meal == firstTheme.theme)
+        showMeal();
+    else if (THEME_NAME_LOOKUP_TABLE.takoyaki == firstTheme.theme)
+        showTakoyaki();
+}
+
+function changeTheme() {
+
+    hideAllThemes();
+
+    // Change theme
+    if (curTheme === THEME_NAME_LOOKUP_TABLE.gyoza)
+        showTakoyaki();
+    else if (curTheme === THEME_NAME_LOOKUP_TABLE.takoyaki)
+        showSandwich();
+    else if (curTheme === THEME_NAME_LOOKUP_TABLE.sandwich)
+        showCrabstick();
+    else if (curTheme === THEME_NAME_LOOKUP_TABLE.crabstick)
+        showMeal();
+    else if (curTheme === THEME_NAME_LOOKUP_TABLE.meal)
+        showGyoza();
 }
 
 const HIDE_HOWTO_DELAY = 1500;
@@ -676,23 +717,6 @@ function showOpenMouthAwhile() {
 }
 
 // ********************************************************************************
-
-function changeTheme() {
-
-    hideAllThemes();
-
-    // Change theme
-    if (curTheme === THEME_NAME_LOOKUP_TABLE.gyoza)
-        showTakoyaki();
-    else if (curTheme === THEME_NAME_LOOKUP_TABLE.takoyaki)
-        showSandwich();
-    else if (curTheme === THEME_NAME_LOOKUP_TABLE.sandwich)
-        showCrabstick();
-    else if (curTheme === THEME_NAME_LOOKUP_TABLE.crabstick)
-        showMeal();
-    else if (curTheme === THEME_NAME_LOOKUP_TABLE.meal)
-        showGyoza();
-}
 
 function hideAllThemes() {
 
