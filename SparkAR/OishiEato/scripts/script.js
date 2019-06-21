@@ -458,8 +458,8 @@ function startGame() {
     hideHowtoWithDelay();
     
     //showGyoza();
-    showSandwich();
-    //showCrabstick();
+    //showSandwich();
+    showCrabstick();
     //showMeal();
     //showTakoyaki();
 }
@@ -557,11 +557,14 @@ const QUOTE_PROD_TRANSFORM = {
         new_prod_big_scale: [1, 1, 1],
         new_quote_bg_scale: [1, 1, 1],
         new_quote_text_scale: [1, 1, 1],
+        // Rotation
+        new_prod_small_rotation: [0, 0, 0],
+        new_prod_big_rotation: [0, 0, 0],
     },
     sandwich: {
         // Point
-        new_prod_small: [-25, 0, 27],
-        new_prod_big: [-25, 0, 27],
+        new_prod_small: [-25, 0, 25],
+        new_prod_big: [-25, 0, 21],
         new_quote_bg: [13, 0, 12],
         new_quote_text: [13, 0, 12],
         // Scale
@@ -569,13 +572,16 @@ const QUOTE_PROD_TRANSFORM = {
         new_prod_big_scale: [1, 1, 1],
         new_quote_bg_scale: [1, 1, 1],
         new_quote_text_scale: [1, 1, 1],
+        // Rotation
+        new_prod_small_rotation: [0, 0, 0],
+        new_prod_big_rotation: [0, 0, 0],
 
         hand: [-30, 0, 36],
     },
     crabstick: {
         // Point
         new_prod_small: [-27, 0, 27],
-        new_prod_big: [-27, 0, 27],
+        new_prod_big: [-27, 0, 23],
         new_quote_bg: [4, 0, 5],
         new_quote_text: [4, 0, 5],
         // Scale
@@ -583,9 +589,12 @@ const QUOTE_PROD_TRANSFORM = {
         new_prod_big_scale: [1, 1, 1],
         new_quote_bg_scale: [1, 1, 1],
         new_quote_text_scale: [1, 1, 1],
+        // Rotation
+        new_prod_small_rotation: [0, 35, 0],
+        new_prod_big_rotation: [0, 35, 0],
 
-        new_crab_bg: [-12, 0, 46],
-        new_crab_fg: [-12, 0, 46],
+        new_crab_bg: [-12, 0, 40],
+        new_crab_fg: [-12, 0, 40],
         new_crab_logo: [30, 0, 38],
     },
     takoyaki: {
@@ -599,6 +608,9 @@ const QUOTE_PROD_TRANSFORM = {
         new_prod_big_scale: [1, 1, 1],
         new_quote_bg_scale: [1, 1, 1],
         new_quote_text_scale: [1, 1, 1],
+        // Rotation
+        new_prod_small_rotation: [0, 0, 0],
+        new_prod_big_rotation: [0, 0, 0],
     },
     meal: {
         // Point
@@ -611,6 +623,9 @@ const QUOTE_PROD_TRANSFORM = {
         new_prod_big_scale: [1, 1, 1],
         new_quote_bg_scale: [1, 1, 1],
         new_quote_text_scale: [1, 1, 1],
+        // Rotation
+        new_prod_small_rotation: [0, 0, 0],
+        new_prod_big_rotation: [0, 0, 0],
 
         new_ramen: [-35, 0, 12],
     },
@@ -634,6 +649,8 @@ function showGyoza() {
 
     facemesh0.material = facePaintGyozaMat;
     facemesh1.material = facePaintGyozaMat;
+
+    showNewProdSmall();
 }
 
 function showTakoyaki() {
@@ -646,6 +663,7 @@ function showTakoyaki() {
     //takoDirectionalLight0.hidden = false;
 
     loadNewDesignTakoyaki();
+    showNewProdSmall();
 }
 
 function showCrabstick() {
@@ -662,6 +680,7 @@ function showCrabstick() {
     newCrabLogo.hidden = false;
 
     loadNewDesignCrabstick();
+    showNewProdSmall();
 }
 
 function showSandwich() {
@@ -681,6 +700,7 @@ function showSandwich() {
     facemesh1.material = facePaintSandwichMat;
 
     loadNewDesignSandwich();
+    showNewProdSmall();
 }
 
 function showMeal() {
@@ -695,6 +715,7 @@ function showMeal() {
     newRamen.hidden = false;
 
     loadNewDesignMeal();
+    showNewProdSmall();
 }
 
 function initSwirlSandwich(swirl, sandwichList, sandwichMeshList, isFront) {
@@ -771,6 +792,10 @@ function setupQuoteProdPosition(transformData) {
     newProdBig.transform.scaleY = transformData.new_prod_big_scale[1];
     newProdBig.transform.scaleZ = transformData.new_prod_big_scale[2];
 
+    newProdBig.transform.rotationX = transformData.new_prod_big_rotation[0];
+    newProdBig.transform.rotationY = transformData.new_prod_big_rotation[1];
+    newProdBig.transform.rotationZ = transformData.new_prod_big_rotation[2];
+
     newProdSmall.transform.x = transformData.new_prod_small[0];
     newProdSmall.transform.y = transformData.new_prod_small[1];
     newProdSmall.transform.z = transformData.new_prod_small[2];
@@ -778,6 +803,10 @@ function setupQuoteProdPosition(transformData) {
     newProdSmall.transform.scaleX = transformData.new_prod_small_scale[0];
     newProdSmall.transform.scaleY = transformData.new_prod_small_scale[1];
     newProdSmall.transform.scaleZ = transformData.new_prod_small_scale[2];
+
+    newProdSmall.transform.rotationX = transformData.new_prod_small_rotation[0];
+    newProdSmall.transform.rotationY = transformData.new_prod_small_rotation[1];
+    newProdSmall.transform.rotationZ = transformData.new_prod_small_rotation[2];
 }
 
 // DBG
