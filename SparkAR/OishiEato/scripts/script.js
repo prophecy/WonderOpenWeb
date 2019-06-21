@@ -550,8 +550,8 @@ const QUOTE_PROD_TRANSFORM = {
         // Point
         new_prod_small: [30, 0, 10],
         new_prod_big: [30, 0, 10],
-        new_quote_bg: [-10, 0, 8],
-        new_quote_text: [-8, 0, 13],
+        new_quote_bg: [-10, 0, 13],
+        new_quote_text: [-10, 0, 13],
         // Scale
         new_prod_small_scale: [1, 1, 1],
         new_prod_big_scale: [1, 1, 1],
@@ -562,7 +562,7 @@ const QUOTE_PROD_TRANSFORM = {
         // Point
         new_prod_small: [-25, 0, 27],
         new_prod_big: [-25, 0, 27],
-        new_quote_bg: [13, 0, 10],
+        new_quote_bg: [13, 0, 12],
         new_quote_text: [13, 0, 12],
         // Scale
         new_prod_small_scale: [1, 1, 1],
@@ -576,7 +576,7 @@ const QUOTE_PROD_TRANSFORM = {
         // Point
         new_prod_small: [-27, 0, 27],
         new_prod_big: [-27, 0, 27],
-        new_quote_bg: [3, 0, 5],
+        new_quote_bg: [4, 0, 5],
         new_quote_text: [4, 0, 5],
         // Scale
         new_prod_small_scale: [1, 1, 1],
@@ -592,7 +592,7 @@ const QUOTE_PROD_TRANSFORM = {
         // Point
         new_prod_small: [30, 0, 10],
         new_prod_big: [30, 0, 10],
-        new_quote_bg: [-8.39964, 0, 10],
+        new_quote_bg: [-10, 0, 12],
         new_quote_text: [-10, 0, 12],
         // Scale
         new_prod_small_scale: [1, 1, 1],
