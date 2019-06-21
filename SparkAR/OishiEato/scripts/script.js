@@ -780,6 +780,7 @@ const testQuoteUrl = [
 ]
 var curTestQuoteUrl = 0;
 
+// Todo: need the real logic
 function getCurBubbleTxtUrl(theme) {
 
     Diagnostics.log("Get cur bubble txt with theme: " + theme);
@@ -792,13 +793,63 @@ function getCurBubbleTxtUrl(theme) {
     return ret;
 }
 
+// Todo: need the real logic
 function getCurProdTxtUrl(theme) {
 
     Diagnostics.log("Get cur prod with theme: " + theme);
 
+    var ret = undefined;
+
     if (THEME_NAME_LOOKUP_TABLE.gyoza === theme) {
 
+        if (isHigh())
+            ret = PROD_TEX_LOOKUP_TABLE.gyoza_chicken_yuzu_12pcs;
+        else
+            ret = PROD_TEX_LOOKUP_TABLE.gyoza_pork_5pcs;
     }
+    else if (THEME_NAME_LOOKUP_TABLE.sandwich === theme) {
+
+        if (isHigh())
+            ret = PROD_TEX_LOOKUP_TABLE.sandwich_alaska_wakame;
+        else
+            ret = PROD_TEX_LOOKUP_TABLE.sandwich_ham_egg;
+    }
+    else if (THEME_NAME_LOOKUP_TABLE.takoyaki === theme) {
+
+        ret = PROD_TEX_LOOKUP_TABLE.takoyaki_takoyaki;
+
+        isHigh();
+    }
+    else if (THEME_NAME_LOOKUP_TABLE.crabstick === theme) {
+        
+        if (isHigh())
+            ret = PROD_TEX_LOOKUP_TABLE.crabstick_kani_alaska;
+        else
+            ret = PROD_TEX_LOOKUP_TABLE.crabstick_kani_kamaboko;
+    }
+    else if (THEME_NAME_LOOKUP_TABLE.meal === theme) {
+
+        if (isHigh())
+            ret = PROD_TEX_LOOKUP_TABLE.meal_clams;
+        else
+            ret = PROD_TEX_LOOKUP_TABLE.meal_keemao;
+    }
+    else {
+
+        Diagnostics.log("unsupported theme: " + theme);
+    }
+
+    return ret;
+}
+
+// Todo: remove this
+var prevHighLow = true;
+function isHigh() {
+
+    var flag = !prevHighLow;
+    prevHighLow = !prevHighLow;
+
+    return flag;
 }
 
 function loadNewDesignGyoza() {
@@ -807,8 +858,10 @@ function loadNewDesignGyoza() {
 
     setupMaterial(newQuoteBgMesh, curResIndex++, NEW_DESIGN_URL_TABLE.gyoza_bubble_bg);
     setupMaterial(newQuoteTxtMesh, curResIndex++, getCurBubbleTxtUrl(THEME_NAME_LOOKUP_TABLE.gyoza));
-    setupMaterial(newProdBigMesh, curResIndex++, NEW_DESIGN_URL_TABLE.gyoza_prod_big);
-    setupMaterial(newProdSmallMesh, curResIndex++, NEW_DESIGN_URL_TABLE.gyoza_prod_big);
+
+    var prodUrl = getCurProdTxtUrl(THEME_NAME_LOOKUP_TABLE.gyoza)
+    setupMaterial(newProdBigMesh, curResIndex++, prodUrl);
+    setupMaterial(newProdSmallMesh, curResIndex++, prodUrl);
 
     // Setup position
     setupQuoteProdPosition(QUOTE_PROD_POSITION.gyoza);
@@ -852,8 +905,10 @@ function loadNewDesignTakoyaki() {
 
     setupMaterial(newQuoteBgMesh, curResIndex++, NEW_DESIGN_URL_TABLE.takoyaki_bubble_bg);
     setupMaterial(newQuoteTxtMesh, curResIndex++, getCurBubbleTxtUrl(THEME_NAME_LOOKUP_TABLE.takoyaki));
-    setupMaterial(newProdBigMesh, curResIndex++, NEW_DESIGN_URL_TABLE.takoyaki_prod);
-    setupMaterial(newProdSmallMesh, curResIndex++, NEW_DESIGN_URL_TABLE.takoyaki_prod);
+
+    var prodUrl = getCurProdTxtUrl(THEME_NAME_LOOKUP_TABLE.takoyaki)
+    setupMaterial(newProdBigMesh, curResIndex++, prodUrl);
+    setupMaterial(newProdSmallMesh, curResIndex++, prodUrl);
 
     // Setup position
     setupQuoteProdPosition(QUOTE_PROD_POSITION.takoyaki);
@@ -873,8 +928,10 @@ function loadNewDesignSandwich() {
 
     setupMaterial(newQuoteBgMesh, curResIndex++, NEW_DESIGN_URL_TABLE.sandwich_bubble_bg);
     setupMaterial(newQuoteTxtMesh, curResIndex++, getCurBubbleTxtUrl(THEME_NAME_LOOKUP_TABLE.sandwich));
-    setupMaterial(newProdBigMesh, curResIndex++, NEW_DESIGN_URL_TABLE.sandwich_prod);
-    setupMaterial(newProdSmallMesh, curResIndex++, NEW_DESIGN_URL_TABLE.sandwich_prod);
+
+    var prodUrl = getCurProdTxtUrl(THEME_NAME_LOOKUP_TABLE.sandwich)
+    setupMaterial(newProdBigMesh, curResIndex++, prodUrl);
+    setupMaterial(newProdSmallMesh, curResIndex++, prodUrl);
 
     setupMaterial(newHandMesh, curResIndex++, NEW_DESIGN_URL_TABLE.sandwich_hand);
 
@@ -900,8 +957,10 @@ function loadNewDesignCrabstick() {
 
     setupMaterial(newQuoteBgMesh, curResIndex++, NEW_DESIGN_URL_TABLE.crabstick_bubble_bg);
     setupMaterial(newQuoteTxtMesh, curResIndex++, getCurBubbleTxtUrl(THEME_NAME_LOOKUP_TABLE.crabstick));
-    setupMaterial(newProdBigMesh, curResIndex++, NEW_DESIGN_URL_TABLE.crabstick_prod);
-    setupMaterial(newProdSmallMesh, curResIndex++, NEW_DESIGN_URL_TABLE.crabstick_prod);
+
+    var prodUrl = getCurProdTxtUrl(THEME_NAME_LOOKUP_TABLE.crabstick)
+    setupMaterial(newProdBigMesh, curResIndex++, prodUrl);
+    setupMaterial(newProdSmallMesh, curResIndex++, prodUrl);
 
     setupMaterial(newCrabBgMesh, curResIndex++, NEW_DESIGN_URL_TABLE.crabstick_crab_bg);
     setupMaterial(newCrabFgMesh, curResIndex++, NEW_DESIGN_URL_TABLE.crabstick_crab_fg);
@@ -937,8 +996,10 @@ function loadNewDesignMeal() {
 
     setupMaterial(newQuoteBgMesh, curResIndex++, NEW_DESIGN_URL_TABLE.meal_bubble_bg);
     setupMaterial(newQuoteTxtMesh, curResIndex++, getCurBubbleTxtUrl(THEME_NAME_LOOKUP_TABLE.meal));
-    setupMaterial(newProdBigMesh, curResIndex++, NEW_DESIGN_URL_TABLE.meal_prod);
-    setupMaterial(newProdSmallMesh, curResIndex++, NEW_DESIGN_URL_TABLE.meal_prod);
+
+    var prodUrl = getCurProdTxtUrl(THEME_NAME_LOOKUP_TABLE.meal)
+    setupMaterial(newProdBigMesh, curResIndex++, prodUrl);
+    setupMaterial(newProdSmallMesh, curResIndex++, prodUrl);
 
     setupMaterial(newRamenMesh, curResIndex++, NEW_DESIGN_URL_TABLE.meal_ramen);
 
