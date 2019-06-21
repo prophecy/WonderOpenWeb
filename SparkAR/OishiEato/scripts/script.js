@@ -457,9 +457,9 @@ function startGame() {
 
     hideHowtoWithDelay();
     
-    //showGyoza();
+    showGyoza();
     //showSandwich();
-    showCrabstick();
+    //showCrabstick();
     //showMeal();
     //showTakoyaki();
 }
