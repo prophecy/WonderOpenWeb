@@ -670,17 +670,27 @@ function changeTheme() {
 
     hideAllThemes();
 
+    // Is end round, create the new round
+    if (itemQueue.length <= 0) {
+
+        Diagnostics.log("Create new round!");
+        createDataRoundMoreThanZero();
+    }
+
+    var nextTheme = itemQueue[0];
+    itemQueue.shift();
+
     // Change theme
-    if (curTheme === THEME_NAME_LOOKUP_TABLE.gyoza)
-        showTakoyaki();
-    else if (curTheme === THEME_NAME_LOOKUP_TABLE.takoyaki)
-        showSandwich();
-    else if (curTheme === THEME_NAME_LOOKUP_TABLE.sandwich)
-        showCrabstick();
-    else if (curTheme === THEME_NAME_LOOKUP_TABLE.crabstick)
-        showMeal();
-    else if (curTheme === THEME_NAME_LOOKUP_TABLE.meal)
+    if (THEME_NAME_LOOKUP_TABLE.gyoza == nextTheme.theme)
         showGyoza();
+    else if (THEME_NAME_LOOKUP_TABLE.sandwich == nextTheme.theme)
+        showSandwich();
+    else if (THEME_NAME_LOOKUP_TABLE.crabstick == nextTheme.theme)
+        showCrabstick();
+    else if (THEME_NAME_LOOKUP_TABLE.meal == nextTheme.theme)
+        showMeal();
+    else if (THEME_NAME_LOOKUP_TABLE.takoyaki == nextTheme.theme)
+        showTakoyaki();
 }
 
 const HIDE_HOWTO_DELAY = 1500;
