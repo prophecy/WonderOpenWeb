@@ -426,6 +426,14 @@ var itemIndex = {
     meal: -1,
 }
 
+var productCounter = {
+    gyoza: 0,
+    sandwich: 0,
+    crabstick: 0,
+    takoyaki: 0,
+    meal: 0
+}
+
 // Beware, this's in O(n)
 function isThemeExistInRoundOrder(theme) {
 
@@ -514,6 +522,11 @@ function createDataRoundMoreThanZero() {
             index = itemIndex.takoyaki;
         else if (THEME_NAME_LOOKUP_TABLE.meal == theme)
             index = itemIndex.meal;
+
+        if (index < 0 || index >= itemList.length) {
+            Diagnostics.log("Index out of bound!");
+            continue;
+        }
 
         itemQueue.push(itemList[index]);
     }
