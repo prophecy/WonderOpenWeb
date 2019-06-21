@@ -48,6 +48,12 @@ const TouchGestures = require('TouchGestures');
 const CameraInfo = require('CameraInfo');
 const FaceGestures = require('FaceGestures');
 const IrisTracking = require("IrisTracking");
+const Random = require('Random');
+
+for (var i = 0; i<30; ++i) {
+
+    Diagnostics.log("rand: " + Random.random());
+}
 
 // --------------------------------------------------------------------------------
 // SCENE DATABASE
@@ -123,130 +129,6 @@ const facePaintGyozaMat = Materials.get("face_paint_gyoza_mat");
 const facePaintSandwichMat = Materials.get("face_paint_sandwich_mat");
 const facePaintInvisibleMat = Materials.get("face_paint_invisible_mat");
 
-// --------------------------------------------------------------------------------
-// RESOURCES for SANDWICH THEME
-// stub
-/*
-const headSandwichRoot = Scene.root.find("head_sandwich_root");
-const headGlassesMesh = Scene.root.find("head_glasses_mesh");
-const headGlassesTex = "head_glasses";
-
-const headSwirl0 = Scene.root.find("head_swirl0");
-const headSwirl1 = Scene.root.find("head_swirl1");
-const headSwirl0Mesh = Scene.root.find("head_swirl0_mesh");
-const headSwirl1Mesh = Scene.root.find("head_swirl1_mesh");
-
-const headSandwichRoot1 = Scene.root.find("head_sandwich_root1");
-const headGlasses1Mesh = Scene.root.find("head_glasses1_mesh");
-const headSwirl01Mesh = Scene.root.find("head_swirl01_mesh");
-const headSwirl11Mesh = Scene.root.find("head_swirl11_mesh");
-
-const headSwirlTex = "head_swirl";
-
-const frontLogoSandwich = Scene.root.find("front_logo_sandwich");
-*/
-
-// --------------------------------------------------------------------------------
-// RESOURCES for TAKOYAKI THEME
-
-// stub
-/*
-const frontTakoyaki = Scene.root.find('front_takoyaki');
-
-const takoyakiFrontSnack0 = Scene.root.find("takoyaki_front_snack0");
-const takoyakiFrontSnack1 = Scene.root.find("takoyaki_front_snack1");
-const takoyakiFrontTako = Scene.root.find("takoyaki_front_tako");
-const takoyakiFrontOishi = Scene.root.find("takoyaki_front_oishi");
-
-const takoyakiFrontSnack0Mesh = Scene.root.find("takoyaki_front_snack0_mesh");
-const takoyakiFrontSnack1Mesh = Scene.root.find("takoyaki_front_snack1_mesh");
-const takoyakiFrontTakoMesh = Scene.root.find("takoyaki_front_tako_mesh");
-const takoyakiFrontOishiMesh = Scene.root.find("takoyaki_front_oishi_mesh");
-
-const takoyakiFrontSnackTex = "takoyaki_front_snack_tex";
-const takoyakiFrontTakoTex = "takoyaki_front_tako_tex";
-const takoyakiFrontOishiTex = "takoyaki_front_oishi_tex";
-
-// Head, takoyaki
-const headTakoyakiRoot = Scene.root.find("head_takoyaki_root");
-const headTakoyakiCatEarsMesh = Scene.root.find("head_takoyaki_cat_ears_mesh");
-const headTakoyakiNoseMesh = Scene.root.find("head_takoyaki_nose_mesh");
-const headTakoyakiWhisker0Mesh = Scene.root.find("head_takoyaki_whisker0_mesh");
-const headTakoyakiWhisker1Mesh = Scene.root.find("head_takoyaki_whisker1_mesh");
-const headCatEarsTex = "head_takoyaki_cat_ears";
-const headNoseTex = "head_takoyaki_nose";
-const headWhiskerTex = "head_takoyaki_whiskers";
-
-const headTakoyakiRoot1 = Scene.root.find("head_takoyaki_root1");
-const headTakoyakiCatEars1Mesh = Scene.root.find("head_takoyaki_cat_ears1_mesh");
-const headTakoyakiNose1Mesh = Scene.root.find("head_takoyaki_nose1_mesh");
-const headTakoyakiWhisker01Mesh = Scene.root.find("head_takoyaki_whisker01_mesh");
-const headTakoyakiWhisker11Mesh = Scene.root.find("head_takoyaki_whisker11_mesh");
-
-// Head, takoyaki special
-const headTakoyakiSpecialRoot = Scene.root.find("head_takoyaki_spec_root");
-const headTakoyakiBigMesh = Scene.root.find("head_takoyaki_big_mesh");
-const headTakoyakiBackMesh = Scene.root.find("head_takoyaki_back_mesh");
-const headTakoyakiBigTex = "head_takoyaki_big";
-const headTakoyakiBackTex = "head_takoyaki_back";
-
-const headTakoyakiSpecial1Root = Scene.root.find("head_takoyaki_spec_root1");
-const headTakoyakiBig1Mesh = Scene.root.find("head_takoyaki_big1_mesh");
-const headTakoyakiBack1Mesh = Scene.root.find("head_takoyaki_back1_mesh");
-
-const pinkyFaceMat = Materials.get("pinky_face_mat");
-
-const frontLogoTakoyaki = Scene.root.find("front_logo_takoyaki");
-*/
-
-// --------------------------------------------------------------------------------
-// RESOURCES for CRABSTICK THEME
-// stub
-/*
-const headCrabstickRoot = Scene.root.find("head_crabstick_root");
-const headCrabstickHatMesh = Scene.root.find("head_crabstick_hat_mesh");
-const headCrabstickScalfMesh = Scene.root.find("head_crabstick_scalf_mesh");
-
-const headCrabstickRoot1 = Scene.root.find("head_crabstick_root1");
-const headCrabstickHat1Mesh = Scene.root.find("head_crabstick_hat1_mesh");
-const headCrabstickScalf1Mesh = Scene.root.find("head_crabstick_scalf1_mesh");
-
-const headCrabstickHatTex = "head_crabstick_hat_tex";
-const headCrabstickScalfTex = "head_crabstick_scalf_tex";
-
-const frontCrabstick = Scene.root.find("front_crabstick");
-const crabstickFrontBareCrabMesh = Scene.root.find("bare_crab_mesh");
-const crabstickFrontHoldingCrabMesh = Scene.root.find("holding_crab_mesh");
-const crabstickFrontLogoCrabMesh = Scene.root.find("logo_crab_mesh");
-
-const frontLogoCrabstick = Scene.root.find("front_logo_crabstick");
-*/
-
-// --------------------------------------------------------------------------------
-// RESOURCES for RAMEN THEME
-// stub
-/*
-const headRamenRoot = Scene.root.find("head_ramen_root");
-const headRamenEyesMesh = Scene.root.find("head_ramen_eyes_mesh");
-const headRamenEyesTex = "head_ramen_eyes_tex";
-
-const headRamenRoot1 = Scene.root.find("head_ramen_root1");
-const headRamenEyes1Mesh = Scene.root.find("head_ramen_eyes1_mesh");
-
-const frontMealRoot = Scene.root.find("front_meal");
-const mealFrontFlagMesh = Scene.root.find("flag_mesh");
-const mealFrontBowlMesh = Scene.root.find("bowl_mesh");
-const mealFrontStillRamenMesh = Scene.root.find("still_ramen_mesh");
-
-const mealShopstick00_pivot = Scene.root.find("shopstick00_pivot");
-const mealShopstick01_pivot = Scene.root.find("shopstick01_pivot");
-
-const mealShopstick00mesh = Scene.root.find("shopstick00_mesh");
-const mealShopstick01mesh = Scene.root.find("shopstick01_mesh");
-
-const frontLogoRamen0 = Scene.root.find("front_logo_ramen0");
-const frontLogoRamen1 = Scene.root.find("front_logo_ramen1");
-*/
 // --------------------------------------------------------------------------------
 // RESOURCES for NEW PRODUCT
 
@@ -1192,14 +1074,6 @@ function initBubbleTex() {
 
 initBubbleTex();
 
-// Handle env obj movements
-//applyBalloonMovement(gyozaFloat, 0.6, 0.4, 0.2, 1500, -3000, 4500);
-//applyRotationBounce(prodPlane0, 50, 20, 1800); // The small one
-//applyRotationBounce(prodPlane1, 0, 50, 1600); // The big one
-//applyRotationBounce(prodPlane2, 50, 20, 2000); // The big one
-
-//applyParalaxMovement(undefined, prodRoot, 0.1, 0.1);
-
 // --------------------------------------------------------------------------------
 // @ FACE DETECTED
 
@@ -1429,9 +1303,9 @@ function getMaterialWithDiffuse(matName, texName) {
 
 function getMaterialWithDiffuseByUrl(matName, texName, url) {
 
-    Diagnostics.log("Get mat: " + matName);
-    Diagnostics.log("Get tex: " + texName);
-    Diagnostics.log("Load texture with URL: " + url);
+    //Diagnostics.log("Get mat: " + matName);
+    //Diagnostics.log("Get tex: " + texName);
+    //Diagnostics.log("Load texture with URL: " + url);
 
     var tex = Textures.get(texName);
     tex.url = url;
@@ -1956,12 +1830,10 @@ function startRamenFeeder() {
     mat.diffuse = diffuseTex;
 
     var maskMatList = [
-        //Materials.get("ramen_mask_mat0"),
         Materials.get("ramen_mask_mat1"), 
         Materials.get("ramen_mask_mat2"), Materials.get("ramen_mask_mat3"), 
         Materials.get("ramen_mask_mat4"), Materials.get("ramen_mask_mat5"), 
         Materials.get("ramen_mask_mat6"), Materials.get("ramen_mask_mat7"), 
-        //Materials.get("ramen_mask_mat8"), 
     ]
 
     // Apply diffuse tex
