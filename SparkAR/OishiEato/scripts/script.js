@@ -53,41 +53,7 @@ const Random = require('Random');
 // --------------------------------------------------------------------------------
 // SCENE DATABASE
 
-// stub
-// Handle bubbles of face #0
-/*
-var bubbleList0 = [];
-bubbleList0.push(Scene.root.find('bubble00'));
-bubbleList0.push(Scene.root.find('bubble01'));
-bubbleList0.push(Scene.root.find('bubble02'));
-bubbleList0.push(Scene.root.find('bubble03'));
-bubbleList0.push(Scene.root.find('bubble04'));
-bubbleList0.push(Scene.root.find('bubble05'));
-bubbleList0.push(Scene.root.find('bubble06'));
-
-// Verify
-for (var i=0; i<bubbleList0.length; ++i)
-    if (bubbleList0[i] === undefined)
-        Diagnostics.log("obj is undefined");
-
-// Handle bubbles of face #1
-var bubbleList1 = [];
-bubbleList1.push(Scene.root.find('bubble10'));
-bubbleList1.push(Scene.root.find('bubble11'));
-bubbleList1.push(Scene.root.find('bubble12'));
-bubbleList1.push(Scene.root.find('bubble13'));
-bubbleList1.push(Scene.root.find('bubble14'));
-bubbleList1.push(Scene.root.find('bubble15'));
-bubbleList1.push(Scene.root.find('bubble16'));
-
-// Verify
-for (var i=0; i<bubbleList1.length; ++i)
-    if (bubbleList1[i] === undefined)
-        Diagnostics.log("obj is undefined");
-*/
-
 // Food feeder for player #0
-
 var foodFeederRoot0 = Scene.root.find('foodFeederRoot0');
 
 var crushPoolList0 = [];
