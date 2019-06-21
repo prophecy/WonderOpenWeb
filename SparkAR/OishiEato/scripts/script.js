@@ -426,22 +426,7 @@ var itemIndex = {
     meal: -1,
 }
 
-var productCounter = {
-    gyoza: 0,
-    sandwich: 0,
-    crabstick: 0,
-    takoyaki: 0,
-    meal: 0
-}
-
-function resetProductCounter() {
-
-    productCounter.gyoza = 0;
-    productCounter.sandwich = 0;
-    productCounter.crabstick = 0;
-    productCounter.takoyaki = 0;
-    productCounter.meal = 0;
-}
+var currentRound = 0;
 
 // Beware, this's in O(n)
 function isThemeExistInRoundOrder(theme) {
@@ -644,7 +629,6 @@ function startGame() {
     
     // Start round
     createDataRoundZero();
-    resetProductCounter();
 
     // Show first theme
     var firstTheme = itemQueue[0];
@@ -653,6 +637,7 @@ function startGame() {
     itemQueue.shift();
 
     Diagnostics.log("firstTheme: " + JSON.stringify(firstTheme));
+    Diagnostics.log("currentRound: " + currentRound);
 
     if (THEME_NAME_LOOKUP_TABLE.gyoza == firstTheme.theme)
         showGyoza();
@@ -668,17 +653,22 @@ function startGame() {
 
 function changeTheme() {
 
-    hideAllThemes();
-
     // Is end round, create the new round
     if (itemQueue.length <= 0) {
 
         Diagnostics.log("Create new round!");
+        
+        currentRound += 1;
+        Diagnostics.log("currentRound: " + currentRound);
+        
         createDataRoundMoreThanZero();
     }
 
     var nextTheme = itemQueue[0];
     itemQueue.shift();
+
+    // Hide themes
+    hideAllThemes();
 
     // Change theme
     if (THEME_NAME_LOOKUP_TABLE.gyoza == nextTheme.theme)
