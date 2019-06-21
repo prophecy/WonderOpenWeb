@@ -415,22 +415,23 @@ function getItemList() {
 }
 
 // Store round order, so the game will loop in the certain way
-var roundOrder = [];
+var themeOrder = [];
 var itemQueue = [];
-var productCounter = {
-    gyoza: 0,
-    sandwich: 0,
-    crabstick: 0,
-    takoyaki: 0,
-    meal: 0,
+
+var itemIndex = {
+    gyoza: -1,
+    sandwich: -1,
+    crabstick: -1,
+    takoyaki: -1,
+    meal: -1,
 }
 
 // Beware, this's in O(n)
 function isThemeExistInRoundOrder(theme) {
 
-    for (var i=0; i<roundOrder.length; ++i) {
+    for (var i=0; i<themeOrder.length; ++i) {
 
-        var it = roundOrder[i];
+        var it = themeOrder[i];
         if (theme == it)
             return true;
     }
@@ -438,10 +439,10 @@ function isThemeExistInRoundOrder(theme) {
     return false;
 }
 
-function createDataRound0() {
-
+function createDataRoundZero() {
+    
     // Clear
-    roundOrder = [];
+    themeOrder = [];
     itemQueue = [];
 
     // Add npd item
@@ -453,9 +454,9 @@ function createDataRound0() {
         
         var isExist = isThemeExistInRoundOrder(item.theme);
         if (!isExist)
-            roundOrder.push(item.theme);
+            themeOrder.push(item.theme);
     }
-
+    
     // Add item
     var itemList = getItemList();
     for (var i=0; i<itemList.length; ++i) {
@@ -464,9 +465,58 @@ function createDataRound0() {
         var isExist = isThemeExistInRoundOrder(item.theme);
         if (!isExist) {
             itemQueue.push(item);
-            roundOrder.push(item.theme);
+            themeOrder.push(item.theme);
         }
-    } 
+    }
+}
+
+function setupItemIndex() {
+
+    var itemList = getItemList();
+    for (var i=0; i<itemList.length; ++i) {
+
+        var item = itemList[i];
+
+        if (item.theme == THEME_NAME_LOOKUP_TABLE.gyoza)
+            itemIndex.gyoza = i;
+        else if (item.theme == THEME_NAME_LOOKUP_TABLE.sandwich)
+            itemIndex.sandwich = i;
+        else if (item.theme == THEME_NAME_LOOKUP_TABLE.crabstick)
+            itemIndex.crabstick = i;
+        else if (item.theme == THEME_NAME_LOOKUP_TABLE.takoyaki)
+            itemIndex.takoyaki = i;
+        else if (item.theme == THEME_NAME_LOOKUP_TABLE.meal)
+            itemIndex.meal = i;
+    }
+}
+
+function createDataRoundMoreThanZero() {
+
+    // Clear
+    itemQueue = [];
+
+    // Get item
+    var itemList = getItemList();
+
+    // Add item
+    for (var i=0; i<themeOrder.length; ++i) {
+
+        var theme = themeOrder[i];
+        var index = -1;
+
+        if (THEME_NAME_LOOKUP_TABLE.gyoza == theme)
+            index = itemIndex.gyoza;
+        else if (THEME_NAME_LOOKUP_TABLE.sandwich == theme)
+            index = itemIndex.sandwich;
+        else if (THEME_NAME_LOOKUP_TABLE.crabstick == theme)
+            index = itemIndex.crabstick;
+        else if (THEME_NAME_LOOKUP_TABLE.takoyaki == theme)
+            index = itemIndex.takoyaki;
+        else if (THEME_NAME_LOOKUP_TABLE.meal == theme)
+            index = itemIndex.meal;
+
+        itemQueue.push(itemList[index]);
+    }
 }
 
 // --------------------------------------------------------------------------------
@@ -541,6 +591,9 @@ function main() {
         if (data) {
 
             storeData(data);
+            //Diagnostics.log("data: " + JSON.stringify(data));
+            setupItemIndex();
+            Diagnostics.log("itemIndex: " + JSON.stringify(itemIndex));
             
             var npdList = getNpdList();
             Diagnostics.log("npdLits.length: " + npdList.length);
@@ -548,10 +601,15 @@ function main() {
 
             var itemList = getItemList();
             Diagnostics.log("itemList.length: " + itemList.length);
+            //Diagnostics.log("itemList: " + JSON.stringify(itemList));
 
-            createDataRound0();
+            createDataRoundZero();
             Diagnostics.log("itemQueue: " + JSON.stringify(itemQueue));
-            Diagnostics.log("roundOrder: " + JSON.stringify(roundOrder));
+            Diagnostics.log("roundOrder: " + JSON.stringify(themeOrder));
+
+            createDataRoundMoreThanZero();
+            Diagnostics.log("itemQueue: " + JSON.stringify(itemQueue));
+            Diagnostics.log("roundOrder: " + JSON.stringify(themeOrder));
         }
         else {
 
