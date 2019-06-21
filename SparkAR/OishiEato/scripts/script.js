@@ -458,9 +458,9 @@ function startGame() {
     hideHowtoWithDelay();
     
     //showGyoza();
-    //showSandwich();
+    showSandwich();
     //showCrabstick();
-    showMeal();
+    //showMeal();
     //showTakoyaki();
 }
 
@@ -544,41 +544,74 @@ function hideAllThemes() {
     newRamen.hidden = true;
 }
 
-const QUOTE_PROD_POSITION = {
+const QUOTE_PROD_TRANSFORM = {
 
     gyoza: {
+        // Point
         new_prod_small: [30, 0, 10],
         new_prod_big: [30, 0, 10],
         new_quote_bg: [-10, 0, 8],
-        new_quote_text: [-10, 0, 8],
+        new_quote_text: [-8, 0, 13],
+        // Scale
+        new_prod_small_scale: [1, 1, 1],
+        new_prod_big_scale: [1, 1, 1],
+        new_quote_bg_scale: [1, 1, 1],
+        new_quote_text_scale: [1, 1, 1],
     },
     sandwich: {
+        // Point
         new_prod_small: [-25, 0, 27],
         new_prod_big: [-25, 0, 27],
         new_quote_bg: [13, 0, 10],
-        new_quote_text: [13, 0, 10],
+        new_quote_text: [13, 0, 12],
+        // Scale
+        new_prod_small_scale: [1, 1, 1],
+        new_prod_big_scale: [1, 1, 1],
+        new_quote_bg_scale: [1, 1, 1],
+        new_quote_text_scale: [1, 1, 1],
+
         hand: [-30, 0, 36],
     },
     crabstick: {
+        // Point
         new_prod_small: [-27, 0, 27],
         new_prod_big: [-27, 0, 27],
         new_quote_bg: [3, 0, 5],
-        new_quote_text: [5.5, 0, 2],
+        new_quote_text: [4, 0, 5],
+        // Scale
+        new_prod_small_scale: [1, 1, 1],
+        new_prod_big_scale: [1, 1, 1],
+        new_quote_bg_scale: [1, 1, 1],
+        new_quote_text_scale: [1, 1, 1],
+
         new_crab_bg: [-12, 0, 46],
         new_crab_fg: [-12, 0, 46],
         new_crab_logo: [30, 0, 38],
     },
     takoyaki: {
+        // Point
         new_prod_small: [30, 0, 10],
         new_prod_big: [30, 0, 10],
         new_quote_bg: [-8.39964, 0, 10],
-        new_quote_text: [-8.39964, 0, 10],
+        new_quote_text: [-10, 0, 12],
+        // Scale
+        new_prod_small_scale: [1, 1, 1],
+        new_prod_big_scale: [1, 1, 1],
+        new_quote_bg_scale: [1, 1, 1],
+        new_quote_text_scale: [1, 1, 1],
     },
     meal: {
+        // Point
         new_prod_small: [-26, 0, 29],
         new_prod_big: [-26, 0, 29],
         new_quote_bg: [9, 0, 5],
         new_quote_text: [9, 0, 5],
+        // Scale
+        new_prod_small_scale: [1, 1, 1],
+        new_prod_big_scale: [1, 1, 1],
+        new_quote_bg_scale: [1, 1, 1],
+        new_quote_text_scale: [1, 1, 1],
+
         new_ramen: [-35, 0, 12],
     },
 };
@@ -712,23 +745,39 @@ function initSwirlSandwich(swirl, sandwichList, sandwichMeshList, isFront) {
 
 var gyozaSeqMatList = [];
 
-function setupQuoteProdPosition(positionData) {
+function setupQuoteProdPosition(transformData) {
 
-    newQuoteBg.transform.x = positionData.new_quote_bg[0];
-    newQuoteBg.transform.y = positionData.new_quote_bg[1];
-    newQuoteBg.transform.z = positionData.new_quote_bg[2];
+    newQuoteBg.transform.x = transformData.new_quote_bg[0];
+    newQuoteBg.transform.y = transformData.new_quote_bg[1];
+    newQuoteBg.transform.z = transformData.new_quote_bg[2];
 
-    newQuoteTxt.transform.x = positionData.new_quote_text[0];
-    newQuoteTxt.transform.y = positionData.new_quote_text[1];
-    newQuoteTxt.transform.z = positionData.new_quote_text[2];
+    newQuoteBg.transform.scaleX = transformData.new_quote_bg_scale[0];
+    newQuoteBg.transform.scaleY = transformData.new_quote_bg_scale[1];
+    newQuoteBg.transform.scaleZ = transformData.new_quote_bg_scale[2];
 
-    newProdBig.transform.x = positionData.new_prod_big[0];
-    newProdBig.transform.y = positionData.new_prod_big[1];
-    newProdBig.transform.z = positionData.new_prod_big[2];
+    newQuoteTxt.transform.x = transformData.new_quote_text[0];
+    newQuoteTxt.transform.y = transformData.new_quote_text[1];
+    newQuoteTxt.transform.z = transformData.new_quote_text[2];
 
-    newProdSmall.transform.x = positionData.new_prod_small[0];
-    newProdSmall.transform.y = positionData.new_prod_small[1];
-    newProdSmall.transform.z = positionData.new_prod_small[2];
+    newQuoteTxt.transform.scaleX = transformData.new_quote_text_scale[0];
+    newQuoteTxt.transform.scaleY = transformData.new_quote_text_scale[1];
+    newQuoteTxt.transform.scaleZ = transformData.new_quote_text_scale[2];
+
+    newProdBig.transform.x = transformData.new_prod_big[0];
+    newProdBig.transform.y = transformData.new_prod_big[1];
+    newProdBig.transform.z = transformData.new_prod_big[2];
+
+    newProdBig.transform.scaleX = transformData.new_prod_big_scale[0];
+    newProdBig.transform.scaleY = transformData.new_prod_big_scale[1];
+    newProdBig.transform.scaleZ = transformData.new_prod_big_scale[2];
+
+    newProdSmall.transform.x = transformData.new_prod_small[0];
+    newProdSmall.transform.y = transformData.new_prod_small[1];
+    newProdSmall.transform.z = transformData.new_prod_small[2];
+
+    newProdSmall.transform.scaleX = transformData.new_prod_small_scale[0];
+    newProdSmall.transform.scaleY = transformData.new_prod_small_scale[1];
+    newProdSmall.transform.scaleZ = transformData.new_prod_small_scale[2];
 }
 
 // DBG
@@ -830,7 +879,7 @@ function loadNewDesignGyoza() {
     setupMaterial(newProdSmallMesh, curResIndex++, prodUrl);
 
     // Setup position
-    setupQuoteProdPosition(QUOTE_PROD_POSITION.gyoza);
+    setupQuoteProdPosition(QUOTE_PROD_TRANSFORM.gyoza);
     
     // Add gyoza sequence
     var mat = getMaterialWithDiffuseByUrl(
@@ -877,7 +926,7 @@ function loadNewDesignTakoyaki() {
     setupMaterial(newProdSmallMesh, curResIndex++, prodUrl);
 
     // Setup position
-    setupQuoteProdPosition(QUOTE_PROD_POSITION.takoyaki);
+    setupQuoteProdPosition(QUOTE_PROD_TRANSFORM.takoyaki);
     
     function setupMaterial(mesh, index, texName) {
 
@@ -902,11 +951,11 @@ function loadNewDesignSandwich() {
     setupMaterial(newHandMesh, curResIndex++, NEW_DESIGN_URL_TABLE.sandwich_hand);
 
     // Setup position
-    setupQuoteProdPosition(QUOTE_PROD_POSITION.sandwich);
+    setupQuoteProdPosition(QUOTE_PROD_TRANSFORM.sandwich);
 
-    newHand.transform.x = QUOTE_PROD_POSITION.sandwich.hand[0];
-    newHand.transform.y = QUOTE_PROD_POSITION.sandwich.hand[1];
-    newHand.transform.z = QUOTE_PROD_POSITION.sandwich.hand[2];
+    newHand.transform.x = QUOTE_PROD_TRANSFORM.sandwich.hand[0];
+    newHand.transform.y = QUOTE_PROD_TRANSFORM.sandwich.hand[1];
+    newHand.transform.z = QUOTE_PROD_TRANSFORM.sandwich.hand[2];
     
     function setupMaterial(mesh, index, texName) {
 
@@ -932,20 +981,20 @@ function loadNewDesignCrabstick() {
     setupMaterial(newCrabFgMesh, curResIndex++, NEW_DESIGN_URL_TABLE.crabstick_crab_fg);
     setupMaterial(newCrabLogoMesh, curResIndex++, NEW_DESIGN_URL_TABLE.crabstick_crab_logo);
 
-    newCrabBg.transform.x = QUOTE_PROD_POSITION.crabstick.new_crab_bg[0];
-    newCrabBg.transform.y = QUOTE_PROD_POSITION.crabstick.new_crab_bg[1];
-    newCrabBg.transform.z = QUOTE_PROD_POSITION.crabstick.new_crab_bg[2];
+    newCrabBg.transform.x = QUOTE_PROD_TRANSFORM.crabstick.new_crab_bg[0];
+    newCrabBg.transform.y = QUOTE_PROD_TRANSFORM.crabstick.new_crab_bg[1];
+    newCrabBg.transform.z = QUOTE_PROD_TRANSFORM.crabstick.new_crab_bg[2];
     
-    newCrabFg.transform.x = QUOTE_PROD_POSITION.crabstick.new_crab_fg[0];
-    newCrabFg.transform.y = QUOTE_PROD_POSITION.crabstick.new_crab_fg[1];
-    newCrabFg.transform.z = QUOTE_PROD_POSITION.crabstick.new_crab_fg[2];
+    newCrabFg.transform.x = QUOTE_PROD_TRANSFORM.crabstick.new_crab_fg[0];
+    newCrabFg.transform.y = QUOTE_PROD_TRANSFORM.crabstick.new_crab_fg[1];
+    newCrabFg.transform.z = QUOTE_PROD_TRANSFORM.crabstick.new_crab_fg[2];
 
-    newCrabLogo.transform.x = QUOTE_PROD_POSITION.crabstick.new_crab_logo[0];
-    newCrabLogo.transform.y = QUOTE_PROD_POSITION.crabstick.new_crab_logo[1];
-    newCrabLogo.transform.z = QUOTE_PROD_POSITION.crabstick.new_crab_logo[2];
+    newCrabLogo.transform.x = QUOTE_PROD_TRANSFORM.crabstick.new_crab_logo[0];
+    newCrabLogo.transform.y = QUOTE_PROD_TRANSFORM.crabstick.new_crab_logo[1];
+    newCrabLogo.transform.z = QUOTE_PROD_TRANSFORM.crabstick.new_crab_logo[2];
 
     // Setup position
-    setupQuoteProdPosition(QUOTE_PROD_POSITION.crabstick);
+    setupQuoteProdPosition(QUOTE_PROD_TRANSFORM.crabstick);
     
     function setupMaterial(mesh, index, texName) {
 
@@ -969,12 +1018,12 @@ function loadNewDesignMeal() {
 
     setupMaterial(newRamenMesh, curResIndex++, NEW_DESIGN_URL_TABLE.meal_ramen);
 
-    newRamen.transform.x = QUOTE_PROD_POSITION.meal.new_ramen[0];
-    newRamen.transform.y = QUOTE_PROD_POSITION.meal.new_ramen[1];
-    newRamen.transform.z = QUOTE_PROD_POSITION.meal.new_ramen[2];
+    newRamen.transform.x = QUOTE_PROD_TRANSFORM.meal.new_ramen[0];
+    newRamen.transform.y = QUOTE_PROD_TRANSFORM.meal.new_ramen[1];
+    newRamen.transform.z = QUOTE_PROD_TRANSFORM.meal.new_ramen[2];
 
     // Setup position
-    setupQuoteProdPosition(QUOTE_PROD_POSITION.meal);
+    setupQuoteProdPosition(QUOTE_PROD_TRANSFORM.meal);
     
     function setupMaterial(mesh, index, texName) {
 
