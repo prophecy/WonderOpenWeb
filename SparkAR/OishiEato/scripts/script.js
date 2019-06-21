@@ -651,7 +651,9 @@ TouchGestures.onLongPress().subscribe(function (gesture) {
 });
 
 TouchGestures.onTap().subscribe(function (gesture) {
-    changeTheme();
+
+    if (hasStarted)
+        changeTheme();
 });
 
 // --------------------------------------------------------------------------------
