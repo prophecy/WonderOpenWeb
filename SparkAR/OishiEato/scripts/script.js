@@ -542,6 +542,7 @@ function hideAllThemes() {
     newCrabFg.hidden = true;
     newCrabLogo.hidden = true;
     newRamen.hidden = true;
+    foodFeederRoot0.hidden = true;
 }
 
 const QUOTE_PROD_TRANSFORM = {
