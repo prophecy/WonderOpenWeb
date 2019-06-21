@@ -426,7 +426,70 @@ var itemIndex = {
     meal: -1,
 }
 
+var productCounter = {
+    gyoza: -1,
+    sandwich: -1,
+    crabstick: -1,
+    takoyaki: -1,
+    meal: -1,
+}
+
 var currentRound = 0;
+
+function resetProductCounter() {
+
+    productCounter.gyoza = -1;
+    productCounter.sandwich = -1;
+    productCounter.crabstick = -1;
+    productCounter.takoyaki = -1;
+    productCounter.meal = -1;
+}
+
+function nextProduct(themeData) {
+
+    //Diagnostics.log("themeData: " + JSON.stringify(themeData));
+
+    if (themeData.type == "productNPD")
+        return;
+
+    var theme = themeData.theme;
+
+    var itemList = getItemList();
+
+    if (theme == THEME_NAME_LOOKUP_TABLE.gyoza) {
+
+        var item = itemList[itemIndex.gyoza];
+        if (++productCounter.gyoza >= item.items.length)
+            productCounter.gyoza = 0;
+    }
+    else if (theme == THEME_NAME_LOOKUP_TABLE.sandwich) {
+
+        var item = itemList[itemIndex.sandwich];
+        if (++productCounter.sandwich >= item.items.length)
+            productCounter.sandwich = 0;
+    }
+    else if (theme == THEME_NAME_LOOKUP_TABLE.crabstick) {
+
+        var item = itemList[itemIndex.crabstick];
+        if (++productCounter.crabstick >= item.items.length)
+            productCounter.crabstick = 0;
+    }
+    else if (theme == THEME_NAME_LOOKUP_TABLE.takoyaki) {
+
+        var item = itemList[itemIndex.takoyaki];
+        if (++productCounter.takoyaki >= item.items.length)
+            productCounter.takoyaki = 0;
+    }
+    else if (theme == THEME_NAME_LOOKUP_TABLE.meal) {
+
+        var item = itemList[itemIndex.meal];
+        if (++productCounter.meal >= item.items.length)
+            productCounter.meal = 0;
+    }
+
+    // Debug productCounter
+    Diagnostics.log("productCounter: " + JSON.stringify(productCounter));
+}
 
 // Beware, this's in O(n)
 function isThemeExistInRoundOrder(theme) {
@@ -452,6 +515,7 @@ function createDataRoundZero() {
     for (var i=0; i<npdList.length; ++i) {
 
         var item = npdList[i];
+        item.type = "productNPD";
         itemQueue.push(item);
         
         var isExist = isThemeExistInRoundOrder(item.theme);
@@ -464,6 +528,8 @@ function createDataRoundZero() {
     for (var i=0; i<itemList.length; ++i) {
 
         var item = itemList[i];
+        item.type = "product";
+
         var isExist = isThemeExistInRoundOrder(item.theme);
         if (!isExist) {
             itemQueue.push(item);
@@ -639,6 +705,8 @@ function startGame() {
     Diagnostics.log("firstTheme: " + JSON.stringify(firstTheme));
     Diagnostics.log("currentRound: " + currentRound);
 
+    nextProduct(firstTheme);
+
     if (THEME_NAME_LOOKUP_TABLE.gyoza == firstTheme.theme)
         showGyoza();
     else if (THEME_NAME_LOOKUP_TABLE.sandwich == firstTheme.theme)
@@ -669,6 +737,8 @@ function changeTheme() {
 
     // Hide themes
     hideAllThemes();
+
+    nextProduct(nextTheme);
 
     // Change theme
     if (THEME_NAME_LOOKUP_TABLE.gyoza == nextTheme.theme)
@@ -837,7 +907,7 @@ const QUOTE_PROD_TRANSFORM = {
 function showGyoza() {
 
     curTheme = THEME_NAME_LOOKUP_TABLE.gyoza;
-
+    
     showOpenMouthAwhile();
 
     headGyozaRoot.hidden = false;
