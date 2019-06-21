@@ -50,11 +50,6 @@ const FaceGestures = require('FaceGestures');
 const IrisTracking = require("IrisTracking");
 const Random = require('Random');
 
-for (var i = 0; i<30; ++i) {
-
-    Diagnostics.log("rand: " + Random.random());
-}
-
 // --------------------------------------------------------------------------------
 // SCENE DATABASE
 
@@ -166,6 +161,8 @@ const facemesh1Meal = Scene.root.find("facemesh1_meal");
 
 const howtoRect = Scene.root.find("howto_rect");
 const howtoBgRect = Scene.root.find("howto_bg_rect");
+const openMouthRect = Scene.root.find("open_mouth_rect");
+openMouthRect.hidden = true;
 
 //const takoDirectionalLight0 = Scene.root.find("tako_directional_ligh0");
 
@@ -517,6 +514,23 @@ function hideHowtoWithDelay() {
     }
 }
 
+function showOpenMouthAwhile() {
+
+    openMouthRect.hidden = false;
+    howtoBgRect.hidden = false;
+
+    const timer = Time.setInterval(hideOpenMouth, HIDE_HOWTO_DELAY);
+
+    function hideOpenMouth() {
+
+        openMouthRect.hidden = true;
+        howtoBgRect.hidden = true;
+
+        // clear interval
+        Time.clearInterval(timer);
+    }
+}
+
 // ********************************************************************************
 
 function changeTheme() {
@@ -607,6 +621,8 @@ function showGyoza() {
 
     curTheme = THEME_NAME_LOOKUP_TABLE.gyoza;
 
+    showOpenMouthAwhile();
+
     headGyozaRoot.hidden = false;
     headGyozaRoot1.hidden = false;
     facemesh0.hidden = false;
@@ -671,6 +687,8 @@ function showSandwich() {
 function showMeal() {
 
     curTheme = THEME_NAME_LOOKUP_TABLE.meal;
+
+    showOpenMouthAwhile();
 
     facemesh0.hidden = false;
     facemesh0Meal.hidden = false;
