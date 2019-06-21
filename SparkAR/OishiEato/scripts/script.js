@@ -745,14 +745,20 @@ function startGame() {
     nextProduct(firstTheme);
     setCurrentProduct(firstTheme);
 
-    if (THEME_NAME_LOOKUP_TABLE.gyoza == firstTheme.theme)
+    if (THEME_NAME_LOOKUP_TABLE.gyoza == firstTheme.theme) {
+
+        showOpenMouthAwhile();
         showGyoza();
+    }
     else if (THEME_NAME_LOOKUP_TABLE.sandwich == firstTheme.theme)
         showSandwich();
     else if (THEME_NAME_LOOKUP_TABLE.crabstick == firstTheme.theme)
         showCrabstick();
-    else if (THEME_NAME_LOOKUP_TABLE.meal == firstTheme.theme)
+    else if (THEME_NAME_LOOKUP_TABLE.meal == firstTheme.theme) {
+
+        showOpenMouthAwhile();
         showMeal();
+    }
     else if (THEME_NAME_LOOKUP_TABLE.takoyaki == firstTheme.theme)
         showTakoyaki();
 }
@@ -780,14 +786,20 @@ function changeTheme() {
     setCurrentProduct(nextTheme);
 
     // Change theme
-    if (THEME_NAME_LOOKUP_TABLE.gyoza == nextTheme.theme)
+    if (THEME_NAME_LOOKUP_TABLE.gyoza == nextTheme.theme) {
+
+        showOpenMouthAwhile();
         showGyoza();
+    }
     else if (THEME_NAME_LOOKUP_TABLE.sandwich == nextTheme.theme)
         showSandwich();
     else if (THEME_NAME_LOOKUP_TABLE.crabstick == nextTheme.theme)
         showCrabstick();
-    else if (THEME_NAME_LOOKUP_TABLE.meal == nextTheme.theme)
+    else if (THEME_NAME_LOOKUP_TABLE.meal == nextTheme.theme) {
+
+        showOpenMouthAwhile();
         showMeal();
+    }
     else if (THEME_NAME_LOOKUP_TABLE.takoyaki == nextTheme.theme)
         showTakoyaki();
 }
@@ -946,8 +958,6 @@ const QUOTE_PROD_TRANSFORM = {
 function showGyoza() {
 
     curTheme = THEME_NAME_LOOKUP_TABLE.gyoza;
-    
-    showOpenMouthAwhile();
 
     headGyozaRoot.hidden = false;
     headGyozaRoot1.hidden = false;
@@ -1018,8 +1028,6 @@ function showSandwich() {
 function showMeal() {
 
     curTheme = THEME_NAME_LOOKUP_TABLE.meal;
-
-    showOpenMouthAwhile();
 
     facemesh0.hidden = false;
     facemesh0Meal.hidden = false;
