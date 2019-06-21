@@ -780,9 +780,9 @@ const testQuoteUrl = [
 ]
 var curTestQuoteUrl = 0;
 
-function getCurQuoteUrl(theme) {
+function getCurBubbleTxtUrl(theme) {
 
-    Diagnostics.log("Get quote with theme: " + theme);
+    Diagnostics.log("Get cur bubble txt with theme: " + theme);
 
     var ret = testQuoteUrl[curTestQuoteUrl];
 
@@ -792,12 +792,21 @@ function getCurQuoteUrl(theme) {
     return ret;
 }
 
+function getCurProdTxtUrl(theme) {
+
+    Diagnostics.log("Get cur prod with theme: " + theme);
+
+    if (THEME_NAME_LOOKUP_TABLE.gyoza === theme) {
+
+    }
+}
+
 function loadNewDesignGyoza() {
 
     var curResIndex = 0;
 
     setupMaterial(newQuoteBgMesh, curResIndex++, NEW_DESIGN_URL_TABLE.gyoza_bubble_bg);
-    setupMaterial(newQuoteTxtMesh, curResIndex++, getCurQuoteUrl(THEME_NAME_LOOKUP_TABLE.gyoza));
+    setupMaterial(newQuoteTxtMesh, curResIndex++, getCurBubbleTxtUrl(THEME_NAME_LOOKUP_TABLE.gyoza));
     setupMaterial(newProdBigMesh, curResIndex++, NEW_DESIGN_URL_TABLE.gyoza_prod_big);
     setupMaterial(newProdSmallMesh, curResIndex++, NEW_DESIGN_URL_TABLE.gyoza_prod_big);
 
@@ -842,7 +851,7 @@ function loadNewDesignTakoyaki() {
     var curResIndex = 0;
 
     setupMaterial(newQuoteBgMesh, curResIndex++, NEW_DESIGN_URL_TABLE.takoyaki_bubble_bg);
-    setupMaterial(newQuoteTxtMesh, curResIndex++, getCurQuoteUrl(THEME_NAME_LOOKUP_TABLE.takoyaki));
+    setupMaterial(newQuoteTxtMesh, curResIndex++, getCurBubbleTxtUrl(THEME_NAME_LOOKUP_TABLE.takoyaki));
     setupMaterial(newProdBigMesh, curResIndex++, NEW_DESIGN_URL_TABLE.takoyaki_prod);
     setupMaterial(newProdSmallMesh, curResIndex++, NEW_DESIGN_URL_TABLE.takoyaki_prod);
 
@@ -863,7 +872,7 @@ function loadNewDesignSandwich() {
     var curResIndex = 0;
 
     setupMaterial(newQuoteBgMesh, curResIndex++, NEW_DESIGN_URL_TABLE.sandwich_bubble_bg);
-    setupMaterial(newQuoteTxtMesh, curResIndex++, getCurQuoteUrl(THEME_NAME_LOOKUP_TABLE.sandwich));
+    setupMaterial(newQuoteTxtMesh, curResIndex++, getCurBubbleTxtUrl(THEME_NAME_LOOKUP_TABLE.sandwich));
     setupMaterial(newProdBigMesh, curResIndex++, NEW_DESIGN_URL_TABLE.sandwich_prod);
     setupMaterial(newProdSmallMesh, curResIndex++, NEW_DESIGN_URL_TABLE.sandwich_prod);
 
@@ -890,7 +899,7 @@ function loadNewDesignCrabstick() {
     var curResIndex = 0;
 
     setupMaterial(newQuoteBgMesh, curResIndex++, NEW_DESIGN_URL_TABLE.crabstick_bubble_bg);
-    setupMaterial(newQuoteTxtMesh, curResIndex++, getCurQuoteUrl(THEME_NAME_LOOKUP_TABLE.crabstick));
+    setupMaterial(newQuoteTxtMesh, curResIndex++, getCurBubbleTxtUrl(THEME_NAME_LOOKUP_TABLE.crabstick));
     setupMaterial(newProdBigMesh, curResIndex++, NEW_DESIGN_URL_TABLE.crabstick_prod);
     setupMaterial(newProdSmallMesh, curResIndex++, NEW_DESIGN_URL_TABLE.crabstick_prod);
 
@@ -927,7 +936,7 @@ function loadNewDesignMeal() {
     var curResIndex = 0;
 
     setupMaterial(newQuoteBgMesh, curResIndex++, NEW_DESIGN_URL_TABLE.meal_bubble_bg);
-    setupMaterial(newQuoteTxtMesh, curResIndex++, getCurQuoteUrl(THEME_NAME_LOOKUP_TABLE.meal));
+    setupMaterial(newQuoteTxtMesh, curResIndex++, getCurBubbleTxtUrl(THEME_NAME_LOOKUP_TABLE.meal));
     setupMaterial(newProdBigMesh, curResIndex++, NEW_DESIGN_URL_TABLE.meal_prod);
     setupMaterial(newProdSmallMesh, curResIndex++, NEW_DESIGN_URL_TABLE.meal_prod);
 
