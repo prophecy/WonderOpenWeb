@@ -536,6 +536,8 @@ function createDataRoundZero() {
             themeOrder.push(item.theme);
         }
     }
+
+    resetProductCounter();
 }
 
 function setupItemIndex() {
