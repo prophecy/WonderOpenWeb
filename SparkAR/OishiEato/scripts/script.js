@@ -1165,46 +1165,69 @@ function showMeal() {
     }
 }
 
+const sandwichRotationRef = Scene.root.find("sandwich_rotation_ref");
+rotateSandwichRef();
+function rotateSandwichRef() {
+            
+    const swirlParms = {
+        durationMilliseconds: SWIRL_DURATION,
+        loopCount: Infinity,
+        mirror: false  
+    };
+
+    const driver = Animation.timeDriver(swirlParms);
+    const sampler = Animation.samplers.linear(0, Math.PI * 2.0);
+    const anim = Animation.animate(driver, sampler);
+
+    sandwichRotationRef.transform.rotationY = anim;
+
+    driver.start();
+}
+
 function initSwirlSandwich(swirl, sandwichList, sandwichMeshList, isFront) {
 
     for (var i=0; i<sandwichList.length; ++i) {
 
-        var radian = Math.PI * 2.0 / sandwichList.length * i;
-
-        var x = Math.cos(radian) * SWIRL_RADIOUS;
-        var z = Math.sin(radian) * SWIRL_RADIOUS;
-
         var obj = sandwichList[i];
-        
-        obj.transform.x = x;
-        obj.transform.z = z;
 
-        obj.transform.rotationY = (Math.PI * 0.5) - radian;
-
-        // Visibility signals
-        var signal0 = swirl.transform.rotationZ.sub(radian).gt(Reactive.val(0));
-        var signal1 = swirl.transform.rotationZ.sub(radian).lt(Reactive.val(-Math.PI));
-
-//        var signal0 = swirl.transform.rotationX.sub(radian).lt(Reactive.val(0.5 * Math.PI));
-//      var signal1 = swirl.transform.rotationX.sub(radian).gt(Reactive.val(-0.5 * Math.PI));
-    //    var signal3 = swirl.transform.rotationX.sub(radian).gt(Reactive.val(1.5 * Math.PI));        
-    //  var signalOut = signal0.and(signal1).or(signal3);
-
-        var signalOut = signal0.or(signal1);
+        // Hide front when z < 0
+        var hideFrontSignel = obj.transform.z.lt(0);
 
         if (isFront)
-            obj.hidden = signalOut;
+            obj.hidden = hideFrontSignel;
         else
-            obj.hidden = signalOut.not();
+            obj.hidden = hideFrontSignel.not();
     }
 
     for (var i=0; i<sandwichMeshList.length; ++i) {
 
-        var obj = sandwichMeshList[i];
-        applySwirlMovement(obj, 0, 1, 0, SWIRL_DURATION);
-    }
+        // Vars
+        var obj = sandwichList[i];
+        var mesh = sandwichMeshList[i];
 
-    applySwirlMovement(swirl, 0, 1, 0, SWIRL_DURATION);
+        // Rotate
+        
+        const swirlParms = {
+            durationMilliseconds: SWIRL_DURATION,
+            loopCount: Infinity,
+            mirror: false  
+        };
+
+        const driver = Animation.timeDriver(swirlParms);
+        const sampler = Animation.samplers.linear(0, Math.PI * 2.0);
+        const anim = Animation.animate(driver, sampler);
+    
+        mesh.transform.rotationY = anim;
+
+        driver.start();
+
+        // Translate
+        var objRad = Math.PI * 2.0 * (i / sandwichMeshList.length);
+        var cos = Reactive.cos(sandwichRotationRef.transform.rotationY.add(objRad));
+        sandwichList[i].transform.x = Reactive.mul(cos, SWIRL_RADIOUS);
+        var sin = Reactive.sin(sandwichRotationRef.transform.rotationY.add(objRad));
+        sandwichList[i].transform.z = Reactive.mul(sin, SWIRL_RADIOUS);
+    }
 }
 
 var gyozaSeqMatList = [];
