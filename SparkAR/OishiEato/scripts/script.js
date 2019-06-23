@@ -116,7 +116,6 @@ const newGyozaRight = Scene.root.find("new_gyoza_right");
 const newGyozaRightMesh = Scene.root.find("new_gyoza_right_mesh");
 
 const newTakoyakiRoot = Scene.root.find("takoyaki_root");
-//const newSmokeRoot = Scene.root.find("smoke_root");
 const newGyozaRoot = Scene.root.find("new_gyoza_root");
 
 const facemesh0Tako = Scene.root.find("facemesh0_tako");
@@ -129,8 +128,6 @@ const howtoRect = Scene.root.find("howto_rect");
 const howtoBgRect = Scene.root.find("howto_bg_rect");
 const openMouthRect = Scene.root.find("open_mouth_rect");
 openMouthRect.hidden = true;
-
-//const takoDirectionalLight0 = Scene.root.find("tako_directional_ligh0");
 
 const mealShopstick00mesh = Scene.root.find("shopstick00_mesh");
 const mealShopstick01mesh = Scene.root.find("shopstick01_mesh");
@@ -214,7 +211,7 @@ var crushTimeDriverList = [];
 var currentData = {};
 
 const SWIRL_RADIOUS = 12.0;
-const SWIRL_DURATION = 3000;
+const SWIRL_DURATION = 6000;
 
 const HEAD_MAT_LIST = [
     "head_mat0", "head_mat1", "head_mat2", "head_mat3", 
@@ -936,6 +933,53 @@ function showGyoza() {
     facemesh1.material = facePaintGyozaMat;
 
     showNewProdSmall();
+
+    function loadNewDesignGyoza() {
+
+        var curResIndex = 0;
+    
+        setupMaterial(newQuoteBgMesh, curResIndex++, NEW_DESIGN_URL_TABLE.gyoza_bubble_bg);
+        setupMaterial(newQuoteTxtMesh, curResIndex++, getCurBubbleTxtUrl(THEME_NAME_LOOKUP_TABLE.gyoza));
+    
+        var prodUrl = getCurProdTxtUrl(THEME_NAME_LOOKUP_TABLE.gyoza)
+        setupMaterial(newProdBigMesh, curResIndex++, prodUrl);
+        setupMaterial(newProdSmallMesh, curResIndex++, prodUrl);
+    
+        // Setup position
+        setupQuoteProdPosition(QUOTE_PROD_TRANSFORM.gyoza);
+        
+        // Add gyoza sequence
+        var mat = getMaterialWithDiffuseByUrl(
+            NEW_DESIGN_MAT_LIST[curResIndex], 
+            NEW_DESIGN_TEX_LIST[curResIndex], 
+            BASE_URL + NEW_DESIGN_URL_TABLE.gyoza_feed_00);
+        gyozaSeqMatList.push(mat);
+        ++curResIndex;
+    
+        mat = getMaterialWithDiffuseByUrl(
+            NEW_DESIGN_MAT_LIST[curResIndex], 
+            NEW_DESIGN_TEX_LIST[curResIndex], 
+            BASE_URL + NEW_DESIGN_URL_TABLE.gyoza_feed_01);
+        gyozaSeqMatList.push(mat);
+        ++curResIndex;
+    
+        mat = getMaterialWithDiffuseByUrl(
+            NEW_DESIGN_MAT_LIST[curResIndex], 
+            NEW_DESIGN_TEX_LIST[curResIndex], 
+            BASE_URL + NEW_DESIGN_URL_TABLE.gyoza_feed_02);
+        gyozaSeqMatList.push(mat);
+        ++curResIndex;
+        
+        newGyozaLeftMesh.material = newGyozaRightMesh.material = gyozaSeqMatList[0];
+        
+        function setupMaterial(mesh, index, texName) {
+    
+            mesh.material = getMaterialWithDiffuseByUrl(
+                NEW_DESIGN_MAT_LIST[index], 
+                NEW_DESIGN_TEX_LIST[index], 
+                BASE_URL + texName);    
+        }    
+    }    
 }
 
 function showTakoyaki() {
@@ -949,6 +993,29 @@ function showTakoyaki() {
 
     loadNewDesignTakoyaki();
     showNewProdSmall();
+
+    function loadNewDesignTakoyaki() {
+
+        var curResIndex = 0;
+
+        setupMaterial(newQuoteBgMesh, curResIndex++, NEW_DESIGN_URL_TABLE.takoyaki_bubble_bg);
+        setupMaterial(newQuoteTxtMesh, curResIndex++, getCurBubbleTxtUrl(THEME_NAME_LOOKUP_TABLE.takoyaki));
+
+        var prodUrl = getCurProdTxtUrl(THEME_NAME_LOOKUP_TABLE.takoyaki)
+        setupMaterial(newProdBigMesh, curResIndex++, prodUrl);
+        setupMaterial(newProdSmallMesh, curResIndex++, prodUrl);
+
+        // Setup position
+        setupQuoteProdPosition(QUOTE_PROD_TRANSFORM.takoyaki);
+        
+        function setupMaterial(mesh, index, texName) {
+
+            mesh.material = getMaterialWithDiffuseByUrl(
+                NEW_DESIGN_MAT_LIST[index], 
+                NEW_DESIGN_TEX_LIST[index], 
+                BASE_URL + texName);    
+        }
+    }
 }
 
 function showCrabstick() {
@@ -966,6 +1033,45 @@ function showCrabstick() {
 
     loadNewDesignCrabstick();
     showNewProdSmall();
+
+    function loadNewDesignCrabstick() {
+
+        var curResIndex = 0;
+
+        setupMaterial(newQuoteBgMesh, curResIndex++, NEW_DESIGN_URL_TABLE.crabstick_bubble_bg);
+        setupMaterial(newQuoteTxtMesh, curResIndex++, getCurBubbleTxtUrl(THEME_NAME_LOOKUP_TABLE.crabstick));
+
+        var prodUrl = getCurProdTxtUrl(THEME_NAME_LOOKUP_TABLE.crabstick)
+        setupMaterial(newProdBigMesh, curResIndex++, prodUrl);
+        setupMaterial(newProdSmallMesh, curResIndex++, prodUrl);
+
+        setupMaterial(newCrabBgMesh, curResIndex++, NEW_DESIGN_URL_TABLE.crabstick_crab_bg);
+        setupMaterial(newCrabFgMesh, curResIndex++, NEW_DESIGN_URL_TABLE.crabstick_crab_fg);
+        setupMaterial(newCrabLogoMesh, curResIndex++, NEW_DESIGN_URL_TABLE.crabstick_crab_logo);
+
+        newCrabBg.transform.x = QUOTE_PROD_TRANSFORM.crabstick.new_crab_bg[0];
+        newCrabBg.transform.y = QUOTE_PROD_TRANSFORM.crabstick.new_crab_bg[1];
+        newCrabBg.transform.z = QUOTE_PROD_TRANSFORM.crabstick.new_crab_bg[2];
+        
+        newCrabFg.transform.x = QUOTE_PROD_TRANSFORM.crabstick.new_crab_fg[0];
+        newCrabFg.transform.y = QUOTE_PROD_TRANSFORM.crabstick.new_crab_fg[1];
+        newCrabFg.transform.z = QUOTE_PROD_TRANSFORM.crabstick.new_crab_fg[2];
+
+        newCrabLogo.transform.x = QUOTE_PROD_TRANSFORM.crabstick.new_crab_logo[0];
+        newCrabLogo.transform.y = QUOTE_PROD_TRANSFORM.crabstick.new_crab_logo[1];
+        newCrabLogo.transform.z = QUOTE_PROD_TRANSFORM.crabstick.new_crab_logo[2];
+
+        // Setup position
+        setupQuoteProdPosition(QUOTE_PROD_TRANSFORM.crabstick);
+        
+        function setupMaterial(mesh, index, texName) {
+
+            mesh.material = getMaterialWithDiffuseByUrl(
+                NEW_DESIGN_MAT_LIST[index], 
+                NEW_DESIGN_TEX_LIST[index], 
+                BASE_URL + texName);    
+        }
+    }
 }
 
 function showSandwich() {
@@ -986,6 +1092,35 @@ function showSandwich() {
 
     loadNewDesignSandwich();
     showNewProdSmall();
+
+    function loadNewDesignSandwich() {
+
+        var curResIndex = 0;
+
+        setupMaterial(newQuoteBgMesh, curResIndex++, NEW_DESIGN_URL_TABLE.sandwich_bubble_bg);
+        setupMaterial(newQuoteTxtMesh, curResIndex++, getCurBubbleTxtUrl(THEME_NAME_LOOKUP_TABLE.sandwich));
+
+        var prodUrl = getCurProdTxtUrl(THEME_NAME_LOOKUP_TABLE.sandwich)
+        setupMaterial(newProdBigMesh, curResIndex++, prodUrl);
+        setupMaterial(newProdSmallMesh, curResIndex++, prodUrl);
+
+        setupMaterial(newHandMesh, curResIndex++, NEW_DESIGN_URL_TABLE.sandwich_hand);
+
+        // Setup position
+        setupQuoteProdPosition(QUOTE_PROD_TRANSFORM.sandwich);
+
+        newHand.transform.x = QUOTE_PROD_TRANSFORM.sandwich.hand[0];
+        newHand.transform.y = QUOTE_PROD_TRANSFORM.sandwich.hand[1];
+        newHand.transform.z = QUOTE_PROD_TRANSFORM.sandwich.hand[2];
+        
+        function setupMaterial(mesh, index, texName) {
+
+            mesh.material = getMaterialWithDiffuseByUrl(
+                NEW_DESIGN_MAT_LIST[index], 
+                NEW_DESIGN_TEX_LIST[index], 
+                BASE_URL + texName);    
+        }
+    }
 }
 
 function showMeal() {
@@ -999,13 +1134,38 @@ function showMeal() {
 
     loadNewDesignMeal();
     showNewProdSmall();
+
+    function loadNewDesignMeal() {
+
+        var curResIndex = 0;
+
+        setupMaterial(newQuoteBgMesh, curResIndex++, NEW_DESIGN_URL_TABLE.meal_bubble_bg);
+        setupMaterial(newQuoteTxtMesh, curResIndex++, getCurBubbleTxtUrl(THEME_NAME_LOOKUP_TABLE.meal));
+
+        var prodUrl = getCurProdTxtUrl(THEME_NAME_LOOKUP_TABLE.meal)
+        setupMaterial(newProdBigMesh, curResIndex++, prodUrl);
+        setupMaterial(newProdSmallMesh, curResIndex++, prodUrl);
+
+        setupMaterial(newRamenMesh, curResIndex++, NEW_DESIGN_URL_TABLE.meal_ramen);
+
+        newRamen.transform.x = QUOTE_PROD_TRANSFORM.meal.new_ramen[0];
+        newRamen.transform.y = QUOTE_PROD_TRANSFORM.meal.new_ramen[1];
+        newRamen.transform.z = QUOTE_PROD_TRANSFORM.meal.new_ramen[2];
+
+        // Setup position
+        setupQuoteProdPosition(QUOTE_PROD_TRANSFORM.meal);
+        
+        function setupMaterial(mesh, index, texName) {
+
+            mesh.material = getMaterialWithDiffuseByUrl(
+                NEW_DESIGN_MAT_LIST[index], 
+                NEW_DESIGN_TEX_LIST[index], 
+                BASE_URL + texName);    
+        }
+    }
 }
 
 function initSwirlSandwich(swirl, sandwichList, sandwichMeshList, isFront) {
-
-    // Setup object transform
-    const SWIRL_RADIOUS = 12.0;
-    const SWIRL_DURATION = 6000;
 
     for (var i=0; i<sandwichList.length; ++i) {
 
@@ -1123,183 +1283,6 @@ function getCurBubbleTxtUrl(theme) {
 function getCurProdTxtUrl(theme) {
 
     return PROD_TEX_LOOKUP_TABLE[currentProductTitle];
-}
-
-// Todo: remove this
-var prevHighLow = true;
-function isHigh() {
-
-    var flag = !prevHighLow;
-    prevHighLow = !prevHighLow;
-
-    return flag;
-}
-
-function loadNewDesignGyoza() {
-
-    var curResIndex = 0;
-
-    setupMaterial(newQuoteBgMesh, curResIndex++, NEW_DESIGN_URL_TABLE.gyoza_bubble_bg);
-    setupMaterial(newQuoteTxtMesh, curResIndex++, getCurBubbleTxtUrl(THEME_NAME_LOOKUP_TABLE.gyoza));
-
-    var prodUrl = getCurProdTxtUrl(THEME_NAME_LOOKUP_TABLE.gyoza)
-    setupMaterial(newProdBigMesh, curResIndex++, prodUrl);
-    setupMaterial(newProdSmallMesh, curResIndex++, prodUrl);
-
-    // Setup position
-    setupQuoteProdPosition(QUOTE_PROD_TRANSFORM.gyoza);
-    
-    // Add gyoza sequence
-    var mat = getMaterialWithDiffuseByUrl(
-        NEW_DESIGN_MAT_LIST[curResIndex], 
-        NEW_DESIGN_TEX_LIST[curResIndex], 
-        BASE_URL + NEW_DESIGN_URL_TABLE.gyoza_feed_00);
-    gyozaSeqMatList.push(mat);
-    ++curResIndex;
-
-    mat = getMaterialWithDiffuseByUrl(
-        NEW_DESIGN_MAT_LIST[curResIndex], 
-        NEW_DESIGN_TEX_LIST[curResIndex], 
-        BASE_URL + NEW_DESIGN_URL_TABLE.gyoza_feed_01);
-    gyozaSeqMatList.push(mat);
-    ++curResIndex;
-
-    mat = getMaterialWithDiffuseByUrl(
-        NEW_DESIGN_MAT_LIST[curResIndex], 
-        NEW_DESIGN_TEX_LIST[curResIndex], 
-        BASE_URL + NEW_DESIGN_URL_TABLE.gyoza_feed_02);
-    gyozaSeqMatList.push(mat);
-    ++curResIndex;
-    
-    newGyozaLeftMesh.material = newGyozaRightMesh.material = gyozaSeqMatList[0];
-    
-    function setupMaterial(mesh, index, texName) {
-
-        mesh.material = getMaterialWithDiffuseByUrl(
-            NEW_DESIGN_MAT_LIST[index], 
-            NEW_DESIGN_TEX_LIST[index], 
-            BASE_URL + texName);    
-    }    
-}
-
-function loadNewDesignTakoyaki() {
-
-    var curResIndex = 0;
-
-    setupMaterial(newQuoteBgMesh, curResIndex++, NEW_DESIGN_URL_TABLE.takoyaki_bubble_bg);
-    setupMaterial(newQuoteTxtMesh, curResIndex++, getCurBubbleTxtUrl(THEME_NAME_LOOKUP_TABLE.takoyaki));
-
-    var prodUrl = getCurProdTxtUrl(THEME_NAME_LOOKUP_TABLE.takoyaki)
-    setupMaterial(newProdBigMesh, curResIndex++, prodUrl);
-    setupMaterial(newProdSmallMesh, curResIndex++, prodUrl);
-
-    // Setup position
-    setupQuoteProdPosition(QUOTE_PROD_TRANSFORM.takoyaki);
-    
-    function setupMaterial(mesh, index, texName) {
-
-        mesh.material = getMaterialWithDiffuseByUrl(
-            NEW_DESIGN_MAT_LIST[index], 
-            NEW_DESIGN_TEX_LIST[index], 
-            BASE_URL + texName);    
-    }
-}
-
-function loadNewDesignSandwich() {
-
-    var curResIndex = 0;
-
-    setupMaterial(newQuoteBgMesh, curResIndex++, NEW_DESIGN_URL_TABLE.sandwich_bubble_bg);
-    setupMaterial(newQuoteTxtMesh, curResIndex++, getCurBubbleTxtUrl(THEME_NAME_LOOKUP_TABLE.sandwich));
-
-    var prodUrl = getCurProdTxtUrl(THEME_NAME_LOOKUP_TABLE.sandwich)
-    setupMaterial(newProdBigMesh, curResIndex++, prodUrl);
-    setupMaterial(newProdSmallMesh, curResIndex++, prodUrl);
-
-    setupMaterial(newHandMesh, curResIndex++, NEW_DESIGN_URL_TABLE.sandwich_hand);
-
-    // Setup position
-    setupQuoteProdPosition(QUOTE_PROD_TRANSFORM.sandwich);
-
-    newHand.transform.x = QUOTE_PROD_TRANSFORM.sandwich.hand[0];
-    newHand.transform.y = QUOTE_PROD_TRANSFORM.sandwich.hand[1];
-    newHand.transform.z = QUOTE_PROD_TRANSFORM.sandwich.hand[2];
-    
-    function setupMaterial(mesh, index, texName) {
-
-        mesh.material = getMaterialWithDiffuseByUrl(
-            NEW_DESIGN_MAT_LIST[index], 
-            NEW_DESIGN_TEX_LIST[index], 
-            BASE_URL + texName);    
-    }
-}
-
-function loadNewDesignCrabstick() {
-
-    var curResIndex = 0;
-
-    setupMaterial(newQuoteBgMesh, curResIndex++, NEW_DESIGN_URL_TABLE.crabstick_bubble_bg);
-    setupMaterial(newQuoteTxtMesh, curResIndex++, getCurBubbleTxtUrl(THEME_NAME_LOOKUP_TABLE.crabstick));
-
-    var prodUrl = getCurProdTxtUrl(THEME_NAME_LOOKUP_TABLE.crabstick)
-    setupMaterial(newProdBigMesh, curResIndex++, prodUrl);
-    setupMaterial(newProdSmallMesh, curResIndex++, prodUrl);
-
-    setupMaterial(newCrabBgMesh, curResIndex++, NEW_DESIGN_URL_TABLE.crabstick_crab_bg);
-    setupMaterial(newCrabFgMesh, curResIndex++, NEW_DESIGN_URL_TABLE.crabstick_crab_fg);
-    setupMaterial(newCrabLogoMesh, curResIndex++, NEW_DESIGN_URL_TABLE.crabstick_crab_logo);
-
-    newCrabBg.transform.x = QUOTE_PROD_TRANSFORM.crabstick.new_crab_bg[0];
-    newCrabBg.transform.y = QUOTE_PROD_TRANSFORM.crabstick.new_crab_bg[1];
-    newCrabBg.transform.z = QUOTE_PROD_TRANSFORM.crabstick.new_crab_bg[2];
-    
-    newCrabFg.transform.x = QUOTE_PROD_TRANSFORM.crabstick.new_crab_fg[0];
-    newCrabFg.transform.y = QUOTE_PROD_TRANSFORM.crabstick.new_crab_fg[1];
-    newCrabFg.transform.z = QUOTE_PROD_TRANSFORM.crabstick.new_crab_fg[2];
-
-    newCrabLogo.transform.x = QUOTE_PROD_TRANSFORM.crabstick.new_crab_logo[0];
-    newCrabLogo.transform.y = QUOTE_PROD_TRANSFORM.crabstick.new_crab_logo[1];
-    newCrabLogo.transform.z = QUOTE_PROD_TRANSFORM.crabstick.new_crab_logo[2];
-
-    // Setup position
-    setupQuoteProdPosition(QUOTE_PROD_TRANSFORM.crabstick);
-    
-    function setupMaterial(mesh, index, texName) {
-
-        mesh.material = getMaterialWithDiffuseByUrl(
-            NEW_DESIGN_MAT_LIST[index], 
-            NEW_DESIGN_TEX_LIST[index], 
-            BASE_URL + texName);    
-    }
-}
-
-function loadNewDesignMeal() {
-
-    var curResIndex = 0;
-
-    setupMaterial(newQuoteBgMesh, curResIndex++, NEW_DESIGN_URL_TABLE.meal_bubble_bg);
-    setupMaterial(newQuoteTxtMesh, curResIndex++, getCurBubbleTxtUrl(THEME_NAME_LOOKUP_TABLE.meal));
-
-    var prodUrl = getCurProdTxtUrl(THEME_NAME_LOOKUP_TABLE.meal)
-    setupMaterial(newProdBigMesh, curResIndex++, prodUrl);
-    setupMaterial(newProdSmallMesh, curResIndex++, prodUrl);
-
-    setupMaterial(newRamenMesh, curResIndex++, NEW_DESIGN_URL_TABLE.meal_ramen);
-
-    newRamen.transform.x = QUOTE_PROD_TRANSFORM.meal.new_ramen[0];
-    newRamen.transform.y = QUOTE_PROD_TRANSFORM.meal.new_ramen[1];
-    newRamen.transform.z = QUOTE_PROD_TRANSFORM.meal.new_ramen[2];
-
-    // Setup position
-    setupQuoteProdPosition(QUOTE_PROD_TRANSFORM.meal);
-    
-    function setupMaterial(mesh, index, texName) {
-
-        mesh.material = getMaterialWithDiffuseByUrl(
-            NEW_DESIGN_MAT_LIST[index], 
-            NEW_DESIGN_TEX_LIST[index], 
-            BASE_URL + texName);    
-    }
 }
 
 applyParalaxMovement(newFrontRoot, undefined, 0.1, 0.1);
@@ -1475,27 +1458,6 @@ initBubbleTex();
 // --------------------------------------------------------------------------------
 // @ FACE DETECTED
 
-// Bubble transformations
-const X_SIDE_WEIGHT = 0.14;
-const Y_SIDE_WEIGHT = 0.15;
-const BUBBLE_POSITION_Y = -8.8;
-const TARGET_BUBBLE_SCALE = 0.0028;
-
-// Stub
-// Bubble list mgr vars
-//var currentBibbleIndex = 0;
-//const BUBBLE_SIZE = bubbleList0.length;
-//var isBubbleVisible = false;
-
-// Hide all bubbles
-//function hideAllBubbles(bubbleList) {
-//    for (var i=0; i<bubbleList.length; ++i)
-//        bubbleList[i].hidden = true;
-//} 
-    
-//hideAllBubbles(bubbleList0);
-//hideAllBubbles(bubbleList1);
-
 var hasStarted = false;
 
 function onFaceTracked(faceIndex) {
@@ -1670,360 +1632,13 @@ function onFace0MouthClose() {
 }
 
 // --------------------------------------------------------------------------------
-// GENERIC FUNCTIONS
-// --------------------------------------------------------------------------------
-
-// Send events for data analytics
-CameraInfo.isCapturingPhoto.monitor().subscribe(function(value) {
-
-    Diagnostics.log("Capturing Proto: value: " + value.newValue);
-
-    // If new value == true -> means begin
-    //        value == false -> means finish
-});
-
-CameraInfo.isRecordingVideo.monitor().subscribe(function(value) {
-
-    Diagnostics.log("Recording Video: value: " + value.newValue);
-
-    // If new value == true -> means begin
-    //        value == false -> means finish
-});
-
-function getMaterialWithDiffuse(matName, texName) {
-
-    var mat = Materials.get(matName);
-    var tex = Textures.get(texName);
-    
-    mat.diffuse = tex;
-    return mat;
-}
-
-function getMaterialWithDiffuseByUrl(matName, texName, url) {
-
-    //Diagnostics.log("Get mat: " + matName);
-    //Diagnostics.log("Get tex: " + texName);
-    //Diagnostics.log("Load texture with URL: " + url);
-
-    var tex = Textures.get(texName);
-    tex.url = url;
-
-    var mat = Materials.get(matName);
-
-    mat.diffuse = tex;
-    return mat;
-}
-
-// Handle mouth opening state
-
-function handleMouthOpeningState(faceIndex, openMinThres, closeMaxThres, openCallback, closCallback) {
-
-    var mouth = FaceTracking.face(faceIndex).mouth;
-
-    var mouthOpen = mouth.openness.gt(Reactive.val(openMinThres));
-    var mouthClose = mouth.openness.lt(Reactive.val(closeMaxThres));
-    
-    mouthOpen.monitor().subscribe(function(flag) {
-        if (flag.newValue)
-            openCallback();
-    });
-
-    mouthClose.monitor().subscribe(function(flag) {
-        if (flag.newValue)
-            closCallback();
-    });
-}
-
-// Check eye closing/opening and blink from
-// Reference: https://developers.facebook.com/docs/ar-studio/reference/classes/facegesturesmodule/
-function handleEyeOpeningState(faceIndex, eyeIndex, openCallback, closeCallback) {
-
-    var face = FaceTracking.face(faceIndex);
-
-    var hasEyeClosed = undefined;
-
-    // Get from closeness callback
-    if (eyeIndex == 0)
-        hasEyeClosed = FaceGestures.hasLeftEyeClosed(face);
-    else if (eyeIndex == 1)
-        hasEyeClosed = FaceGestures.hasRightEyeClosed(face);
-
-    // Monitor from closeness callback
-    hasEyeClosed.monitor().subscribe(function(val) {
-
-        if (val.newValue == true)
-            closeCallback(faceIndex, eyeIndex);
-        else
-            openCallback(faceIndex, eyeIndex);
-    });
-}
-
-// [2019.06.13] Fixed face not show on iOS
-//     This is about Facebook AR platform implementation problem occuring when user's face is tracked before finish loading.
-//        Then cause mismatch state
-var isFaceTracked = [ false, false ];
-
-function checkTrackedStateWithDelay(faceIndex, trackCallback, untrackCallback) {
-
-    const interval = Time.setInterval(checkTrackedState, 400);
-
-    function checkTrackedState() {
-
-        var state = FaceTracking.face(faceIndex).isTracked.pinLastValue();
-
-        if (state != isFaceTracked[faceIndex]) {
-
-            if (state == true)
-                trackCallback();
-            else
-                untrackCallback();
-
-            Time.clearInterval(interval);
-        }
-    }
-}
-
-function handleFaceTrackingState(faceIndex, trackCallback, untrackCallback) {
-
-    checkTrackedStateWithDelay(faceIndex, trackCallback, untrackCallback);
-
-    // Monitor tracking state
-    FaceTracking.face(faceIndex).isTracked.monitor().subscribe(function(e) {
-
-        if (isFaceTracked[faceIndex] != e.newValue) {
-
-            isFaceTracked[faceIndex] = e.newValue;
-        
-            if (e.newValue)
-                trackCallback();
-            else
-                untrackCallback();
-        }
-    }); 
-}
-
-function axisRotation(axis_x, axis_y, axis_z, angle_degrees) {
-    var norm = Math.sqrt(axis_x*axis_x + axis_y*axis_y + axis_z*axis_z);
-    axis_x /= norm;
-    axis_y /= norm;
-    axis_z /= norm;
-    var angle_radians = angle_degrees * Math.PI / 180.0;
-    var cos = Math.cos(angle_radians/2);
-    var sin = Math.sin(angle_radians/2);
-    return Reactive.rotation(
-        cos, axis_x*sin, axis_y*sin, axis_z*sin);
-}
-
-function applySpinMovement(obj, duration) {
-
-    var time_driver = Animation.timeDriver({
-        durationMilliseconds: duration,
-        loopCount: Infinity
-    });
-    
-    // Create a rotation sampler using Rotation objects generated
-    // by the previously-defined axisRotation() method.
-    var rotation_sampler = Animation.samplers.polyline({
-        keyframes: [
-            axisRotation(0, 1, 0, 0),
-            axisRotation(0, 1, 0, 90),
-            axisRotation(0, 1, 0, 180),
-            axisRotation(0, 1, 0, 270),
-            axisRotation(0, 1, 0, 356)
-        ],
-        knots: [
-            0, 2, 4, 6, 8
-        ]
-    });
-
-    // Start the animation
-    var rotation_signal = Animation.animate(time_driver, rotation_sampler);
-    time_driver.start();
-
-    obj.transform.rotation = rotation_signal;
-}
-
-function applyFoodSpinMovement(obj, duration) {
-
-    var time_driver = Animation.timeDriver({
-        durationMilliseconds: duration,
-        loopCount: Infinity
-    });
-    
-    // Create a rotation sampler using Rotation objects generated
-    // by the previously-defined axisRotation() method.
-    var rotation_sampler = Animation.samplers.polyline({
-        keyframes: [
-            axisRotation(1, 0, 0, 360),
-            axisRotation(1, 0, 0, 270),
-            axisRotation(1, 0, 0, 180),
-            axisRotation(1, 0, 0, 90),
-            axisRotation(1, 0, 0, 0),
-        ],
-        knots: [
-            0, 2, 4, 6, 8
-        ]
-    });
-
-    // Start the animation
-    var rotation_signal = Animation.animate(time_driver, rotation_sampler);
-    time_driver.start();
-
-    obj.transform.rotation = rotation_signal;
-}
-function applyBalloonMovement(obj, rx, ry, rz, tx, ty, tz) {
-
-    var originList = [
-        obj.transform.x.pinLastValue(), 
-        obj.transform.y.pinLastValue(), 
-        obj.transform.z.pinLastValue()
-    ];
-
-    var radiousList = [rx, ry, rz];
-    var timeList = [tx, ty, tz];
-    var transAnimList = [];
-
-    for (var i=0; i<3; ++i) {
-
-        const showTimeDriverParameters = {
-            durationMilliseconds: timeList[i],
-            loopCount: Infinity,
-            mirror: true  
-        };
-
-        const timeDriver = Animation.timeDriver(showTimeDriverParameters);
-
-        // Translate animation
-        const curRadious = radiousList[i];
-        const min = originList[i] - curRadious;
-        const max = originList[i] + curRadious;
-        const transSampler = Animation.samplers.easeInOutQuad(min, max);
-        const transAnim = Animation.animate(timeDriver, transSampler);
-    
-        transAnimList.push(transAnim);
-
-        timeDriver.start();
-    }
-
-    obj.transform.x = transAnimList[0];
-    obj.transform.y = transAnimList[1];
-    obj.transform.z = transAnimList[2];
-}
-
-function applyParalaxMovement(fLayer, bLayer, fw, bw) {
-
-    if (fLayer != undefined) {
-
-        fLayer.transform.x = Reactive.mul(facePoint0.x, fw);
-        fLayer.transform.y = Reactive.mul(facePoint0.y, fw);
-    }
-
-    if (bLayer != undefined) {
-
-        bLayer.transform.x = Reactive.mul(facePoint0.x, -bw);
-        bLayer.transform.y = Reactive.mul(facePoint0.y, -bw);
-    }
-}
-
-function applyShopsticksBound(obj, minAngle, maxAngle, duration) {
-
-    var time_driver = Animation.timeDriver({
-        durationMilliseconds: duration,
-        loopCount: Infinity
-    });
-
-    // Create a rotation sampler using Rotation objects generated
-    // by the previously-defined axisRotation() method.
-    var rotation_sampler = Animation.samplers.polyline({
-        keyframes: [
-            axisRotation(0, 1, 0, minAngle),
-            axisRotation(0, 1, 0, minAngle),
-
-            axisRotation(0, 1, 0, maxAngle),
-
-            axisRotation(0, 1, 0, minAngle),
-        ],
-        knots: [
-            0, 5, 7, 9,
-        ]
-    });
-
-    // Start the animation
-    var rotation_signal = Animation.animate(time_driver, rotation_sampler);
-    
-    obj.transform.rotation = rotation_signal;
-
-    time_driver.start();
-}
-
-function applyRotationBounce(obj, minAngle, maxAngle, duration) {
-
-    var time_driver = Animation.timeDriver({
-        durationMilliseconds: duration,
-        loopCount: Infinity
-    });
-
-    // Create a rotation sampler using Rotation objects generated
-    // by the previously-defined axisRotation() method.
-    var rotation_sampler = Animation.samplers.polyline({
-        keyframes: [
-            axisRotation(0, 1, 0, minAngle),
-            axisRotation(0, 1, 0, minAngle),
-
-            axisRotation(0, 1, 0, maxAngle),
-
-            axisRotation(0, 1, 0, minAngle),
-        ],
-        knots: [
-            0, 12, 13, 14,
-        ]
-    });
-
-    // Start the animation
-    var rotation_signal = Animation.animate(time_driver, rotation_sampler);
-    
-    obj.transform.rotation = rotation_signal;
-
-    time_driver.start();
-}
-
-function applyRotationBounceLessDelay(obj, minAngle, maxAngle, duration) {
-
-    var time_driver = Animation.timeDriver({
-        durationMilliseconds: duration,
-        loopCount: Infinity
-    });
-
-    // Create a rotation sampler using Rotation objects generated
-    // by the previously-defined axisRotation() method.
-    var rotation_sampler = Animation.samplers.polyline({
-        keyframes: [
-            axisRotation(0, 1, 0, minAngle),
-            axisRotation(0, 1, 0, minAngle),
-
-            axisRotation(0, 1, 0, maxAngle),
-
-            axisRotation(0, 1, 0, minAngle),
-        ],
-        knots: [
-            0, 6, 8, 10,
-        ]
-    });
-
-    // Start the animation
-    var rotation_signal = Animation.animate(time_driver, rotation_sampler);
-    
-    obj.transform.rotation = rotation_signal;
-
-    time_driver.start();
-}
-
-// --------------------------------------------------------------------------------
 // SPECIFIC FUNCTIONS
 // --------------------------------------------------------------------------------
 
 // --------------------------------------------------------------------------------
 // Bubble animation
+
+const Y_SIDE_WEIGHT = 1.0;
 
 function showBubble(obj, facePoint, xSideWeight, positionY, targetBubbleScale, isAlwaysLeft) { 
 
@@ -2395,6 +2010,374 @@ function getThemeData(url, callback) {
             callback(null, error);
     */
     });
+}
+
+// --------------------------------------------------------------------------------
+// --------------------------------------------------------------------------------
+// --------------------------------------------------------------------------------
+// --------------------------------------------------------------------------------
+
+// --------------------------------------------------------------------------------
+// --------------------------------------------------------------------------------
+// --------------------------------------------------------------------------------
+// --------------------------------------------------------------------------------
+
+// GENERIC FUNCTIONS
+
+// --------------------------------------------------------------------------------
+// --------------------------------------------------------------------------------
+// --------------------------------------------------------------------------------
+// --------------------------------------------------------------------------------
+// --------------------------------------------------------------------------------
+
+// --------------------------------------------------------------------------------
+// --------------------------------------------------------------------------------
+// --------------------------------------------------------------------------------
+// --------------------------------------------------------------------------------
+
+// Send events for data analytics
+CameraInfo.isCapturingPhoto.monitor().subscribe(function(value) {
+
+    Diagnostics.log("Capturing Proto: value: " + value.newValue);
+
+    // If new value == true -> means begin
+    //        value == false -> means finish
+});
+
+CameraInfo.isRecordingVideo.monitor().subscribe(function(value) {
+
+    Diagnostics.log("Recording Video: value: " + value.newValue);
+
+    // If new value == true -> means begin
+    //        value == false -> means finish
+});
+
+function getMaterialWithDiffuse(matName, texName) {
+
+    var mat = Materials.get(matName);
+    var tex = Textures.get(texName);
+    
+    mat.diffuse = tex;
+    return mat;
+}
+
+function getMaterialWithDiffuseByUrl(matName, texName, url) {
+
+    //Diagnostics.log("Get mat: " + matName);
+    //Diagnostics.log("Get tex: " + texName);
+    //Diagnostics.log("Load texture with URL: " + url);
+
+    var tex = Textures.get(texName);
+    tex.url = url;
+
+    var mat = Materials.get(matName);
+
+    mat.diffuse = tex;
+    return mat;
+}
+
+// Handle mouth opening state
+
+function handleMouthOpeningState(faceIndex, openMinThres, closeMaxThres, openCallback, closCallback) {
+
+    var mouth = FaceTracking.face(faceIndex).mouth;
+
+    var mouthOpen = mouth.openness.gt(Reactive.val(openMinThres));
+    var mouthClose = mouth.openness.lt(Reactive.val(closeMaxThres));
+    
+    mouthOpen.monitor().subscribe(function(flag) {
+        if (flag.newValue)
+            openCallback();
+    });
+
+    mouthClose.monitor().subscribe(function(flag) {
+        if (flag.newValue)
+            closCallback();
+    });
+}
+
+// Check eye closing/opening and blink from
+// Reference: https://developers.facebook.com/docs/ar-studio/reference/classes/facegesturesmodule/
+function handleEyeOpeningState(faceIndex, eyeIndex, openCallback, closeCallback) {
+
+    var face = FaceTracking.face(faceIndex);
+
+    var hasEyeClosed = undefined;
+
+    // Get from closeness callback
+    if (eyeIndex == 0)
+        hasEyeClosed = FaceGestures.hasLeftEyeClosed(face);
+    else if (eyeIndex == 1)
+        hasEyeClosed = FaceGestures.hasRightEyeClosed(face);
+
+    // Monitor from closeness callback
+    hasEyeClosed.monitor().subscribe(function(val) {
+
+        if (val.newValue == true)
+            closeCallback(faceIndex, eyeIndex);
+        else
+            openCallback(faceIndex, eyeIndex);
+    });
+}
+
+// [2019.06.13] Fixed face not show on iOS
+//     This is about Facebook AR platform implementation problem occuring when user's face is tracked before finish loading.
+//        Then cause mismatch state
+var isFaceTracked = [ false, false ];
+
+function checkTrackedStateWithDelay(faceIndex, trackCallback, untrackCallback) {
+
+    const interval = Time.setInterval(checkTrackedState, 400);
+
+    function checkTrackedState() {
+
+        var state = FaceTracking.face(faceIndex).isTracked.pinLastValue();
+
+        if (state != isFaceTracked[faceIndex]) {
+
+            if (state == true)
+                trackCallback();
+            else
+                untrackCallback();
+
+            Time.clearInterval(interval);
+        }
+    }
+}
+
+function handleFaceTrackingState(faceIndex, trackCallback, untrackCallback) {
+
+    checkTrackedStateWithDelay(faceIndex, trackCallback, untrackCallback);
+
+    // Monitor tracking state
+    FaceTracking.face(faceIndex).isTracked.monitor().subscribe(function(e) {
+
+        if (isFaceTracked[faceIndex] != e.newValue) {
+
+            isFaceTracked[faceIndex] = e.newValue;
+        
+            if (e.newValue)
+                trackCallback();
+            else
+                untrackCallback();
+        }
+    }); 
+}
+
+function axisRotation(axis_x, axis_y, axis_z, angle_degrees) {
+    var norm = Math.sqrt(axis_x*axis_x + axis_y*axis_y + axis_z*axis_z);
+    axis_x /= norm;
+    axis_y /= norm;
+    axis_z /= norm;
+    var angle_radians = angle_degrees * Math.PI / 180.0;
+    var cos = Math.cos(angle_radians/2);
+    var sin = Math.sin(angle_radians/2);
+    return Reactive.rotation(
+        cos, axis_x*sin, axis_y*sin, axis_z*sin);
+}
+
+function applySpinMovement(obj, duration) {
+
+    var time_driver = Animation.timeDriver({
+        durationMilliseconds: duration,
+        loopCount: Infinity
+    });
+    
+    // Create a rotation sampler using Rotation objects generated
+    // by the previously-defined axisRotation() method.
+    var rotation_sampler = Animation.samplers.polyline({
+        keyframes: [
+            axisRotation(0, 1, 0, 0),
+            axisRotation(0, 1, 0, 90),
+            axisRotation(0, 1, 0, 180),
+            axisRotation(0, 1, 0, 270),
+            axisRotation(0, 1, 0, 356)
+        ],
+        knots: [
+            0, 2, 4, 6, 8
+        ]
+    });
+
+    // Start the animation
+    var rotation_signal = Animation.animate(time_driver, rotation_sampler);
+    time_driver.start();
+
+    obj.transform.rotation = rotation_signal;
+}
+
+function applyFoodSpinMovement(obj, duration) {
+
+    var time_driver = Animation.timeDriver({
+        durationMilliseconds: duration,
+        loopCount: Infinity
+    });
+    
+    // Create a rotation sampler using Rotation objects generated
+    // by the previously-defined axisRotation() method.
+    var rotation_sampler = Animation.samplers.polyline({
+        keyframes: [
+            axisRotation(1, 0, 0, 360),
+            axisRotation(1, 0, 0, 270),
+            axisRotation(1, 0, 0, 180),
+            axisRotation(1, 0, 0, 90),
+            axisRotation(1, 0, 0, 0),
+        ],
+        knots: [
+            0, 2, 4, 6, 8
+        ]
+    });
+
+    // Start the animation
+    var rotation_signal = Animation.animate(time_driver, rotation_sampler);
+    time_driver.start();
+
+    obj.transform.rotation = rotation_signal;
+}
+function applyBalloonMovement(obj, rx, ry, rz, tx, ty, tz) {
+
+    var originList = [
+        obj.transform.x.pinLastValue(), 
+        obj.transform.y.pinLastValue(), 
+        obj.transform.z.pinLastValue()
+    ];
+
+    var radiousList = [rx, ry, rz];
+    var timeList = [tx, ty, tz];
+    var transAnimList = [];
+
+    for (var i=0; i<3; ++i) {
+
+        const showTimeDriverParameters = {
+            durationMilliseconds: timeList[i],
+            loopCount: Infinity,
+            mirror: true  
+        };
+
+        const timeDriver = Animation.timeDriver(showTimeDriverParameters);
+
+        // Translate animation
+        const curRadious = radiousList[i];
+        const min = originList[i] - curRadious;
+        const max = originList[i] + curRadious;
+        const transSampler = Animation.samplers.easeInOutQuad(min, max);
+        const transAnim = Animation.animate(timeDriver, transSampler);
+    
+        transAnimList.push(transAnim);
+
+        timeDriver.start();
+    }
+
+    obj.transform.x = transAnimList[0];
+    obj.transform.y = transAnimList[1];
+    obj.transform.z = transAnimList[2];
+}
+
+function applyParalaxMovement(fLayer, bLayer, fw, bw) {
+
+    if (fLayer != undefined) {
+
+        fLayer.transform.x = Reactive.mul(facePoint0.x, fw);
+        fLayer.transform.y = Reactive.mul(facePoint0.y, fw);
+    }
+
+    if (bLayer != undefined) {
+
+        bLayer.transform.x = Reactive.mul(facePoint0.x, -bw);
+        bLayer.transform.y = Reactive.mul(facePoint0.y, -bw);
+    }
+}
+
+function applyShopsticksBound(obj, minAngle, maxAngle, duration) {
+
+    var time_driver = Animation.timeDriver({
+        durationMilliseconds: duration,
+        loopCount: Infinity
+    });
+
+    // Create a rotation sampler using Rotation objects generated
+    // by the previously-defined axisRotation() method.
+    var rotation_sampler = Animation.samplers.polyline({
+        keyframes: [
+            axisRotation(0, 1, 0, minAngle),
+            axisRotation(0, 1, 0, minAngle),
+
+            axisRotation(0, 1, 0, maxAngle),
+
+            axisRotation(0, 1, 0, minAngle),
+        ],
+        knots: [
+            0, 5, 7, 9,
+        ]
+    });
+
+    // Start the animation
+    var rotation_signal = Animation.animate(time_driver, rotation_sampler);
+    
+    obj.transform.rotation = rotation_signal;
+
+    time_driver.start();
+}
+
+function applyRotationBounce(obj, minAngle, maxAngle, duration) {
+
+    var time_driver = Animation.timeDriver({
+        durationMilliseconds: duration,
+        loopCount: Infinity
+    });
+
+    // Create a rotation sampler using Rotation objects generated
+    // by the previously-defined axisRotation() method.
+    var rotation_sampler = Animation.samplers.polyline({
+        keyframes: [
+            axisRotation(0, 1, 0, minAngle),
+            axisRotation(0, 1, 0, minAngle),
+
+            axisRotation(0, 1, 0, maxAngle),
+
+            axisRotation(0, 1, 0, minAngle),
+        ],
+        knots: [
+            0, 12, 13, 14,
+        ]
+    });
+
+    // Start the animation
+    var rotation_signal = Animation.animate(time_driver, rotation_sampler);
+    
+    obj.transform.rotation = rotation_signal;
+
+    time_driver.start();
+}
+
+function applyRotationBounceLessDelay(obj, minAngle, maxAngle, duration) {
+
+    var time_driver = Animation.timeDriver({
+        durationMilliseconds: duration,
+        loopCount: Infinity
+    });
+
+    // Create a rotation sampler using Rotation objects generated
+    // by the previously-defined axisRotation() method.
+    var rotation_sampler = Animation.samplers.polyline({
+        keyframes: [
+            axisRotation(0, 1, 0, minAngle),
+            axisRotation(0, 1, 0, minAngle),
+
+            axisRotation(0, 1, 0, maxAngle),
+
+            axisRotation(0, 1, 0, minAngle),
+        ],
+        knots: [
+            0, 6, 8, 10,
+        ]
+    });
+
+    // Start the animation
+    var rotation_signal = Animation.animate(time_driver, rotation_sampler);
+    
+    obj.transform.rotation = rotation_signal;
+
+    time_driver.start();
 }
 
 // ********************************************************************************
