@@ -280,6 +280,15 @@ const THEME_NAME_LOOKUP_TABLE = {
     meal: "Meal",
 }
 
+const THEME_NAME_LOOKUP_REVERSE_MAP = {
+
+    "Gyoza": "gyoza",
+    "Sandwich": "sandwich",
+    "Crab Stick": "crabstick",
+    "Tokoyaki": "takoyaki",
+    "Meal": "meal",
+}
+
 const CRUSH_TEX_LOOKUP_TABLE = {
 
     gyoza: [
@@ -462,63 +471,30 @@ function setCurrentProduct(themeData) {
         Diagnostics.log("themeData: " + JSON.stringify(themeData));
         Diagnostics.log("productCounter: " + JSON.stringify(productCounter));
 
-        if (theme == THEME_NAME_LOOKUP_TABLE.gyoza)
-            prodTitle = themeData.items[productCounter.gyoza].title;
-        else if (theme == THEME_NAME_LOOKUP_TABLE.sandwich)
-            prodTitle = themeData.items[productCounter.sandwich].title;
-        else if (theme == THEME_NAME_LOOKUP_TABLE.crabstick)
-            prodTitle = themeData.items[productCounter.crabstick].title;
-        else if (theme == THEME_NAME_LOOKUP_TABLE.takoyaki)
-            prodTitle = themeData.items[productCounter.takoyaki].title;
-        else if (theme == THEME_NAME_LOOKUP_TABLE.meal)
-            prodTitle = themeData.items[productCounter.meal].title;
+        var themeKey = THEME_NAME_LOOKUP_REVERSE_MAP[theme];
+        prodTitle = themeData.items[productCounter[themeKey]].title;
     }
 
     Diagnostics.log("Got product title: " + prodTitle);
     currentProductTitle = prodTitle;
 }
 
-function nextProduct(themeData) {
+function nextProductCounter(themeData) {
 
     //Diagnostics.log("themeData: " + JSON.stringify(themeData));
 
     if (themeData.type == "productNPD")
         return;
 
-    var theme = themeData.theme;
-
     var itemList = getItemList();
 
-    if (theme == THEME_NAME_LOOKUP_TABLE.gyoza) {
+    var theme = themeData.theme;
+    var themeKey = THEME_NAME_LOOKUP_REVERSE_MAP[theme];
+    Diagnostics.log("themeKey: " + themeKey + " from theme: " + theme);
 
-        var item = itemList[itemIndex.gyoza];
-        if (++productCounter.gyoza >= item.items.length)
-            productCounter.gyoza = 0;
-    }
-    else if (theme == THEME_NAME_LOOKUP_TABLE.sandwich) {
-
-        var item = itemList[itemIndex.sandwich];
-        if (++productCounter.sandwich >= item.items.length)
-            productCounter.sandwich = 0;
-    }
-    else if (theme == THEME_NAME_LOOKUP_TABLE.crabstick) {
-
-        var item = itemList[itemIndex.crabstick];
-        if (++productCounter.crabstick >= item.items.length)
-            productCounter.crabstick = 0;
-    }
-    else if (theme == THEME_NAME_LOOKUP_TABLE.takoyaki) {
-
-        var item = itemList[itemIndex.takoyaki];
-        if (++productCounter.takoyaki >= item.items.length)
-            productCounter.takoyaki = 0;
-    }
-    else if (theme == THEME_NAME_LOOKUP_TABLE.meal) {
-
-        var item = itemList[itemIndex.meal];
-        if (++productCounter.meal >= item.items.length)
-            productCounter.meal = 0;
-    }
+    var item = itemList[itemIndex[themeKey]];
+    if (++productCounter[themeKey] >= item.items.length)
+        productCounter[themeKey] = 0;
 
     // Debug productCounter
     Diagnostics.log("productCounter: " + JSON.stringify(productCounter));
@@ -579,17 +555,10 @@ function setupItemIndex() {
     for (var i=0; i<itemList.length; ++i) {
 
         var item = itemList[i];
+        var themeKey = THEME_NAME_LOOKUP_REVERSE_MAP[item.theme];
+        Diagnostics.log("ThemeKey: " + themeKey + " from theme: " + item.theme);
 
-        if (item.theme == THEME_NAME_LOOKUP_TABLE.gyoza)
-            itemIndex.gyoza = i;
-        else if (item.theme == THEME_NAME_LOOKUP_TABLE.sandwich)
-            itemIndex.sandwich = i;
-        else if (item.theme == THEME_NAME_LOOKUP_TABLE.crabstick)
-            itemIndex.crabstick = i;
-        else if (item.theme == THEME_NAME_LOOKUP_TABLE.takoyaki)
-            itemIndex.takoyaki = i;
-        else if (item.theme == THEME_NAME_LOOKUP_TABLE.meal)
-            itemIndex.meal = i;
+        itemIndex[themeKey] = i;
     }
 }
 
@@ -604,19 +573,13 @@ function createDataRoundMoreThanZero() {
     // Add item
     for (var i=0; i<themeOrder.length; ++i) {
 
-        var theme = themeOrder[i];
         var index = -1;
 
-        if (THEME_NAME_LOOKUP_TABLE.gyoza == theme)
-            index = itemIndex.gyoza;
-        else if (THEME_NAME_LOOKUP_TABLE.sandwich == theme)
-            index = itemIndex.sandwich;
-        else if (THEME_NAME_LOOKUP_TABLE.crabstick == theme)
-            index = itemIndex.crabstick;
-        else if (THEME_NAME_LOOKUP_TABLE.takoyaki == theme)
-            index = itemIndex.takoyaki;
-        else if (THEME_NAME_LOOKUP_TABLE.meal == theme)
-            index = itemIndex.meal;
+        var theme = themeOrder[i];
+        var themeKey = THEME_NAME_LOOKUP_REVERSE_MAP[theme];
+        Diagnostics.log("ThemeKey: " + themeKey + " from theme: " + theme);
+
+        index = itemIndex[themeKey];
 
         if (index < 0 || index >= itemList.length) {
             Diagnostics.log("Index out of bound!");
@@ -742,7 +705,7 @@ function startGame() {
     Diagnostics.log("firstTheme: " + JSON.stringify(firstTheme));
     Diagnostics.log("currentRound: " + currentRound);
 
-    nextProduct(firstTheme);
+    nextProductCounter(firstTheme);
     setCurrentProduct(firstTheme);
 
     if (THEME_NAME_LOOKUP_TABLE.gyoza == firstTheme.theme) {
@@ -782,7 +745,7 @@ function changeTheme() {
     // Hide themes
     hideAllThemes();
 
-    nextProduct(nextTheme);
+    nextProductCounter(nextTheme);
     setCurrentProduct(nextTheme);
 
     // Change theme
