@@ -208,8 +208,6 @@ const MOUTH_CLOSSNESS_MAX_THRESHOLD = 0.07;
 var feedTimeDriverList = [];
 var crushTimeDriverList = [];
 
-var currentData = {};
-
 const SWIRL_RADIOUS = 12.0;
 const SWIRL_DURATION = 6000;
 
@@ -382,6 +380,7 @@ const NEW_DESIGN_URL_TABLE = {
 var currentThemeData = {};
 
 function storeData(data) {
+
     currentThemeData = data;
 }
 
@@ -721,6 +720,10 @@ function startGame() {
     }
     else if (THEME_NAME_LOOKUP_TABLE.takoyaki == firstTheme.theme)
         showTakoyaki();
+
+    // Debug
+    //showTakoyaki();
+    //currentProductTitle = "takoyaki_takoyaki";
 }
 
 function changeTheme() {
@@ -1456,12 +1459,6 @@ function hideNewProd() {
 }
 
 foodFeederRoot0.hidden = true;
-
-// Init with gyoza face
-
-currentData.face = FACE_NAME_LOOKUP_TABLE.gyoza;
-
-//initHead();
 
 // Init bubbles' tex
 function initBubbleTex() {
