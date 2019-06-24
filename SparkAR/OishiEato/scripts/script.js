@@ -170,10 +170,10 @@ for (var i=0; i<12; ++i)
 for (var i=0; i<12; ++i)
     frontSandwichMeshList.push(Scene.root.find("sandwich_planef" + i + "_mesh"));
 
-for (var i=0; i<7; ++i)
+for (var i=0; i<12; ++i)
     backSandwichList.push(Scene.root.find("sandwichb" + i));
-for (var i=0; i<7; ++i)
-    backSandwichMeshList.push(Scene.root.find("sandwichb" + i + "_mesh"));
+for (var i=0; i<12; ++i)
+    backSandwichMeshList.push(Scene.root.find("sandwich_planeb" + i + "_mesh"));
 
 const frontSandwichList1 = [];
 const frontSandwichMeshList1 = [];
