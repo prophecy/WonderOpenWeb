@@ -165,10 +165,10 @@ const frontSandwichMeshList = [];
 const backSandwichList = [];
 const backSandwichMeshList = [];
 
-for (var i=0; i<7; ++i)
+for (var i=0; i<12; ++i)
     frontSandwichList.push(Scene.root.find("sandwichf" + i));
-for (var i=0; i<7; ++i)
-    frontSandwichMeshList.push(Scene.root.find("sandwichf" + i + "_mesh"));
+for (var i=0; i<12; ++i)
+    frontSandwichMeshList.push(Scene.root.find("sandwich_planef" + i + "_mesh"));
 
 for (var i=0; i<7; ++i)
     backSandwichList.push(Scene.root.find("sandwichb" + i));
@@ -358,6 +358,13 @@ const NEW_DESIGN_URL_TABLE = {
     sandwich_bubble_txt: "new_design/sample_takoyaki/copy.png",
     sandwich_prod: "new_design/sample_sandwich/sandwich_crab.png",
     sandwich_hand: "new_design/sample_sandwich/hand.png",
+    sandwich_ingredient: [
+        "new_design/sample_sandwich/sw10.png", // Crabstick
+        "new_design/sample_sandwich/tuna.png", // Tuna
+        "new_design/sample_sandwich/seaweed.png", // Seaweed
+        "new_design/sample_sandwich/sw3.png", // Egg
+        "new_design/sample_sandwich/ham.png", // Ham
+    ],
 
     // Crabstick sample
     crabstick_bubble_bg: "new_design/sample_crabstick/new_crab.png",
@@ -628,8 +635,9 @@ var curTheme = undefined;
 
 function main() {
 
-    initSwirlSandwich(frontSwirl1, frontSandwichList1, frontSandwichMeshList1, true);
-    initSwirlSandwich(backSwirl1, backSandwichList1, backSandwichMeshList1, false);
+    // Todo: Set swirl for player 1
+    //initSwirlSandwich(frontSwirl1, frontSandwichList1, frontSandwichMeshList1, true);
+    //initSwirlSandwich(backSwirl1, backSandwichList1, backSandwichMeshList1, false);
     
     initSwirlSandwich(frontSwirl, frontSandwichList, frontSandwichMeshList, true);
     initSwirlSandwich(backSwirl, backSandwichList, backSandwichMeshList, false);
@@ -704,7 +712,7 @@ function startGame() {
 
     nextProductCounter(firstTheme);
     setCurrentProduct(firstTheme);
-
+/*
     if (THEME_NAME_LOOKUP_TABLE.gyoza == firstTheme.theme) {
 
         showOpenMouthAwhile();
@@ -721,10 +729,13 @@ function startGame() {
     }
     else if (THEME_NAME_LOOKUP_TABLE.takoyaki == firstTheme.theme)
         showTakoyaki();
-
+*/
     // Debug - Show tako when start
     //showTakoyaki();
     //currentProductTitle = "takoyaki_takoyaki";
+    // Debug, show sandwich when start
+    showSandwich();
+    currentProductTitle = "sandwich_alaska_wakame";
 }
 
 function changeTheme() {
@@ -1094,6 +1105,8 @@ function showCrabstick() {
     }
 }
 
+var hasStartSandwich = false;
+
 function showSandwich() {
 
     curTheme = THEME_NAME_LOOKUP_TABLE.sandwich;
@@ -1107,11 +1120,13 @@ function showSandwich() {
     bodySegmentationRect.hidden = false;
     newHand.hidden = false;
 
-    facemesh0.material = facePaintSandwichMat;
-    facemesh1.material = facePaintSandwichMat;
+    facemesh0.material = facePaintInvisibleMat;
+    facemesh1.material = facePaintInvisibleMat;
 
-    loadNewDesignSandwich();
     showNewProdSmall();
+
+    if (hasStartSandwich == false)
+        loadNewDesignSandwich();
 
     function loadNewDesignSandwich() {
 
@@ -1125,6 +1140,39 @@ function showSandwich() {
         setupMaterial(newProdSmallMesh, curResIndex++, prodUrl);
 
         setupMaterial(newHandMesh, curResIndex++, NEW_DESIGN_URL_TABLE.sandwich_hand);
+
+        // Apply mat for each sandwich
+        var ingMatList = [];
+        for (var i=0; i<NEW_DESIGN_URL_TABLE.sandwich_ingredient.length; ++i) {
+
+            var url = BASE_URL + NEW_DESIGN_URL_TABLE.sandwich_ingredient[i];
+
+            Diagnostics.log(
+                "MatName: " + NEW_DESIGN_MAT_LIST[curResIndex] +
+                " TexName: " + NEW_DESIGN_TEX_LIST[curResIndex]
+                );
+
+            Diagnostics.log("url: " + url);
+
+            var mat = getMaterialWithDiffuseByUrl(
+                NEW_DESIGN_MAT_LIST[curResIndex], 
+                NEW_DESIGN_TEX_LIST[curResIndex], 
+                url);
+
+            ingMatList.push(mat); 
+            
+            ++curResIndex;
+        }
+
+        var ingIndex = 0;
+        for (var i=0; i<frontSandwichMeshList.length; ++i) {
+
+            var mesh = frontSandwichMeshList[i];
+            mesh.material = ingMatList[ingIndex];
+
+            if (++ingIndex >= ingMatList.length)
+                ingIndex = 0;
+        }
 
         // Setup position
         setupQuoteProdPosition(QUOTE_PROD_TRANSFORM.sandwich);
@@ -1141,6 +1189,8 @@ function showSandwich() {
                 BASE_URL + texName);    
         }
     }
+
+    hasStartSandwich = true;
 }
 
 function showMeal() {
@@ -1196,7 +1246,7 @@ function rotateSandwichRef() {
     };
 
     const driver = Animation.timeDriver(swirlParms);
-    const sampler = Animation.samplers.linear(0, Math.PI * 2.0);
+    const sampler = Animation.samplers.linear(0, Math.PI * 2.0 * -1.0);
     const anim = Animation.animate(driver, sampler);
 
     sandwichRotationRef.transform.rotationY = anim;
@@ -1226,7 +1276,7 @@ function initSwirlSandwich(swirl, sandwichList, sandwichMeshList, isFront) {
         var mesh = sandwichMeshList[i];
 
         // Rotate
-        
+        /*
         const swirlParms = {
             durationMilliseconds: SWIRL_DURATION,
             loopCount: Infinity,
@@ -1240,7 +1290,7 @@ function initSwirlSandwich(swirl, sandwichList, sandwichMeshList, isFront) {
         mesh.transform.rotationY = anim;
 
         driver.start();
-
+        */
         // Translate
         var objRad = Math.PI * 2.0 * (i / sandwichMeshList.length);
         var cos = Reactive.cos(sandwichRotationRef.transform.rotationY.add(objRad));
