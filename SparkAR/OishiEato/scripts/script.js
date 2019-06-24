@@ -737,7 +737,7 @@ function startGame() {
     //showTakoyaki();
     //currentProductTitle = "takoyaki_takoyaki";
     // Debug, show sandwich when start
-    showSandwich();
+    showSandwich(SANDWICH_MODE_SWIRL);
     currentProductTitle = "sandwich_alaska_wakame";
 }
 
@@ -770,7 +770,7 @@ function changeTheme() {
         showGyoza();
     }
     else if (THEME_NAME_LOOKUP_TABLE.sandwich == nextTheme.theme)
-        showSandwich();
+        showSandwich(SANDWICH_MODE_SWIRL);
     else if (THEME_NAME_LOOKUP_TABLE.crabstick == nextTheme.theme)
         showCrabstick();
     else if (THEME_NAME_LOOKUP_TABLE.meal == nextTheme.theme) {
@@ -1110,7 +1110,12 @@ function showCrabstick() {
 
 var hasStartSandwich = false;
 
-function showSandwich() {
+const SANDWICH_MODE_SWIRL = 0;
+const SANDWICH_MODE_EAT = 1;
+
+function showSandwich(mode) {
+
+    Diagnostics.log("mode: " + mode);
 
     curTheme = THEME_NAME_LOOKUP_TABLE.sandwich;
 
@@ -1120,7 +1125,11 @@ function showSandwich() {
     sandwichRoot.hidden = false;
     sandwichRoot1.hidden = false;
 
-    bodySegmentationRect.hidden = false;
+    if (mode == SANDWICH_MODE_SWIRL)
+        bodySegmentationRect.hidden = false;
+    else if (mode == SANDWICH_MODE_EAT)
+        bodySegmentationRect.hidden = true;
+
     newHand.hidden = false;
 
     facemesh0.material = facePaintInvisibleMat;
@@ -1144,44 +1153,53 @@ function showSandwich() {
 
         setupMaterial(newHandMesh, curResIndex++, NEW_DESIGN_URL_TABLE.sandwich_hand);
 
-        // Apply mat for each sandwich
-        var ingMatList = [];
-        for (var i=0; i<NEW_DESIGN_URL_TABLE.sandwich_ingredient.length; ++i) {
+        if (mode == SANDWICH_MODE_SWIRL) {
 
-            var url = BASE_URL + NEW_DESIGN_URL_TABLE.sandwich_ingredient[i];
+            // Apply mat for each swirl sandwich
+            var ingMatList = [];
+            for (var i=0; i<NEW_DESIGN_URL_TABLE.sandwich_ingredient.length; ++i) {
 
-            Diagnostics.log(
-                "MatName: " + NEW_DESIGN_MAT_LIST[curResIndex] +
-                " TexName: " + NEW_DESIGN_TEX_LIST[curResIndex]
-                );
+                var url = BASE_URL + NEW_DESIGN_URL_TABLE.sandwich_ingredient[i];
 
-            Diagnostics.log("url: " + url);
+                Diagnostics.log(
+                    "MatName: " + NEW_DESIGN_MAT_LIST[curResIndex] +
+                    " TexName: " + NEW_DESIGN_TEX_LIST[curResIndex]
+                    );
 
-            var mat = getMaterialWithDiffuseByUrl(
-                NEW_DESIGN_MAT_LIST[curResIndex], 
-                NEW_DESIGN_TEX_LIST[curResIndex], 
-                url);
+                Diagnostics.log("url: " + url);
 
-            ingMatList.push(mat); 
+                var mat = getMaterialWithDiffuseByUrl(
+                    NEW_DESIGN_MAT_LIST[curResIndex], 
+                    NEW_DESIGN_TEX_LIST[curResIndex], 
+                    url);
+
+                ingMatList.push(mat); 
+                
+                ++curResIndex;
+            }
+
+            var ingIndex = 0;
+            for (var i=0; i<frontSandwichMeshList.length; ++i) {
+
+                var frontMesh = frontSandwichMeshList[i];
+                frontMesh.material = ingMatList[ingIndex];
+
+                var backMesh = backSandwichMeshList[i];
+                backMesh.material = ingMatList[ingIndex];
+
+                if (++ingIndex >= ingMatList.length)
+                    ingIndex = 0;
+            }
+
+            // Set cheek texture
+            setupMaterial(newSandwichCheek0Mesh, curResIndex++, NEW_DESIGN_URL_TABLE.sandwich_check_0);
+        }
+        else if (mode == SANDWICH_MODE_EAT) {
+
             
-            ++curResIndex;
+            // Set cheek texture
+            setupMaterial(newSandwichCheek0Mesh, curResIndex++, NEW_DESIGN_URL_TABLE.sandwich_check_1);
         }
-
-        var ingIndex = 0;
-        for (var i=0; i<frontSandwichMeshList.length; ++i) {
-
-            var frontMesh = frontSandwichMeshList[i];
-            frontMesh.material = ingMatList[ingIndex];
-
-            var backMesh = backSandwichMeshList[i];
-            backMesh.material = ingMatList[ingIndex];
-
-            if (++ingIndex >= ingMatList.length)
-                ingIndex = 0;
-        }
-
-        // Set cheek texture
-        setupMaterial(newSandwichCheek0Mesh, curResIndex++, NEW_DESIGN_URL_TABLE.sandwich_check_0);
 
         // Setup position
         setupQuoteProdPosition(QUOTE_PROD_TRANSFORM.sandwich);
@@ -1590,7 +1608,7 @@ function onFaceTracked(faceIndex) {
     if (curTheme === THEME_NAME_LOOKUP_TABLE.gyoza)
         showGyoza();
     else if (curTheme === THEME_NAME_LOOKUP_TABLE.sandwich)
-        showSandwich();
+        showSandwich(SANDWICH_MODE_SWIRL);
     else if (curTheme === THEME_NAME_LOOKUP_TABLE.crabstick)
         showCrabstick();
     else if (curTheme === THEME_NAME_LOOKUP_TABLE.takoyaki)
