@@ -1167,8 +1167,11 @@ function showSandwich() {
         var ingIndex = 0;
         for (var i=0; i<frontSandwichMeshList.length; ++i) {
 
-            var mesh = frontSandwichMeshList[i];
-            mesh.material = ingMatList[ingIndex];
+            var frontMesh = frontSandwichMeshList[i];
+            frontMesh.material = ingMatList[ingIndex];
+
+            var backMesh = backSandwichMeshList[i];
+            backMesh.material = ingMatList[ingIndex];
 
             if (++ingIndex >= ingMatList.length)
                 ingIndex = 0;
