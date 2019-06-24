@@ -138,6 +138,7 @@ const mealShopstick01_pivot = Scene.root.find("shopstick01_pivot");
 // For sandwich
 const newHand = Scene.root.find("new_hand");
 const newHandMesh = Scene.root.find("new_hand_mesh");
+const newSandwichCheek0Mesh = Scene.root.find("sandwich_cheek0_mesh");
 
 // For crabstick
 const newCrabBg = Scene.root.find("new_crab_bg");
@@ -365,6 +366,8 @@ const NEW_DESIGN_URL_TABLE = {
         "new_design/sample_sandwich/sw3.png", // Egg
         "new_design/sample_sandwich/ham.png", // Ham
     ],
+    sandwich_check_0: "new_design/sample_sandwich/cheek.png",
+    sandwich_check_1: "new_design/sample_sandwich/cheek2.png",
 
     // Crabstick sample
     crabstick_bubble_bg: "new_design/sample_crabstick/new_crab.png",
@@ -1176,6 +1179,9 @@ function showSandwich() {
             if (++ingIndex >= ingMatList.length)
                 ingIndex = 0;
         }
+
+        // Set cheek texture
+        setupMaterial(newSandwichCheek0Mesh, curResIndex++, NEW_DESIGN_URL_TABLE.sandwich_check_0);
 
         // Setup position
         setupQuoteProdPosition(QUOTE_PROD_TRANSFORM.sandwich);
