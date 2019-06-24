@@ -343,6 +343,7 @@ const NEW_DESIGN_URL_TABLE = {
     gyoza_feed_00: "new_design/sample_gyoza/01_04_gyuza1_action.png",
     gyoza_feed_01: "new_design/sample_gyoza/01_04_gyuza2_action.png",
     gyoza_feed_02: "new_design/sample_gyoza/01_04_gyuza3_action.png",
+    gyoza_feed_03: "new_design/sample_gyoza/01_04_gyuza4_action.png",
     gyoza_prod_small: "new_design/sample_gyoza/01_03_product.png",
     gyoza_prod_big: "new_design/sample_gyoza/01_03_product2_action.png",
     gyoza_prod_bg: "new_design/sample_gyoza/01_02_bg2.png",
@@ -918,6 +919,9 @@ const QUOTE_PROD_TRANSFORM = {
     },
 };
 
+var gyozaSeqMatList = [];
+var hasStartGyoza = false;
+
 function showGyoza() {
 
     curTheme = THEME_NAME_LOOKUP_TABLE.gyoza;
@@ -928,7 +932,8 @@ function showGyoza() {
     newGyozaRoot.hidden = false;
 
     loadNewDesignGyoza();
-    runGyozaSequence();
+    if (!hasStartGyoza)
+        runGyozaSequence();
     applyRotationBounceLessDelay(newGyozaLeft, 0, 20, 700);
     applyRotationBounceLessDelay(newGyozaRight, 0, 50, 600);
 
@@ -938,6 +943,9 @@ function showGyoza() {
     showNewProdSmall();
 
     function loadNewDesignGyoza() {
+
+        // Reset qyozaSeqMatList
+        gyozaSeqMatList = [];
 
         var curResIndex = 0;
     
@@ -972,7 +980,14 @@ function showGyoza() {
             BASE_URL + NEW_DESIGN_URL_TABLE.gyoza_feed_02);
         gyozaSeqMatList.push(mat);
         ++curResIndex;
-        
+
+        mat = getMaterialWithDiffuseByUrl(
+            NEW_DESIGN_MAT_LIST[curResIndex], 
+            NEW_DESIGN_TEX_LIST[curResIndex], 
+            BASE_URL + NEW_DESIGN_URL_TABLE.gyoza_feed_03);
+        gyozaSeqMatList.push(mat);
+        ++curResIndex;
+
         newGyozaLeftMesh.material = newGyozaRightMesh.material = gyozaSeqMatList[0];
         
         function setupMaterial(mesh, index, texName) {
@@ -982,7 +997,9 @@ function showGyoza() {
                 NEW_DESIGN_TEX_LIST[index], 
                 BASE_URL + texName);    
         }    
-    }    
+    }  
+    
+    hasStartGyoza = true;
 }
 
 function showTakoyaki() {
@@ -1232,8 +1249,6 @@ function initSwirlSandwich(swirl, sandwichList, sandwichMeshList, isFront) {
         sandwichList[i].transform.z = Reactive.mul(sin, SWIRL_RADIOUS);
     }
 }
-
-var gyozaSeqMatList = [];
 
 function setupQuoteProdPosition(transformData) {
 
