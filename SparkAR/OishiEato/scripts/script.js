@@ -737,7 +737,7 @@ function startGame() {
     //showTakoyaki();
     //currentProductTitle = "takoyaki_takoyaki";
     // Debug, show sandwich when start
-    showSandwich(SANDWICH_MODE_SWIRL);
+    showSandwich(SANDWICH_MODE_EAT);
     currentProductTitle = "sandwich_alaska_wakame";
 }
 
@@ -770,7 +770,7 @@ function changeTheme() {
         showGyoza();
     }
     else if (THEME_NAME_LOOKUP_TABLE.sandwich == nextTheme.theme)
-        showSandwich(SANDWICH_MODE_SWIRL);
+        showSandwich(SANDWICH_MODE_EAT);
     else if (THEME_NAME_LOOKUP_TABLE.crabstick == nextTheme.theme)
         showCrabstick();
     else if (THEME_NAME_LOOKUP_TABLE.meal == nextTheme.theme) {
@@ -1114,8 +1114,6 @@ const SANDWICH_MODE_SWIRL = 0;
 const SANDWICH_MODE_EAT = 1;
 
 function showSandwich(mode) {
-
-    Diagnostics.log("mode: " + mode);
 
     curTheme = THEME_NAME_LOOKUP_TABLE.sandwich;
 
@@ -1608,7 +1606,7 @@ function onFaceTracked(faceIndex) {
     if (curTheme === THEME_NAME_LOOKUP_TABLE.gyoza)
         showGyoza();
     else if (curTheme === THEME_NAME_LOOKUP_TABLE.sandwich)
-        showSandwich(SANDWICH_MODE_SWIRL);
+        showSandwich(SANDWICH_MODE_EAT);
     else if (curTheme === THEME_NAME_LOOKUP_TABLE.crabstick)
         showCrabstick();
     else if (curTheme === THEME_NAME_LOOKUP_TABLE.takoyaki)
