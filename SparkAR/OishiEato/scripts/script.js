@@ -751,7 +751,7 @@ function startGame() {
 
     nextProductCounter(firstTheme);
     setCurrentProduct(firstTheme);
-
+/*
     if (THEME_NAME_LOOKUP_TABLE.gyoza == firstTheme.theme) {
 
         showOpenMouthAwhile();
@@ -768,13 +768,16 @@ function startGame() {
     }
     else if (THEME_NAME_LOOKUP_TABLE.takoyaki == firstTheme.theme)
         showTakoyaki();
-
+*/
     // Debug - Show tako when start
     //showTakoyaki();
     //currentProductTitle = "takoyaki_takoyaki";
     // Debug, show sandwich when start
     //showSandwich(SANDWICH_MODE_EAT);
     //currentProductTitle = "sandwich_alaska_wakame";
+
+    // For the build of 2 sandwiches
+    showSandwich(SANDWICH_MODE_SWIRL);
 }
 
 function changeTheme() {
@@ -795,7 +798,7 @@ function changeTheme() {
 
     // Hide themes
     hideAllThemes();
-
+/*
     nextProductCounter(nextTheme);
     setCurrentProduct(nextTheme);
 
@@ -816,6 +819,12 @@ function changeTheme() {
     }
     else if (THEME_NAME_LOOKUP_TABLE.takoyaki == nextTheme.theme)
         showTakoyaki();
+    */
+
+    if (currentSandwichMode == SANDWICH_MODE_SWIRL)
+        showSandwich(SANDWICH_MODE_EAT);
+    else if (currentSandwichMode == SANDWICH_MODE_EAT)
+        showSandwich(SANDWICH_MODE_SWIRL);
 }
 
 const HIDE_HOWTO_DELAY = 1500;
@@ -1149,20 +1158,30 @@ var hasStartSandwich = false;
 const SANDWICH_MODE_SWIRL = 0;
 const SANDWICH_MODE_EAT = 1;
 
+var currentSandwichMode = undefined;
+
 function showSandwich(mode) {
 
     curTheme = THEME_NAME_LOOKUP_TABLE.sandwich;
+    currentSandwichMode = mode;
 
     facemesh0.hidden = false;
     facemesh1.hidden = false;
 
-    sandwichRoot.hidden = false;
-    sandwichRoot1.hidden = false;
+    if (mode == SANDWICH_MODE_SWIRL) {
 
-    if (mode == SANDWICH_MODE_SWIRL)
         bodySegmentationRect.hidden = false;
-    else if (mode == SANDWICH_MODE_EAT)
+
+        sandwichRoot.hidden = false;
+        sandwichRoot1.hidden = false;
+    }
+    else if (mode == SANDWICH_MODE_EAT) {
+
         bodySegmentationRect.hidden = true;
+
+        sandwichRoot.hidden = true;
+        sandwichRoot1.hidden = true;
+    }
 
     newHand.hidden = false;
 
@@ -1172,10 +1191,18 @@ function showSandwich(mode) {
     showNewProdSmall();
     loadNewDesignSandwich();
 
-    if (hasStartSandwich == false)
-        startSwirlEffect();
+    function loadNewDesignSandwich() {
 
-    function startSwirlEffect() {
+        var curResIndex = 0;
+
+        setupMaterial(newQuoteBgMesh, curResIndex++, NEW_DESIGN_URL_TABLE.sandwich_bubble_bg);
+        setupMaterial(newQuoteTxtMesh, curResIndex++, getCurBubbleTxtUrl(THEME_NAME_LOOKUP_TABLE.sandwich));
+
+        var prodUrl = getCurProdTxtUrl(THEME_NAME_LOOKUP_TABLE.sandwich)
+        setupMaterial(newProdBigMesh, curResIndex++, prodUrl);
+        setupMaterial(newProdSmallMesh, curResIndex++, prodUrl);
+
+        setupMaterial(newHandMesh, curResIndex++, NEW_DESIGN_URL_TABLE.sandwich_hand);
 
         if (mode == SANDWICH_MODE_SWIRL) {
 
@@ -1185,12 +1212,12 @@ function showSandwich(mode) {
 
                 var url = BASE_URL + NEW_DESIGN_URL_TABLE.sandwich_ingredient[i];
 
-                Diagnostics.log(
-                    "MatName: " + NEW_DESIGN_MAT_LIST[curResIndex] +
-                    " TexName: " + NEW_DESIGN_TEX_LIST[curResIndex]
-                    );
+                //Diagnostics.log(
+                //    "MatName: " + NEW_DESIGN_MAT_LIST[curResIndex] +
+                //    " TexName: " + NEW_DESIGN_TEX_LIST[curResIndex]
+                //    );
 
-                Diagnostics.log("url: " + url);
+                //Diagnostics.log("url: " + url);
 
                 var mat = getMaterialWithDiffuseByUrl(
                     NEW_DESIGN_MAT_LIST[curResIndex], 
@@ -1214,23 +1241,6 @@ function showSandwich(mode) {
                 if (++ingIndex >= ingMatList.length)
                     ingIndex = 0;
             }
-        }
-    }
-
-    function loadNewDesignSandwich() {
-
-        var curResIndex = 0;
-
-        setupMaterial(newQuoteBgMesh, curResIndex++, NEW_DESIGN_URL_TABLE.sandwich_bubble_bg);
-        setupMaterial(newQuoteTxtMesh, curResIndex++, getCurBubbleTxtUrl(THEME_NAME_LOOKUP_TABLE.sandwich));
-
-        var prodUrl = getCurProdTxtUrl(THEME_NAME_LOOKUP_TABLE.sandwich)
-        setupMaterial(newProdBigMesh, curResIndex++, prodUrl);
-        setupMaterial(newProdSmallMesh, curResIndex++, prodUrl);
-
-        setupMaterial(newHandMesh, curResIndex++, NEW_DESIGN_URL_TABLE.sandwich_hand);
-
-        if (mode == SANDWICH_MODE_SWIRL) {
 
             // Apply mat for each swirl sandwich
             var ingMatList = [];
@@ -1273,7 +1283,8 @@ function showSandwich(mode) {
         }
         else if (mode == SANDWICH_MODE_EAT) {
 
-            
+            Diagnostics.log("mode; " + mode);
+
             // Set cheek texture
             setupMaterial(newSandwichCheek0Mesh, curResIndex++, NEW_DESIGN_URL_TABLE.sandwich_check_1);
         }
@@ -1682,6 +1693,7 @@ function onFaceTracked(faceIndex) {
     }
     
     // Show the current theme
+    /*
     if (curTheme === THEME_NAME_LOOKUP_TABLE.gyoza)
         showGyoza();
     else if (curTheme === THEME_NAME_LOOKUP_TABLE.sandwich)
@@ -1692,6 +1704,13 @@ function onFaceTracked(faceIndex) {
         showTakoyaki();
     else if (curTheme === THEME_NAME_LOOKUP_TABLE.meal)
         showMeal();
+    */
+   /*
+    if (currentSandwichMode == SANDWICH_MODE_SWIRL)
+        showSandwich(SANDWICH_MODE_SWIRL);
+    else if (currentSandwichMode == SANDWICH_MODE_EAT)
+        showSandwich(SANDWICH_MODE_EAT);
+        */
 }
 
 function onFaceUntracked(faceIndex) {
@@ -1787,16 +1806,19 @@ function onFace0MouthOpen() {
     }
     else if (curTheme === THEME_NAME_LOOKUP_TABLE.sandwich) {
 
-        foodFeederRoot0.hidden = false;
+        if (currentSandwichMode == SANDWICH_MODE_EAT) {
 
-        newRamen.hidden = true;
-        ramenPool0.hidden = true;
-        testyPool0.hidden = false;
+            foodFeederRoot0.hidden = false;
 
-        var mouth = FaceTracking.face(0).mouth;
-        foodFeederRoot0.transform.x = mouth.center.x;
-        foodFeederRoot0.transform.y = mouth.center.y;
-        foodFeederRoot0.transform.z = mouth.center.z;
+            newRamen.hidden = true;
+            ramenPool0.hidden = true;
+            testyPool0.hidden = false;
+    
+            var mouth = FaceTracking.face(0).mouth;
+            foodFeederRoot0.transform.x = mouth.center.x;
+            foodFeederRoot0.transform.y = mouth.center.y;
+            foodFeederRoot0.transform.z = mouth.center.z;
+        }
     }
     else if (curTheme == THEME_NAME_LOOKUP_TABLE.meal) {
 
