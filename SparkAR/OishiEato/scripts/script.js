@@ -167,6 +167,7 @@ const ramenPool0 = Scene.root.find("ramenPool0");
 const sandwichRoot = Scene.root.find("sandwich_root");
 const frontSwirl = Scene.root.find("swirl_foreground");
 const backSwirl = Scene.root.find("swirl_background");
+const sandwichSwirlRoot = Scene.root.find("sandwich_swirl_root");
 
 const sandwichRoot1 = Scene.root.find("sandwich_root1");
 const frontSwirl1 = Scene.root.find("swirl_foreground1");
@@ -402,8 +403,8 @@ const NEW_DESIGN_URL_TABLE = {
         "new_design/sample_sandwich/sw3.png", // Egg
         "new_design/sample_sandwich/ham.png", // Ham
     ],
-    sandwich_check_0: "new_design/sample_sandwich/cheek.png",
-    sandwich_check_1: "new_design/sample_sandwich/cheek2.png",
+    sandwich_cheek_0: "new_design/sample_sandwich/cheek.png",
+    sandwich_cheek_1: "new_design/sample_sandwich/cheek2.png",
 
     // Crabstick sample
     crabstick_bubble_bg: "new_design/sample_crabstick/new_crab.png",
@@ -1168,19 +1169,18 @@ function showSandwich(mode) {
     facemesh0.hidden = false;
     facemesh1.hidden = false;
 
+    sandwichRoot.hidden = false;
+    sandwichRoot1.hidden = false;
+
     if (mode == SANDWICH_MODE_SWIRL) {
 
         bodySegmentationRect.hidden = false;
-
-        sandwichRoot.hidden = false;
-        sandwichRoot1.hidden = false;
+        sandwichSwirlRoot.hidden = false;
     }
     else if (mode == SANDWICH_MODE_EAT) {
 
         bodySegmentationRect.hidden = true;
-
-        sandwichRoot.hidden = true;
-        sandwichRoot1.hidden = true;
+        sandwichSwirlRoot.hidden = true;
     }
 
     newHand.hidden = false;
@@ -1278,15 +1278,17 @@ function showSandwich(mode) {
                     ingIndex = 0;
             }
 
+            Diagnostics.log("curResIndex: " + curResIndex);
+
             // Set cheek texture
-            setupMaterial(newSandwichCheek0Mesh, curResIndex++, NEW_DESIGN_URL_TABLE.sandwich_check_0);
+            setupMaterial(newSandwichCheek0Mesh, curResIndex++, NEW_DESIGN_URL_TABLE.sandwich_cheek_0);
         }
         else if (mode == SANDWICH_MODE_EAT) {
 
-            Diagnostics.log("mode; " + mode);
+            Diagnostics.log("...");
 
             // Set cheek texture
-            setupMaterial(newSandwichCheek0Mesh, curResIndex++, NEW_DESIGN_URL_TABLE.sandwich_check_1);
+            setupMaterial(newSandwichCheek0Mesh, curResIndex++, NEW_DESIGN_URL_TABLE.sandwich_cheek_1);
         }
 
         // Setup position
@@ -1705,12 +1707,11 @@ function onFaceTracked(faceIndex) {
     else if (curTheme === THEME_NAME_LOOKUP_TABLE.meal)
         showMeal();
     */
-   /*
+   
     if (currentSandwichMode == SANDWICH_MODE_SWIRL)
         showSandwich(SANDWICH_MODE_SWIRL);
     else if (currentSandwichMode == SANDWICH_MODE_EAT)
         showSandwich(SANDWICH_MODE_EAT);
-        */
 }
 
 function onFaceUntracked(faceIndex) {
