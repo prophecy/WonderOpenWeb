@@ -764,14 +764,13 @@ function startGame() {
     nextProductCounter(firstTheme);
     setCurrentProduct(firstTheme);
 
-    /*
     if (THEME_NAME_LOOKUP_TABLE.gyoza == firstTheme.theme) {
 
         showOpenMouthAwhile();
         showGyoza();
     }
     else if (THEME_NAME_LOOKUP_TABLE.sandwich == firstTheme.theme)
-        showSandwich(SANDWICH_MODE_EAT);
+        showSandwich(SANDWICH_MODE_SWIRL);
     else if (THEME_NAME_LOOKUP_TABLE.crabstick == firstTheme.theme)
         showCrabstick();
     else if (THEME_NAME_LOOKUP_TABLE.meal == firstTheme.theme) {
@@ -781,7 +780,6 @@ function startGame() {
     }
     else if (THEME_NAME_LOOKUP_TABLE.takoyaki == firstTheme.theme)
         showTakoyaki();
-    */
    
     // Debug - Show tako when start
     //showTakoyaki();
@@ -792,8 +790,8 @@ function startGame() {
 
     // For the build of 2 sandwiches
     //showSandwich(SANDWICH_MODE_EAT);
-    showMeal();
-    currentProductTitle = "meal_kraphrao";
+    //showMeal();
+    //currentProductTitle = "meal_kraphrao";
 }
 
 function changeTheme() {
@@ -825,7 +823,7 @@ function changeTheme() {
         showGyoza();
     }
     else if (THEME_NAME_LOOKUP_TABLE.sandwich == nextTheme.theme)
-        showSandwich(SANDWICH_MODE_EAT);
+        showSandwich(SANDWICH_MODE_SWIRL);
     else if (THEME_NAME_LOOKUP_TABLE.crabstick == nextTheme.theme)
         showCrabstick();
     else if (THEME_NAME_LOOKUP_TABLE.meal == nextTheme.theme) {
