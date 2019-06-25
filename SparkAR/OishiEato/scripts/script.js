@@ -778,7 +778,7 @@ function startGame() {
     //currentProductTitle = "sandwich_alaska_wakame";
 
     // For the build of 2 sandwiches
-    showSandwich(SANDWICH_MODE_SWIRL);
+    showSandwich(SANDWICH_MODE_EAT);
 }
 
 function changeTheme() {
@@ -2082,7 +2082,9 @@ function startFoodFeederV2(foodObjList, args) {
         var signal3 = testyPool0.transform.rotationX.sub(rad).gt(Reactive.val(1.5 * Math.PI));        
         var signalOut = signal0.and(signal1).or(signal3);
 
-        foodObjList[i].hidden = signalOut.not();
+        var obj = foodObjList[i];
+        //obj.hidden = signalOut.not();
+        obj.transform.x = signalOut.ifThenElse(Reactive.val(0), Reactive.val(10000));
     }
 
     // Rotate food objs
