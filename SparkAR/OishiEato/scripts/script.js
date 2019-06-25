@@ -763,7 +763,7 @@ function startGame() {
 
     nextProductCounter(firstTheme);
     setCurrentProduct(firstTheme);
-
+/*
     if (THEME_NAME_LOOKUP_TABLE.gyoza == firstTheme.theme) {
 
         showOpenMouthAwhile();
@@ -780,16 +780,15 @@ function startGame() {
     }
     else if (THEME_NAME_LOOKUP_TABLE.takoyaki == firstTheme.theme)
         showTakoyaki();
-   
+*/  
     // Debug - Show tako when start
     //showTakoyaki();
     //currentProductTitle = "takoyaki_takoyaki";
     // Debug, show sandwich when start
-    //showSandwich(SANDWICH_MODE_EAT);
-    //currentProductTitle = "sandwich_alaska_wakame";
+    showSandwich(SANDWICH_MODE_EAT);
+    currentProductTitle = "sandwich_alaska_wakame";
 
     // For the build of 2 sandwiches
-    //showSandwich(SANDWICH_MODE_EAT);
     //showMeal();
     //currentProductTitle = "meal_kraphrao";
 }
@@ -2055,11 +2054,51 @@ function handleFoodFeeder(crushObjList, foodObjList0, foodObjList1,
     startRamenFeeder();
     startNormalCrushFeeder(crushObjList, foodFeederArgs);
 
-    startFoodFeederV2(foodObjList0, foodFeederArgs, testyPool0);
-    startFoodFeederV2(foodObjList1, foodFeederArgs, testyPool01);
+    //startFoodFeederV2(foodObjList0, testyPool0);
+    //startFoodFeederV2(foodObjList1, testyPool01);
+    startFoodFeederV3(foodObjList0, testyPool0);
 }
 
-function startFoodFeederV2(foodObjList, args, testyPool) {
+function startFoodFeederV3(foodObjList, testyPool) {
+
+    // LERP in normalized range
+    const DURATION = 2000;
+
+    const interval = { 
+        durationMilliseconds: DURATION,
+        loopCount: Infinity,
+        mirror: false  
+    };
+
+    const driver = Animation.timeDriver(interval);
+    const samp = Animation.samplers.linear(0, 1);
+    const anim = Animation.animate(driver, samp);
+
+    driver.start();
+
+    // Adjust signal with offset
+    for (var i=0; i<foodObjList.length; ++i) {
+
+        //var offset = 0.5; // [0, 1]
+        var offset = Random.random();
+        var offsetSignal = anim.add(offset).mod(Reactive.val(1.0));
+    
+        // Manipulate obj transform
+        const RANGE = 40;
+        const TAIL = 20 * Random.random();
+        var obj = foodObjList[i];
+        obj.transform.z = offsetSignal.sub(1).mul(Reactive.val((RANGE + TAIL) * -1.0));
+
+        const VARIANT = 20;
+        const nVec = Random.random();
+        obj.transform.x = offsetSignal.sub(1).mul(Reactive.val(VARIANT*nVec - VARIANT*0.5));
+
+        const SHIFT = 20;
+        obj.transform.y = offsetSignal.sub(1).mul(Reactive.val(SHIFT));
+    }
+}
+
+function startFoodFeederV2(foodObjList, testyPool) {
 
     var RADIUS = 80;
     var VARIANT = 5;
@@ -2084,7 +2123,7 @@ function startFoodFeederV2(foodObjList, args, testyPool) {
     }
 
     // Manipulate spin movement
-    applyFoodSpinMovement(testyPool, 10000);
+    applyFoodSpinMovement(testyPool, 3000);
     /* // Alternal rotation using Euler 
     runFoodSpinMoveMent(3000);
     function runFoodSpinMoveMent(duration) {
