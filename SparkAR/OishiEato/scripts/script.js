@@ -770,7 +770,7 @@ function startGame() {
         showGyoza();
     }
     else if (THEME_NAME_LOOKUP_TABLE.sandwich == firstTheme.theme)
-        showSandwich(SANDWICH_MODE_SWIRL);
+        showSandwich(SANDWICH_MODE_EAT);
     else if (THEME_NAME_LOOKUP_TABLE.crabstick == firstTheme.theme)
         showCrabstick();
     else if (THEME_NAME_LOOKUP_TABLE.meal == firstTheme.theme) {
@@ -821,7 +821,7 @@ function changeTheme() {
         showGyoza();
     }
     else if (THEME_NAME_LOOKUP_TABLE.sandwich == nextTheme.theme)
-        showSandwich(SANDWICH_MODE_SWIRL);
+        showSandwich(SANDWICH_MODE_EAT);
     else if (THEME_NAME_LOOKUP_TABLE.crabstick == nextTheme.theme)
         showCrabstick();
     else if (THEME_NAME_LOOKUP_TABLE.meal == nextTheme.theme) {
@@ -1824,6 +1824,7 @@ function onFace0MouthOpen() {
             newRamen.hidden = true;
             ramenPool0.hidden = true;
             testyPool0.hidden = false;
+            testyPool01.hidden = false;
     
             var mouth = FaceTracking.face(0).mouth;
             foodFeederRoot0.transform.x = mouth.center.x;
@@ -1839,6 +1840,7 @@ function onFace0MouthOpen() {
         newRamen.hidden = true;
         ramenPool0.hidden = false;
         testyPool0.hidden = true;
+        testyPool01.hidden = true;
 
         foodFeederRoot0.transform.x = mouth.center.x;
         foodFeederRoot0.transform.y = mouth.center.y;
