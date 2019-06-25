@@ -764,6 +764,7 @@ function startGame() {
     nextProductCounter(firstTheme);
     setCurrentProduct(firstTheme);
 
+    /*
     if (THEME_NAME_LOOKUP_TABLE.gyoza == firstTheme.theme) {
 
         showOpenMouthAwhile();
@@ -780,7 +781,8 @@ function startGame() {
     }
     else if (THEME_NAME_LOOKUP_TABLE.takoyaki == firstTheme.theme)
         showTakoyaki();
-
+    */
+   
     // Debug - Show tako when start
     //showTakoyaki();
     //currentProductTitle = "takoyaki_takoyaki";
@@ -790,6 +792,8 @@ function startGame() {
 
     // For the build of 2 sandwiches
     //showSandwich(SANDWICH_MODE_EAT);
+    showMeal();
+    currentProductTitle = "meal_kraphrao";
 }
 
 function changeTheme() {
@@ -1744,7 +1748,7 @@ function onEyeOpened(faceIndex, eyeIndex) {
 
     var face = FaceTracking.face(faceIndex);
 
-    Diagnostics.log("faceIndex: " + faceIndex + " eyeIndex: " + eyeIndex);
+    //Diagnostics.log("faceIndex: " + faceIndex + " eyeIndex: " + eyeIndex);
 
     var curLaserBeamLeft = laserBeamLeft;
     var curLaserBeamRight = laserBeamRight;
