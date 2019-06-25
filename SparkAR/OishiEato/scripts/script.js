@@ -1331,8 +1331,8 @@ function showMeal() {
     facemesh1Meal.hidden = false;
     newRamen.hidden = false;
 
-    facemesh0.material = facePaintCheekMat;
-    facemesh1.material = facePaintCheekMat;
+    facemesh0.material = facePaintInvisibleMat;
+    facemesh1.material = facePaintInvisibleMat;
 
     loadNewDesignMeal();
     showNewProdSmall();
