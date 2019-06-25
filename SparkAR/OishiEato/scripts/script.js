@@ -2083,8 +2083,11 @@ function startFoodFeederV2(foodObjList, args) {
         var signalOut = signal0.and(signal1).or(signal3);
 
         var obj = foodObjList[i];
-        //obj.hidden = signalOut.not();
-        obj.transform.x = signalOut.ifThenElse(Reactive.val(0), Reactive.val(10000));
+        
+        // This technique improve performance tremendously comparing with visible/invisible
+        // The old technique -> obj.hidden = signalOut.not();
+        const HIDDEN_POINT = 10000; 
+        obj.transform.x = signalOut.ifThenElse(Reactive.val(0), Reactive.val(HIDDEN_POINT));
     }
 
     // Rotate food objs
