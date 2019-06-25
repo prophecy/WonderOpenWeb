@@ -1709,7 +1709,6 @@ function onFaceTracked(faceIndex) {
     }
     
     // Show the current theme
-    /*
     if (curTheme === THEME_NAME_LOOKUP_TABLE.gyoza)
         showGyoza();
     else if (curTheme === THEME_NAME_LOOKUP_TABLE.sandwich)
@@ -1720,12 +1719,13 @@ function onFaceTracked(faceIndex) {
         showTakoyaki();
     else if (curTheme === THEME_NAME_LOOKUP_TABLE.meal)
         showMeal();
-    */
    
+    /*
     if (currentSandwichMode == SANDWICH_MODE_SWIRL)
         showSandwich(SANDWICH_MODE_SWIRL);
     else if (currentSandwichMode == SANDWICH_MODE_EAT)
         showSandwich(SANDWICH_MODE_EAT);
+    */
 }
 
 function onFaceUntracked(faceIndex) {
@@ -2057,6 +2057,7 @@ function handleFoodFeeder(crushObjList, foodObjList0, foodObjList1,
     //startFoodFeederV2(foodObjList0, testyPool0);
     //startFoodFeederV2(foodObjList1, testyPool01);
     startFoodFeederV3(foodObjList0, testyPool0);
+    startFoodFeederV3(foodObjList1, testyPool01);
 }
 
 function startFoodFeederV3(foodObjList, testyPool) {
@@ -2071,7 +2072,7 @@ function startFoodFeederV3(foodObjList, testyPool) {
     };
 
     const driver = Animation.timeDriver(interval);
-    const samp = Animation.samplers.linear(0, 1);
+    const samp = Animation.samplers.easeInOutQuad(0, 1);
     const anim = Animation.animate(driver, samp);
 
     driver.start();
