@@ -108,7 +108,7 @@ const headGyozaRoot1 = Scene.root.find('head_gyoza_root1');
 const facePaintGyozaMat = Materials.get("face_paint_gyoza_mat");
 const facePaintSandwichMat = Materials.get("face_paint_sandwich_mat");
 const facePaintInvisibleMat = Materials.get("face_paint_invisible_mat");
-
+const facePaintCheekMat = Materials.get("face_paint_cheek_mat");
 // --------------------------------------------------------------------------------
 // RESOURCES for NEW PRODUCT
 
@@ -1332,6 +1332,9 @@ function showMeal() {
     facemesh0Meal.hidden = false;
     facemesh1Meal.hidden = false;
     newRamen.hidden = false;
+
+    facemesh0.material = facePaintCheekMat;
+    facemesh1.material = facePaintCheekMat;
 
     loadNewDesignMeal();
     showNewProdSmall();
