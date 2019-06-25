@@ -56,6 +56,7 @@ const Random = require('Random');
 // Food feeder for player #0
 var foodFeederRoot0 = Scene.root.find('foodFeederRoot0');
 var testyPool0 = Scene.root.find("testyPool0");
+var testyPool01 = Scene.root.find("testyPool01");
 
 var foodPoolList0 = [];
 for (var i=0; i<32; ++i)
@@ -64,6 +65,15 @@ for (var i=0; i<32; ++i)
 var foodPoolMeshList0 = [];
 for (var i=0; i<32; ++i)
     foodPoolMeshList0.push(Scene.root.find('testy0' + i + "_mesh"));
+
+var foodPoolList01 = [];
+for (var i=0; i<32; ++i)
+    foodPoolList01.push(Scene.root.find('testy001' + i));
+
+var foodPoolMeshList01 = [];
+for (var i=0; i<32; ++i)
+    foodPoolMeshList01.push(Scene.root.find('testy001' + i + "_mesh"));    
+
 
 var crushPoolList0 = [];
 for (var i=0; i<10; ++i)
@@ -305,45 +315,6 @@ const THEME_NAME_LOOKUP_REVERSE_MAP = {
     "Meal": "meal",
 }
 
-const FOOD_TEX_LOOKUP_TABLE = {
-
-    gyoza: [
-        "theme_gyoza/gyoza_00.png", "theme_gyoza/gyoza_01.png", 
-    ],
-    sandwich: [
-        "theme_sandwich/sw2.png", "theme_sandwich/sw3.png", "theme_sandwich/sw4.png", "theme_sandwich/sw8.png", "theme_sandwich/sw10.png"
-    ],
-    crabstick: [
-        "theme_crabstick/crab_4.png", "theme_crabstick/crab_5.png", "theme_crabstick/crab_6.png", 
-    ],
-    takoyaki: [
-        "theme_tako/ta4.png", "theme_tako/ta5.png", "theme_tako/ta6.png", 
-    ],
-    meal: [ ],
-}
-
-const CRUSH_TEX_LOOKUP_TABLE = {
-
-    gyoza: [
-        "theme_gyoza/gyoza_02.png", "theme_gyoza/gyoza_03.png", "theme_gyoza/gyoza_04.png", "theme_gyoza/gyoza_05.png",
-    ],
-    sandwich: [
-        "theme_sandwich/sw2.png", "theme_sandwich/sw3_2.png", "theme_sandwich/sw9.png", "theme_sandwich/sw10_2.png",
-        "theme_sandwich/sw11.png", "theme_sandwich/sw12.png"
-    ],
-    crabstick: [
-        "theme_crabstick/crab_7.png", "theme_crabstick/crab_8.png", "theme_crabstick/crab_9.png", 
-    ],
-    takoyaki: [
-        "theme_tako/ta7.png", "theme_tako/ta8.png", "theme_tako/ta9.png", "theme_tako/ta10.png", 
-        "theme_tako/ta11.png", 
-    ],
-    meal: [ 
-        "theme_meal/ramen_detail1.png", "theme_meal/ramen_detail2.png", 
-        "theme_meal/ramen_detail3.png", "theme_meal/ramen_detail4.png", 
-    ],
-}
-
 const FACE_NAME_LOOKUP_TABLE = {
 
     gyoza: "gyoza",
@@ -420,6 +391,46 @@ const NEW_DESIGN_URL_TABLE = {
     meal_prod: "new_design/sample_meal/ramenL.png",
     meal_ramen: "new_design/sample_meal/ramen_still.png",
 };
+
+const FOOD_TEX_LOOKUP_TABLE = {
+
+    gyoza: [
+        "theme_gyoza/gyoza_00.png", "theme_gyoza/gyoza_01.png", 
+    ],
+    //sandwich: [
+        //"theme_sandwich/sw2.png", "theme_sandwich/sw3.png", "theme_sandwich/sw4.png", "theme_sandwich/sw8.png", "theme_sandwich/sw10.png"
+    //],
+    sandwich: NEW_DESIGN_URL_TABLE.sandwich_ingredient,
+    crabstick: [
+        "theme_crabstick/crab_4.png", "theme_crabstick/crab_5.png", "theme_crabstick/crab_6.png", 
+    ],
+    takoyaki: [
+        "theme_tako/ta4.png", "theme_tako/ta5.png", "theme_tako/ta6.png", 
+    ],
+    meal: [ ],
+}
+
+const CRUSH_TEX_LOOKUP_TABLE = {
+
+    gyoza: [
+        "theme_gyoza/gyoza_02.png", "theme_gyoza/gyoza_03.png", "theme_gyoza/gyoza_04.png", "theme_gyoza/gyoza_05.png",
+    ],
+    sandwich: [
+        "theme_sandwich/sw2.png", "theme_sandwich/sw3_2.png", "theme_sandwich/sw9.png", "theme_sandwich/sw10_2.png",
+        "theme_sandwich/sw11.png", "theme_sandwich/sw12.png"
+    ],
+    crabstick: [
+        "theme_crabstick/crab_7.png", "theme_crabstick/crab_8.png", "theme_crabstick/crab_9.png", 
+    ],
+    takoyaki: [
+        "theme_tako/ta7.png", "theme_tako/ta8.png", "theme_tako/ta9.png", "theme_tako/ta10.png", 
+        "theme_tako/ta11.png", 
+    ],
+    meal: [ 
+        "theme_meal/ramen_detail1.png", "theme_meal/ramen_detail2.png", 
+        "theme_meal/ramen_detail3.png", "theme_meal/ramen_detail4.png", 
+    ],
+}
 
 // --------------------------------------------------------------------------------
 // CORE DATA
@@ -701,7 +712,7 @@ function main() {
         MOUTH_OPENNESS_MIN_THRESHOLD, MOUTH_CLOSSNESS_MAX_THRESHOLD, 
         onFace0MouthOpen, onFace0MouthClose);
 
-    handleFoodFeeder(crushPoolList0, foodPoolList0);
+    handleFoodFeeder(crushPoolList0, foodPoolList0, foodPoolList01, foodPoolMeshList0, foodPoolMeshList01);
 
     // Request
     getThemeData(CONFIG.GET_ASSET_LIST_URL, function(data, error) {
@@ -1284,8 +1295,6 @@ function showSandwich(mode) {
             setupMaterial(newSandwichCheek0Mesh, curResIndex++, NEW_DESIGN_URL_TABLE.sandwich_cheek_0);
         }
         else if (mode == SANDWICH_MODE_EAT) {
-
-            Diagnostics.log("...");
 
             // Set cheek texture
             setupMaterial(newSandwichCheek0Mesh, curResIndex++, NEW_DESIGN_URL_TABLE.sandwich_cheek_1);
@@ -1951,21 +1960,15 @@ function hideBubble(obj) {
 // --------------------------------------------------------------------------------
 // Food feeder
 
-function handleFoodFeeder(crushObjList, foodObjList) {
+function handleFoodFeeder(crushObjList, foodObjList0, foodObjList1, 
+    foodPoolMeshList0, foodPoolMeshList1) {
 
     // Setup mat
-    setupFoodMat(FOOD_TEX_LOOKUP_TABLE.sandwich);
+    setupFoodMat(FOOD_TEX_LOOKUP_TABLE.sandwich, foodPoolMeshList0);
+    setupFoodMat(FOOD_TEX_LOOKUP_TABLE.sandwich, foodPoolMeshList1);
+
     setupCrushMat(CRUSH_TEX_LOOKUP_TABLE.meal);
-    /*
-    // Setup shopstick
-    var url = CONFIG.BASE_TEX_URL + "theme_meal/chopsticks.png"
-    var tex = Textures.get(FOOD_TEX_LIST[0]);
-    var mat = Materials.get(FOOD_MAT_LIST[0]);
-
-    tex.url = url;
-    mat.diffuse = tex;
-    */
-
+    
     mealShopstick00mesh.material = Materials.get("new_chopstick_mat");
     mealShopstick01mesh.material = Materials.get("new_chopstick_mat");
 
@@ -1973,8 +1976,8 @@ function handleFoodFeeder(crushObjList, foodObjList) {
     applyShopsticksBound(mealShopstick00_pivot, -10, 20, 600);
     applyShopsticksBound(mealShopstick01_pivot, 0, 30, 600);
     
-    function setupFoodMat(texPathList) {
-        setupMatTex(texPathList, FOOD_MAT_LIST, FOOD_TEX_LIST, foodPoolMeshList0);
+    function setupFoodMat(texPathList, meshList) {
+        setupMatTex(texPathList, FOOD_MAT_LIST, FOOD_TEX_LIST, meshList);
     }
 
     function setupCrushMat(texPathList) {
@@ -2044,13 +2047,14 @@ function handleFoodFeeder(crushObjList, foodObjList) {
     startRamenFeeder();
     startNormalCrushFeeder(crushObjList, foodFeederArgs);
 
-    startFoodFeederV2(foodObjList, foodFeederArgs);
+    startFoodFeederV2(foodObjList0, foodFeederArgs, testyPool0);
+    startFoodFeederV2(foodObjList1, foodFeederArgs, testyPool01);
 }
 
-function startFoodFeederV2(foodObjList, args) {
+function startFoodFeederV2(foodObjList, args, testyPool) {
 
-    var RADIUS = 120;
-    var VARIANT = 3;
+    var RADIUS = 80;
+    var VARIANT = 5;
 
     // This line is generated by my code
     // https://github.com/prophecy/JupyterTreasure/blob/master/ParticleAndSpace/rand_space_test.ipynb
@@ -2071,7 +2075,27 @@ function startFoodFeederV2(foodObjList, args) {
         foodObjList[i].transform.z = pz * RADIUS;
     }
 
-    applyFoodSpinMovement(testyPool0, 3000);
+    // Manipulate spin movement
+    applyFoodSpinMovement(testyPool, 10000);
+    /* // Alternal rotation using Euler 
+    runFoodSpinMoveMent(3000);
+    function runFoodSpinMoveMent(duration) {
+
+        const swirlParms = {
+            durationMilliseconds: duration,
+            loopCount: Infinity,
+            mirror: false  
+        };
+
+        const driver = Animation.timeDriver(swirlParms);
+        const sampler = Animation.samplers.linear(0, Math.PI * 2.0 * -1.0);
+        const anim = Animation.animate(driver, sampler);
+
+        testyPool0.transform.rotationX = anim;
+
+        driver.start();
+    }
+    */
 
     for (var i=0; i<foodObjList.length; ++i) {
 
