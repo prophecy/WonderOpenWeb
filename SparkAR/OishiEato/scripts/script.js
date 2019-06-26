@@ -29,6 +29,7 @@ const CONFIG = {
     ENV: ENV,
     GET_ASSET_LIST_URL: BASE_URL + "getAssetList.aspx",
     BASE_TEX_URL: BASE_URL,
+    BASE_BUBBLE_URL: "new_design/sample_quote/",
 }
 
 // --------------------------------------------------------------------------------
@@ -441,6 +442,45 @@ var currentThemeData = {};
 function storeData(data) {
 
     currentThemeData = data;
+
+    //Diagnostics.log("currentThemeData: " + JSON.stringify(currentThemeData));
+
+    // Set default quote data
+    if (currentThemeData["quote"] == undefined) {
+
+        var QUOTE_COUNT = 75;
+        var quote = {};
+        
+        quote.indices = [];
+        for (var i=0; i<QUOTE_COUNT; ++i)
+            quote.indices.push(i+1);
+
+        quote.method = "rand"; // rand | seq
+
+        currentThemeData.quote = quote;
+    }
+
+    // Run quote
+    quote.curIndex = 0;
+
+    // Run random
+    if (currentThemeData.quote.method == "rand") {
+
+        // Run random using shuffle bag
+        for (var i=0; i<currentThemeData.quote.indices.length; ++i) {
+
+            var curIndex = i;
+            var curVal = currentThemeData.quote.indices[i];
+            var randIndex = Math.floor(Random.random() * currentThemeData.quote.indices.length);
+            var randVal = currentThemeData.quote.indices[randIndex];
+
+            // Swap
+            currentThemeData.quote.indices[curIndex] = randVal;
+            currentThemeData.quote.indices[randIndex] = curVal;
+        }
+    }
+
+    //Diagnostics.log("quote: " + JSON.stringify(currentThemeData.quote));
 }
 
 function getNpdList() {
@@ -686,7 +726,6 @@ var curTheme = undefined;
 
 function main() {
 
-    // Todo: Set swirl for player 1
     //initSwirlSandwich(frontSwirl1, frontSandwichList1, frontSandwichMeshList1, true);
     //initSwirlSandwich(backSwirl1, backSandwichList1, backSandwichMeshList1, false);
     
@@ -758,6 +797,7 @@ function startGame() {
     // Pop the theme
     itemQueue.shift();
 
+    Diagnostics.log("themeOrder: " + JSON.stringify(themeOrder));
     Diagnostics.log("firstTheme: " + JSON.stringify(firstTheme));
     Diagnostics.log("currentRound: " + currentRound);
 
@@ -798,10 +838,8 @@ function changeTheme() {
     // Is end round, create the new round
     if (itemQueue.length <= 0) {
 
-        Diagnostics.log("Create new round!");
-        
         currentRound += 1;
-        Diagnostics.log("currentRound: " + currentRound);
+        Diagnostics.log("Create new round: currentRound: " + currentRound);
         
         createDataRoundMoreThanZero();
     }
@@ -1023,7 +1061,7 @@ function showGyoza() {
         var curResIndex = 0;
     
         setupMaterial(newQuoteBgMesh, curResIndex++, NEW_DESIGN_URL_TABLE.gyoza_bubble_bg);
-        setupMaterial(newQuoteTxtMesh, curResIndex++, getCurBubbleTxtUrl(THEME_NAME_LOOKUP_TABLE.gyoza));
+        setupMaterial(newQuoteTxtMesh, curResIndex++, getCurBubbleTxtUrl());
     
         var prodUrl = getCurProdTxtUrl(THEME_NAME_LOOKUP_TABLE.gyoza)
         setupMaterial(newProdBigMesh, curResIndex++, prodUrl);
@@ -1092,7 +1130,7 @@ function showTakoyaki() {
         var curResIndex = 0;
 
         setupMaterial(newQuoteBgMesh, curResIndex++, NEW_DESIGN_URL_TABLE.takoyaki_bubble_bg);
-        setupMaterial(newQuoteTxtMesh, curResIndex++, getCurBubbleTxtUrl(THEME_NAME_LOOKUP_TABLE.takoyaki));
+        setupMaterial(newQuoteTxtMesh, curResIndex++, getCurBubbleTxtUrl());
 
         var prodUrl = getCurProdTxtUrl(THEME_NAME_LOOKUP_TABLE.takoyaki)
         setupMaterial(newProdBigMesh, curResIndex++, prodUrl);
@@ -1132,7 +1170,7 @@ function showCrabstick() {
         var curResIndex = 0;
 
         setupMaterial(newQuoteBgMesh, curResIndex++, NEW_DESIGN_URL_TABLE.crabstick_bubble_bg);
-        setupMaterial(newQuoteTxtMesh, curResIndex++, getCurBubbleTxtUrl(THEME_NAME_LOOKUP_TABLE.crabstick));
+        setupMaterial(newQuoteTxtMesh, curResIndex++, getCurBubbleTxtUrl());
 
         var prodUrl = getCurProdTxtUrl(THEME_NAME_LOOKUP_TABLE.crabstick)
         setupMaterial(newProdBigMesh, curResIndex++, prodUrl);
@@ -1209,7 +1247,7 @@ function showSandwich(mode) {
         var curResIndex = 0;
 
         setupMaterial(newQuoteBgMesh, curResIndex++, NEW_DESIGN_URL_TABLE.sandwich_bubble_bg);
-        setupMaterial(newQuoteTxtMesh, curResIndex++, getCurBubbleTxtUrl(THEME_NAME_LOOKUP_TABLE.sandwich));
+        setupMaterial(newQuoteTxtMesh, curResIndex++, getCurBubbleTxtUrl());
 
         var prodUrl = getCurProdTxtUrl(THEME_NAME_LOOKUP_TABLE.sandwich)
         setupMaterial(newProdBigMesh, curResIndex++, prodUrl);
@@ -1341,7 +1379,7 @@ function showMeal() {
         var curResIndex = 0;
 
         setupMaterial(newQuoteBgMesh, curResIndex++, NEW_DESIGN_URL_TABLE.meal_bubble_bg);
-        setupMaterial(newQuoteTxtMesh, curResIndex++, getCurBubbleTxtUrl(THEME_NAME_LOOKUP_TABLE.meal));
+        setupMaterial(newQuoteTxtMesh, curResIndex++, getCurBubbleTxtUrl());
 
         var prodUrl = getCurProdTxtUrl(THEME_NAME_LOOKUP_TABLE.meal)
         setupMaterial(newProdBigMesh, curResIndex++, prodUrl);
@@ -1474,32 +1512,19 @@ function setupQuoteProdPosition(transformData) {
     newProdSmall.transform.rotationZ = transformData.new_prod_small_rotation[2];
 }
 
-// DBG
-const testQuoteUrl = [
-    "new_design/sample_quote/quote1.png",
-    "new_design/sample_quote/quote2.png",
-    "new_design/sample_quote/quote3.png",
-    "new_design/sample_quote/quote4.png",
-    "new_design/sample_quote/quote5.png",
-    "new_design/sample_quote/quote6.png",
-    "new_design/sample_quote/quote7.png",
-    "new_design/sample_quote/quote8.png",
-    "new_design/sample_quote/quote9.png",
-    "new_design/sample_quote/quote10.png",
-]
-var curTestQuoteUrl = 0;
+function getCurBubbleTxtUrl() {
 
-// Todo: need the real logic
-function getCurBubbleTxtUrl(theme) {
+    var indices = currentThemeData.quote.indices;
+    var curIndex = currentThemeData.quote.curIndex
+    var bubbleIndex = indices[curIndex];
 
-    Diagnostics.log("Get cur bubble txt with theme: " + theme);
+    var bubbleUrl = CONFIG.BASE_BUBBLE_URL + "quote" + bubbleIndex + ".png";
+    Diagnostics.log("bubbleUrl: " + bubbleUrl);
 
-    var ret = testQuoteUrl[curTestQuoteUrl];
+    if (++currentThemeData.quote.curIndex >= currentThemeData.quote.length)
+        currentThemeData.quote.curIndex = 0;
 
-    if (++curTestQuoteUrl >= testQuoteUrl.length)
-        curTestQuoteUrl = 0;
-
-    return ret;
+    return bubbleUrl;
 }
 
 function getCurProdTxtUrl(theme) {
