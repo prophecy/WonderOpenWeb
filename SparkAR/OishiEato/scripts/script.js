@@ -187,6 +187,7 @@ const frontGyozaTrayRect = Scene.root.find("front_gyoza_tray");
 // For meal (Ramen)
 const newRamen = Scene.root.find("new_ramen");
 const newRamenMesh = Scene.root.find("new_ramen_mesh");
+const frontRamenFlagRect = Scene.root.find("front_ramen_flag");
 
 const ramenPool0 = Scene.root.find("ramenPool0");
 
@@ -417,6 +418,7 @@ const NEW_DESIGN_URL_TABLE = {
     meal_bubble_txt: "new_design/sample_takoyaki/copy.png",
     meal_prod: "new_design/sample_meal/ramenL.png",
     meal_ramen: "new_design/sample_meal/ramen_still.png",
+    meal_flag: "new_design/sample_meal/flag.png",
 };
 
 const FOOD_TEX_LOOKUP_TABLE = {
@@ -829,7 +831,7 @@ function startGame() {
 
     nextProductCounter(firstTheme);
     setCurrentProduct(firstTheme);
-/*
+
     if (THEME_NAME_LOOKUP_TABLE.gyoza == firstTheme.theme) {
 
         showOpenMouthAwhile();
@@ -846,7 +848,6 @@ function startGame() {
     }
     else if (THEME_NAME_LOOKUP_TABLE.takoyaki == firstTheme.theme)
         showTakoyaki();
-*/
 
     // Debug - Show tako when start
     //showTakoyaki();
@@ -858,7 +859,7 @@ function startGame() {
     //showMeal();
     //currentProductTitle = "meal_kraphrao";
     //showCrabstick();
-    showMeal();
+    //showMeal();
 }
 
 function changeTheme() {
@@ -974,6 +975,7 @@ function hideAllThemes() {
     frontGyozaTableRect.hidden = true;
     frontGyozaTrayRect.hidden = true;
     newTakoyakiTray.hidden = true;
+    frontRamenFlagRect.hidden = true;
 }
 
 const QUOTE_PROD_TRANSFORM = {
@@ -1061,8 +1063,8 @@ const QUOTE_PROD_TRANSFORM = {
         new_quote_bg_scale: [1, 1, 1],
         new_quote_text_scale: [1, 1, 1],
         // Rotation
-        new_prod_small_rotation: [0, -45, 0],
-        new_prod_big_rotation: [0, -45, 0],
+        new_prod_small_rotation: [0, 45, 0],
+        new_prod_big_rotation: [0, 45, 0],
 
         new_ramen: [-35, 0, 12],
     },
@@ -1436,6 +1438,7 @@ function showMeal() {
     facemesh0Meal.hidden = false;
     facemesh1Meal.hidden = false;
     //newRamen.hidden = false;
+    frontRamenFlagRect.hidden = false;
 
     facemesh0.material = facePaintInvisibleMat;
     facemesh1.material = facePaintInvisibleMat;
@@ -1460,6 +1463,7 @@ function showMeal() {
         setupMaterial(newProdSmallMesh, curResIndex++, prodUrl);
 
         //setupMaterial(newRamenMesh, curResIndex++, NEW_DESIGN_URL_TABLE.meal_ramen);
+        setupMaterial(frontRamenFlagRect, curResIndex++, NEW_DESIGN_URL_TABLE.meal_flag);
 
         newRamen.transform.x = QUOTE_PROD_TRANSFORM.meal.new_ramen[0];
         newRamen.transform.y = QUOTE_PROD_TRANSFORM.meal.new_ramen[1];
