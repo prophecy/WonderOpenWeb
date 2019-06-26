@@ -110,6 +110,9 @@ const facePaintGyozaMat = Materials.get("face_paint_gyoza_mat");
 const facePaintSandwichMat = Materials.get("face_paint_sandwich_mat");
 const facePaintInvisibleMat = Materials.get("face_paint_invisible_mat");
 const facePaintCheekMat = Materials.get("face_paint_cheek_mat");
+const faceTracker0Mat = Materials.get("face_tracker0_mat");
+const faceTracker1Mat = Materials.get("face_tracker1_mat");
+
 // --------------------------------------------------------------------------------
 // RESOURCES for NEW PRODUCT
 
@@ -1239,8 +1242,8 @@ function showSandwich(mode) {
 
     newHand.hidden = false;
 
-    facemesh0.material = facePaintInvisibleMat;
-    facemesh1.material = facePaintInvisibleMat;
+    facemesh0.material = faceTracker0Mat;
+    facemesh1.material = faceTracker1Mat;
 
     showNewProdSmall();
     loadNewDesignSandwich();
