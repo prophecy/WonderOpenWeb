@@ -1064,6 +1064,11 @@ function showGyoza() {
 
     showNewProdSmall();
 
+    if (isMouthOpening[0])
+        onFace0MouthOpen();
+    else if (isMouthOpening[1])
+        onFace1MouthOpen();
+    
     function loadNewDesignGyoza() {
 
         // Reset qyozaSeqMatList
@@ -1390,6 +1395,11 @@ function showMeal() {
     loadNewDesignMeal();
     showNewProdSmall();
 
+    if (isMouthOpening[0])
+        onFace0MouthOpen();
+    else if (isMouthOpening[1])
+        onFace1MouthOpen();
+    
     function loadNewDesignMeal() {
 
         var curResIndex = 0;
@@ -2477,7 +2487,39 @@ function getMaterialWithDiffuseByUrl(matName, texName, url) {
 
 // Handle mouth opening state
 
+var isMouthOpening = [ false, false ];
+
+function checkMouthOpeningStateWithDelay(faceIndex, openMinThres, closeMaxThres, openCallback, closCallback) {
+
+    const interval = Time.setInterval(checkMouthOpeningState, 400);
+
+    function checkMouthOpeningState() {
+
+        var mouth = FaceTracking.face(faceIndex).mouth;
+
+        var mouthOpen = mouth.openness.gt(Reactive.val(openMinThres));
+        //var mouthClose = mouth.openness.lt(Reactive.val(closeMaxThres));
+
+        var state = mouthOpen.pinLastValue();
+
+        if (state != isMouthOpening[faceIndex]) {
+
+            isMouthOpening[faceIndex] = state;
+
+            if (state)
+                openCallback();
+            else
+                closCallback();
+        }
+        
+        Time.clearInterval(interval);
+    }
+}
+
+
 function handleMouthOpeningState(faceIndex, openMinThres, closeMaxThres, openCallback, closCallback) {
+
+    checkMouthOpeningStateWithDelay(faceIndex, openMinThres, closeMaxThres, openCallback, closCallback);
 
     var mouth = FaceTracking.face(faceIndex).mouth;
 
@@ -2485,13 +2527,21 @@ function handleMouthOpeningState(faceIndex, openMinThres, closeMaxThres, openCal
     var mouthClose = mouth.openness.lt(Reactive.val(closeMaxThres));
     
     mouthOpen.monitor().subscribe(function(flag) {
-        if (flag.newValue)
+
+        if (flag.newValue) {
+
+            isMouthOpening[faceIndex] = true;
             openCallback();
+        }
     });
 
     mouthClose.monitor().subscribe(function(flag) {
-        if (flag.newValue)
+
+        if (flag.newValue) {
+
+            isMouthOpening[faceIndex] = false;
             closCallback();
+        }
     });
 }
 
@@ -2519,9 +2569,11 @@ function checkEyeOpeningStateWithDelay(faceIndex, eyeIndex, openCallback, closeC
         if (state == undefined)
             return;
 
-        if (state != isEyeClose[faceIndex, eyeIndex]) {
+        if (state != isEyeClose[faceIndex][eyeIndex]) {
 
             //Diagnostics.log("state: " + state);
+
+            isEyeClose[faceIndex][eyeIndex] = state;
 
             if (state == true)
                 closeCallback(faceIndex, eyeIndex);
