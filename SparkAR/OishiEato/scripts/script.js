@@ -104,14 +104,17 @@ const dbgCanvas = Scene.root.find('debugPanelCanvas');
 const headGyozaRoot = Scene.root.find('head_gyoza_root');
 const headGyozaRoot1 = Scene.root.find('head_gyoza_root1');
 
-// stub
-//const headHachimaki1Mesh = Scene.root.find("head_hachimaki1_mesh");
+
+// --------------------------------------------------------------------------------
+// RESOURCES for materials
 const facePaintGyozaMat = Materials.get("face_paint_gyoza_mat");
 const facePaintSandwichMat = Materials.get("face_paint_sandwich_mat");
 const facePaintInvisibleMat = Materials.get("face_paint_invisible_mat");
 const facePaintCheekMat = Materials.get("face_paint_cheek_mat");
 const faceTracker0Mat = Materials.get("face_tracker0_mat");
 const faceTracker1Mat = Materials.get("face_tracker1_mat");
+
+const invisibleMat = Materials.get("invisible_mat");
 
 // --------------------------------------------------------------------------------
 // RESOURCES for NEW PRODUCT
@@ -351,6 +354,8 @@ const NEW_DESIGN_TEX_LIST = [
 
 const NEW_DESIGN_URL_TABLE = {
     
+    invisible: "new_design/transparent.png",
+
     // Gyoza sample
     gyoza_bubble_bg: "new_design/sample_gyoza/01_01_bg.png",
     gyoza_bubble_txt_00: "new_design/sample_takoyaki/copy.png",
@@ -1006,8 +1011,8 @@ const QUOTE_PROD_TRANSFORM = {
         // Point
         new_prod_small: [30, 0, 10],
         new_prod_big: [30, 0, 10],
-        new_quote_bg: [-10, 0, 12],
-        new_quote_text: [-10, 0, 12],
+        new_quote_bg: [0, 0, 5],
+        new_quote_text: [0, 0, 5],
         // Scale
         new_prod_small_scale: [1, 1, 1],
         new_prod_big_scale: [1, 1, 1],
@@ -1138,9 +1143,8 @@ function showTakoyaki() {
         setupMaterial(newQuoteBgMesh, curResIndex++, NEW_DESIGN_URL_TABLE.takoyaki_bubble_bg);
         setupMaterial(newQuoteTxtMesh, curResIndex++, getCurBubbleTxtUrl());
 
-        var prodUrl = getCurProdTxtUrl(THEME_NAME_LOOKUP_TABLE.takoyaki)
-        setupMaterial(newProdBigMesh, curResIndex++, prodUrl);
-        setupMaterial(newProdSmallMesh, curResIndex++, prodUrl);
+        setupMaterial(newProdBigMesh, curResIndex++, NEW_DESIGN_URL_TABLE.invisible);
+        setupMaterial(newProdSmallMesh, curResIndex++, NEW_DESIGN_URL_TABLE.invisible);
 
         // Setup position
         setupQuoteProdPosition(QUOTE_PROD_TRANSFORM.takoyaki);
