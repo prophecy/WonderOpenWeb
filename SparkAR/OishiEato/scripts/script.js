@@ -1175,6 +1175,12 @@ function showCrabstick() {
     loadNewDesignCrabstick();
     showNewProdSmall();
 
+    // This make sure to beam when any eye is opened
+    for (var i=0; i<2; ++i)
+        for (var j=0; j<2; ++j)
+            if (!isEyeClose[i][j])
+                onEyeOpened(i, j);
+        
     function loadNewDesignCrabstick() {
 
         var curResIndex = 0;
@@ -2489,9 +2495,49 @@ function handleMouthOpeningState(faceIndex, openMinThres, closeMaxThres, openCal
     });
 }
 
+var isEyeClose = [ 
+    [ false, false ], // Face #0 [ left, right ]
+    [ false, false ]  // Face #1 [ left, right ]
+];
+
+function checkEyeOpeningStateWithDelay(faceIndex, eyeIndex, openCallback, closeCallback) {
+    
+    //Diagnostics.log("faceIndex: " + faceIndex + " eyeIndex: " + eyeIndex);
+
+    const interval = Time.setInterval(checkOpeningState, 400);
+
+    function checkOpeningState() {
+
+        var face = FaceTracking.face(faceIndex);
+        var state = undefined;
+
+        if (eyeIndex == 0)
+            state = FaceGestures.hasLeftEyeClosed(face).pinLastValue();
+        else if (eyeIndex == 1)
+            state = FaceGestures.hasRightEyeClosed(face).pinLastValue();
+
+        if (state == undefined)
+            return;
+
+        if (state != isEyeClose[faceIndex, eyeIndex]) {
+
+            //Diagnostics.log("state: " + state);
+
+            if (state == true)
+                closeCallback(faceIndex, eyeIndex);
+            else
+                openCallback(faceIndex, eyeIndex);
+        }
+
+        Time.clearInterval(interval);
+    }
+}
+
 // Check eye closing/opening and blink from
 // Reference: https://developers.facebook.com/docs/ar-studio/reference/classes/facegesturesmodule/
 function handleEyeOpeningState(faceIndex, eyeIndex, openCallback, closeCallback) {
+
+    checkEyeOpeningStateWithDelay(faceIndex, eyeIndex, openCallback, closeCallback);
 
     var face = FaceTracking.face(faceIndex);
 
@@ -2506,6 +2552,8 @@ function handleEyeOpeningState(faceIndex, eyeIndex, openCallback, closeCallback)
     // Monitor from closeness callback
     hasEyeClosed.monitor().subscribe(function(val) {
 
+        isEyeClose[faceIndex][eyeIndex] = val.newValue;
+        
         if (val.newValue == true)
             closeCallback(faceIndex, eyeIndex);
         else
@@ -2532,9 +2580,9 @@ function checkTrackedStateWithDelay(faceIndex, trackCallback, untrackCallback) {
                 trackCallback();
             else
                 untrackCallback();
-
-            Time.clearInterval(interval);
         }
+
+        Time.clearInterval(interval);
     }
 }
 
