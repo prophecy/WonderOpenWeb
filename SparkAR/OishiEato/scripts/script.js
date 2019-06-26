@@ -2072,7 +2072,7 @@ function startFoodFeederV3(foodObjList, testyPool) {
     };
 
     const driver = Animation.timeDriver(interval);
-    const samp = Animation.samplers.easeInOutQuad(0, 1);
+    const samp = Animation.samplers.linear(0, 1);
     const anim = Animation.animate(driver, samp);
 
     driver.start();
