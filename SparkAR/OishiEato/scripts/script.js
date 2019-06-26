@@ -1498,9 +1498,9 @@ function setupQuoteProdPosition(transformData) {
     newProdBig.transform.scaleY = transformData.new_prod_big_scale[1];
     newProdBig.transform.scaleZ = transformData.new_prod_big_scale[2];
 
-    newProdBig.transform.rotationX = transformData.new_prod_big_rotation[0];
-    newProdBig.transform.rotationY = transformData.new_prod_big_rotation[1];
-    newProdBig.transform.rotationZ = transformData.new_prod_big_rotation[2];
+    newProdBig.transform.rotationX = transformData.new_prod_big_rotation[0] * Math.PI / 180.0;
+    newProdBig.transform.rotationY = transformData.new_prod_big_rotation[1] * Math.PI / 180.0;
+    newProdBig.transform.rotationZ = transformData.new_prod_big_rotation[2] * Math.PI / 180.0;
 
     newProdSmall.transform.x = transformData.new_prod_small[0];
     newProdSmall.transform.y = transformData.new_prod_small[1];
@@ -1510,9 +1510,9 @@ function setupQuoteProdPosition(transformData) {
     newProdSmall.transform.scaleY = transformData.new_prod_small_scale[1];
     newProdSmall.transform.scaleZ = transformData.new_prod_small_scale[2];
 
-    newProdSmall.transform.rotationX = transformData.new_prod_small_rotation[0];
-    newProdSmall.transform.rotationY = transformData.new_prod_small_rotation[1];
-    newProdSmall.transform.rotationZ = transformData.new_prod_small_rotation[2];
+    newProdSmall.transform.rotationX = transformData.new_prod_small_rotation[0] * Math.PI / 180.0;
+    newProdSmall.transform.rotationY = transformData.new_prod_small_rotation[1] * Math.PI / 180.0;
+    newProdSmall.transform.rotationZ = transformData.new_prod_small_rotation[2] * Math.PI / 180.0;
 }
 
 function getCurBubbleTxtUrl() {
