@@ -143,6 +143,8 @@ const newGyozaRightMesh = Scene.root.find("new_gyoza_right_mesh");
 
 const newTakoyakiRoot = Scene.root.find("takoyaki_root");
 const newGyozaRoot = Scene.root.find("new_gyoza_root");
+const newTakoyakiTray = Scene.root.find("new_takoyaki_tray");
+const newTakoyakiTrayMesh = Scene.root.find("new_takoyaki_tray_mesh");
 
 const facemesh0Tako = Scene.root.find("facemesh0_tako");
 const facemesh1Tako = Scene.root.find("facemesh1_tako");
@@ -372,6 +374,7 @@ const NEW_DESIGN_URL_TABLE = {
     takoyaki_bubble_bg: "new_design/sample_takoyaki/bubble.png",
     takoyaki_bubble_txt: "new_design/sample_takoyaki/copy.png",
     takoyaki_prod: "new_design/sample_takoyaki/takopack.png",
+    takoyaki_tray: "new_design/sample_takoyaki/takoyaki.png",
 
     // Sandwich sample
     sandwich_bubble_bg: "new_design/sample_sandwich/bb_sandwich.png",
@@ -834,12 +837,11 @@ function startGame() {
 */
 
     // Debug - Show tako when start
-    //showTakoyaki();
-    //currentProductTitle = "takoyaki_takoyaki";
+    showTakoyaki();
+    currentProductTitle = "takoyaki_takoyaki";
     // Debug, show sandwich when start
-    showSandwich(SANDWICH_MODE_SWIRL);
-    currentProductTitle = "sandwich_alaska_wakame";
-
+    //showSandwich(SANDWICH_MODE_SWIRL);
+    //currentProductTitle = "sandwich_alaska_wakame";
     // For the build of 2 sandwiches
     //showMeal();
     //currentProductTitle = "meal_kraphrao";
@@ -1012,10 +1014,10 @@ const QUOTE_PROD_TRANSFORM = {
     },
     takoyaki: {
         // Point
-        new_prod_small: [30, 0, 10],
-        new_prod_big: [30, 0, 10],
-        new_quote_bg: [0, 0, 5],
-        new_quote_text: [0, 0, 5],
+        new_prod_small: [30, 0, 10], // Obsolete
+        new_prod_big: [30, 0, 10], // Obsolete
+        new_quote_bg: [10, 0, 5],
+        new_quote_text: [10, 0, 5],
         // Scale
         new_prod_small_scale: [1, 1, 1],
         new_prod_big_scale: [1, 1, 1],
@@ -1024,6 +1026,9 @@ const QUOTE_PROD_TRANSFORM = {
         // Rotation
         new_prod_small_rotation: [0, 0, 0],
         new_prod_big_rotation: [0, 0, 0],
+
+        tray: [-30, 0, 30],
+        tray_scale: [2, 2, 2],
     },
     meal: {
         // Point
@@ -1153,6 +1158,16 @@ function showTakoyaki() {
 
         setupMaterial(newProdBigMesh, curResIndex++, NEW_DESIGN_URL_TABLE.invisible);
         setupMaterial(newProdSmallMesh, curResIndex++, NEW_DESIGN_URL_TABLE.invisible);
+
+        setupMaterial(newTakoyakiTrayMesh, curResIndex++, NEW_DESIGN_URL_TABLE.takoyaki_tray);
+
+        newTakoyakiTray.transform.x = QUOTE_PROD_TRANSFORM.takoyaki.tray[0];
+        newTakoyakiTray.transform.y = QUOTE_PROD_TRANSFORM.takoyaki.tray[1];
+        newTakoyakiTray.transform.z = QUOTE_PROD_TRANSFORM.takoyaki.tray[2];
+
+        newTakoyakiTray.transform.scaleX = QUOTE_PROD_TRANSFORM.takoyaki.tray_scale[0];
+        newTakoyakiTray.transform.scaleY = QUOTE_PROD_TRANSFORM.takoyaki.tray_scale[1];
+        newTakoyakiTray.transform.scaleZ = QUOTE_PROD_TRANSFORM.takoyaki.tray_scale[2];
 
         // Setup position
         setupQuoteProdPosition(QUOTE_PROD_TRANSFORM.takoyaki);
