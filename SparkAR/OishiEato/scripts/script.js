@@ -857,7 +857,8 @@ function startGame() {
     // For the build of 2 sandwiches
     //showMeal();
     //currentProductTitle = "meal_kraphrao";
-    showCrabstick();
+    //showCrabstick();
+    showMeal();
 }
 
 function changeTheme() {
@@ -1050,18 +1051,18 @@ const QUOTE_PROD_TRANSFORM = {
     },
     meal: {
         // Point
-        new_prod_small: [-26, 0, 29],
-        new_prod_big: [-26, 0, 29],
-        new_quote_bg: [9, 0, 5],
-        new_quote_text: [9, 0, 5],
+        new_prod_small: [20, 0, 20],
+        new_prod_big: [20, 0, 22],
+        new_quote_bg: [-7, 0, 15],
+        new_quote_text: [-7, 0, 15],
         // Scale
         new_prod_small_scale: [1, 1, 1],
         new_prod_big_scale: [1, 1, 1],
         new_quote_bg_scale: [1, 1, 1],
         new_quote_text_scale: [1, 1, 1],
         // Rotation
-        new_prod_small_rotation: [0, 0, 0],
-        new_prod_big_rotation: [0, 0, 0],
+        new_prod_small_rotation: [0, -45, 0],
+        new_prod_big_rotation: [0, -45, 0],
 
         new_ramen: [-35, 0, 12],
     },
@@ -1434,7 +1435,7 @@ function showMeal() {
     facemesh0.hidden = false;
     facemesh0Meal.hidden = false;
     facemesh1Meal.hidden = false;
-    newRamen.hidden = false;
+    //newRamen.hidden = false;
 
     facemesh0.material = facePaintInvisibleMat;
     facemesh1.material = facePaintInvisibleMat;
@@ -1458,7 +1459,7 @@ function showMeal() {
         setupMaterial(newProdBigMesh, curResIndex++, prodUrl);
         setupMaterial(newProdSmallMesh, curResIndex++, prodUrl);
 
-        setupMaterial(newRamenMesh, curResIndex++, NEW_DESIGN_URL_TABLE.meal_ramen);
+        //setupMaterial(newRamenMesh, curResIndex++, NEW_DESIGN_URL_TABLE.meal_ramen);
 
         newRamen.transform.x = QUOTE_PROD_TRANSFORM.meal.new_ramen[0];
         newRamen.transform.y = QUOTE_PROD_TRANSFORM.meal.new_ramen[1];
