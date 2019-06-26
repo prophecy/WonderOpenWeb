@@ -135,6 +135,12 @@ const newProdBigMesh = Scene.root.find("new_prod_big_mesh");
 const newProdSmall = Scene.root.find("new_prod_small");
 const newProdSmallMesh = Scene.root.find("new_prod_small_mesh");
 
+const newProdSmallFront = Scene.root.find("new_prod_small_front");
+const newProdSmallFrontMesh = Scene.root.find("new_prod_small_front_mesh");
+
+const newProdBigFront = Scene.root.find("new_prod_big_front");
+const newProdBigFrontMesh = Scene.root.find("new_prod_big_front_mesh");
+
 const newGyozaLeft = Scene.root.find("new_gyoza_left");
 const newGyozaLeftMesh = Scene.root.find("new_gyoza_left_mesh");
 
@@ -962,6 +968,11 @@ function hideAllThemes() {
     newCrabLogo.hidden = true;
     newRamen.hidden = true;
     foodFeederRoot0.hidden = true;
+    newProdSmallFront.hidden = true;
+    newProdBigFront.hidden = true;
+    frontGyozaTableRect.hidden = true;
+    frontGyozaTrayRect.hidden = true;
+    newTakoyakiTray.hidden = true;
 }
 
 const QUOTE_PROD_TRANSFORM = {
@@ -1152,6 +1163,7 @@ function showTakoyaki() {
     facemesh0Tako.hidden = false;
     facemesh1Tako.hidden = false;
     //takoDirectionalLight0.hidden = false;
+    newTakoyakiTray.hidden = false;
 
     loadNewDesignTakoyaki();
     showNewProdSmall();
@@ -1203,6 +1215,12 @@ function showCrabstick() {
     //newCrabFg.hidden = false;
     //newCrabLogo.hidden = false;
 
+    newProdBigFront.hidden = false;
+    newProdSmallFront.hidden = false;
+
+    frontGyozaTableRect.hidden = false;
+    frontGyozaTrayRect.hidden = false;
+
     loadNewDesignCrabstick();
     showNewProdSmall();
 
@@ -1220,8 +1238,8 @@ function showCrabstick() {
         setupMaterial(newQuoteTxtMesh, curResIndex++, getCurBubbleTxtUrl());
 
         var prodUrl = getCurProdTxtUrl(THEME_NAME_LOOKUP_TABLE.crabstick)
-        setupMaterial(newProdBigMesh, curResIndex++, prodUrl);
-        setupMaterial(newProdSmallMesh, curResIndex++, prodUrl);
+        setupMaterial(newProdBigFrontMesh, curResIndex++, prodUrl);
+        setupMaterial(newProdSmallFrontMesh, curResIndex++, prodUrl);
 
         setupMaterial(newCrabBgMesh, curResIndex++, NEW_DESIGN_URL_TABLE.crabstick_crab_bg);
         setupMaterial(newCrabFgMesh, curResIndex++, NEW_DESIGN_URL_TABLE.crabstick_crab_fg);
@@ -1565,6 +1583,31 @@ function setupQuoteProdPosition(transformData) {
     newProdSmall.transform.rotationX = transformData.new_prod_small_rotation[0] * Math.PI / 180.0;
     newProdSmall.transform.rotationY = transformData.new_prod_small_rotation[1] * Math.PI / 180.0;
     newProdSmall.transform.rotationZ = transformData.new_prod_small_rotation[2] * Math.PI / 180.0;
+
+    // Front prod
+    newProdBigFront.transform.x = transformData.new_prod_big[0];
+    newProdBigFront.transform.y = transformData.new_prod_big[1];
+    newProdBigFront.transform.z = transformData.new_prod_big[2];
+
+    newProdBigFront.transform.scaleX = transformData.new_prod_big_scale[0];
+    newProdBigFront.transform.scaleY = transformData.new_prod_big_scale[1];
+    newProdBigFront.transform.scaleZ = transformData.new_prod_big_scale[2];
+
+    newProdBigFront.transform.rotationX = transformData.new_prod_big_rotation[0] * Math.PI / 180.0;
+    newProdBigFront.transform.rotationY = transformData.new_prod_big_rotation[1] * Math.PI / 180.0;
+    newProdBigFront.transform.rotationZ = transformData.new_prod_big_rotation[2] * Math.PI / 180.0;
+
+    newProdSmallFront.transform.x = transformData.new_prod_small[0];
+    newProdSmallFront.transform.y = transformData.new_prod_small[1];
+    newProdSmallFront.transform.z = transformData.new_prod_small[2];
+
+    newProdSmallFront.transform.scaleX = transformData.new_prod_small_scale[0];
+    newProdSmallFront.transform.scaleY = transformData.new_prod_small_scale[1];
+    newProdSmallFront.transform.scaleZ = transformData.new_prod_small_scale[2];
+
+    newProdSmallFront.transform.rotationX = transformData.new_prod_small_rotation[0] * Math.PI / 180.0;
+    newProdSmallFront.transform.rotationY = transformData.new_prod_small_rotation[1] * Math.PI / 180.0;
+    newProdSmallFront.transform.rotationZ = transformData.new_prod_small_rotation[2] * Math.PI / 180.0;
 }
 
 function getCurBubbleTxtUrl() {
@@ -1698,6 +1741,7 @@ function hideNewQuoteText() {
 function showNewProdInit() {
 
     newProdSmall.hidden = false;
+    newProdSmallFront.hidden = false;
 
     const driverParams = {
 
@@ -1719,19 +1763,28 @@ function showNewProdInit() {
 function showNewProdBig() {
 
     newProdBig.hidden = false;
+    newProdBigFront.hidden = false;
+
     newProdSmall.hidden = true;
+    newProdSmallFront.hidden = true;
 }
 
 function showNewProdSmall() {
 
     newProdSmall.hidden = false;
+    newProdSmallFront.hidden = false;
+    
     newProdBig.hidden = true;
+    newProdBigFront.hidden = true;
 }
 
 function hideNewProd() {
 
     newProdBig.hidden = true;
+    newProdBigFront.hidden = true;
+
     newProdSmall.hidden = true;
+    newProdSmallFront.hidden = true;
 }
 
 foodFeederRoot0.hidden = true;
