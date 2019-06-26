@@ -175,6 +175,10 @@ const newCrabFg = Scene.root.find("new_crab_fg");
 const newCrabFgMesh = Scene.root.find("new_crab_fg_mesh");
 const newCrabLogo = Scene.root.find("new_crab_logo");
 const newCrabLogoMesh = Scene.root.find("new_crab_logo_mesh");
+const frontGyozaTableRect = Scene.root.find("front_gyoza_table");
+const frontGyozaTrayRect = Scene.root.find("front_gyoza_tray");
+
+// For meal (Ramen)
 const newRamen = Scene.root.find("new_ramen");
 const newRamenMesh = Scene.root.find("new_ramen_mesh");
 
@@ -392,13 +396,15 @@ const NEW_DESIGN_URL_TABLE = {
     sandwich_cheek_0: "new_design/sample_sandwich/cheek.png",
     sandwich_cheek_1: "new_design/sample_sandwich/cheek2.png",
 
-    // Crabstick sample
+    // Crabstick sample (Crabstick is the new gyoza)
     crabstick_bubble_bg: "new_design/sample_crabstick/new_crab.png",
     crabstick_bubble_txt: "new_design/sample_takoyaki/copy.png",
     crabstick_prod: "new_design/sample_crabstick/crab_pack.png",
     crabstick_crab_bg: "new_design/sample_crabstick/handcrab1.png",
     crabstick_crab_fg: "new_design/sample_crabstick/handcrab1.2.png",
     crabstick_crab_logo: "new_design/sample_crabstick/handcrab_logo.png",
+    crabstick_gyoza_table: "new_design/sample_crabstick/gyoza_theme2_table.png",
+    crabstick_gyoza_tray: "new_design/sample_crabstick/gyoza_theme2.2.png",
 
     // Meal sample
     meal_bubble_bg: "new_design/sample_meal/bb_ramen.png",
@@ -837,14 +843,15 @@ function startGame() {
 */
 
     // Debug - Show tako when start
-    showTakoyaki();
-    currentProductTitle = "takoyaki_takoyaki";
+    //showTakoyaki();
+    //currentProductTitle = "takoyaki_takoyaki";
     // Debug, show sandwich when start
     //showSandwich(SANDWICH_MODE_SWIRL);
     //currentProductTitle = "sandwich_alaska_wakame";
     // For the build of 2 sandwiches
     //showMeal();
     //currentProductTitle = "meal_kraphrao";
+    showCrabstick();
 }
 
 function changeTheme() {
@@ -995,22 +1002,22 @@ const QUOTE_PROD_TRANSFORM = {
     },
     crabstick: {
         // Point
-        new_prod_small: [-27, 0, 27],
-        new_prod_big: [-27, 0, 23],
-        new_quote_bg: [4, 0, 5],
-        new_quote_text: [4, 0, 5],
+        new_prod_small: [27, 0, 30],
+        new_prod_big: [27, 0, 26],
+        new_quote_bg: [-7, 0, 5],
+        new_quote_text: [-7, 0, 5],
         // Scale
         new_prod_small_scale: [1, 1, 1],
         new_prod_big_scale: [1, 1, 1],
         new_quote_bg_scale: [1, 1, 1],
         new_quote_text_scale: [1, 1, 1],
         // Rotation
-        new_prod_small_rotation: [0, 35, 0],
-        new_prod_big_rotation: [0, 35, 0],
+        new_prod_small_rotation: [0, -8, 0],
+        new_prod_big_rotation: [0, -8, 0],
 
-        new_crab_bg: [-12, 0, 40],
-        new_crab_fg: [-12, 0, 40],
-        new_crab_logo: [30, 0, 38],
+        new_crab_bg: [-12, 0, 40], // Obsolete
+        new_crab_fg: [-12, 0, 40], // Obsolete
+        new_crab_logo: [30, 0, 38], // Obsolete
     },
     takoyaki: {
         // Point
@@ -1182,6 +1189,7 @@ function showTakoyaki() {
     }
 }
 
+// **** Warning ! Crabstick is the new gyoza !
 function showCrabstick() {
 
     curTheme = THEME_NAME_LOOKUP_TABLE.crabstick;
@@ -1191,9 +1199,9 @@ function showCrabstick() {
     facemesh0.material = facePaintInvisibleMat;
     facemesh1.material = facePaintInvisibleMat;
 
-    newCrabBg.hidden = false;
-    newCrabFg.hidden = false;
-    newCrabLogo.hidden = false;
+    //newCrabBg.hidden = false;
+    //newCrabFg.hidden = false;
+    //newCrabLogo.hidden = false;
 
     loadNewDesignCrabstick();
     showNewProdSmall();
@@ -1230,6 +1238,9 @@ function showCrabstick() {
         newCrabLogo.transform.x = QUOTE_PROD_TRANSFORM.crabstick.new_crab_logo[0];
         newCrabLogo.transform.y = QUOTE_PROD_TRANSFORM.crabstick.new_crab_logo[1];
         newCrabLogo.transform.z = QUOTE_PROD_TRANSFORM.crabstick.new_crab_logo[2];
+
+        setupMaterial(frontGyozaTableRect, curResIndex++, NEW_DESIGN_URL_TABLE.crabstick_gyoza_table);
+        setupMaterial(frontGyozaTrayRect, curResIndex++, NEW_DESIGN_URL_TABLE.crabstick_gyoza_tray);
 
         // Setup position
         setupQuoteProdPosition(QUOTE_PROD_TRANSFORM.crabstick);
