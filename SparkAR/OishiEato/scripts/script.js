@@ -335,6 +335,7 @@ const NEW_DESIGN_MAT_LIST = [
     "new_design_mat4", "new_design_mat5", "new_design_mat6", "new_design_mat7",  
     "new_design_mat8", "new_design_mat9", "new_design_mat10", "new_design_mat11", 
     "new_design_mat12", "new_design_mat13", "new_design_mat14", "new_design_mat15", 
+    "new_design_mat16", "new_design_mat17", "new_design_mat18", "new_design_mat19", 
 ];
 
 const NEW_DESIGN_TEX_LIST = [
@@ -342,6 +343,7 @@ const NEW_DESIGN_TEX_LIST = [
     "ext_new_design_tex4", "ext_new_design_tex5", "ext_new_design_tex6", "ext_new_design_tex7", 
     "ext_new_design_tex8", "ext_new_design_tex9", "ext_new_design_tex10", "ext_new_design_tex11", 
     "ext_new_design_tex12", "ext_new_design_tex13", "ext_new_design_tex14", "ext_new_design_tex15", 
+    "ext_new_design_tex16", "ext_new_design_tex17", "ext_new_design_tex18", "ext_new_design_tex19", 
 ];
 
 const NEW_DESIGN_URL_TABLE = {
@@ -374,6 +376,7 @@ const NEW_DESIGN_URL_TABLE = {
         "new_design/sample_sandwich/seaweed.png", // Seaweed
         "new_design/sample_sandwich/sw3.png", // Egg
         "new_design/sample_sandwich/ham.png", // Ham
+        "theme_sandwich/sw2.png", // Whole piece sandwich
     ],
     sandwich_cheek_0: "new_design/sample_sandwich/cheek.png",
     sandwich_cheek_1: "new_design/sample_sandwich/cheek2.png",
@@ -445,7 +448,7 @@ function storeData(data) {
 
     //Diagnostics.log("currentThemeData: " + JSON.stringify(currentThemeData));
 
-    // Set default quote data
+    // Set default quote data if NOT exist
     if (currentThemeData["quote"] == undefined) {
 
         var QUOTE_COUNT = 75;
@@ -453,7 +456,7 @@ function storeData(data) {
         
         quote.indices = [];
         for (var i=0; i<QUOTE_COUNT; ++i)
-            quote.indices.push(i+1);
+            quote.indices.push(i+1); // Because asset index start at 1
 
         quote.method = "rand"; // rand | seq
 
@@ -810,7 +813,7 @@ function startGame() {
         showGyoza();
     }
     else if (THEME_NAME_LOOKUP_TABLE.sandwich == firstTheme.theme)
-        showSandwich(SANDWICH_MODE_EAT);
+        showSandwich(SANDWICH_MODE_SWIRL);
     else if (THEME_NAME_LOOKUP_TABLE.crabstick == firstTheme.theme)
         showCrabstick();
     else if (THEME_NAME_LOOKUP_TABLE.meal == firstTheme.theme) {
@@ -860,7 +863,7 @@ function changeTheme() {
         showGyoza();
     }
     else if (THEME_NAME_LOOKUP_TABLE.sandwich == nextTheme.theme)
-        showSandwich(SANDWICH_MODE_EAT);
+        showSandwich(SANDWICH_MODE_SWIRL);
     else if (THEME_NAME_LOOKUP_TABLE.crabstick == nextTheme.theme)
         showCrabstick();
     else if (THEME_NAME_LOOKUP_TABLE.meal == nextTheme.theme) {
@@ -1737,7 +1740,7 @@ function onFaceTracked(faceIndex) {
     if (curTheme === THEME_NAME_LOOKUP_TABLE.gyoza)
         showGyoza();
     else if (curTheme === THEME_NAME_LOOKUP_TABLE.sandwich)
-        showSandwich(SANDWICH_MODE_EAT);
+        showSandwich(SANDWICH_MODE_SWIRL);
     else if (curTheme === THEME_NAME_LOOKUP_TABLE.crabstick)
         showCrabstick();
     else if (curTheme === THEME_NAME_LOOKUP_TABLE.takoyaki)
