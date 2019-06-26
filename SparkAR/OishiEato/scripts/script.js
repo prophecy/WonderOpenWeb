@@ -814,7 +814,7 @@ function startGame() {
 
     nextProductCounter(firstTheme);
     setCurrentProduct(firstTheme);
-
+/*
     if (THEME_NAME_LOOKUP_TABLE.gyoza == firstTheme.theme) {
 
         showOpenMouthAwhile();
@@ -831,13 +831,14 @@ function startGame() {
     }
     else if (THEME_NAME_LOOKUP_TABLE.takoyaki == firstTheme.theme)
         showTakoyaki();
+*/
 
     // Debug - Show tako when start
     //showTakoyaki();
     //currentProductTitle = "takoyaki_takoyaki";
     // Debug, show sandwich when start
-    //showSandwich(SANDWICH_MODE_EAT);
-    //currentProductTitle = "sandwich_alaska_wakame";
+    showSandwich(SANDWICH_MODE_SWIRL);
+    currentProductTitle = "sandwich_alaska_wakame";
 
     // For the build of 2 sandwiches
     //showMeal();
@@ -973,15 +974,17 @@ const QUOTE_PROD_TRANSFORM = {
     },
     sandwich: {
         // Point
-        new_prod_small: [-25, 0, 25],
-        new_prod_big: [-25, 0, 21],
-        new_quote_bg: [13, 0, 12],
-        new_quote_text: [13, 0, 12],
+        new_prod_small: [27, 0, 25],
+        new_prod_big: [24, 0, 19],
+        new_quote_bg: [-8, 0, 5],
+        new_quote_text: [-8, 0, 5],
+
         // Scale
-        new_prod_small_scale: [1, 1, 1],
-        new_prod_big_scale: [1, 1, 1],
+        new_prod_small_scale: [1.45, 1.45, 1.45],
+        new_prod_big_scale: [1.3, 1.3, 1.3],
         new_quote_bg_scale: [1, 1, 1],
         new_quote_text_scale: [1, 1, 1],
+
         // Rotation
         new_prod_small_rotation: [0, 0, 0],
         new_prod_big_rotation: [0, 0, 0],
@@ -1274,7 +1277,7 @@ function showSandwich(mode) {
         setupMaterial(newProdBigMesh, curResIndex++, prodUrl);
         setupMaterial(newProdSmallMesh, curResIndex++, prodUrl);
 
-        setupMaterial(newHandMesh, curResIndex++, NEW_DESIGN_URL_TABLE.sandwich_hand);
+        //setupMaterial(newHandMesh, curResIndex++, NEW_DESIGN_URL_TABLE.sandwich_hand);
 
         if (mode == SANDWICH_MODE_SWIRL) {
 
@@ -1770,13 +1773,6 @@ function onFaceTracked(faceIndex) {
         showTakoyaki();
     else if (curTheme === THEME_NAME_LOOKUP_TABLE.meal)
         showMeal();
-   
-    /*
-    if (currentSandwichMode == SANDWICH_MODE_SWIRL)
-        showSandwich(SANDWICH_MODE_SWIRL);
-    else if (currentSandwichMode == SANDWICH_MODE_EAT)
-        showSandwich(SANDWICH_MODE_EAT);
-    */
 }
 
 function onFaceUntracked(faceIndex) {
