@@ -2405,7 +2405,8 @@ function startRamenFeeder() {
         const length = maskMatList.length;
         const index = Math.floor( length * ratio );
 
-        ramen00Mesh.material = maskMatList[index];
+        if (index < maskMatList.length)
+            ramen00Mesh.material = maskMatList[index];
 
         // To clear interval
         //Time.clearInterval(maskTimer);
