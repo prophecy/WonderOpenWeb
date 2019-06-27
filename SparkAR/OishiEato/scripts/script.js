@@ -57,25 +57,24 @@ const Random = require('Random');
 
 // Food feeder for player #0
 var foodFeederRoot0 = Scene.root.find('foodFeederRoot0');
-var testyPool0 = Scene.root.find("testyPool0");
-var testyPool01 = Scene.root.find("testyPool01");
+//var testyPool0 = Scene.root.find("testyPool0");
+//var testyPool01 = Scene.root.find("testyPool01");
 
-var foodPoolList0 = [];
-for (var i=0; i<32; ++i)
-    foodPoolList0.push(Scene.root.find('testy0' + i));
+//var foodPoolList0 = [];
+//for (var i=0; i<32; ++i)
+//    foodPoolList0.push(Scene.root.find('testy0' + i));
 
-var foodPoolMeshList0 = [];
-for (var i=0; i<32; ++i)
-    foodPoolMeshList0.push(Scene.root.find('testy0' + i + "_mesh"));
+//var foodPoolMeshList0 = [];
+//for (var i=0; i<32; ++i)
+//    foodPoolMeshList0.push(Scene.root.find('testy0' + i + "_mesh"));
 
-var foodPoolList01 = [];
-for (var i=0; i<32; ++i)
-    foodPoolList01.push(Scene.root.find('testy001' + i));
+//var foodPoolList01 = [];
+//for (var i=0; i<32; ++i)
+//    foodPoolList01.push(Scene.root.find('testy001' + i));
 
-var foodPoolMeshList01 = [];
-for (var i=0; i<32; ++i)
-    foodPoolMeshList01.push(Scene.root.find('testy001' + i + "_mesh"));    
-
+//var foodPoolMeshList01 = [];
+//for (var i=0; i<32; ++i)
+//    foodPoolMeshList01.push(Scene.root.find('testy001' + i + "_mesh"));    
 
 var crushPoolList0 = [];
 for (var i=0; i<10; ++i)
@@ -780,7 +779,8 @@ function main() {
         MOUTH_OPENNESS_MIN_THRESHOLD, MOUTH_CLOSSNESS_MAX_THRESHOLD, 
         onFace0MouthOpen, onFace0MouthClose);
 
-    handleFoodFeeder(crushPoolList0, foodPoolList0, foodPoolList01, foodPoolMeshList0, foodPoolMeshList01);
+    //handleFoodFeeder(crushPoolList0, foodPoolList0, foodPoolList01, foodPoolMeshList0, foodPoolMeshList01);
+    handleFoodFeeder(crushPoolList0, undefined, undefined, undefined, undefined);
 
     // Request
     getThemeData(function(data, error) {
@@ -2132,8 +2132,8 @@ function handleFoodFeeder(crushObjList, foodObjList0, foodObjList1,
     foodPoolMeshList0, foodPoolMeshList1) {
 
     // Setup mat
-    setupFoodMat(FOOD_TEX_LOOKUP_TABLE.sandwich, foodPoolMeshList0);
-    setupFoodMat(FOOD_TEX_LOOKUP_TABLE.sandwich, foodPoolMeshList1);
+    //setupFoodMat(FOOD_TEX_LOOKUP_TABLE.sandwich, foodPoolMeshList0);
+    //setupFoodMat(FOOD_TEX_LOOKUP_TABLE.sandwich, foodPoolMeshList1);
 
     setupCrushMat(CRUSH_TEX_LOOKUP_TABLE.meal);
     
@@ -2217,8 +2217,9 @@ function handleFoodFeeder(crushObjList, foodObjList0, foodObjList1,
 
     //startFoodFeederV2(foodObjList0, testyPool0);
     //startFoodFeederV2(foodObjList1, testyPool01);
-    startFoodFeederV3(foodObjList0, testyPool0);
-    startFoodFeederV3(foodObjList1, testyPool01);
+
+    //startFoodFeederV3(foodObjList0, testyPool0);
+    //startFoodFeederV3(foodObjList1, testyPool01);
 }
 
 function startFoodFeederV3(foodObjList, testyPool) {
