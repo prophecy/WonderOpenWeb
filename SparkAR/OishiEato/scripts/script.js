@@ -28,6 +28,7 @@ else if (ENV === ENV_DEV)
 const CONFIG = {
     ENV: ENV,
     GET_ASSET_LIST_URL: BASE_URL + "getAssetList.aspx",
+    POST_STAT_URL: BASE_URL + "arstat.aspx",
     BASE_TEX_URL: BASE_URL,
     BASE_BUBBLE_URL: "new_design/sample_quote/",
 }
@@ -1615,13 +1616,18 @@ function setupQuoteProdPosition(transformData) {
     newProdSmallFront.transform.rotationZ = transformData.new_prod_small_rotation[2] * Math.PI / 180.0;
 }
 
+var currentBubbleName = undefined;
+
 function getCurBubbleTxtUrl() {
 
     var indices = currentThemeData.quote.indices;
     var curIndex = currentThemeData.quote.curIndex
     var bubbleIndex = indices[curIndex];
 
-    var bubbleUrl = CONFIG.BASE_BUBBLE_URL + "quote" + bubbleIndex + ".png";
+    var bubbleName = "quote" + bubbleIndex;
+    currentBubbleName = bubbleName;
+
+    var bubbleUrl = CONFIG.BASE_BUBBLE_URL + bubbleName + ".png";
     Diagnostics.log("bubbleUrl: " + bubbleUrl);
 
     if (++currentThemeData.quote.curIndex >= currentThemeData.quote.length)
@@ -1775,6 +1781,11 @@ function showNewProdBig() {
         newProdBigFront.hidden = false;
         newProdSmallFront.hidden = true;           
     }
+    else {
+
+        newProdSmallFront.hidden = true;
+        newProdBigFront.hidden = true;
+    }
 }
 
 function showNewProdSmall() {
@@ -1785,6 +1796,11 @@ function showNewProdSmall() {
     if (curTheme == THEME_NAME_LOOKUP_TABLE.crabstick) {
 
         newProdSmallFront.hidden = false;
+        newProdBigFront.hidden = true;
+    }
+    else {
+
+        newProdSmallFront.hidden = true;
         newProdBigFront.hidden = true;
     }
 }
@@ -1798,6 +1814,11 @@ function hideNewProd() {
 
         newProdBigFront.hidden = true;
         newProdSmallFront.hidden = true;
+    }
+    else {
+
+        newProdSmallFront.hidden = true;
+        newProdBigFront.hidden = true;
     }
 }
 
@@ -2469,12 +2490,42 @@ function startNormalCrushFeeder(crushObjList, args) {
 // --------------------------------------------------------------------------------
 
 function getThemeData(callback) {
-    startGetRequest(CONFIG.GET_ASSET_LIST_URL, function(res, err) {
 
-        //Diagnostics.log("id: " + res.id);
-        callback(res, err);
+    startGetRequest(CONFIG.GET_ASSET_LIST_URL, function(data, err) {
+
+        Diagnostics.log("id: " + data.id);
+        callback(data, err);
     });
 }
+
+// mode ∈ {"photocapture" | "videocapture" }
+function postCaptureStat(mode) {
+
+    var indices = currentThemeData.quote.indices;
+    var curIndex = currentThemeData.quote.curIndex
+    var bubbleIndex = indices[curIndex];
+
+    // Get current person
+    var body = {
+        idinfo: currentThemeData.id,
+        logtype: mode,
+        param1: isFaceTracked,
+        param2: curTheme,
+        param3: currentProductTitle,
+        param4: currentBubbleName
+    };
+
+    Diagnostics.log("postCaptureState: body: " + JSON.stringify(body));
+
+    startPostRequest(CONFIG.POST_STAT_URL, body, function(data, err) {
+
+        if (data != undefined)
+            Diagnostics.log("Post capture stat success");
+        else
+            Diagnostics.log("Post capture error: " + JSON.stringify(err));
+    })
+}
+
 
 // --------------------------------------------------------------------------------
 // --------------------------------------------------------------------------------
@@ -2506,6 +2557,22 @@ function startGetRequest(url, callback) {
 		headers: { 'Content-type': 'application/json' }
 	};
     
+    startRequest(url, request, callback);
+}
+
+function startPostRequest(url, body, callback) {
+
+	const request = {
+		method: 'POST',
+        headers: { 'Content-type': 'application/json' },
+        body: JSON.stringify(body)
+	};
+    
+    startRequest(url, request, callback);
+}
+
+function startRequest(url, request, callback) {
+
     Networking.fetch(url, request).then(function(result) {
     
         // Check the status of the result
@@ -2547,6 +2614,9 @@ CameraInfo.isCapturingPhoto.monitor().subscribe(function(value) {
 
     // If new value == true -> means begin
     //        value == false -> means finish
+
+    if (value.newValue)
+        postCaptureStat("photocapture");
 });
 
 CameraInfo.isRecordingVideo.monitor().subscribe(function(value) {
@@ -2555,6 +2625,9 @@ CameraInfo.isRecordingVideo.monitor().subscribe(function(value) {
 
     // If new value == true -> means begin
     //        value == false -> means finish
+
+    if (value.newValue)
+        postCaptureStat("videocapture");
 });
 
 function getMaterialWithDiffuse(matName, texName) {
