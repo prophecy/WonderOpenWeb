@@ -173,6 +173,7 @@ const mealShopstick01_pivot = Scene.root.find("shopstick01_pivot");
 const newHand = Scene.root.find("new_hand");
 const newHandMesh = Scene.root.find("new_hand_mesh");
 const newSandwichCheek0Mesh = Scene.root.find("sandwich_cheek0_mesh");
+const newSandwichCheek1Mesh = Scene.root.find("sandwich_cheek1_mesh");
 
 // For crabstick
 const newCrabBg = Scene.root.find("new_crab_bg");
@@ -200,8 +201,8 @@ const backSwirl = Scene.root.find("swirl_background");
 const sandwichSwirlRoot = Scene.root.find("sandwich_swirl_root");
 
 const sandwichRoot1 = Scene.root.find("sandwich_root1");
-const frontSwirl1 = Scene.root.find("swirl_foreground1");
-const backSwirl1 = Scene.root.find("swirl_background1");
+//const frontSwirl1 = Scene.root.find("swirl_foreground1");
+//const backSwirl1 = Scene.root.find("swirl_background1");
 
 const frontSandwichList = [];
 const frontSandwichMeshList = [];
@@ -223,15 +224,15 @@ const frontSandwichMeshList1 = [];
 const backSandwichList1 = [];
 const backSandwichMeshList1 = [];
 
-for (var i=0; i<7; ++i)
-    frontSandwichList1.push(Scene.root.find("sandwichf" + i + "_1"));
-for (var i=0; i<7; ++i)
-    frontSandwichMeshList1.push(Scene.root.find("sandwichf" + i + "_1_mesh"));
+//for (var i=0; i<7; ++i)
+//    frontSandwichList1.push(Scene.root.find("sandwichf" + i + "_1"));
+//for (var i=0; i<7; ++i)
+//    frontSandwichMeshList1.push(Scene.root.find("sandwichf" + i + "_1_mesh"));
 
-for (var i=0; i<7; ++i)
-    backSandwichList1.push(Scene.root.find("sandwichb" + i + "_1"));
-for (var i=0; i<7; ++i)
-    backSandwichMeshList1.push(Scene.root.find("sandwichb" + i + "_1_mesh"));
+//for (var i=0; i<7; ++i)
+//    backSandwichList1.push(Scene.root.find("sandwichb" + i + "_1"));
+//for (var i=0; i<7; ++i)
+//    backSandwichMeshList1.push(Scene.root.find("sandwichb" + i + "_1_mesh"));
 
 // --------------------------------------------------------------------------------
 // RESOURCES for CRABSTICK
@@ -1405,11 +1406,13 @@ function showSandwich(mode) {
 
             // Set cheek texture
             setupMaterial(newSandwichCheek0Mesh, curResIndex++, NEW_DESIGN_URL_TABLE.sandwich_cheek_0);
+            newSandwichCheek1Mesh.material = newSandwichCheek0Mesh.material;
         }
         else if (mode == SANDWICH_MODE_EAT) {
 
             // Set cheek texture
             setupMaterial(newSandwichCheek0Mesh, curResIndex++, NEW_DESIGN_URL_TABLE.sandwich_cheek_1);
+            newSandwichCheek1Mesh.material = newSandwichCheek0Mesh.material;
         }
 
         // Setup position
@@ -1988,8 +1991,8 @@ function onFace0MouthOpen() {
 
             newRamen.hidden = true;
             ramenPool0.hidden = true;
-            testyPool0.hidden = false;
-            testyPool01.hidden = false;
+            //testyPool0.hidden = false;
+            //testyPool01.hidden = false;
     
             var mouth = FaceTracking.face(0).mouth;
             foodFeederRoot0.transform.x = mouth.center.x;
@@ -2004,8 +2007,8 @@ function onFace0MouthOpen() {
         foodFeederRoot0.hidden = false;
         newRamen.hidden = true;
         ramenPool0.hidden = false;
-        testyPool0.hidden = true;
-        testyPool01.hidden = true;
+        //testyPool0.hidden = true;
+        //testyPool01.hidden = true;
 
         foodFeederRoot0.transform.x = mouth.center.x;
         foodFeederRoot0.transform.y = mouth.center.y;
