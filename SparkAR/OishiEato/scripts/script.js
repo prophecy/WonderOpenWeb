@@ -150,6 +150,7 @@ const newGyozaRightMesh = Scene.root.find("new_gyoza_right_mesh");
 const newTakoyakiRoot = Scene.root.find("takoyaki_root");
 const newGyozaRoot = Scene.root.find("new_gyoza_root");
 const newTakoyakiTray = Scene.root.find("new_takoyaki_tray");
+const frontTakoyakiTray = Scene.root.find("front_takoyaki_tray");
 const newTakoyakiTrayMesh = Scene.root.find("new_takoyaki_tray_mesh");
 
 const facemesh0Tako = Scene.root.find("facemesh0_tako");
@@ -407,7 +408,7 @@ const NEW_DESIGN_URL_TABLE = {
     takoyaki_bubble_bg: "new_design/sample_takoyaki/bubble.png",
     takoyaki_bubble_txt: "new_design/sample_takoyaki/copy.png",
     takoyaki_prod: "new_design/sample_takoyaki/takopack.png",
-    takoyaki_tray: "new_design/sample_takoyaki/takoyaki.png",
+    takoyaki_tray: "new_design/sample_takoyaki/takoyaki_tray.png",
 
     // Sandwich sample
     sandwich_bubble_bg: "new_design/sample_sandwich/bb_sandwich.png",
@@ -854,7 +855,7 @@ function startGame() {
 
     nextProductCounter(firstTheme);
     setCurrentProduct(firstTheme);
-    
+    /*
     if (THEME_NAME_LOOKUP_TABLE.gyoza == firstTheme.theme) {
 
         showOpenMouthAwhile();
@@ -871,10 +872,10 @@ function startGame() {
     }
     else if (THEME_NAME_LOOKUP_TABLE.takoyaki == firstTheme.theme)
         showTakoyaki();
-    
+    */
     // Debug - Show tako when start
-    //showTakoyaki();
-    //currentProductTitle = "takoyaki_takoyaki";
+    showTakoyaki();
+    currentProductTitle = "takoyaki_takoyaki";
     // Debug, show sandwich when start
     //showSandwich(SANDWICH_MODE_SWIRL);
     //currentProductTitle = "sandwich_alaska_wakame";
@@ -1071,8 +1072,8 @@ const QUOTE_PROD_TRANSFORM = {
         new_prod_small_rotation: [0, 0, 0],
         new_prod_big_rotation: [0, 0, 0],
 
-        tray: [-30, 0, 30],
-        tray_scale: [2, 2, 2],
+        tray: [-20, 0, 20],
+        tray_scale: [2.7, 2.7, 2.7],
     },
     meal: {
         // Point
@@ -1204,7 +1205,8 @@ function showTakoyaki() {
         setupMaterial(newProdBigMesh, curResIndex++, NEW_DESIGN_URL_TABLE.invisible);
         setupMaterial(newProdSmallMesh, curResIndex++, NEW_DESIGN_URL_TABLE.invisible);
 
-        setupMaterial(newTakoyakiTrayMesh, curResIndex++, NEW_DESIGN_URL_TABLE.takoyaki_tray);
+        //setupMaterial(newTakoyakiTrayMesh, curResIndex++, NEW_DESIGN_URL_TABLE.takoyaki_tray);
+        setupMaterial(frontTakoyakiTray, curResIndex++, NEW_DESIGN_URL_TABLE.takoyaki_tray);
 
         newTakoyakiTray.transform.x = QUOTE_PROD_TRANSFORM.takoyaki.tray[0];
         newTakoyakiTray.transform.y = QUOTE_PROD_TRANSFORM.takoyaki.tray[1];
