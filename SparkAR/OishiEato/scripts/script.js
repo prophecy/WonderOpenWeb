@@ -184,7 +184,7 @@ const newCrabFgMesh = Scene.root.find("new_crab_fg_mesh");
 const newCrabLogo = Scene.root.find("new_crab_logo");
 const newCrabLogoMesh = Scene.root.find("new_crab_logo_mesh");
 const frontGyozaTableRect = Scene.root.find("front_gyoza_table");
-const frontGyozaTrayRect = Scene.root.find("front_gyoza_tray");
+const frontGyozaFlagRect = Scene.root.find("front_gyoza_flag");
 
 // For meal (Ramen)
 const newRamen = Scene.root.find("new_ramen");
@@ -437,6 +437,8 @@ const NEW_DESIGN_URL_TABLE = {
     crabstick_crab_logo: "new_design/sample_crabstick/handcrab_logo.png",
     crabstick_gyoza_table: "new_design/sample_crabstick/gyoza_theme2_table.png",
     crabstick_gyoza_tray: "new_design/sample_crabstick/gyoza_theme2.2.png",
+    crabstick_gyoza_table_02: "new_design/sample_crabstick/table_03.png",
+    crabstick_gyoza_flag: "new_design/sample_crabstick/flag.png",
 
     // Meal sample
     meal_bubble_bg: "new_design/sample_meal/bb_ramen.png",
@@ -857,7 +859,7 @@ function startGame() {
 
     nextProductCounter(firstTheme);
     setCurrentProduct(firstTheme);
-    
+    /*
     if (THEME_NAME_LOOKUP_TABLE.gyoza == firstTheme.theme) {
 
         showOpenMouthAwhile();
@@ -874,7 +876,7 @@ function startGame() {
     }
     else if (THEME_NAME_LOOKUP_TABLE.takoyaki == firstTheme.theme)
         showTakoyaki();
-    
+    */
     // Debug - Show tako when start
     //showTakoyaki();
     //currentProductTitle = "takoyaki_takoyaki";
@@ -884,7 +886,7 @@ function startGame() {
     // For the build of 2 sandwiches
     //showMeal();
     //currentProductTitle = "meal_kraphrao";
-    //showCrabstick();
+    showCrabstick();
     //showMeal();
 }
 
@@ -999,7 +1001,7 @@ function hideAllThemes() {
     newProdSmallFront.hidden = true;
     newProdBigFront.hidden = true;
     frontGyozaTableRect.hidden = true;
-    frontGyozaTrayRect.hidden = true;
+    frontGyozaFlagRect.hidden = true;
     newTakoyakiTray.hidden = true;
     frontTakoyakiTray.hidden = true;
     frontRamenFlagRect.hidden = true;
@@ -1043,13 +1045,13 @@ const QUOTE_PROD_TRANSFORM = {
     },
     crabstick: {
         // Point
-        new_prod_small: [27, 0, 30],
-        new_prod_big: [27, 0, 26],
-        new_quote_bg: [-7, 0, 5],
-        new_quote_text: [-7, 0, 5],
+        new_prod_small: [32, 0, 30],
+        new_prod_big: [32, 0, 26],
+        new_quote_bg: [-2, 0, 6],
+        new_quote_text: [0, 0, 5],
         // Scale
         new_prod_small_scale: [1, 1, 1],
-        new_prod_big_scale: [1, 1, 1],
+        new_prod_big_scale: [0.9, 0.9, 0.9],
         new_quote_bg_scale: [1, 1, 1],
         new_quote_text_scale: [1, 1, 1],
         // Rotation
@@ -1251,7 +1253,7 @@ function showCrabstick() {
     newProdSmallFront.hidden = false;
 
     frontGyozaTableRect.hidden = false;
-    frontGyozaTrayRect.hidden = false;
+    frontGyozaFlagRect.hidden = false;
 
     loadNewDesignCrabstick();
     showNewProdSmall();
@@ -1289,8 +1291,8 @@ function showCrabstick() {
         newCrabLogo.transform.y = QUOTE_PROD_TRANSFORM.crabstick.new_crab_logo[1];
         newCrabLogo.transform.z = QUOTE_PROD_TRANSFORM.crabstick.new_crab_logo[2];
 
-        setupMaterial(frontGyozaTableRect, curResIndex++, NEW_DESIGN_URL_TABLE.crabstick_gyoza_table);
-        setupMaterial(frontGyozaTrayRect, curResIndex++, NEW_DESIGN_URL_TABLE.crabstick_gyoza_tray);
+        setupMaterial(frontGyozaTableRect, curResIndex++, NEW_DESIGN_URL_TABLE.crabstick_gyoza_table_02);
+        setupMaterial(frontGyozaFlagRect, curResIndex++, NEW_DESIGN_URL_TABLE.crabstick_gyoza_flag);
 
         // Setup position
         setupQuoteProdPosition(QUOTE_PROD_TRANSFORM.crabstick);
