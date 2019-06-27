@@ -425,6 +425,8 @@ const NEW_DESIGN_URL_TABLE = {
     ],
     sandwich_cheek_0: "new_design/sample_sandwich/cheek.png",
     sandwich_cheek_1: "new_design/sample_sandwich/cheek2.png",
+    sandwich_teapot: "new_design/sample_sandwich/tea_pot_512.png",
+    sandwich_bread: "new_design/sample_sandwich/bread_512.png",
 
     // Crabstick sample (Crabstick is the new gyoza)
     crabstick_bubble_bg: "new_design/sample_crabstick/new_crab.png",
@@ -874,11 +876,11 @@ function startGame() {
         showTakoyaki();
     */
     // Debug - Show tako when start
-    showTakoyaki();
-    currentProductTitle = "takoyaki_takoyaki";
+    //showTakoyaki();
+    //currentProductTitle = "takoyaki_takoyaki";
     // Debug, show sandwich when start
-    //showSandwich(SANDWICH_MODE_SWIRL);
-    //currentProductTitle = "sandwich_alaska_wakame";
+    showSandwich(SANDWICH_MODE_SWIRL);
+    currentProductTitle = "sandwich_alaska_wakame";
     // For the build of 2 sandwiches
     //showMeal();
     //currentProductTitle = "meal_kraphrao";
@@ -999,6 +1001,7 @@ function hideAllThemes() {
     frontGyozaTableRect.hidden = true;
     frontGyozaTrayRect.hidden = true;
     newTakoyakiTray.hidden = true;
+    frontTakoyakiTray.hidden = true;
     frontRamenFlagRect.hidden = true;
 }
 
@@ -1021,14 +1024,14 @@ const QUOTE_PROD_TRANSFORM = {
     },
     sandwich: {
         // Point
-        new_prod_small: [27, 0, 25],
+        new_prod_small: [25, 0, 22],
         new_prod_big: [24, 0, 19],
         new_quote_bg: [-8, 0, 5],
         new_quote_text: [-8, 0, 5],
 
         // Scale
         new_prod_small_scale: [1.45, 1.45, 1.45],
-        new_prod_big_scale: [1.3, 1.3, 1.3],
+        new_prod_big_scale: [0.95, 0.95, 0.95],
         new_quote_bg_scale: [1, 1, 1],
         new_quote_text_scale: [1, 1, 1],
 
@@ -1191,6 +1194,7 @@ function showTakoyaki() {
     facemesh1Tako.hidden = false;
     //takoDirectionalLight0.hidden = false;
     newTakoyakiTray.hidden = false;
+    frontTakoyakiTray.hidden = false;
 
     loadNewDesignTakoyaki();
     showNewProdSmall();
@@ -1318,6 +1322,7 @@ function showSandwich(mode) {
 
     sandwichRoot.hidden = false;
     sandwichRoot1.hidden = false;
+    frontTakoyakiTray.hidden = false;
 
     if (mode == SANDWICH_MODE_SWIRL) {
 
@@ -1344,6 +1349,7 @@ function showSandwich(mode) {
 
         setupMaterial(newQuoteBgMesh, curResIndex++, NEW_DESIGN_URL_TABLE.sandwich_bubble_bg);
         setupMaterial(newQuoteTxtMesh, curResIndex++, getCurBubbleTxtUrl());
+        setupMaterial(frontTakoyakiTray, curResIndex++, NEW_DESIGN_URL_TABLE.sandwich_bread);
 
         var prodUrl = getCurProdTxtUrl(THEME_NAME_LOOKUP_TABLE.sandwich)
         setupMaterial(newProdBigMesh, curResIndex++, prodUrl);
