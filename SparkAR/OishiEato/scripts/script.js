@@ -1036,8 +1036,8 @@ const QUOTE_PROD_TRANSFORM = {
         new_quote_text: [-8, 0, 5],
 
         // Scale
-        new_prod_small_scale: [1.45, 1.45, 1.45],
-        new_prod_big_scale: [0.95, 0.95, 0.95],
+        new_prod_small_scale: [1, 1, 1],//[1.45, 1.45, 1.45],
+        new_prod_big_scale: [1, 1, 1],//[0.95, 0.95, 0.95],
         new_quote_bg_scale: [1, 1, 1],
         new_quote_text_scale: [1, 1, 1],
 
