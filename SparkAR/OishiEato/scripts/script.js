@@ -443,7 +443,7 @@ const NEW_DESIGN_URL_TABLE = {
     meal_bubble_txt: "new_design/sample_takoyaki/copy.png",
     meal_prod: "new_design/sample_meal/ramenL.png",
     meal_ramen: "new_design/sample_meal/ramen_still.png",
-    meal_flag: "new_design/sample_meal/flag.png",
+    meal_flag: "new_design/sample_meal/flag_02.png",
 };
 
 const FOOD_TEX_LOOKUP_TABLE = {
@@ -857,7 +857,7 @@ function startGame() {
 
     nextProductCounter(firstTheme);
     setCurrentProduct(firstTheme);
-    /*
+    
     if (THEME_NAME_LOOKUP_TABLE.gyoza == firstTheme.theme) {
 
         showOpenMouthAwhile();
@@ -874,13 +874,13 @@ function startGame() {
     }
     else if (THEME_NAME_LOOKUP_TABLE.takoyaki == firstTheme.theme)
         showTakoyaki();
-    */
+    
     // Debug - Show tako when start
     //showTakoyaki();
     //currentProductTitle = "takoyaki_takoyaki";
     // Debug, show sandwich when start
-    showSandwich(SANDWICH_MODE_SWIRL);
-    currentProductTitle = "sandwich_alaska_wakame";
+    //showSandwich(SANDWICH_MODE_SWIRL);
+    //currentProductTitle = "sandwich_alaska_wakame";
     // For the build of 2 sandwiches
     //showMeal();
     //currentProductTitle = "meal_kraphrao";
@@ -1341,6 +1341,7 @@ function showSandwich(mode) {
     facemesh1.material = faceTracker1Mat;
 
     showNewProdSmall();
+
     loadNewDesignSandwich();
 
     function loadNewDesignSandwich() {
