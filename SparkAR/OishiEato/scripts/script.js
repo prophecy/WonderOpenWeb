@@ -176,6 +176,8 @@ const newHandMesh = Scene.root.find("new_hand_mesh");
 const newSandwichCheek0Mesh = Scene.root.find("sandwich_cheek0_mesh");
 const newSandwichCheek1Mesh = Scene.root.find("sandwich_cheek1_mesh");
 
+const frontSandwichTray = Scene.root.find("front_sandwich_tray");
+
 // For crabstick
 const newCrabBg = Scene.root.find("new_crab_bg");
 const newCrabBgMesh = Scene.root.find("new_crab_bg_mesh");
@@ -859,7 +861,7 @@ function startGame() {
 
     nextProductCounter(firstTheme);
     setCurrentProduct(firstTheme);
-    /*
+    
     if (THEME_NAME_LOOKUP_TABLE.gyoza == firstTheme.theme) {
 
         showOpenMouthAwhile();
@@ -876,9 +878,9 @@ function startGame() {
     }
     else if (THEME_NAME_LOOKUP_TABLE.takoyaki == firstTheme.theme)
         showTakoyaki();
-    */
+    
     // Debug - Show tako when start
-    showTakoyaki();
+    //showTakoyaki();
     //currentProductTitle = "takoyaki_takoyaki";
     // Debug, show sandwich when start
     //showSandwich(SANDWICH_MODE_SWIRL);
@@ -1005,6 +1007,7 @@ function hideAllThemes() {
     newTakoyakiTray.hidden = true;
     frontTakoyakiTray.hidden = true;
     frontRamenFlagRect.hidden = true;
+    frontSandwichTray.hidden = true;
 }
 
 const QUOTE_PROD_TRANSFORM = {
@@ -1324,7 +1327,7 @@ function showSandwich(mode) {
 
     sandwichRoot.hidden = false;
     sandwichRoot1.hidden = false;
-    frontTakoyakiTray.hidden = false;
+    frontSandwichTray.hidden = false;
 
     if (mode == SANDWICH_MODE_SWIRL) {
 
@@ -1352,7 +1355,7 @@ function showSandwich(mode) {
 
         setupMaterial(newQuoteBgMesh, curResIndex++, NEW_DESIGN_URL_TABLE.sandwich_bubble_bg);
         setupMaterial(newQuoteTxtMesh, curResIndex++, getCurBubbleTxtUrl());
-        setupMaterial(frontTakoyakiTray, curResIndex++, NEW_DESIGN_URL_TABLE.sandwich_bread);
+        setupMaterial(frontSandwichTray, curResIndex++, NEW_DESIGN_URL_TABLE.sandwich_bread);
 
         var prodUrl = getCurProdTxtUrl(THEME_NAME_LOOKUP_TABLE.sandwich)
         setupMaterial(newProdBigMesh, curResIndex++, prodUrl);
