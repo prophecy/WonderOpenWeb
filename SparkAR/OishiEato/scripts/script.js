@@ -760,9 +760,10 @@ function createDataRoundMoreThanZero() {
 
 // Toggle show/hidden debug panel
 TouchGestures.onLongPress().subscribe(function (gesture) {
-
+/*
     var isHidden = dbgCanvas.hidden.pinLastValue();
     dbgCanvas.hidden = !isHidden;
+    */
 });
 
 TouchGestures.onTap().subscribe(function (gesture) {
