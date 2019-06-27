@@ -1053,10 +1053,10 @@ const QUOTE_PROD_TRANSFORM = {
     },
     meal: {
         // Point
-        new_prod_small: [20, 0, 20],
-        new_prod_big: [20, 0, 22],
-        new_quote_bg: [-7, 0, 15],
-        new_quote_text: [-7, 0, 15],
+        new_prod_small: [23.5, 0, 25],
+        new_prod_big: [22.5, 0, 26],
+        new_quote_bg: [-8, 0, 15],
+        new_quote_text: [-8, 0, 15],
         // Scale
         new_prod_small_scale: [1, 1, 1],
         new_prod_big_scale: [1, 1, 1],
@@ -1768,28 +1768,37 @@ function showNewProdInit() {
 function showNewProdBig() {
 
     newProdBig.hidden = false;
-    newProdBigFront.hidden = false;
-
     newProdSmall.hidden = true;
-    newProdSmallFront.hidden = true;
+
+    if (curTheme == THEME_NAME_LOOKUP_TABLE.crabstick) {
+
+        newProdBigFront.hidden = false;
+        newProdSmallFront.hidden = true;           
+    }
 }
 
 function showNewProdSmall() {
 
     newProdSmall.hidden = false;
-    newProdSmallFront.hidden = false;
-    
     newProdBig.hidden = true;
-    newProdBigFront.hidden = true;
+
+    if (curTheme == THEME_NAME_LOOKUP_TABLE.crabstick) {
+
+        newProdSmallFront.hidden = false;
+        newProdBigFront.hidden = true;
+    }
 }
 
 function hideNewProd() {
 
     newProdBig.hidden = true;
-    newProdBigFront.hidden = true;
-
     newProdSmall.hidden = true;
-    newProdSmallFront.hidden = true;
+
+    if (curTheme == THEME_NAME_LOOKUP_TABLE.crabstick) {
+
+        newProdBigFront.hidden = true;
+        newProdSmallFront.hidden = true;
+    }
 }
 
 foodFeederRoot0.hidden = true;
