@@ -196,13 +196,14 @@ const ramenPool0 = Scene.root.find("ramenPool0");
 // RESOURCES for SWIRL SANDWICH
 
 const sandwichRoot = Scene.root.find("sandwich_root");
+const sandwichSwirlRoot = Scene.root.find("sandwich_swirl_root");
 const frontSwirl = Scene.root.find("swirl_foreground");
 const backSwirl = Scene.root.find("swirl_background");
-const sandwichSwirlRoot = Scene.root.find("sandwich_swirl_root");
 
 const sandwichRoot1 = Scene.root.find("sandwich_root1");
-//const frontSwirl1 = Scene.root.find("swirl_foreground1");
-//const backSwirl1 = Scene.root.find("swirl_background1");
+const sandwichSwirlRoot1 = Scene.root.find("sandwich_swirl_root1");
+const frontSwirl1 = Scene.root.find("swirl_foreground1");
+const backSwirl1 = Scene.root.find("swirl_background1");
 
 const frontSandwichList = [];
 const frontSandwichMeshList = [];
@@ -223,6 +224,26 @@ const frontSandwichList1 = [];
 const frontSandwichMeshList1 = [];
 const backSandwichList1 = [];
 const backSandwichMeshList1 = [];
+
+for (var i=0; i<10; ++i)
+    frontSandwichList1.push(Scene.root.find("sandwichf10" + i));
+frontSandwichList1.push(Scene.root.find("sandwichf110"));
+frontSandwichList1.push(Scene.root.find("sandwichf111"));
+
+for (var i=0; i<10; ++i)
+    frontSandwichMeshList1.push(Scene.root.find("sandwich_planef10" + i + "_mesh"));
+frontSandwichList1.push(Scene.root.find("sandwich_planef110_mesh"));
+frontSandwichList1.push(Scene.root.find("sandwich_planef111_mesh"));
+
+for (var i=0; i<10; ++i)
+    backSandwichList1.push(Scene.root.find("sandwichb10" + i));
+frontSandwichList1.push(Scene.root.find("sandwichb110"));
+frontSandwichList1.push(Scene.root.find("sandwichb111"));
+
+for (var i=0; i<10; ++i)
+    backSandwichMeshList1.push(Scene.root.find("sandwich_planeb10" + i + "_mesh"));
+frontSandwichList1.push(Scene.root.find("sandwich_planeb110_mesh"));
+frontSandwichList1.push(Scene.root.find("sandwich_planeb111_mesh"));
 
 //for (var i=0; i<7; ++i)
 //    frontSandwichList1.push(Scene.root.find("sandwichf" + i + "_1"));
