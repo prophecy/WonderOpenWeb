@@ -902,7 +902,7 @@ function startGame() {
 
     nextProductCounter(firstTheme);
     setCurrentProduct(firstTheme);
-    
+    /*
     if (THEME_NAME_LOOKUP_TABLE.gyoza == firstTheme.theme) {
 
         showOpenMouthAwhile();
@@ -919,13 +919,13 @@ function startGame() {
     }
     else if (THEME_NAME_LOOKUP_TABLE.takoyaki == firstTheme.theme)
         showTakoyaki();
-    
+    */
     // Debug - Show tako when start
     //showTakoyaki();
     //currentProductTitle = "takoyaki_takoyaki";
     // Debug, show sandwich when start
-    //showSandwich(SANDWICH_MODE_SWIRL);
-    //currentProductTitle = "sandwich_alaska_wakame";
+    showSandwich(SANDWICH_MODE_SWIRL);
+    currentProductTitle = "sandwich_alaska_wakame";
     // For the build of 2 sandwiches
     //showMeal();
     //currentProductTitle = "meal_kraphrao";
@@ -1072,10 +1072,10 @@ const QUOTE_PROD_TRANSFORM = {
     },
     sandwich: {
         // Point
-        new_prod_small: [23.5, 0, 19],
-        new_prod_big: [24, 0, 19],
-        new_quote_bg: [-8, 0, 5],
-        new_quote_text: [-8, 0, 5],
+        new_prod_small: [27.5, 0, 19],
+        new_prod_big: [28, 0, 19],
+        new_quote_bg: [-4, 0, 5],
+        new_quote_text: [-4, 0, 5],
 
         // Scale
         new_prod_small_scale: [1, 1, 1],//[1.45, 1.45, 1.45],
