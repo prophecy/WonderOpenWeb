@@ -820,6 +820,10 @@ function main() {
         0, 
         MOUTH_OPENNESS_MIN_THRESHOLD, MOUTH_CLOSSNESS_MAX_THRESHOLD, 
         function() { onMouthOpen(0); }, function() { onMouthClose(0); });
+    handleMouthOpeningState(
+        1,
+        MOUTH_OPENNESS_MIN_THRESHOLD, MOUTH_CLOSSNESS_MAX_THRESHOLD, 
+        function() { onMouthOpen(1); }, function() { onMouthClose(1); });
 
     //handleFoodFeeder(crushPoolList0, foodPoolList0, foodPoolList01, foodPoolMeshList0, foodPoolMeshList01);
     handleFoodFeeder(crushPoolList0, undefined, undefined, undefined, undefined);
@@ -989,7 +993,8 @@ function showOpenMouthAwhile() {
 function hideAllThemes() {
 
     newTakoyakiRoot.hidden = true;
-    newGyozaRoot.hidden = true;    
+    newGyozaRoot.hidden = true;
+    newGyozaRoot1.hidden = true;
     facemesh0.hidden = true;
     facemesh0Tako.hidden = true;
     facemesh1Tako.hidden = true;
@@ -1128,10 +1133,16 @@ function showGyoza() {
     newGyozaRoot.hidden = false;
 
     loadNewDesignGyoza();
-    if (!hasStartGyoza)
+    if (!hasStartGyoza) {
+
+        applyRotationBounceLessDelay(newGyozaLeft, 0, 20, 700);
+        applyRotationBounceLessDelay(newGyozaRight, 0, 50, 600);
+
+        applyRotationBounceLessDelay(newGyozaLeft1, 0, 20, 750);
+        applyRotationBounceLessDelay(newGyozaRight1, 0, 50, 650);
+
         runGyozaSequence();
-    applyRotationBounceLessDelay(newGyozaLeft, 0, 20, 700);
-    applyRotationBounceLessDelay(newGyozaRight, 0, 50, 600);
+    }
 
     facemesh0.material = facePaintGyozaMat;
     facemesh1.material = facePaintGyozaMat;
@@ -1189,6 +1200,7 @@ function showGyoza() {
         ++curResIndex;
 
         newGyozaLeftMesh.material = newGyozaRightMesh.material = gyozaSeqMatList[0];
+        newGyozaLeft1Mesh.material = newGyozaRight1Mesh.material = gyozaSeqMatList[0];
         
         function setupMaterial(mesh, index, texName) {
     
@@ -1651,6 +1663,7 @@ function runGyozaSequence() {
     function updateLeftSeq() {
 
         newGyozaLeftMesh.material = gyozaSeqMatList[curGyozaLeftSeqIndex];
+        newGyozaLeft1Mesh.material = newGyozaLeftMesh.material;
         
         if (++curGyozaLeftSeqIndex >= gyozaSeqMatList.length)
             curGyozaLeftSeqIndex = 0;
@@ -1659,7 +1672,8 @@ function runGyozaSequence() {
     function updateRightSeq() {
 
         newGyozaRightMesh.material = gyozaSeqMatList[curGyozaRightSeqIndex];
-        
+        newGyozaRight1Mesh.material = newGyozaRightMesh.material;
+
         if (++curGyozaRightSeqIndex >= gyozaSeqMatList.length)
             curGyozaRightSeqIndex = 0;
     }
@@ -1986,6 +2000,7 @@ function onMouthOpen(faceIndex) {
         }
         else if (curTheme === THEME_NAME_LOOKUP_TABLE.sandwich) {
     
+            // Sandwich's eat mode is deprecated
             if (currentSandwichMode == SANDWICH_MODE_EAT) {
     
                 foodFeederRoot0.hidden = false;
@@ -2016,6 +2031,15 @@ function onMouthOpen(faceIndex) {
             foodFeederRoot0.transform.z = mouth.center.z;
         }  
     }
+    else if (faceIndex == 1) {
+
+        if (curTheme === THEME_NAME_LOOKUP_TABLE.gyoza) {
+    
+            newGyozaRoot1.hidden = false;
+            newGyozaLeft1.hidden = false;
+            newGyozaRight1.hidden = false;
+        }
+    }
 }
 
 function onMouthClose(faceIndex) {
@@ -2025,17 +2049,15 @@ function onMouthClose(faceIndex) {
         showNewProdSmall();
 
         newGyozaRoot.hidden = true;
-        //newGyozaLeft.hidden = false;
-        //newGyozaRight.hidden = false;
-    
-        //newSmokeRoot.hidden = true;
-    
         foodFeederRoot0.hidden = true;
     
-        if (curTheme == THEME_NAME_LOOKUP_TABLE.meal) {
-    
-            newRamen.hidden = false;
-        }
+//        if (curTheme == THEME_NAME_LOOKUP_TABLE.meal) {
+//            newRamen.hidden = false;
+//        }
+    }
+    else if (faceIndex == 1) {
+
+        newGyozaRoot1.hidden = true;
     }
 }
 
