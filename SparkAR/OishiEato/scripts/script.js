@@ -141,14 +141,23 @@ const newProdSmallFrontMesh = Scene.root.find("new_prod_small_front_mesh");
 const newProdBigFront = Scene.root.find("new_prod_big_front");
 const newProdBigFrontMesh = Scene.root.find("new_prod_big_front_mesh");
 
+const newGyozaRoot = Scene.root.find("new_gyoza_root");
+
 const newGyozaLeft = Scene.root.find("new_gyoza_left");
 const newGyozaLeftMesh = Scene.root.find("new_gyoza_left_mesh");
 
 const newGyozaRight = Scene.root.find("new_gyoza_right");
 const newGyozaRightMesh = Scene.root.find("new_gyoza_right_mesh");
 
+const newGyozaRoot1 = Scene.root.find("new_gyoza_root1");
+
+const newGyozaLeft1 = Scene.root.find("new_gyoza_left1");
+const newGyozaLeft1Mesh = Scene.root.find("new_gyoza_left1_mesh");
+
+const newGyozaRight1 = Scene.root.find("new_gyoza_right1");
+const newGyozaRight1Mesh = Scene.root.find("new_gyoza_right1_mesh");
+
 const newTakoyakiRoot = Scene.root.find("takoyaki_root");
-const newGyozaRoot = Scene.root.find("new_gyoza_root");
 const newTakoyakiTray = Scene.root.find("new_takoyaki_tray");
 const frontTakoyakiTray = Scene.root.find("front_takoyaki_tray");
 const newTakoyakiTrayMesh = Scene.root.find("new_takoyaki_tray_mesh");
@@ -1965,8 +1974,6 @@ function onEyeClosed(faceIndex, eyeIndex) {
 // --------------------------------------------------------------------------------
 // @ OPEN MOUTH
 
-newGyozaRoot.hidden = true;
-
 function onFace0MouthOpen() {
 
     showNewProdBig();
@@ -2015,8 +2022,8 @@ function onFace0MouthClose() {
     showNewProdSmall();
 
     newGyozaRoot.hidden = true;
-    newGyozaLeft.hidden = false;
-    newGyozaRight.hidden = false;
+    //newGyozaLeft.hidden = false;
+    //newGyozaRight.hidden = false;
 
     //newSmokeRoot.hidden = true;
 
