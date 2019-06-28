@@ -468,7 +468,7 @@ const NEW_DESIGN_URL_TABLE = {
     meal_bubble_txt: "new_design/sample_takoyaki/copy.png",
     meal_prod: "new_design/sample_meal/ramenL.png",
     meal_ramen: "new_design/sample_meal/ramen_still.png",
-    meal_flag: "new_design/sample_meal/flag_02.png",
+    meal_flag: "new_design/sample_meal/flag_03.png",
 };
 
 const FOOD_TEX_LOOKUP_TABLE = {
