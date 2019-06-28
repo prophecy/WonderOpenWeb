@@ -787,11 +787,11 @@ var curTheme = undefined;
 
 function main() {
 
-    initSwirlSandwich(frontSwirl, frontSandwichList, frontSandwichMeshList, true);
-    initSwirlSandwich(backSwirl, backSandwichList, backSandwichMeshList, false);
+    initSwirlSandwich(frontSwirl, frontSandwichList, frontSandwichMeshList, true, 0);
+    initSwirlSandwich(backSwirl, backSandwichList, backSandwichMeshList, false, 0);
 
-    initSwirlSandwich(frontSwirl1, frontSandwichList1, frontSandwichMeshList1, true);
-    initSwirlSandwich(backSwirl1, backSandwichList1, backSandwichMeshList1, false);
+    initSwirlSandwich(frontSwirl1, frontSandwichList1, frontSandwichMeshList1, true, 103);
+    initSwirlSandwich(backSwirl1, backSandwichList1, backSandwichMeshList1, false, 103);
     
     hideAllThemes();
 
@@ -1505,7 +1505,9 @@ function rotateSandwichRef() {
     driver.start();
 }
 
-function initSwirlSandwich(swirl, sandwichList, sandwichMeshList, isFront) {
+function initSwirlSandwich(swirl, sandwichList, sandwichMeshList, isFront, degreeOffset) {
+
+    var radOffset = degreeOffset / 180.0 * Math.PI;
 
     for (var i=0; i<sandwichList.length; ++i) {
 
@@ -1526,27 +1528,12 @@ function initSwirlSandwich(swirl, sandwichList, sandwichMeshList, isFront) {
         var obj = sandwichList[i];
         var mesh = sandwichMeshList[i];
 
-        // Rotate
-        /*
-        const swirlParms = {
-            durationMilliseconds: SWIRL_DURATION,
-            loopCount: Infinity,
-            mirror: false  
-        };
-
-        const driver = Animation.timeDriver(swirlParms);
-        const sampler = Animation.samplers.linear(0, Math.PI * 2.0);
-        const anim = Animation.animate(driver, sampler);
-    
-        mesh.transform.rotationY = anim;
-
-        driver.start();
-        */
         // Translate
         var objRad = Math.PI * 2.0 * (i / sandwichMeshList.length);
-        var cos = Reactive.cos(sandwichRotationRef.transform.rotationY.add(objRad));
+        var objRadWithOffset = objRad + radOffset;
+        var cos = Reactive.cos(sandwichRotationRef.transform.rotationY.add(objRadWithOffset));
         sandwichList[i].transform.x = Reactive.mul(cos, SWIRL_RADIOUS);
-        var sin = Reactive.sin(sandwichRotationRef.transform.rotationY.add(objRad));
+        var sin = Reactive.sin(sandwichRotationRef.transform.rotationY.add(objRadWithOffset));
         sandwichList[i].transform.z = Reactive.mul(sin, SWIRL_RADIOUS);
     }
 }
