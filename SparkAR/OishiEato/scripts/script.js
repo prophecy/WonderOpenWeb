@@ -211,6 +211,7 @@ const newRamenMesh = Scene.root.find("new_ramen_mesh");
 const frontRamenFlagRect = Scene.root.find("front_ramen_flag");
 
 const ramenPool0 = Scene.root.find("ramenPool0");
+const ramenPool1 = Scene.root.find("ramenPool1");
 
 // --------------------------------------------------------------------------------
 // RESOURCES for SWIRL SANDWICH
@@ -2280,7 +2281,14 @@ function handleFoodFeeder(crushObjList, foodObjList0, foodObjList1,
         crushVarianceZ: 3.5,
     }
 
-    startRamenFeeder();
+    var ramenRoot = Scene.root.find("ramenRoot0");
+    var ramen00Mesh = Scene.root.find("ramen_00_mesh");
+    startRamenFeeder(ramenRoot, ramen00Mesh);
+
+    var ramenRoot1 = Scene.root.find("ramenRoot1");
+    var ramen10Mesh = Scene.root.find("ramen_10_mesh");
+    startRamenFeeder(ramenRoot1, ramen10Mesh);
+
     startNormalCrushFeeder(crushObjList, foodFeederArgs);
 
     //startFoodFeederV2(foodObjList0, testyPool0);
@@ -2405,13 +2413,13 @@ function startFoodFeederV2(foodObjList, testyPool) {
     Diagnostics.watch("rx2: ", testyPool0.transform.rotationX.sub(rad).gt(Reactive.val(Math.PI)));
 }
 
-function startRamenFeeder() {
+function startRamenFeeder(ramenRoot, ramen00Mesh) {
 
     // Todo: Fix intensive looping here
 
     // For object
-    var ramenRoot = Scene.root.find("ramenRoot0");
-    var ramen00Mesh = Scene.root.find("ramen_00_mesh");
+    //var ramenRoot = Scene.root.find("ramenRoot0");
+    //var ramen00Mesh = Scene.root.find("ramen_00_mesh");
 
     // Translate animation
     const RAMEN_MAX_OFFSET = -5.0;
