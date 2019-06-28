@@ -428,7 +428,7 @@ const NEW_DESIGN_URL_TABLE = {
     takoyaki_bubble_bg: "new_design/sample_takoyaki/bubble.png",
     takoyaki_bubble_txt: "new_design/sample_takoyaki/copy.png",
     takoyaki_prod: "new_design/sample_takoyaki/takopack.png",
-    takoyaki_tray: "new_design/sample_takoyaki/takoyaki_tray.png",
+    takoyaki_tray: "new_design/sample_takoyaki/tako_tray_v2.png",
 
     // Sandwich sample
     sandwich_bubble_bg: "new_design/sample_sandwich/bb_sandwich.png",
@@ -921,11 +921,11 @@ function startGame() {
         showTakoyaki();
     */
     // Debug - Show tako when start
-    //showTakoyaki();
-    //currentProductTitle = "takoyaki_takoyaki";
+    showTakoyaki();
+    currentProductTitle = "takoyaki_takoyaki";
     // Debug, show sandwich when start
-    showSandwich(SANDWICH_MODE_SWIRL);
-    currentProductTitle = "sandwich_alaska_wakame";
+    //showSandwich(SANDWICH_MODE_SWIRL);
+    //currentProductTitle = "sandwich_alaska_wakame";
     // For the build of 2 sandwiches
     //showMeal();
     //currentProductTitle = "meal_kraphrao";
