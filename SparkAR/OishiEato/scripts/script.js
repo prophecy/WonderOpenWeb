@@ -1327,7 +1327,7 @@ function showSandwich(mode) {
     currentSandwichMode = mode;
 
     facemesh0.hidden = false;
-    facemesh1.hidden = false;
+    //facemesh1.hidden = false;
 
     sandwichRoot.hidden = false;
     sandwichRoot1.hidden = false;
@@ -1842,45 +1842,52 @@ function onFaceTracked(faceIndex) {
         hasStarted = true;
     }
 
-    if (faceIndex != 0)
-        return;
+    if (faceIndex == 0) {
 
-    showNewQuote();
+        showNewQuote();
 
-    const quoteTxtTimer = Time.setInterval(showQuoteText, 500);
-    const prodTimer = Time.setInterval(showProd, 1000);
-
-    function showQuoteText() {
-
-        showNewQuoteTxt();
-
-        // clear interval
-        Time.clearInterval(quoteTxtTimer);
-    }
-
-    function showProd() {
-
-        showNewProdInit();
-
-        // clear interval
-        Time.clearInterval(prodTimer);
-    }
+        const quoteTxtTimer = Time.setInterval(showQuoteText, 500);
+        const prodTimer = Time.setInterval(showProd, 1000);
     
-    // Show the current theme
-    if (curTheme === THEME_NAME_LOOKUP_TABLE.gyoza)
-        showGyoza();
-    else if (curTheme === THEME_NAME_LOOKUP_TABLE.sandwich)
-        showSandwich(SANDWICH_MODE_SWIRL);
-    else if (curTheme === THEME_NAME_LOOKUP_TABLE.crabstick)
-        showCrabstick();
-    else if (curTheme === THEME_NAME_LOOKUP_TABLE.takoyaki)
-        showTakoyaki();
-    else if (curTheme === THEME_NAME_LOOKUP_TABLE.meal)
-        showMeal();
+        function showQuoteText() {
+    
+            showNewQuoteTxt();
+    
+            // clear interval
+            Time.clearInterval(quoteTxtTimer);
+        }
+    
+        function showProd() {
+    
+            showNewProdInit();
+    
+            // clear interval
+            Time.clearInterval(prodTimer);
+        }
+        
+        // Show the current theme
+        if (curTheme === THEME_NAME_LOOKUP_TABLE.gyoza)
+            showGyoza();
+        else if (curTheme === THEME_NAME_LOOKUP_TABLE.sandwich)
+            showSandwich(SANDWICH_MODE_SWIRL);
+        else if (curTheme === THEME_NAME_LOOKUP_TABLE.crabstick)
+            showCrabstick();
+        else if (curTheme === THEME_NAME_LOOKUP_TABLE.takoyaki)
+            showTakoyaki();
+        else if (curTheme === THEME_NAME_LOOKUP_TABLE.meal)
+            showMeal();
+    }
+    else if (faceIndex == 1) {
+
+        facemesh1.hidden = false;
+    }
 }
 
 function onFaceUntracked(faceIndex) {
 
+    if (faceIndex == 1)
+        facemesh1.hidden = true;
+    
     if (faceIndex != 0)
         return;
 
