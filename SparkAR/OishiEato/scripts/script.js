@@ -2091,6 +2091,7 @@ function onMouthClose(faceIndex) {
     else if (faceIndex == 1) {
 
         newGyozaRoot1.hidden = true;
+        foodFeederRoot0.hidden = true;
     }
 }
 
