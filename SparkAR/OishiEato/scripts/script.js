@@ -346,7 +346,7 @@ const PROD_TEX_LOOKUP_TABLE = {
     crabstick_reserved_00: "theme_crabstick/product/reserved_00.png",
     crabstick_reserved_01: "theme_crabstick/product/reserved_01.png",
 
-    takoyaki_takoyaki: "theme_tako/product/takoyaki.png",
+    takoyaki_takoyaki: "theme_tako/product/takoyaki_v2.png",
 
     takoyaki_reserved_00: "theme_tako/product/reserved_00.png",
     takoyaki_reserved_01: "theme_tako/product/reserved_01.png",
@@ -446,7 +446,7 @@ const NEW_DESIGN_URL_TABLE = {
     sandwich_cheek_0: "new_design/sample_sandwich/cheek.png",
     sandwich_cheek_1: "new_design/sample_sandwich/cheek2.png",
     sandwich_teapot: "new_design/sample_sandwich/tea_pot_512.png",
-    sandwich_bread: "new_design/sample_sandwich/bread_512.png",
+    sandwich_bread: "new_design/sample_sandwich/bread_512_v2.png",
 
     // Crabstick sample (Crabstick is the new gyoza)
     crabstick_bubble_bg: "new_design/sample_crabstick/new_crab.png",
