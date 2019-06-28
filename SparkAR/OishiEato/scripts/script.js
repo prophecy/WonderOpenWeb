@@ -440,6 +440,9 @@ const NEW_DESIGN_URL_TABLE = {
     crabstick_gyoza_table: "new_design/sample_crabstick/gyoza_theme2_table.png",
     crabstick_gyoza_tray: "new_design/sample_crabstick/gyoza_theme2.2.png",
     crabstick_gyoza_table_02: "new_design/sample_crabstick/table_03.png",
+    crabstick_gyoza_table_test_01: "new_design/sample_crabstick/table_test_v1.png",
+    crabstick_gyoza_table_test_02: "new_design/sample_crabstick/table_test_v2.png",
+    crabstick_gyoza_table_test_03: "new_design/sample_crabstick/table_test_v3.png",
     crabstick_gyoza_flag: "new_design/sample_crabstick/flag.png",
 
     // Meal sample
@@ -1049,8 +1052,8 @@ const QUOTE_PROD_TRANSFORM = {
     },
     crabstick: {
         // Point
-        new_prod_small: [32, 0, 30],
-        new_prod_big: [32, 0, 26],
+        new_prod_small: [31, 0, 28],
+        new_prod_big: [31, 0, 24],
         new_quote_bg: [-2, 0, 6],
         new_quote_text: [0, 0, 5],
         // Scale
@@ -1295,7 +1298,7 @@ function showCrabstick() {
         newCrabLogo.transform.y = QUOTE_PROD_TRANSFORM.crabstick.new_crab_logo[1];
         newCrabLogo.transform.z = QUOTE_PROD_TRANSFORM.crabstick.new_crab_logo[2];
 
-        setupMaterial(frontGyozaTableRect, curResIndex++, NEW_DESIGN_URL_TABLE.crabstick_gyoza_table_02);
+        setupMaterial(frontGyozaTableRect, curResIndex++, NEW_DESIGN_URL_TABLE.crabstick_gyoza_table_test_03);
         setupMaterial(frontGyozaFlagRect, curResIndex++, NEW_DESIGN_URL_TABLE.crabstick_gyoza_flag);
 
         // Setup position
