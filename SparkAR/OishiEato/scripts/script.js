@@ -235,18 +235,18 @@ frontSandwichList1.push(Scene.root.find("sandwichf111"));
 
 for (var i=0; i<10; ++i)
     frontSandwichMeshList1.push(Scene.root.find("sandwich_planef10" + i + "_mesh"));
-frontSandwichList1.push(Scene.root.find("sandwich_planef110_mesh"));
-frontSandwichList1.push(Scene.root.find("sandwich_planef111_mesh"));
+frontSandwichMeshList1.push(Scene.root.find("sandwich_planef110_mesh"));
+frontSandwichMeshList1.push(Scene.root.find("sandwich_planef111_mesh"));
 
 for (var i=0; i<10; ++i)
     backSandwichList1.push(Scene.root.find("sandwichb10" + i));
-frontSandwichList1.push(Scene.root.find("sandwichb110"));
-frontSandwichList1.push(Scene.root.find("sandwichb111"));
+backSandwichList1.push(Scene.root.find("sandwichb110"));
+backSandwichList1.push(Scene.root.find("sandwichb111"));
 
 for (var i=0; i<10; ++i)
     backSandwichMeshList1.push(Scene.root.find("sandwich_planeb10" + i + "_mesh"));
-frontSandwichList1.push(Scene.root.find("sandwich_planeb110_mesh"));
-frontSandwichList1.push(Scene.root.find("sandwich_planeb111_mesh"));
+backSandwichMeshList1.push(Scene.root.find("sandwich_planeb110_mesh"));
+backSandwichMeshList1.push(Scene.root.find("sandwich_planeb111_mesh"));
 
 //for (var i=0; i<7; ++i)
 //    frontSandwichList1.push(Scene.root.find("sandwichf" + i + "_1"));
@@ -787,11 +787,11 @@ var curTheme = undefined;
 
 function main() {
 
-    //initSwirlSandwich(frontSwirl1, frontSandwichList1, frontSandwichMeshList1, true);
-    //initSwirlSandwich(backSwirl1, backSandwichList1, backSandwichMeshList1, false);
-    
     initSwirlSandwich(frontSwirl, frontSandwichList, frontSandwichMeshList, true);
     initSwirlSandwich(backSwirl, backSandwichList, backSandwichMeshList, false);
+
+    initSwirlSandwich(frontSwirl1, frontSandwichList1, frontSandwichMeshList1, true);
+    initSwirlSandwich(backSwirl1, backSandwichList1, backSandwichMeshList1, false);
     
     hideAllThemes();
 
@@ -1317,7 +1317,7 @@ function showCrabstick() {
 var hasStartSandwich = false;
 
 const SANDWICH_MODE_SWIRL = 0;
-const SANDWICH_MODE_EAT = 1;
+const SANDWICH_MODE_EAT = 1; // Deprecated (Removed all objects in the scene)
 
 var currentSandwichMode = undefined;
 
@@ -1369,18 +1369,11 @@ function showSandwich(mode) {
 
         if (mode == SANDWICH_MODE_SWIRL) {
 
-            // Apply mat for each swirl sandwich
+            // Get ingredients' materials
             var ingMatList = [];
             for (var i=0; i<NEW_DESIGN_URL_TABLE.sandwich_ingredient.length; ++i) {
 
                 var url = BASE_URL + NEW_DESIGN_URL_TABLE.sandwich_ingredient[i];
-
-                //Diagnostics.log(
-                //    "MatName: " + NEW_DESIGN_MAT_LIST[curResIndex] +
-                //    " TexName: " + NEW_DESIGN_TEX_LIST[curResIndex]
-                //    );
-
-                //Diagnostics.log("url: " + url);
 
                 var mat = getMaterialWithDiffuseByUrl(
                     NEW_DESIGN_MAT_LIST[curResIndex], 
@@ -1392,60 +1385,28 @@ function showSandwich(mode) {
                 ++curResIndex;
             }
 
+            // Apply ingredients' mat to meshes
             var ingIndex = 0;
+            var meshList = [ undefined, undefined, undefined, undefined ];
             for (var i=0; i<frontSandwichMeshList.length; ++i) {
 
-                var frontMesh = frontSandwichMeshList[i];
-                frontMesh.material = ingMatList[ingIndex];
+                meshList[0] = frontSandwichMeshList[i];
+                meshList[1] = backSandwichMeshList[i];
+                meshList[2] = frontSandwichMeshList1[i];
+                meshList[3] = backSandwichMeshList1[i];
 
-                var backMesh = backSandwichMeshList[i];
-                backMesh.material = ingMatList[ingIndex];
+                for (var j=0; j<meshList.length; ++j)
+                    meshList[j].material = ingMatList[ingIndex];
 
                 if (++ingIndex >= ingMatList.length)
                     ingIndex = 0;
             }
-
-            // Apply mat for each swirl sandwich
-            var ingMatList = [];
-            for (var i=0; i<NEW_DESIGN_URL_TABLE.sandwich_ingredient.length; ++i) {
-
-                var url = BASE_URL + NEW_DESIGN_URL_TABLE.sandwich_ingredient[i];
-
-                Diagnostics.log(
-                    "MatName: " + NEW_DESIGN_MAT_LIST[curResIndex] +
-                    " TexName: " + NEW_DESIGN_TEX_LIST[curResIndex]
-                    );
-
-                Diagnostics.log("url: " + url);
-
-                var mat = getMaterialWithDiffuseByUrl(
-                    NEW_DESIGN_MAT_LIST[curResIndex], 
-                    NEW_DESIGN_TEX_LIST[curResIndex], 
-                    url);
-
-                ingMatList.push(mat); 
-                
-                ++curResIndex;
-            }
-
-            var ingIndex = 0;
-            for (var i=0; i<frontSandwichMeshList.length; ++i) {
-
-                var frontMesh = frontSandwichMeshList[i];
-                frontMesh.material = ingMatList[ingIndex];
-
-                var backMesh = backSandwichMeshList[i];
-                backMesh.material = ingMatList[ingIndex];
-
-                if (++ingIndex >= ingMatList.length)
-                    ingIndex = 0;
-            }
-
-            Diagnostics.log("curResIndex: " + curResIndex);
 
             // Set cheek texture
             setupMaterial(newSandwichCheek0Mesh, curResIndex++, NEW_DESIGN_URL_TABLE.sandwich_cheek_0);
-            newSandwichCheek1Mesh.material = newSandwichCheek0Mesh.material;
+            newSandwichCheek1Mesh.material = newSandwichCheek0Mesh.material;            
+
+            Diagnostics.log("curResIndex: " + curResIndex);
         }
         else if (mode == SANDWICH_MODE_EAT) {
 
