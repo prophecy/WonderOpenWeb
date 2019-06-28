@@ -461,6 +461,9 @@ const NEW_DESIGN_URL_TABLE = {
     crabstick_gyoza_table_test_01: "new_design/sample_crabstick/table_test_v1.png",
     crabstick_gyoza_table_test_02: "new_design/sample_crabstick/table_test_v2.png",
     crabstick_gyoza_table_test_03: "new_design/sample_crabstick/table_test_v3.png",
+    crabstick_gyoza_table_test_04: "new_design/sample_crabstick/table_test_v4.png",
+    crabstick_gyoza_table_test_05: "new_design/sample_crabstick/table_test_v5.png",
+    crabstick_gyoza_table_test_06: "new_design/sample_crabstick/table_test_v6.png",
     crabstick_gyoza_flag: "new_design/sample_crabstick/flag_v3.png",
 
     // Meal sample
@@ -902,7 +905,7 @@ function startGame() {
 
     nextProductCounter(firstTheme);
     setCurrentProduct(firstTheme);
-    /*
+    
     if (THEME_NAME_LOOKUP_TABLE.gyoza == firstTheme.theme) {
 
         showOpenMouthAwhile();
@@ -919,7 +922,7 @@ function startGame() {
     }
     else if (THEME_NAME_LOOKUP_TABLE.takoyaki == firstTheme.theme)
         showTakoyaki();
-    */
+    
     // Debug - Show tako when start
     //showTakoyaki();
     //currentProductTitle = "takoyaki_takoyaki";
@@ -929,7 +932,7 @@ function startGame() {
     // For the build of 2 sandwiches
     //showMeal();
     //currentProductTitle = "meal_kraphrao";
-    showCrabstick();
+    //showCrabstick();
     //showMeal();
 }
 
@@ -1350,7 +1353,7 @@ function showCrabstick() {
         newCrabLogo.transform.y = QUOTE_PROD_TRANSFORM.crabstick.new_crab_logo[1];
         newCrabLogo.transform.z = QUOTE_PROD_TRANSFORM.crabstick.new_crab_logo[2];
 
-        setupMaterial(frontGyozaTableRect, curResIndex++, NEW_DESIGN_URL_TABLE.crabstick_gyoza_table_test_01);
+        setupMaterial(frontGyozaTableRect, curResIndex++, NEW_DESIGN_URL_TABLE.crabstick_gyoza_table_test_06);
         setupMaterial(frontGyozaFlagRect, curResIndex++, NEW_DESIGN_URL_TABLE.crabstick_gyoza_flag);
 
         // Setup position
