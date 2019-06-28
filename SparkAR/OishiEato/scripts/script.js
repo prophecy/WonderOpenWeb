@@ -57,6 +57,8 @@ const Random = require('Random');
 
 // Food feeder for player #0
 var foodFeederRoot0 = Scene.root.find('foodFeederRoot0');
+var foodFeederRoot1 = Scene.root.find('foodFeederRoot1');
+
 //var testyPool0 = Scene.root.find("testyPool0");
 //var testyPool01 = Scene.root.find("testyPool01");
 
@@ -178,6 +180,12 @@ const mealShopstick01mesh = Scene.root.find("shopstick01_mesh");
 
 const mealShopstick00_pivot = Scene.root.find("shopstick00_pivot");
 const mealShopstick01_pivot = Scene.root.find("shopstick01_pivot");
+
+const mealShopstick10mesh = Scene.root.find("shopstick10_mesh");
+const mealShopstick11mesh = Scene.root.find("shopstick11_mesh");
+
+const mealShopstick10_pivot = Scene.root.find("shopstick10_pivot");
+const mealShopstick11_pivot = Scene.root.find("shopstick11_pivot");
 
 // For sandwich
 const newHand = Scene.root.find("new_hand");
@@ -647,6 +655,11 @@ function nextProductCounter(themeData) {
 
     //Diagnostics.log("themeData: " + JSON.stringify(themeData));
 
+    if (themeData == undefined) {
+        Diagnostics.log("themeData is undefined");
+        return;
+    }
+
     if (themeData.type == "productNPD")
         return;
 
@@ -685,31 +698,39 @@ function createDataRoundZero() {
 
     // Add npd item
     var npdList = getNpdList();
-    for (var i=0; i<npdList.length; ++i) {
 
-        var item = npdList[i];
-        item.type = "productNPD";
-        itemQueue.push(item);
-        
-        var isExist = isThemeExistInRoundOrder(item.theme);
-        if (!isExist)
-            themeOrder.push(item.theme);
+    if (npdList != undefined) {
+
+        for (var i=0; i<npdList.length; ++i) {
+
+            var item = npdList[i];
+            item.type = "productNPD";
+            itemQueue.push(item);
+            
+            var isExist = isThemeExistInRoundOrder(item.theme);
+            if (!isExist)
+                themeOrder.push(item.theme);
+        }
     }
     
     // Add item
     var itemList = getItemList();
-    for (var i=0; i<itemList.length; ++i) {
 
-        var item = itemList[i];
-        item.type = "product";
+    if (itemList != undefined) {
 
-        var isExist = isThemeExistInRoundOrder(item.theme);
-        if (!isExist) {
-            itemQueue.push(item);
-            themeOrder.push(item.theme);
-        }
+        for (var i=0; i<itemList.length; ++i) {
+
+            var item = itemList[i];
+            item.type = "product";
+    
+            var isExist = isThemeExistInRoundOrder(item.theme);
+            if (!isExist) {
+                itemQueue.push(item);
+                themeOrder.push(item.theme);
+            }
+        }    
     }
-
+    
     resetProductCounter();
 }
 
@@ -832,6 +853,8 @@ function main() {
     getThemeData(function(data, error) {
 
         if (data) {
+
+            Diagnostics.log("API request success");
 
             storeData(data);
             //Diagnostics.log("data: " + JSON.stringify(data));
@@ -1018,6 +1041,7 @@ function hideAllThemes() {
     newCrabLogo.hidden = true;
     newRamen.hidden = true;
     foodFeederRoot0.hidden = true;
+    foodFeederRoot1.hidden = true;
     newProdSmallFront.hidden = true;
     newProdBigFront.hidden = true;
     frontGyozaTableRect.hidden = true;
@@ -1833,8 +1857,6 @@ function hideNewProd() {
     }
 }
 
-foodFeederRoot0.hidden = true;
-
 // Init bubbles' tex
 function initBubbleTex() {
 
@@ -2039,6 +2061,16 @@ function onMouthOpen(faceIndex) {
             newGyozaLeft1.hidden = false;
             newGyozaRight1.hidden = false;
         }
+        else if (curTheme == THEME_NAME_LOOKUP_TABLE.meal) {
+
+            foodFeederRoot1.hidden = false;
+            ramenPool0.hidden = false;
+
+            var mouth = FaceTracking.face(1).mouth;
+            foodFeederRoot1.transform.x = mouth.center.x;
+            foodFeederRoot1.transform.y = mouth.center.y;
+            foodFeederRoot1.transform.z = mouth.center.z;
+        }
     }
 }
 
@@ -2170,10 +2202,16 @@ function handleFoodFeeder(crushObjList, foodObjList0, foodObjList1,
     mealShopstick00mesh.material = Materials.get("new_chopstick_mat");
     mealShopstick01mesh.material = Materials.get("new_chopstick_mat");
 
+    mealShopstick10mesh.material = Materials.get("new_chopstick_mat");
+    mealShopstick11mesh.material = Materials.get("new_chopstick_mat");
+
     // Animate shopsticks
     applyShopsticksBound(mealShopstick00_pivot, -10, 20, 600);
     applyShopsticksBound(mealShopstick01_pivot, 0, 30, 600);
     
+    applyShopsticksBound(mealShopstick10_pivot, -10, 20, 600);
+    applyShopsticksBound(mealShopstick11_pivot, 0, 30, 600);
+
     function setupFoodMat(texPathList, meshList) {
         setupMatTex(texPathList, FOOD_MAT_LIST, FOOD_TEX_LIST, meshList);
     }
