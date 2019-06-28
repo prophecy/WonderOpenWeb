@@ -138,10 +138,10 @@ const newProdSmall = Scene.root.find("new_prod_small");
 const newProdSmallMesh = Scene.root.find("new_prod_small_mesh");
 
 const newProdSmallFront = Scene.root.find("new_prod_small_front");
-const newProdSmallFrontMesh = Scene.root.find("new_prod_small_front_mesh");
+//const newProdSmallFrontMesh = Scene.root.find("new_prod_small_front_mesh");
 
 const newProdBigFront = Scene.root.find("new_prod_big_front");
-const newProdBigFrontMesh = Scene.root.find("new_prod_big_front_mesh");
+//const newProdBigFrontMesh = Scene.root.find("new_prod_big_front_mesh");
 
 const newGyozaRoot = Scene.root.find("new_gyoza_root");
 
@@ -461,7 +461,7 @@ const NEW_DESIGN_URL_TABLE = {
     crabstick_gyoza_table_test_01: "new_design/sample_crabstick/table_test_v1.png",
     crabstick_gyoza_table_test_02: "new_design/sample_crabstick/table_test_v2.png",
     crabstick_gyoza_table_test_03: "new_design/sample_crabstick/table_test_v3.png",
-    crabstick_gyoza_flag: "new_design/sample_crabstick/flag.png",
+    crabstick_gyoza_flag: "new_design/sample_crabstick/flag_v3.png",
 
     // Meal sample
     meal_bubble_bg: "new_design/sample_meal/bb_ramen.png",
@@ -902,7 +902,7 @@ function startGame() {
 
     nextProductCounter(firstTheme);
     setCurrentProduct(firstTheme);
-    
+    /*
     if (THEME_NAME_LOOKUP_TABLE.gyoza == firstTheme.theme) {
 
         showOpenMouthAwhile();
@@ -919,7 +919,7 @@ function startGame() {
     }
     else if (THEME_NAME_LOOKUP_TABLE.takoyaki == firstTheme.theme)
         showTakoyaki();
-    
+    */
     // Debug - Show tako when start
     //showTakoyaki();
     //currentProductTitle = "takoyaki_takoyaki";
@@ -929,7 +929,7 @@ function startGame() {
     // For the build of 2 sandwiches
     //showMeal();
     //currentProductTitle = "meal_kraphrao";
-    //showCrabstick();
+    showCrabstick();
     //showMeal();
 }
 
@@ -1051,6 +1051,10 @@ function hideAllThemes() {
     frontTakoyakiTray.hidden = true;
     frontRamenFlagRect.hidden = true;
     frontSandwichTray.hidden = true;
+
+    // Warning ! This is extra, fast, rapid, hacking code
+    newProdBigMesh.hidden = false;
+    newProdSmallMesh.hidden = false;
 }
 
 const QUOTE_PROD_TRANSFORM = {
@@ -1297,12 +1301,15 @@ function showCrabstick() {
     facemesh0.material = facePaintInvisibleMat;
     facemesh1.material = facePaintInvisibleMat;
 
+    newProdBigMesh.hidden = true;
+    newProdSmallMesh.hidden = true;
+
     //newCrabBg.hidden = false;
     //newCrabFg.hidden = false;
     //newCrabLogo.hidden = false;
 
-    newProdBigFront.hidden = false;
-    newProdSmallFront.hidden = false;
+    //newProdBigFront.hidden = false;
+    //newProdSmallFront.hidden = false;
 
     frontGyozaTableRect.hidden = false;
     frontGyozaFlagRect.hidden = false;
@@ -1324,8 +1331,8 @@ function showCrabstick() {
         setupMaterial(newQuoteTxtMesh, curResIndex++, getCurBubbleTxtUrl());
 
         var prodUrl = getCurProdTxtUrl(THEME_NAME_LOOKUP_TABLE.crabstick)
-        setupMaterial(newProdBigFrontMesh, curResIndex++, prodUrl);
-        setupMaterial(newProdSmallFrontMesh, curResIndex++, prodUrl);
+        setupMaterial(newProdBigFront, curResIndex++, prodUrl);
+        setupMaterial(newProdSmallFront, curResIndex++, prodUrl);
 
         setupMaterial(newCrabBgMesh, curResIndex++, NEW_DESIGN_URL_TABLE.crabstick_crab_bg);
         setupMaterial(newCrabFgMesh, curResIndex++, NEW_DESIGN_URL_TABLE.crabstick_crab_fg);
@@ -1625,29 +1632,29 @@ function setupQuoteProdPosition(transformData) {
     newProdSmall.transform.rotationZ = transformData.new_prod_small_rotation[2] * Math.PI / 180.0;
 
     // Front prod
-    newProdBigFront.transform.x = transformData.new_prod_big[0];
-    newProdBigFront.transform.y = transformData.new_prod_big[1];
-    newProdBigFront.transform.z = transformData.new_prod_big[2];
+    //newProdBigFront.transform.x = transformData.new_prod_big[0];
+    //newProdBigFront.transform.y = transformData.new_prod_big[1];
+    //newProdBigFront.transform.z = transformData.new_prod_big[2];
 
-    newProdBigFront.transform.scaleX = transformData.new_prod_big_scale[0];
-    newProdBigFront.transform.scaleY = transformData.new_prod_big_scale[1];
-    newProdBigFront.transform.scaleZ = transformData.new_prod_big_scale[2];
+    //newProdBigFront.transform.scaleX = transformData.new_prod_big_scale[0];
+    //newProdBigFront.transform.scaleY = transformData.new_prod_big_scale[1];
+    //newProdBigFront.transform.scaleZ = transformData.new_prod_big_scale[2];
 
-    newProdBigFront.transform.rotationX = transformData.new_prod_big_rotation[0] * Math.PI / 180.0;
-    newProdBigFront.transform.rotationY = transformData.new_prod_big_rotation[1] * Math.PI / 180.0;
-    newProdBigFront.transform.rotationZ = transformData.new_prod_big_rotation[2] * Math.PI / 180.0;
+    //newProdBigFront.transform.rotationX = transformData.new_prod_big_rotation[0] * Math.PI / 180.0;
+    //newProdBigFront.transform.rotationY = transformData.new_prod_big_rotation[1] * Math.PI / 180.0;
+    //newProdBigFront.transform.rotationZ = transformData.new_prod_big_rotation[2] * Math.PI / 180.0;
 
-    newProdSmallFront.transform.x = transformData.new_prod_small[0];
-    newProdSmallFront.transform.y = transformData.new_prod_small[1];
-    newProdSmallFront.transform.z = transformData.new_prod_small[2];
+    //newProdSmallFront.transform.x = transformData.new_prod_small[0];
+    //newProdSmallFront.transform.y = transformData.new_prod_small[1];
+    //newProdSmallFront.transform.z = transformData.new_prod_small[2];
 
-    newProdSmallFront.transform.scaleX = transformData.new_prod_small_scale[0];
-    newProdSmallFront.transform.scaleY = transformData.new_prod_small_scale[1];
-    newProdSmallFront.transform.scaleZ = transformData.new_prod_small_scale[2];
+    //newProdSmallFront.transform.scaleX = transformData.new_prod_small_scale[0];
+    //newProdSmallFront.transform.scaleY = transformData.new_prod_small_scale[1];
+    //newProdSmallFront.transform.scaleZ = transformData.new_prod_small_scale[2];
 
-    newProdSmallFront.transform.rotationX = transformData.new_prod_small_rotation[0] * Math.PI / 180.0;
-    newProdSmallFront.transform.rotationY = transformData.new_prod_small_rotation[1] * Math.PI / 180.0;
-    newProdSmallFront.transform.rotationZ = transformData.new_prod_small_rotation[2] * Math.PI / 180.0;
+    //newProdSmallFront.transform.rotationX = transformData.new_prod_small_rotation[0] * Math.PI / 180.0;
+    //newProdSmallFront.transform.rotationY = transformData.new_prod_small_rotation[1] * Math.PI / 180.0;
+    //newProdSmallFront.transform.rotationZ = transformData.new_prod_small_rotation[2] * Math.PI / 180.0;
 }
 
 var currentBubbleName = undefined;
