@@ -819,7 +819,7 @@ function main() {
     handleMouthOpeningState(
         0, 
         MOUTH_OPENNESS_MIN_THRESHOLD, MOUTH_CLOSSNESS_MAX_THRESHOLD, 
-        onFace0MouthOpen, onFace0MouthClose);
+        function() { onMouthOpen(0); }, function() { onMouthClose(0); });
 
     //handleFoodFeeder(crushPoolList0, foodPoolList0, foodPoolList01, foodPoolMeshList0, foodPoolMeshList01);
     handleFoodFeeder(crushPoolList0, undefined, undefined, undefined, undefined);
@@ -1138,10 +1138,9 @@ function showGyoza() {
 
     showNewProdSmall();
 
-    if (isMouthOpening[0])
-        onFace0MouthOpen();
-    else if (isMouthOpening[1])
-        onFace1MouthOpen();
+    for (var i=0; i<2; ++i)
+        if (isMouthOpening[i])
+            onMouthOpen(i);
     
     function loadNewDesignGyoza() {
 
@@ -1459,10 +1458,9 @@ function showMeal() {
     loadNewDesignMeal();
     showNewProdSmall();
 
-    if (isMouthOpening[0])
-        onFace0MouthOpen();
-    else if (isMouthOpening[1])
-        onFace1MouthOpen();
+    for (var i=0; i<2; ++i)
+        if (isMouthOpening[i])
+            onMouthOpen(i);
     
     function loadNewDesignMeal() {
 
@@ -1974,64 +1972,70 @@ function onEyeClosed(faceIndex, eyeIndex) {
 // --------------------------------------------------------------------------------
 // @ OPEN MOUTH
 
-function onFace0MouthOpen() {
+function onMouthOpen(faceIndex) {
 
-    showNewProdBig();
+    if (faceIndex == 0) {
 
-    if (curTheme === THEME_NAME_LOOKUP_TABLE.gyoza) {
+        showNewProdBig();
 
-        newGyozaRoot.hidden = false;
-        newGyozaLeft.hidden = false;
-        newGyozaRight.hidden = false;
-    }
-    else if (curTheme === THEME_NAME_LOOKUP_TABLE.sandwich) {
-
-        if (currentSandwichMode == SANDWICH_MODE_EAT) {
-
-            foodFeederRoot0.hidden = false;
-
-            newRamen.hidden = true;
-            ramenPool0.hidden = true;
-            //testyPool0.hidden = false;
-            //testyPool01.hidden = false;
+        if (curTheme === THEME_NAME_LOOKUP_TABLE.gyoza) {
+    
+            newGyozaRoot.hidden = false;
+            newGyozaLeft.hidden = false;
+            newGyozaRight.hidden = false;
+        }
+        else if (curTheme === THEME_NAME_LOOKUP_TABLE.sandwich) {
+    
+            if (currentSandwichMode == SANDWICH_MODE_EAT) {
+    
+                foodFeederRoot0.hidden = false;
+    
+                newRamen.hidden = true;
+                ramenPool0.hidden = true;
+                //testyPool0.hidden = false;
+                //testyPool01.hidden = false;
+        
+                var mouth = FaceTracking.face(0).mouth;
+                foodFeederRoot0.transform.x = mouth.center.x;
+                foodFeederRoot0.transform.y = mouth.center.y;
+                foodFeederRoot0.transform.z = mouth.center.z;
+            }
+        }
+        else if (curTheme == THEME_NAME_LOOKUP_TABLE.meal) {
     
             var mouth = FaceTracking.face(0).mouth;
+    
+            foodFeederRoot0.hidden = false;
+            newRamen.hidden = true;
+            ramenPool0.hidden = false;
+            //testyPool0.hidden = true;
+            //testyPool01.hidden = true;
+    
             foodFeederRoot0.transform.x = mouth.center.x;
             foodFeederRoot0.transform.y = mouth.center.y;
             foodFeederRoot0.transform.z = mouth.center.z;
-        }
+        }  
     }
-    else if (curTheme == THEME_NAME_LOOKUP_TABLE.meal) {
-
-        var mouth = FaceTracking.face(0).mouth;
-
-        foodFeederRoot0.hidden = false;
-        newRamen.hidden = true;
-        ramenPool0.hidden = false;
-        //testyPool0.hidden = true;
-        //testyPool01.hidden = true;
-
-        foodFeederRoot0.transform.x = mouth.center.x;
-        foodFeederRoot0.transform.y = mouth.center.y;
-        foodFeederRoot0.transform.z = mouth.center.z;
-    }   
 }
 
-function onFace0MouthClose() {
+function onMouthClose(faceIndex) {
 
-    showNewProdSmall();
+    if (faceIndex == 0) {
 
-    newGyozaRoot.hidden = true;
-    //newGyozaLeft.hidden = false;
-    //newGyozaRight.hidden = false;
+        showNewProdSmall();
 
-    //newSmokeRoot.hidden = true;
-
-    foodFeederRoot0.hidden = true;
-
-    if (curTheme == THEME_NAME_LOOKUP_TABLE.meal) {
-
-        newRamen.hidden = false;
+        newGyozaRoot.hidden = true;
+        //newGyozaLeft.hidden = false;
+        //newGyozaRight.hidden = false;
+    
+        //newSmokeRoot.hidden = true;
+    
+        foodFeederRoot0.hidden = true;
+    
+        if (curTheme == THEME_NAME_LOOKUP_TABLE.meal) {
+    
+            newRamen.hidden = false;
+        }
     }
 }
 
