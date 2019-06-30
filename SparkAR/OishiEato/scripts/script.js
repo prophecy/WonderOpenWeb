@@ -471,7 +471,7 @@ const NEW_DESIGN_URL_TABLE = {
     meal_bubble_txt: "new_design/sample_takoyaki/copy.png",
     meal_prod: "new_design/sample_meal/ramenL.png",
     meal_ramen: "new_design/sample_meal/ramen_still.png",
-    meal_flag: "new_design/sample_meal/flag_v4.png",
+    meal_flag: "new_design/sample_meal/flag_v5.png",
 };
 
 const FOOD_TEX_LOOKUP_TABLE = {
@@ -1119,8 +1119,8 @@ const QUOTE_PROD_TRANSFORM = {
         // Point
         new_prod_small: [30, 0, 10], // Obsolete
         new_prod_big: [30, 0, 10], // Obsolete
-        new_quote_bg: [10, 0, 5],
-        new_quote_text: [10, 0, 5],
+        new_quote_bg: [10.5, 0, 3],
+        new_quote_text: [10.5, 0, 3],
         // Scale
         new_prod_small_scale: [1, 1, 1],
         new_prod_big_scale: [1, 1, 1],
