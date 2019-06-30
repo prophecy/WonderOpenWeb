@@ -2589,9 +2589,47 @@ function getThemeData(callback) {
 
     startGetRequest(CONFIG.GET_ASSET_LIST_URL, function(data, err) {
 
-        Diagnostics.log("id: " + data.id);
-        callback(data, err);
+        if (err == undefined && data != undefined) {
+
+            Diagnostics.log("id: " + data.id);
+            callback(data, err);
+    
+            startHeartbeatInterval();
+        }
+        else {
+
+            Diagnostics.log("get theme data error!");
+        }
     });
+}
+
+var isHeartbeatOnRequest = false;
+
+function startHeartbeatInterval() {
+
+    const interval = Time.setInterval(sendHeartbeat, 5000);
+
+    var body = {
+        idinfo: currentThemeData.id
+    };
+
+    function sendHeartbeat() {
+
+        if (isHeartbeatOnRequest)
+            return;
+
+        isHeartbeatOnRequest = true;
+
+        startPostRequest(CONFIG.POST_STAT_URL, body, function(data, err) {
+
+            //if (data != undefined)
+                //Diagnostics.log("Post heartbeat success");
+            //else
+                //Diagnostics.log("Post heartbeat error: " + JSON.stringify(err));
+
+            isHeartbeatOnRequest = false;
+        })
+    }
 }
 
 // mode ∈ {"photocapture" | "videocapture" }
@@ -2685,7 +2723,7 @@ function startRequest(url, request, callback) {
         // (https://developer.mozilla.org/en-US/docs/Web/HTTP/Status)
         if ((result.status >= 200) && (result.status < 300)) {
     
-            Diagnostics.log('HTTP request success');
+            //Diagnostics.log('HTTP request success');
             
             // If the request was successful, chain the JSON forward
             return result.json();
