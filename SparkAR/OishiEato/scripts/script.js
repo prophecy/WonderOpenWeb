@@ -187,6 +187,8 @@ const mealShopstick11mesh = Scene.root.find("shopstick11_mesh");
 const mealShopstick10_pivot = Scene.root.find("shopstick10_pivot");
 const mealShopstick11_pivot = Scene.root.find("shopstick11_pivot");
 
+const headbandImageMesh = Scene.root.find("headband_image_mesh");
+
 // For sandwich
 const newHand = Scene.root.find("new_hand");
 const newHandMesh = Scene.root.find("new_hand_mesh");
@@ -423,6 +425,7 @@ const NEW_DESIGN_URL_TABLE = {
     gyoza_prod_small: "new_design/sample_gyoza/01_03_product.png",
     gyoza_prod_big: "new_design/sample_gyoza/01_03_product2_action.png",
     gyoza_prod_bg: "new_design/sample_gyoza/01_02_bg2.png",
+    gyoza_headband: "new_design/sample_gyoza/gyoza_headband.png",
 
     // Takoyaki sample
     takoyaki_bubble_bg: "new_design/sample_takoyaki/bubble.png",
@@ -1199,6 +1202,8 @@ function showGyoza() {
         setupMaterial(newProdBigMesh, curResIndex++, prodUrl);
         setupMaterial(newProdSmallMesh, curResIndex++, prodUrl);
     
+        setupMaterial(headbandImageMesh, curResIndex++, NEW_DESIGN_URL_TABLE.gyoza_headband);
+
         // Setup position
         setupQuoteProdPosition(QUOTE_PROD_TRANSFORM.gyoza);
         
