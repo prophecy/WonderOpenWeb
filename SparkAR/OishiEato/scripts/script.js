@@ -1812,21 +1812,21 @@ function showNewProdInit() {
     else
         newProdSmall.hidden = false;
     
-    const driverParams = {
+    //const driverParams = {
 
-        durationMilliseconds: SHOW_ANIM_DURATION,
-        loopCount: 1,
-        mirror: false  
-    };
+    //    durationMilliseconds: SHOW_ANIM_DURATION,
+    //    loopCount: 1,
+    //    mirror: false  
+    //};
 
-    const timeDriver = Animation.timeDriver(driverParams);
-    const sampler = Animation.samplers.easeInOutQuad(0, 1);
-    const anim = Animation.animate(timeDriver, sampler);
+    //const timeDriver = Animation.timeDriver(driverParams);
+    //const sampler = Animation.samplers.easeInOutQuad(0, 1);
+    //const anim = Animation.animate(timeDriver, sampler);
 
-    newProdSmall.transform.scaleX = anim;
-    newProdSmall.transform.scaleZ = anim;
+    //newProdSmall.transform.scaleX = anim;
+    //newProdSmall.transform.scaleZ = anim;
 
-    timeDriver.start();
+    //timeDriver.start();
 }
 
 function showNewProdBig() {
