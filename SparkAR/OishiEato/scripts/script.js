@@ -188,6 +188,7 @@ const mealShopstick10_pivot = Scene.root.find("shopstick10_pivot");
 const mealShopstick11_pivot = Scene.root.find("shopstick11_pivot");
 
 const headbandImageMesh = Scene.root.find("headband_image_mesh");
+const headbandImage1Mesh = Scene.root.find("headband_image1_mesh");
 
 // For sandwich
 const newHand = Scene.root.find("new_hand");
@@ -1203,6 +1204,7 @@ function showGyoza() {
         setupMaterial(newProdSmallMesh, curResIndex++, prodUrl);
     
         setupMaterial(headbandImageMesh, curResIndex++, NEW_DESIGN_URL_TABLE.gyoza_headband);
+        headbandImage1Mesh.material = headbandImageMesh.material;
 
         // Setup position
         setupQuoteProdPosition(QUOTE_PROD_TRANSFORM.gyoza);
