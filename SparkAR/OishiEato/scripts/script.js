@@ -1058,10 +1058,8 @@ function hideAllThemes() {
     frontTakoyakiTray.hidden = true;
     frontRamenFlagRect.hidden = true;
     frontSandwichTray.hidden = true;
-
-    // Warning ! This is extra, fast, rapid, hacking code
-    newProdBigMesh.hidden = false;
-    newProdSmallMesh.hidden = false;
+    newProdBigMesh.hidden = true;
+    newProdSmallMesh.hidden = true;
 }
 
 const QUOTE_PROD_TRANSFORM = {
@@ -1167,6 +1165,8 @@ function showGyoza() {
     headGyozaRoot1.hidden = false;
     facemesh0.hidden = false;
     newGyozaRoot.hidden = false;
+    newProdBigMesh.hidden = false;
+    newProdSmallMesh.hidden = false;
 
     loadNewDesignGyoza();
     if (!hasStartGyoza) {
@@ -1263,6 +1263,8 @@ function showTakoyaki() {
     //takoDirectionalLight0.hidden = false;
     newTakoyakiTray.hidden = false;
     frontTakoyakiTray.hidden = false;
+    newProdBigMesh.hidden = false;
+    newProdSmallMesh.hidden = false;
 
     loadNewDesignTakoyaki();
     showNewProdSmall();
@@ -1310,9 +1312,6 @@ function showCrabstick() {
 
     facemesh0.material = facePaintInvisibleMat;
     facemesh1.material = facePaintInvisibleMat;
-
-    newProdBigMesh.hidden = true;
-    newProdSmallMesh.hidden = true;
 
     //newCrabBg.hidden = false;
     //newCrabFg.hidden = false;
@@ -1394,6 +1393,8 @@ function showSandwich(mode) {
     sandwichRoot.hidden = false;
     sandwichRoot1.hidden = false;
     frontSandwichTray.hidden = false;
+    newProdBigMesh.hidden = false;
+    newProdSmallMesh.hidden = false;
 
     if (mode == SANDWICH_MODE_SWIRL) {
 
@@ -1505,6 +1506,8 @@ function showMeal() {
     facemesh1Meal.hidden = false;
     //newRamen.hidden = false;
     frontRamenFlagRect.hidden = false;
+    newProdBigMesh.hidden = false;
+    newProdSmallMesh.hidden = false;
 
     facemesh0.material = facePaintInvisibleMat;
     facemesh1.material = facePaintInvisibleMat;
@@ -1804,9 +1807,11 @@ function hideNewQuoteText() {
 
 function showNewProdInit() {
 
-    newProdSmall.hidden = false;
-    newProdSmallFront.hidden = false;
-
+    if (curTheme == THEME_NAME_LOOKUP_TABLE.crabstick)
+        newProdSmallFront.hidden = false;
+    else
+        newProdSmall.hidden = false;
+    
     const driverParams = {
 
         durationMilliseconds: SHOW_ANIM_DURATION,
