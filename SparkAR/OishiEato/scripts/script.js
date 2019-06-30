@@ -2601,6 +2601,12 @@ function postCaptureStat(mode) {
     var curIndex = currentThemeData.quote.curIndex
     var bubbleIndex = indices[curIndex];
 
+    var isEyeOpening = [[false, false], [false, false]];
+
+    for (var i=0; i<2; ++i)
+        for (var j=0; j<2; ++j)
+            isEyeOpening[i][j] = !isEyeClose[i][j];
+
     // Get current person
     var body = {
         idinfo: currentThemeData.id,
@@ -2608,7 +2614,11 @@ function postCaptureStat(mode) {
         param1: isFaceTracked,
         param2: curTheme,
         param3: currentProductTitle,
-        param4: currentBubbleName
+        param4: currentBubbleName,
+        param5: {
+            isEyeOpening: isEyeOpening,
+            isMouthOpening: isMouthOpening
+        }
     };
 
     Diagnostics.log("postCaptureState: body: " + JSON.stringify(body));
@@ -2892,6 +2902,8 @@ function checkTrackedStateWithDelay(faceIndex, trackCallback, untrackCallback) {
         var state = FaceTracking.face(faceIndex).isTracked.pinLastValue();
 
         if (state != isFaceTracked[faceIndex]) {
+
+            isFaceTracked[faceIndex] = state;
 
             if (state == true)
                 trackCallback();
