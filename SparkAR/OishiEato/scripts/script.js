@@ -1675,16 +1675,18 @@ var currentBubbleName = undefined;
 function getCurBubbleTxtUrl() {
 
     var indices = currentThemeData.quote.indices;
-    var curIndex = currentThemeData.quote.curIndex
+    var curIndex = currentThemeData.quote.curIndex;
     var bubbleIndex = indices[curIndex];
 
+    Diagnostics.log("curIndex: " + curIndex + " indices.length: " + indices.length);
+    
     var bubbleName = "quote" + bubbleIndex;
     currentBubbleName = bubbleName;
 
     var bubbleUrl = CONFIG.BASE_BUBBLE_URL + bubbleName + ".png";
     Diagnostics.log("bubbleUrl: " + bubbleUrl);
 
-    if (++currentThemeData.quote.curIndex >= currentThemeData.quote.length)
+    if (++currentThemeData.quote.curIndex >= currentThemeData.quote.indices.length)
         currentThemeData.quote.curIndex = 0;
 
     return bubbleUrl;
