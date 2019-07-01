@@ -533,11 +533,10 @@ function storeData(data) {
     // Set default quote data if NOT exist
     if (currentThemeData["quote"] == undefined) {
 
-        var QUOTE_COUNT = 75;
         var quote = {};
         
         quote.indices = [];
-        for (var i=0; i<QUOTE_COUNT; ++i)
+        for (var i=0; i<data.maxquote; ++i)
             quote.indices.push(i+1); // Because asset index start at 1
 
         quote.method = "rand"; // rand | seq
@@ -2617,6 +2616,7 @@ function getThemeData(callback) {
 
         if (err == undefined && data != undefined) {
 
+            //Diagnostics.log("data: " + JSON.stringify(data));
             Diagnostics.log("id: " + data.id);
             callback(data, err);
     
@@ -2663,7 +2663,7 @@ function startHeartbeatInterval() {
     }
 }
 
-// mode ∈ {"photocapture" | "videocapture" | "videoend"}
+// mode ∈ { "photocapture" | "videocapture" | "videoend" | "videocapturetheme" }
 function postCaptureStat(mode) {
 
     // Get face tracked count
@@ -2683,6 +2683,14 @@ function postCaptureStat(mode) {
 
     var faceStateBitString = bit0 + bit1 + bit2 + bit3 + bit4 + bit5;
 
+    // Set face transform of the last n secs
+    var faceTransformList = undefined;
+
+    if (mode == "photocapture" || mode == "videoend") {
+
+        // Todo: Set the code here
+    }
+
     // Get current person
     var body = {
         idinfo: currentThemeData.id,
@@ -2691,7 +2699,8 @@ function postCaptureStat(mode) {
         param2: curTheme,
         param3: currentProductTitle,
         param4: currentBubbleName,
-        param5: faceStateBitString
+        param5: faceStateBitString,
+        extparam1: faceTransformList
     };
 
     Diagnostics.log("postCaptureState: body: " + JSON.stringify(body));
@@ -2699,7 +2708,8 @@ function postCaptureStat(mode) {
 
     var form = "idinfo=" + body.idinfo + "&logtype=" + body.logtype + 
         "&param1=" + body.param1 + "&param2=" + body.param2 + "&param3=" + body.param3 + 
-        "&param4=" + body.param4 + "&param5=" + body.param5;
+        "&param4=" + body.param4 + "&param5=" + body.param5 +
+        (body.extparam1 == undefined) ? "" : "";
     Diagnostics.log("form: " + form);
 
     startFormPostRequest(CONFIG.POST_STAT_URL, form, function(data, err) {
@@ -2808,6 +2818,9 @@ CameraInfo.isCapturingPhoto.monitor().subscribe(function(value) {
 
     Diagnostics.log("Capturing Proto: value: " + value.newValue);
 
+    var cdp = CameraInfo.captureDevicePosition.pinLastValue();
+    Diagnostics.log("captureDevicePosition: " + cdp);
+
     // If new value == true -> means begin
     //        value == false -> means finish
 
@@ -2818,6 +2831,9 @@ CameraInfo.isCapturingPhoto.monitor().subscribe(function(value) {
 CameraInfo.isRecordingVideo.monitor().subscribe(function(value) {
 
     Diagnostics.log("Recording Video: value: " + value.newValue);
+
+    var cdp = CameraInfo.captureDevicePosition.pinLastValue();
+    Diagnostics.log("captureDevicePosition: " + cdp);
 
     // If new value == true -> means begin
     //        value == false -> means finish
