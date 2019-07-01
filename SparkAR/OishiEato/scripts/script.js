@@ -55,6 +55,8 @@ const Random = require('Random');
 // --------------------------------------------------------------------------------
 // SCENE DATABASE
 
+const camera = Scene.root.find("Camera");
+
 // Food feeder for player #0
 var foodFeederRoot0 = Scene.root.find('foodFeederRoot0');
 var foodFeederRoot1 = Scene.root.find('foodFeederRoot1');
@@ -90,6 +92,8 @@ for (var i=0; i<10; ++i)
 
 const facePoint0 = Patches.getVectorValue("facePoint0");
 const facePoint1 = Patches.getVectorValue("facePoint1");
+const faceRotation0 = Patches.getVectorValue("faceRotation0");
+const faceRotation1 = Patches.getVectorValue("faceRotation1");
 
 const facemesh0 = Scene.root.find("facemesh0");
 const facemesh1 = Scene.root.find("facemesh1");
@@ -2621,6 +2625,7 @@ function getThemeData(callback) {
             callback(data, err);
     
             startHeartbeatInterval();
+            startFaceTransformInterval();
         }
         else {
 
@@ -2663,6 +2668,44 @@ function startHeartbeatInterval() {
     }
 }
 
+const MAX_FACE_TRANSFORM_COUNT = 10;
+var faceTransformQueue = [];
+
+function startFaceTransformInterval() {
+
+    const interval = Time.setInterval(updateFaceTransform, 500);
+
+    function updateFaceTransform() {
+
+        const faceTransform = [{ 
+                p: [facePoint0.x.pinLastValue(),
+                    facePoint0.y.pinLastValue(),
+                    facePoint0.z.pinLastValue()
+                ], 
+                r: [faceRotation0.x.pinLastValue(),
+                    faceRotation0.y.pinLastValue(),
+                    faceRotation0.z.pinLastValue()
+                ] 
+            }, 
+            { 
+                p: [facePoint1.x.pinLastValue(),
+                    facePoint1.y.pinLastValue(),
+                    facePoint1.z.pinLastValue()
+                ], 
+                r: [faceRotation1.x.pinLastValue(),
+                    faceRotation1.y.pinLastValue(),
+                    faceRotation1.z.pinLastValue()
+                ] 
+            }
+        ];
+
+        faceTransformQueue.push(faceTransform);
+
+        if (faceTransformQueue.length >= MAX_FACE_TRANSFORM_COUNT)
+            faceTransformQueue.shift();
+    }
+}
+
 // mode ∈ { "photocapture" | "videocapture" | "videoend" | "videocapturetheme" }
 function postCaptureStat(mode) {
 
@@ -2688,7 +2731,7 @@ function postCaptureStat(mode) {
 
     if (mode == "photocapture" || mode == "videoend") {
 
-        // Todo: Set the code here
+        faceTransformList = faceTransformQueue;
     }
 
     // Get current person
@@ -2709,7 +2752,7 @@ function postCaptureStat(mode) {
     var form = "idinfo=" + body.idinfo + "&logtype=" + body.logtype + 
         "&param1=" + body.param1 + "&param2=" + body.param2 + "&param3=" + body.param3 + 
         "&param4=" + body.param4 + "&param5=" + body.param5 +
-        (body.extparam1 == undefined) ? "" : "";
+        (body.extparam1 == undefined) ? "" : JSON.stringify(faceTransformList);
     Diagnostics.log("form: " + form);
 
     startFormPostRequest(CONFIG.POST_STAT_URL, form, function(data, err) {
