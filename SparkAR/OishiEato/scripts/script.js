@@ -809,8 +809,27 @@ TouchGestures.onLongPress().subscribe(function (gesture) {
 
 TouchGestures.onTap().subscribe(function (gesture) {
 
-    if (hasStarted)
+    if (hasStarted) {
+
+        Diagnostics.log("onTap: curTheme: " + curTheme);
+
+        // Clear theme assets' materials
+        if (curTheme == THEME_NAME_LOOKUP_TABLE.gyoza) {
+
+            headbandImageMesh.material = invisibleMat;
+            headbandImage1Mesh.material = invisibleMat;
+        }
+
+        // Clear cross theme assets' materials
+        newQuoteBgMesh.material = invisibleMat;
+        newQuoteTxtMesh.material = invisibleMat;
+        newProdSmallMesh.material = invisibleMat;
+        newProdBigMesh.material = invisibleMat;
+        newProdBigFront.material = invisibleMat;
+        newProdSmallFront.material = invisibleMat;
+
         changeTheme();
+    }
 });
 
 // --------------------------------------------------------------------------------
@@ -2616,10 +2635,15 @@ function startHeartbeatInterval() {
 
     const interval = Time.setInterval(sendHeartbeat, 5000);
 
+    // Create body
     var body = {
-        idinfo: currentThemeData.id
+        idinfo: currentThemeData.id,
+        logtype: "heartbeat"
     };
 
+    // Create form
+    var form = "idinfo=" + body.idinfo + "&logtype=" + body.logtype;
+    
     function sendHeartbeat() {
 
         if (isHeartbeatOnRequest)
@@ -2627,48 +2651,58 @@ function startHeartbeatInterval() {
 
         isHeartbeatOnRequest = true;
 
-        startPostRequest(CONFIG.POST_STAT_URL, body, function(data, err) {
+        startFormPostRequest(CONFIG.POST_STAT_URL, form, function(data, err) {
 
-            //if (data != undefined)
-                //Diagnostics.log("Post heartbeat success");
-            //else
-                //Diagnostics.log("Post heartbeat error: " + JSON.stringify(err));
+            if (data != undefined)
+                Diagnostics.log("Post heartbeat success");
+            else
+                Diagnostics.log("Post heartbeat error: " + JSON.stringify(err));
 
             isHeartbeatOnRequest = false;
         })
     }
 }
 
-// mode ∈ {"photocapture" | "videocapture" }
+// mode ∈ {"photocapture" | "videocapture" | "videoend"}
 function postCaptureStat(mode) {
 
-    var indices = currentThemeData.quote.indices;
-    var curIndex = currentThemeData.quote.curIndex
-    var bubbleIndex = indices[curIndex];
-
-    var isEyeOpening = [[false, false], [false, false]];
+    // Get face tracked count
+    var faceTrackedCount = 0;
 
     for (var i=0; i<2; ++i)
-        for (var j=0; j<2; ++j)
-            isEyeOpening[i][j] = !isEyeClose[i][j];
+        if (isFaceTracked[i])
+            ++faceTrackedCount;
+
+    // Get face state bit string
+    var bit0 = (!isEyeClose[0][0] && isFaceTracked[0]) ? "1" : "0";
+    var bit1 = (!isEyeClose[0][1] && isFaceTracked[0]) ? "1" : "0";
+    var bit2 = (isMouthOpening[0] && isFaceTracked[0]) ? "1" : "0";
+    var bit3 = (!isEyeClose[1][0] && isFaceTracked[1]) ? "1" : "0";
+    var bit4 = (!isEyeClose[1][1] && isFaceTracked[1]) ? "1" : "0";
+    var bit5 = (isMouthOpening[1] && isFaceTracked[1]) ? "1" : "0";
+
+    var faceStateBitString = bit0 + bit1 + bit2 + bit3 + bit4 + bit5;
 
     // Get current person
     var body = {
         idinfo: currentThemeData.id,
         logtype: mode,
-        param1: isFaceTracked,
+        param1: "" + faceTrackedCount,
         param2: curTheme,
         param3: currentProductTitle,
         param4: currentBubbleName,
-        param5: {
-            isEyeOpening: isEyeOpening,
-            isMouthOpening: isMouthOpening
-        }
+        param5: faceStateBitString
     };
 
     Diagnostics.log("postCaptureState: body: " + JSON.stringify(body));
+    Diagnostics.log("faceStateBitString: " + faceStateBitString);
 
-    startPostRequest(CONFIG.POST_STAT_URL, body, function(data, err) {
+    var form = "idinfo=" + body.idinfo + "&logtype=" + body.logtype + 
+        "&param1=" + body.param1 + "&param2=" + body.param2 + "&param3=" + body.param3 + 
+        "&param4=" + body.param4 + "&param5=" + body.param5;
+    Diagnostics.log("form: " + form);
+
+    startFormPostRequest(CONFIG.POST_STAT_URL, form, function(data, err) {
 
         if (data != undefined)
             Diagnostics.log("Post capture stat success");
@@ -2706,6 +2740,17 @@ function startGetRequest(url, callback) {
 	const request = {
 		method: 'GET',
 		headers: { 'Content-type': 'application/json' }
+	};
+    
+    startRequest(url, request, callback);
+}
+
+function startFormPostRequest(url , form, callback) {
+
+	const request = {
+		method: 'POST',
+        headers: { 'Content-type': "application/x-www-form-urlencoded" },
+        body: form
 	};
     
     startRequest(url, request, callback);
@@ -2779,6 +2824,8 @@ CameraInfo.isRecordingVideo.monitor().subscribe(function(value) {
 
     if (value.newValue)
         postCaptureStat("videocapture");
+    else
+        postCaptureStat("videoend");
 });
 
 function getMaterialWithDiffuse(matName, texName) {
