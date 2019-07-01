@@ -2634,6 +2634,30 @@ function getThemeData(callback) {
     });
 }
 
+// transitionName ∈ { "facein" | "faceout" }
+function onFaceStateChange(faceIndex, transitionName) {
+
+    // Create body
+    var body = {
+        idinfo: currentThemeData.id,
+        logtype: transitionName,
+        param1: "" + (faceIndex + 1)
+    };
+
+    Diagnostics.log("onFaceStateChange: " + JSON.stringify(body));
+
+    // Create form
+    var form = "idinfo=" + body.idinfo + "&logtype=" + body.logtype + "&param1=" + body.param1;
+    
+    startFormPostRequest(CONFIG.POST_STAT_URL, form, function(data, err) {
+
+        if (data != undefined)
+            Diagnostics.log("Post face state success");
+        else
+            Diagnostics.log("Post face state error: " + JSON.stringify(err));
+    });
+}
+
 var isHeartbeatOnRequest = false;
 
 function startHeartbeatInterval() {
@@ -3056,10 +3080,16 @@ function checkTrackedStateWithDelay(faceIndex, trackCallback, untrackCallback) {
 
             isFaceTracked[faceIndex] = state;
 
-            if (state == true)
+            if (state == true) {
+
+                onFaceStateChange(faceIndex, "facein");
                 trackCallback();
-            else
+            }
+            else {
+
+                onFaceStateChange(faceIndex, "faceout");
                 untrackCallback();
+            }
         }
 
         Time.clearInterval(interval);
@@ -3077,10 +3107,16 @@ function handleFaceTrackingState(faceIndex, trackCallback, untrackCallback) {
 
             isFaceTracked[faceIndex] = e.newValue;
         
-            if (e.newValue)
+            if (e.newValue) {
+
+                onFaceStateChange(faceIndex, "facein");
                 trackCallback();
-            else
+            }
+            else {
+
+                onFaceStateChange(faceIndex, "faceout");
                 untrackCallback();
+            }
         }
     }); 
 }
