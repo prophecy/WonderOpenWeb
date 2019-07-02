@@ -51,6 +51,7 @@ const CameraInfo = require('CameraInfo');
 const FaceGestures = require('FaceGestures');
 const IrisTracking = require("IrisTracking");
 const Random = require('Random');
+const LiveStreaming = require("LiveStreaming");
 
 // --------------------------------------------------------------------------------
 // SCENE DATABASE
@@ -2612,6 +2613,39 @@ function startNormalCrushFeeder(crushObjList, args) {
             args.crushVarianceX, args.crushVarianceY, args.crushVarianceZ);
     }
 }
+
+// --------------------------------------------------------------------------------
+// LIVE STREAMING
+// --------------------------------------------------------------------------------
+
+const reactions = LiveStreaming.reactions;
+const comments = LiveStreaming.comments;
+
+const angryCount = reactions.angry;
+const hahaCount = reactions.haha;
+const likeCount = reactions.like;
+const loveCount = reactions.love;
+const sadCount = reactions.sad;
+const totalCount = reactions.total;
+const wowCount = reactions.wow;
+
+LiveStreaming.state.monitor().subscribe(function(value) {
+
+    if (value.newValue == LiveStreamingModule.State.LIVE) {
+        // Todo: Send live state
+    }
+    else if (value.newValue == LiveStreamingModule.State.NONELIVE) {
+        // Todo: Send non live state
+    }
+    else if (value.newValue == LiveStreamingModule.State.PRELIVE) {
+        // Todo: Set prelive state
+    }
+});
+
+comments.stream.subscribe(function(value) {
+
+    // Todo: Send comment
+});
 
 // --------------------------------------------------------------------------------
 // NETWORKING
