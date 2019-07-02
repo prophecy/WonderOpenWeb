@@ -51,7 +51,7 @@ const CameraInfo = require('CameraInfo');
 const FaceGestures = require('FaceGestures');
 const IrisTracking = require("IrisTracking");
 const Random = require('Random');
-const LiveStreaming = require("LiveStreaming");
+//const LiveStreaming = require("LiveStreaming");
 
 // --------------------------------------------------------------------------------
 // SCENE DATABASE
@@ -2617,7 +2617,7 @@ function startNormalCrushFeeder(crushObjList, args) {
 // --------------------------------------------------------------------------------
 // LIVE STREAMING
 // --------------------------------------------------------------------------------
-
+/*
 const reactions = LiveStreaming.reactions;
 const comments = LiveStreaming.comments;
 
@@ -2646,7 +2646,7 @@ comments.stream.subscribe(function(value) {
 
     // Todo: Send comment
 });
-
+*/
 // --------------------------------------------------------------------------------
 // NETWORKING
 // --------------------------------------------------------------------------------
