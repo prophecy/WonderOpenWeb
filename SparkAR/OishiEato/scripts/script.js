@@ -2773,6 +2773,7 @@ function postCaptureStat(mode) {
         param3: currentProductTitle,
         param4: currentBubbleName,
         param5: faceStateBitString,
+        param6: latestVideoPosition,
         extparam1: faceTransformList
     };
 
@@ -2781,7 +2782,7 @@ function postCaptureStat(mode) {
 
     var form = "idinfo=" + body.idinfo + "&logtype=" + body.logtype + 
         "&param1=" + body.param1 + "&param2=" + body.param2 + "&param3=" + body.param3 + 
-        "&param4=" + body.param4 + "&param5=" + body.param5 +
+        "&param4=" + body.param4 + "&param5=" + body.param5 + "&param6=" + body.param6 +
         (body.extparam1 == undefined) ? "" : JSON.stringify(faceTransformList);
     Diagnostics.log("form: " + form);
 
@@ -2885,13 +2886,32 @@ function startRequest(url, request, callback) {
     });
 }
 
+var latestVideoPosition = undefined;
+
+function checkCaptureDevicePositionWithDelay() {
+
+    const interval = Time.setInterval(checkCaptureDevicePosition, 400);
+
+    function checkCaptureDevicePosition() {
+
+        latestVideoPosition = CameraInfo.captureDevicePosition.pinLastValue();
+        Diagnostics.log("captureDevicePosition: " + latestVideoPosition);
+
+        Time.clearInterval(interval);
+    }
+}
+checkCaptureDevicePositionWithDelay();
+
+CameraInfo.captureDevicePosition.monitor().subscribe(function(value) {
+
+    Diagnostics.log("captureDevicePosition: " + value.newValue);
+    latestVideoPosition = value.newValue;
+});
+
 // Send events for data analytics
 CameraInfo.isCapturingPhoto.monitor().subscribe(function(value) {
 
     Diagnostics.log("Capturing Proto: value: " + value.newValue);
-
-    var cdp = CameraInfo.captureDevicePosition.pinLastValue();
-    Diagnostics.log("captureDevicePosition: " + cdp);
 
     // If new value == true -> means begin
     //        value == false -> means finish
@@ -2903,9 +2923,6 @@ CameraInfo.isCapturingPhoto.monitor().subscribe(function(value) {
 CameraInfo.isRecordingVideo.monitor().subscribe(function(value) {
 
     Diagnostics.log("Recording Video: value: " + value.newValue);
-
-    var cdp = CameraInfo.captureDevicePosition.pinLastValue();
-    Diagnostics.log("captureDevicePosition: " + cdp);
 
     // If new value == true -> means begin
     //        value == false -> means finish
