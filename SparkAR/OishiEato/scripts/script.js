@@ -1006,6 +1006,9 @@ function changeTheme() {
     else if (currentSandwichMode == SANDWICH_MODE_EAT)
         showSandwich(SANDWICH_MODE_SWIRL);
     */
+
+    if (CameraInfo.isRecordingVideo.pinLastValue())
+        postCaptureStat("videocapturetheme");
 }
 
 const HIDE_HOWTO_DELAY = 1500;
@@ -2695,39 +2698,39 @@ function startHeartbeatInterval() {
 const MAX_FACE_TRANSFORM_COUNT = 10;
 var faceTransformQueue = [];
 
+function updateFaceTransform() {
+
+    const faceTransform = [{ 
+            p: [facePoint0.x.pinLastValue(),
+                facePoint0.y.pinLastValue(),
+                facePoint0.z.pinLastValue()
+            ], 
+            r: [faceRotation0.x.pinLastValue(),
+                faceRotation0.y.pinLastValue(),
+                faceRotation0.z.pinLastValue()
+            ] 
+        }, 
+        { 
+            p: [facePoint1.x.pinLastValue(),
+                facePoint1.y.pinLastValue(),
+                facePoint1.z.pinLastValue()
+            ], 
+            r: [faceRotation1.x.pinLastValue(),
+                faceRotation1.y.pinLastValue(),
+                faceRotation1.z.pinLastValue()
+            ] 
+        }
+    ];
+
+    faceTransformQueue.push(faceTransform);
+
+    if (faceTransformQueue.length >= MAX_FACE_TRANSFORM_COUNT)
+        faceTransformQueue.shift();
+}
+
 function startFaceTransformInterval() {
 
     const interval = Time.setInterval(updateFaceTransform, 500);
-
-    function updateFaceTransform() {
-
-        const faceTransform = [{ 
-                p: [facePoint0.x.pinLastValue(),
-                    facePoint0.y.pinLastValue(),
-                    facePoint0.z.pinLastValue()
-                ], 
-                r: [faceRotation0.x.pinLastValue(),
-                    faceRotation0.y.pinLastValue(),
-                    faceRotation0.z.pinLastValue()
-                ] 
-            }, 
-            { 
-                p: [facePoint1.x.pinLastValue(),
-                    facePoint1.y.pinLastValue(),
-                    facePoint1.z.pinLastValue()
-                ], 
-                r: [faceRotation1.x.pinLastValue(),
-                    faceRotation1.y.pinLastValue(),
-                    faceRotation1.z.pinLastValue()
-                ] 
-            }
-        ];
-
-        faceTransformQueue.push(faceTransform);
-
-        if (faceTransformQueue.length >= MAX_FACE_TRANSFORM_COUNT)
-            faceTransformQueue.shift();
-    }
 }
 
 // mode ∈ { "photocapture" | "videocapture" | "videoend" | "videocapturetheme" }
@@ -2754,6 +2757,9 @@ function postCaptureStat(mode) {
     var faceTransformList = undefined;
 
     if (mode == "photocapture" || mode == "videoend") {
+
+        // Update to get transforms at snapped time
+        updateFaceTransform();
 
         faceTransformList = faceTransformQueue;
     }
@@ -2787,7 +2793,6 @@ function postCaptureStat(mode) {
             Diagnostics.log("Post capture error: " + JSON.stringify(err));
     })
 }
-
 
 // --------------------------------------------------------------------------------
 // --------------------------------------------------------------------------------
