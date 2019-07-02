@@ -2733,7 +2733,7 @@ function startFaceTransformInterval() {
     const interval = Time.setInterval(updateFaceTransform, 500);
 }
 
-// mode ∈ { "photocapture" | "videocapture" | "videoend" | "videocapturetheme" }
+// mode ∈ { "photocapture" | "videocapture" | "videocaptureend" | "videocapturetheme" }
 function postCaptureStat(mode) {
 
     // Get face tracked count
@@ -2756,7 +2756,7 @@ function postCaptureStat(mode) {
     // Set face transform of the last n secs
     var faceTransformList = undefined;
 
-    if (mode == "photocapture" || mode == "videoend") {
+    if (mode == "photocapture" || mode == "videocaptureend") {
 
         // Update to get transforms at snapped time
         updateFaceTransform();
@@ -2933,7 +2933,7 @@ CameraInfo.isRecordingVideo.monitor().subscribe(function(value) {
     if (value.newValue)
         postCaptureStat("videocapture");
     else
-        postCaptureStat("videoend");
+        postCaptureStat("videocaptureend");
 });
 
 function getMaterialWithDiffuse(matName, texName) {
