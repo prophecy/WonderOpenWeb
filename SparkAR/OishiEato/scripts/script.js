@@ -2780,10 +2780,13 @@ function postCaptureStat(mode) {
     Diagnostics.log("postCaptureState: body: " + JSON.stringify(body));
     Diagnostics.log("faceStateBitString: " + faceStateBitString);
 
+    var faceTransformStr = JSON.stringify(faceTransformList);
+    //Diagnostics.log("faceTransformStr: " + faceTransformStr);
+
     var form = "idinfo=" + body.idinfo + "&logtype=" + body.logtype + 
         "&param1=" + body.param1 + "&param2=" + body.param2 + "&param3=" + body.param3 + 
         "&param4=" + body.param4 + "&param5=" + body.param5 + "&param6=" + body.param6 +
-        (body.extparam1 == undefined) ? "" : JSON.stringify(faceTransformList);
+        "&extparam1=" + faceTransformStr;
     Diagnostics.log("form: " + form);
 
     startFormPostRequest(CONFIG.POST_STAT_URL, form, function(data, err) {
