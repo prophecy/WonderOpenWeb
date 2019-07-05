@@ -813,7 +813,7 @@ TouchGestures.onLongPress().subscribe(function (gesture) {
 
 TouchGestures.onTap().subscribe(function (gesture) {
 
-    if (hasStarted) {
+    if (hasGameStarted) {
 
         Diagnostics.log("onTap: curTheme: " + curTheme);
 
@@ -911,6 +911,18 @@ function main() {
             Diagnostics.log("API request error!");
         }
     });
+}
+
+// Try start game, if criterias ar met
+var hasGameStarted = false;
+
+function tryStartGame() {
+
+    if (hasGameStarted)
+        return true;
+
+    startGame();
+    hasGameStarted = true;
 }
 
 function startGame() {
@@ -1908,33 +1920,13 @@ function hideNewProd() {
     }
 }
 
-// Init bubbles' tex
-function initBubbleTex() {
-
-    var texName = "bubbleTex";
-    var texUrl = CONFIG.BASE_TEX_URL + "getQuote.png"
-
-    for (var i=0; i<7; ++i) {
-
-        var tex = Textures.get(texName + i);
-        tex.url = texUrl;
-    }
-}
-
-initBubbleTex();
-
 // --------------------------------------------------------------------------------
 // @ FACE DETECTED
 
-var hasStarted = false;
-
 function onFaceTracked(faceIndex) {
 
-    if (!hasStarted) {
-
-        startGame();
-        hasStarted = true;
-    }
+    if (!hasGameStarted)
+        tryStartGame();
 
     if (faceIndex == 0) {
 
