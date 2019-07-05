@@ -1861,6 +1861,15 @@ function showNewQuoteTxt() {
     newQuoteTxt.transform.scaleZ = anim;
 
     timeDriver.start();
+
+    var handler = timeDriver.onAfterIteration().subscribe(function() {
+
+        // Animation might take time, hide quote text after finish if face is currently untracked
+        if (!isFaceTracked[0])
+            newQuoteTxt.hidden = true;
+
+        handler.unsubscribe();
+    });
 }
 
 function hideNewQuoteText() {
