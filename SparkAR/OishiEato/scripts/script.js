@@ -1959,7 +1959,9 @@ function onFaceTracked(faceIndex) {
     
         function showQuoteText() {
     
-            showNewQuoteTxt();
+            // Check again because the face might be not being tracked after delay
+            if (isFaceTracked[0])
+                showNewQuoteTxt();
     
             // clear interval
             Time.clearInterval(quoteTxtTimer);
@@ -1967,7 +1969,9 @@ function onFaceTracked(faceIndex) {
     
         function showProd() {
     
-            showNewProdInit();
+            // Check again because the face might be not being tracked after delay
+            if (isFaceTracked[0])
+                showNewProdInit();
     
             // clear interval
             Time.clearInterval(prodTimer);
