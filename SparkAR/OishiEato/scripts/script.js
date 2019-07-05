@@ -527,7 +527,7 @@ const CRUSH_TEX_LOOKUP_TABLE = {
 // CORE DATA
 // --------------------------------------------------------------------------------
 
-var currentThemeData = {};
+var currentThemeData = undefined;
 
 function storeData(data) {
 
@@ -813,27 +813,27 @@ TouchGestures.onLongPress().subscribe(function (gesture) {
 
 TouchGestures.onTap().subscribe(function (gesture) {
 
-    if (hasGameStarted) {
+    if (!hasGameStarted)
+        return;
 
-        Diagnostics.log("onTap: curTheme: " + curTheme);
+    Diagnostics.log("onTap: curTheme: " + curTheme);
 
-        // Clear theme assets' materials
-        if (curTheme == THEME_NAME_LOOKUP_TABLE.gyoza) {
+    // Clear theme assets' materials
+    if (curTheme == THEME_NAME_LOOKUP_TABLE.gyoza) {
 
-            headbandImageMesh.material = invisibleMat;
-            headbandImage1Mesh.material = invisibleMat;
-        }
-
-        // Clear cross theme assets' materials
-        newQuoteBgMesh.material = invisibleMat;
-        newQuoteTxtMesh.material = invisibleMat;
-        newProdSmallMesh.material = invisibleMat;
-        newProdBigMesh.material = invisibleMat;
-        newProdBigFront.material = invisibleMat;
-        newProdSmallFront.material = invisibleMat;
-
-        changeTheme();
+        headbandImageMesh.material = invisibleMat;
+        headbandImage1Mesh.material = invisibleMat;
     }
+
+    // Clear cross theme assets' materials
+    newQuoteBgMesh.material = invisibleMat;
+    newQuoteTxtMesh.material = invisibleMat;
+    newProdSmallMesh.material = invisibleMat;
+    newProdBigMesh.material = invisibleMat;
+    newProdBigFront.material = invisibleMat;
+    newProdSmallFront.material = invisibleMat;
+
+    changeTheme();
 });
 
 // --------------------------------------------------------------------------------
@@ -881,47 +881,70 @@ function main() {
     handleFoodFeeder(crushPoolList0, undefined, undefined, undefined, undefined);
 
     // Request
-    getThemeData(function(data, error) {
+    function getThemeDataContainer() {
 
-        if (data) {
+        getThemeData(function(data, error) {
 
-            Diagnostics.log("API request success");
+            if (data) {
+    
+                Diagnostics.log("API request success");
+    
+                storeData(data);
+                //Diagnostics.log("data: " + JSON.stringify(data));
+                setupItemIndex();
+                //Diagnostics.log("itemIndex: " + JSON.stringify(itemIndex));
+                
+                tryStartGame();
+    
+                // The lines below is for debugging
+                //var npdList = getNpdList();
+                //Diagnostics.log("npdLits.length: " + npdList.length);
+                //Diagnostics.log("npdList: " + JSON.stringify(npdList));
+                //var itemList = getItemList();
+                //Diagnostics.log("itemList.length: " + itemList.length);
+                //Diagnostics.log("itemList: " + JSON.stringify(itemList));
+                //createDataRoundZero();
+                //Diagnostics.log("itemQueue: " + JSON.stringify(itemQueue));
+                //Diagnostics.log("roundOrder: " + JSON.stringify(themeOrder));
+                //createDataRoundMoreThanZero();
+                //Diagnostics.log("itemQueue: " + JSON.stringify(itemQueue));
+                //Diagnostics.log("roundOrder: " + JSON.stringify(themeOrder));
+            }
+            else {
+    
+                Diagnostics.log("API request error!");
+            }
+        });
 
-            storeData(data);
-            //Diagnostics.log("data: " + JSON.stringify(data));
-            setupItemIndex();
-            //Diagnostics.log("itemIndex: " + JSON.stringify(itemIndex));
-            
-            // The lines below is for debugging
-            //var npdList = getNpdList();
-            //Diagnostics.log("npdLits.length: " + npdList.length);
-            //Diagnostics.log("npdList: " + JSON.stringify(npdList));
-            //var itemList = getItemList();
-            //Diagnostics.log("itemList.length: " + itemList.length);
-            //Diagnostics.log("itemList: " + JSON.stringify(itemList));
-            //createDataRoundZero();
-            //Diagnostics.log("itemQueue: " + JSON.stringify(itemQueue));
-            //Diagnostics.log("roundOrder: " + JSON.stringify(themeOrder));
-            //createDataRoundMoreThanZero();
-            //Diagnostics.log("itemQueue: " + JSON.stringify(itemQueue));
-            //Diagnostics.log("roundOrder: " + JSON.stringify(themeOrder));
-        }
-        else {
+        // clear interval
+        //Time.clearInterval(timer);
+    }
 
-            Diagnostics.log("API request error!");
-        }
-    });
+    //const timer = Time.setInterval(getThemeDataContainer, 5000);
+    getThemeDataContainer();
 }
 
-// Try start game, if criterias ar met
 var hasGameStarted = false;
 
+// Try start game, if all prerequisites are met
 function tryStartGame() {
 
+    // This guarantees to start game once and only once
     if (hasGameStarted)
-        return true;
+        return;
 
+    // This guarantees to start the game only if themeData is ready
+    if (currentThemeData == undefined)
+        return;
+
+    // This guarantees to start the game only if face [0] is currently tracked
+    if (isFaceTracked[0] == false)
+        return;
+
+    // Start the game
     startGame();
+
+    // Block game to start again
     hasGameStarted = true;
 }
 
@@ -1925,8 +1948,7 @@ function hideNewProd() {
 
 function onFaceTracked(faceIndex) {
 
-    if (!hasGameStarted)
-        tryStartGame();
+    tryStartGame();
 
     if (faceIndex == 0) {
 
@@ -2665,6 +2687,9 @@ function getThemeData(callback) {
 
 // transitionName ∈ { "facein" | "faceout" }
 function onFaceStateChange(faceIndex, transitionName) {
+
+    if (!hasGameStarted)
+        return;
 
     // Create body
     var body = {
