@@ -2665,24 +2665,78 @@ comments.stream.subscribe(function(value) {
 // NETWORKING
 // --------------------------------------------------------------------------------
 
+var isGettingThemeData = false;
+var isUseLocalThemeData = false;
+var getThemeAttemptCount = 0;
+
+var GET_THEME_DATA_INTERVAL = 500;
+var GET_THEME_DATA_TIMEOUT = 4000;
+var GET_THEME_DATA_MAX_ATTEMPT = Math.floor(GET_THEME_DATA_TIMEOUT / GET_THEME_DATA_INTERVAL);
+
 function getThemeData(callback) {
 
-    startGetRequest(CONFIG.GET_ASSET_LIST_URL, function(data, err) {
+    const interval = Time.setInterval(getThemeDataInterval, GET_THEME_DATA_INTERVAL);
 
-        if (err == undefined && data != undefined) {
+    function onGetThemeDataSuccess(data) {
 
-            //Diagnostics.log("data: " + JSON.stringify(data));
-            Diagnostics.log("id: " + data.id);
-            callback(data, err);
+        //Diagnostics.log("data: " + JSON.stringify(data));
+        Diagnostics.log("id: " + data.id);
+        callback(data, null);
+
+        startHeartbeatInterval();
+        startFaceTransformInterval();
+    }
+
+    function getThemeDataInterval() {
+
+        ++getThemeAttemptCount;
+
+        if (getThemeAttemptCount > GET_THEME_DATA_MAX_ATTEMPT) {
+
+            Diagnostics.log("Too long waiting for theme data !!!! Will use local data");
+
+            // Release lock, and end request interval
+            isGettingThemeData = false;
+            Time.clearInterval(interval);
+
+            isUseLocalThemeData = true;
+
+            // I copied data from the server
+            var localThemeData = JSON.parse('{"result":"complete","id":"58333A54-85FB-4210-B300-6FA6FBCF43D6","maxquote":"50","assetlist":[{"type":"productNPD","items":[{"theme":"Gyoza","title":"gyoza_pork_5pcs","weight":"1","npdorder":"1"}]},{"type":"product","theme":"Gyoza","items":[{"title":"gyoza_pork_mala_12pcs","weight":"1","npdorder":"0"},{"title":"gyoza_takoyaki_5pcs","weight":"1","npdorder":"0"},{"title":"gyoza_pork_12pcs","weight":"1","npdorder":"0"},{"title":"gyoza_pork_mala_5pcs","weight":"1","npdorder":"0"},{"title":"gyoza_shrimp_12pcs","weight":"1","npdorder":"0"},{"title":"gyoza_pork_5pcs","weight":"1","npdorder":"1"},{"title":"gyoza_chicken_yuzu_5pcs","weight":"1","npdorder":"0"},{"title":"gyoza_chicken_yuzu_12pcs","weight":"1","npdorder":"0"}]},{"type":"product","theme":"Sandwich","items":[{"title":"sandwich_crabstick_wasabi","weight":"1","npdorder":"0"},{"title":"sandwich_tuna","weight":"1","npdorder":"0"},{"title":"sandwich_ham_egg","weight":"1","npdorder":"0"},{"title":"sandwich_alaska_wakame","weight":"1","npdorder":"0"}]},{"type":"product","theme":"Tokoyaki","items":[{"title":"takoyaki_takoyaki","weight":"1","npdorder":"0"}]},{"type":"product","theme":"Crab Stick","items":[{"title":"gyoza_pork_mala_5pcs","weight":"1","npdorder":"0"},{"title":"gyoza_pork_5pcs","weight":"1","npdorder":"1"},{"title":"gyoza_takoyaki_5pcs","weight":"1","npdorder":"0"},{"title":"gyoza_pork_12pcs","weight":"1","npdorder":"0"},{"title":"gyoza_pork_mala_12pcs","weight":"1","npdorder":"0"},{"title":"gyoza_chicken_yuzu_12pcs","weight":"1","npdorder":"0"},{"title":"gyoza_shrimp_12pcs","weight":"1","npdorder":"0"},{"title":"gyoza_chicken_yuzu_5pcs","weight":"1","npdorder":"0"}]},{"type":"product","theme":"Meal","items":[{"title":"meal_keemao","weight":"1","npdorder":"0"},{"title":"meal_yakisoba","weight":"1","npdorder":"0"},{"title":"meal_kraphrao","weight":"1","npdorder":"0"},{"title":"meal_clams","weight":"1","npdorder":"0"}]}]}');
+            //Diagnostics.log("localThemeData: " + JSON.stringify(localThemeData));
+            onGetThemeDataSuccess(localThemeData);
+
+            // Use local data, then do nothing else!
+            return;
+        }
+
+        // This is like threading lock, guarantee to have request once at a time
+        if (isGettingThemeData)
+            return;
+        isGettingThemeData = true;
+
+        startGetRequest(CONFIG.GET_ASSET_LIST_URL, function(data, err) {
+
+            if (err == undefined && data != undefined) {
     
-            startHeartbeatInterval();
-            startFaceTransformInterval();
-        }
-        else {
+                if (!isUseLocalThemeData) {
 
-            Diagnostics.log("get theme data error!");
-        }
-    });
+                    // Release lock, and end request interval
+                    isGettingThemeData = false;
+                    Time.clearInterval(interval);
+
+                    onGetThemeDataSuccess(data);
+                }
+            }
+            else {
+    
+                Diagnostics.log("get theme data error!");
+
+                // Release lock
+                isGettingThemeData = false;
+            }
+        });
+    }
 }
 
 // transitionName ∈ { "facein" | "faceout" }
